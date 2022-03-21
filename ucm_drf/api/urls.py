@@ -1,0 +1,54 @@
+from django.urls import include, path
+from rest_framework import routers
+from rest_framework.schemas import get_schema_view
+from rest_framework_simplejwt import views as jwt_views
+from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
+
+from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
+    RunViewSet, \
+    ExecutionRecordViewSet, AttachmentViewSet, get_score, get_feature_score, get_use_case_score, DefectViewSet, \
+    ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, get_feature_completion, \
+    get_overall_completion
+
+# , use_case_count, requirement_count,     test_case_count
+
+schema_view = get_schema_view(title='UCM-DRF API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'attachments', AttachmentViewSet)
+router.register(r'releases', ReleaseViewSet)
+router.register(r'epics', EpicViewSet)
+router.register(r'features', FeatureViewSet)
+router.register(r'sprints', SprintViewSet)
+router.register(r'stories', StoryViewSet)
+router.register(r'usecases', UseCaseViewSet)
+# router.register(r'steps', StepViewSet)
+router.register(r'requirements', RequirementViewSet)
+router.register(r'testcases', TestCaseViewSet)
+router.register(r'defects', DefectViewSet)
+router.register(r'runs', RunViewSet)
+router.register(r'executionrecords', ExecutionRecordViewSet)
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
+urlpatterns = [
+    path('', include(router.urls)),
+    # path('usecases_count', use_case_count),
+    # path('requirement_count', requirement_count),
+    # path('testcases_count', test_case_count),
+
+    path('auth/restframework/', include('rest_framework.urls', namespace='rest_framework')),
+    path('auth/jwt/login', jwt_views.TokenObtainPairView.as_view()),
+    path('auth/jwt/refresh', jwt_views.TokenRefreshView.as_view()),
+
+    path('score/', get_score),
+    path('featurescore/<int:pk>', get_feature_score),
+    path('usecasescore/<int:pk>', get_use_case_score),
+    path('usecasecompletion/<int:pk>', get_use_case_completion),
+    path('featurecompletion/<int:pk>', get_feature_completion),
+    path('completion/', get_overall_completion),
+
+    path('swagger/', schema_view, name='docs'),
+]

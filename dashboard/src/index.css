@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.ag-theme-alpine {
+  font-style: italic;
+  background-color: #fff !important;
+}
+
+.rag-green-outer {
+  background-color: #f8abab !important;
+}
+
+.ag-header-cell,
+.ag-header-group-cell,
+.ag-cell {
+  border: 1px solid black;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ag-header-cell {
+  background-color: #4d4d4d;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-weight: bold;
+  color: white;
+}
+.ag-header-cell-text {
+  text-align: center;
+}
+.ag-header-cell-label {
+  justify-content: center;
+}
+
+.overview-mail-labels {
+  border: 1px solid black;
+  border-radius: 20px;
+}
+.overview-mail-labels-line {
+  width: 100%;
+  height: 1px;
+  color: black;
+  background-color: black;
+}
+.overview-mail-visualization-item {
+  border: 1px solid black;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.tableHeight {
+  height: "450px !important";
+}
+.piechartWrapper {
+  width: unset;
+}
