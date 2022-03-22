@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 # Register your models here.
 from import_export import resources
@@ -6,13 +7,20 @@ from import_export.admin import ImportExportModelAdmin
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story
 
+class ModelAdminExtension(ImportExportModelAdmin):
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(ModelAdminExtension, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'description':
+            formfield.widget = forms.Textarea(attrs=formfield.widget.attrs)
+        return formfield
+
 
 class AttachmentResource(resources.ModelResource):
     class Meta:
         model = Attachment
 
 
-class AttachmentAdmin(ImportExportModelAdmin):
+class AttachmentAdmin(ModelAdminExtension):
     resource_class = AttachmentResource
 
 
@@ -24,7 +32,7 @@ class ReleaseResource(resources.ModelResource):
         model = Release
 
 
-class ReleaseAdmin(ImportExportModelAdmin):
+class ReleaseAdmin(ModelAdminExtension):
     resource_class = ReleaseResource
 
 
@@ -36,7 +44,7 @@ class EpicResource(resources.ModelResource):
         model = Epic
 
 
-class EpicAdmin(ImportExportModelAdmin):
+class EpicAdmin(ModelAdminExtension):
     resource_class = EpicResource
 
 
@@ -48,7 +56,7 @@ class FeatureResource(resources.ModelResource):
         model = Feature
 
 
-class FeatureAdmin(ImportExportModelAdmin):
+class FeatureAdmin(ModelAdminExtension):
     resource_class = FeatureResource
 
 
@@ -60,7 +68,7 @@ class SprintResource(resources.ModelResource):
         model = Sprint
 
 
-class SprintAdmin(ImportExportModelAdmin):
+class SprintAdmin(ModelAdminExtension):
     resource_class = SprintResource
 
 
@@ -72,7 +80,7 @@ class StoryResource(resources.ModelResource):
         model = Story
 
 
-class StoryAdmin(ImportExportModelAdmin):
+class StoryAdmin(ModelAdminExtension):
     resource_class = StoryResource
 
 
@@ -84,7 +92,7 @@ class UseCaseResource(resources.ModelResource):
         model = UseCase
 
 
-class UseCaseAdmin(ImportExportModelAdmin):
+class UseCaseAdmin(ModelAdminExtension):
     resource_class = UseCaseResource
 
 
@@ -96,7 +104,7 @@ class RequirementResource(resources.ModelResource):
         model = Requirement
 
 
-class RequirementAdmin(ImportExportModelAdmin):
+class RequirementAdmin(ModelAdminExtension):
     resource_class = RequirementResource
 
 
@@ -108,7 +116,7 @@ class TestCaseResource(resources.ModelResource):
         model = TestCase
 
 
-class TestCaseAdmin(ImportExportModelAdmin):
+class TestCaseAdmin(ModelAdminExtension):
     resource_class = TestCaseResource
 
 
@@ -120,7 +128,7 @@ class DefectResource(resources.ModelResource):
         model = Defect
 
 
-class DefectAdmin(ImportExportModelAdmin):
+class DefectAdmin(ModelAdminExtension):
     resource_class = DefectResource
 
 
@@ -132,7 +140,7 @@ class RunResource(resources.ModelResource):
         model = Run
 
 
-class RunAdmin(ImportExportModelAdmin):
+class RunAdmin(ModelAdminExtension):
     resource_class = RunResource
 
 
@@ -144,7 +152,7 @@ class ExecutionRecordResource(resources.ModelResource):
         model = ExecutionRecord
 
 
-class ExecutionRecordAdmin(ImportExportModelAdmin):
+class ExecutionRecordAdmin(ModelAdminExtension):
     resource_class = ExecutionRecordResource
 
 

@@ -79,18 +79,18 @@ WSGI_APPLICATION = 'ucm_drf.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-if os.getenv("mode") == "production":
+if os.getenv("mode", "staging") == "production":
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'testmanagement',
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'ENGINE': os.getenv('DATABASE__ENGINE', 'django.db.backends.postgresql_psycopg2'),
+            'NAME': os.getenv('DATABASE__NAME', 'testmanagement'),
+            'USER': os.getenv('DATABASE__USER', 'postgres'),
+            'PASSWORD': os.getenv('DATABASE__PASSWORD', 'postgres'),
+            'HOST': os.getenv('DATABASE__HOST', 'localhost'),
+            'PORT': os.getenv('DATABASE__PORT', '5432'),
         }
     }
-else:
+else:  # staging
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
