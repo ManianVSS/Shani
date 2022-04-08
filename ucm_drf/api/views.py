@@ -6,10 +6,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
-    Sprint, Story, ReviewStatus, ExecutionRecordStatus
+    Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
-    DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer
+    DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
+    ReliabilityRunSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -127,19 +128,33 @@ class StoryViewSet(viewsets.ModelViewSet):
     }
 
 
+class UseCaseCategoryViewSet(viewsets.ModelViewSet):
+    queryset = UseCaseCategory.objects.all()
+    serializer_class = UseCaseCategorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'weight', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'weight': compare_fields_filter_lookups,
+    }
+
+
 class UseCaseViewSet(viewsets.ModelViewSet):
     queryset = UseCase.objects.all()
     serializer_class = UseCaseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'weight', 'consumer_score',
+    ordering_fields = ['id', 'name', 'summary', 'category', 'status', 'weight', 'consumer_score',
                        'serviceability_score', 'test_confidence', 'development_confidence', ]
     ordering = default_ordering
     filterset_fields = {
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
 
-        'feature__name': id_fields_filter_lookups,
+        'category__name': id_fields_filter_lookups,
         'requirements__id': id_fields_filter_lookups,
         # 'testcases__id': id_fields_filter_lookups,
 
@@ -250,14 +265,38 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
     }
 
 
+# TODO
+class ReliabilityRunViewSet(viewsets.ModelViewSet):
+    queryset = ReliabilityRun.objects.all()
+    serializer_class = ReliabilityRunSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
+                       'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
+                       'targetIPTI', 'ipti']
+    ordering = default_ordering
+    filterset_fields = {
+        'build': string_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'start_time': compare_fields_filter_lookups,
+        'modified_time': compare_fields_filter_lookups,
+        'testName': string_fields_filter_lookups,
+        'testEnvironmentType': string_fields_filter_lookups,
+        'testEnvironmentName': string_fields_filter_lookups,
+        'status': id_fields_filter_lookups,
+        'targetIPTI': compare_fields_filter_lookups,
+        'incidents': id_fields_filter_lookups,
+    }
+
+
 @api_view(['GET'])
 def get_score(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    all_features = Feature.objects.all()
+    all_use_case_categories = UseCaseCategory.objects.all()
 
-    score = {'feature_scores': [],
+    score = {'use_case_category_scores': [],
              'cumulative_score': 0,
              'cumulative_weight': 0,
              }
@@ -265,27 +304,28 @@ def get_score(request):
     total_weight = 0
     total_score = 0
 
-    for feature in all_features:
-        feature_score = {'name': feature.name,
-                         'cumulative_score': 0,
-                         'cumulative_weight': 0,
-                         'score': 0,
-                         'weight': feature.weight}
+    for use_case_category in all_use_case_categories:
+        use_case_category_score = {'name': use_case_category.name,
+                                   'cumulative_score': 0,
+                                   'cumulative_weight': 0,
+                                   'score': 0,
+                                   'weight': use_case_category.weight}
 
-        feature_use_cases = UseCase.objects.filter(feature_id=feature.id)
+        category_use_cases = UseCase.objects.filter(category_id=use_case_category.id)
 
-        feature_total_weight = 0
-        feature_total_score = 0
-        for use_case in feature_use_cases:
-            feature_total_weight += use_case.weight
-            feature_total_score += use_case.weight * use_case.get_score()
-        feature_score['cumulative_weight'] = feature_total_weight
-        feature_score['cumulative_score'] = feature_total_score
-        feature_score['score'] = 0 if feature_total_weight == 0 else feature_total_score / feature_total_weight
+        use_case_category_total_weight = 0
+        use_case_category_total_score = 0
+        for use_case in category_use_cases:
+            use_case_category_total_weight += use_case.weight
+            use_case_category_total_score += use_case.weight * use_case.get_score()
+        use_case_category_score['cumulative_weight'] = use_case_category_total_weight
+        use_case_category_score['cumulative_score'] = use_case_category_total_score
+        use_case_category_score[
+            'score'] = 0 if use_case_category_total_weight == 0 else use_case_category_total_score / use_case_category_total_weight
 
-        score['feature_scores'].append(feature_score)
-        total_weight += feature.weight
-        total_score += feature.weight * feature_score['score']
+        score['use_case_category_scores'].append(use_case_category_score)
+        total_weight += use_case_category.weight
+        total_score += use_case_category.weight * use_case_category_score['score']
 
     score['cumulative_score'] = total_score
     score['cumulative_weight'] = total_weight
@@ -295,35 +335,35 @@ def get_score(request):
 
 
 @api_view(['GET'])
-def get_feature_score(request, pk):
+def get_use_case_category_score(request, pk):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     try:
-        feature = Feature.objects.get(pk=pk)
+        category = UseCaseCategory.objects.get(pk=pk)
     except Feature.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
-    feature_score = {'name': feature.name,
-                     'cumulative_score': 0,
-                     'cumulative_weight': 0,
-                     'score': 0}
+    category_score = {'name': category.name,
+                      'cumulative_score': 0,
+                      'cumulative_weight': 0,
+                      'score': 0}
 
-    feature_use_cases = UseCase.objects.filter(feature_id=feature.id)
+    category_use_cases = UseCase.objects.filter(category_id=category.id)
 
-    feature_total_weight = 0
-    feature_total_score = 0
-    feature_score['use_case_scores'] = []
-    for use_case in feature_use_cases:
+    category_total_weight = 0
+    category_total_score = 0
+    category_score['use_case_scores'] = []
+    for use_case in category_use_cases:
         use_case_score = {'name': use_case.name, 'weight': use_case.weight, 'score': use_case.get_score()}
-        feature_score['use_case_scores'].append(use_case_score)
-        feature_total_weight += use_case.weight
-        feature_total_score += use_case.weight * use_case_score['score']
-    feature_score['cumulative_weight'] = feature_total_weight
-    feature_score['cumulative_score'] = feature_total_score
-    feature_score['score'] = 0 if feature_total_weight == 0 else feature_total_score / feature_total_weight
+        category_score['use_case_scores'].append(use_case_score)
+        category_total_weight += use_case.weight
+        category_total_score += use_case.weight * use_case_score['score']
+    category_score['cumulative_weight'] = category_total_weight
+    category_score['cumulative_score'] = category_total_score
+    category_score['score'] = 0 if category_total_weight == 0 else category_total_score / category_total_weight
 
-    return Response(feature_score)
+    return Response(category_score)
 
 
 @api_view(['GET'])

@@ -211,7 +211,7 @@ const Home = () => {
                 width={650}
                 height={300}
                 // data={barChartData}
-                data={score?.feature_scores}
+                data={score?.use_case_category_scores}
                 layout="vertical"
                 margin={{
                   top: 5,
@@ -355,7 +355,7 @@ const Home = () => {
           <Col sm={8}>
             <CustomCarousel
               component={FeatureCard}
-              data={score?.feature_scores}
+              data={score?.use_case_category_scores}
             />
           </Col>
         </Row>
@@ -441,7 +441,7 @@ const Home = () => {
                     <div className={classes.mainChartHeaderLabel}>
                       <Dot color="primary" />
                       <Typography className={classes.mainChartLegentElement}>
-                        Features
+                        Use Case Categories
                       </Typography>
                     </div>
                   </div>

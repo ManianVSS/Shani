@@ -6,9 +6,9 @@ from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 
 from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
     RunViewSet, \
-    ExecutionRecordViewSet, AttachmentViewSet, get_score, get_feature_score, get_use_case_score, DefectViewSet, \
+    ExecutionRecordViewSet, AttachmentViewSet, get_score, get_use_case_category_score, get_use_case_score, DefectViewSet, \
     ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, get_feature_completion, \
-    get_overall_completion
+    get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -18,18 +18,24 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'attachments', AttachmentViewSet)
+
 router.register(r'releases', ReleaseViewSet)
 router.register(r'epics', EpicViewSet)
 router.register(r'features', FeatureViewSet)
 router.register(r'sprints', SprintViewSet)
 router.register(r'stories', StoryViewSet)
+
+router.register(r'usecasecategories', UseCaseCategoryViewSet)
 router.register(r'usecases', UseCaseViewSet)
 # router.register(r'steps', StepViewSet)
 router.register(r'requirements', RequirementViewSet)
 router.register(r'testcases', TestCaseViewSet)
+# router.register(r'steps', StepViewSet)
+
 router.register(r'defects', DefectViewSet)
 router.register(r'runs', RunViewSet)
 router.register(r'executionrecords', ExecutionRecordViewSet)
+router.register(r'reliabilityruns', ReliabilityRunViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -44,7 +50,7 @@ urlpatterns = [
     path('auth/jwt/refresh', jwt_views.TokenRefreshView.as_view()),
 
     path('score/', get_score),
-    path('featurescore/<int:pk>', get_feature_score),
+    path('featurescore/<int:pk>', get_use_case_category_score),
     path('usecasescore/<int:pk>', get_use_case_score),
     path('usecasecompletion/<int:pk>', get_use_case_completion),
     path('featurecompletion/<int:pk>', get_feature_completion),

@@ -5,7 +5,17 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
-    Epic, Sprint, Story
+    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun
+
+admin.site.site_header = "Shani Administration"
+admin.site.site_title = "Shani Admin Portal"
+admin.site.index_title = "Welcome to Shani Portal"
+
+
+class AttachmentResource(resources.ModelResource):
+    class Meta:
+        model = Attachment
+
 
 class ModelAdminExtension(ImportExportModelAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -13,11 +23,6 @@ class ModelAdminExtension(ImportExportModelAdmin):
         if db_field.name == 'description':
             formfield.widget = forms.Textarea(attrs=formfield.widget.attrs)
         return formfield
-
-
-class AttachmentResource(resources.ModelResource):
-    class Meta:
-        model = Attachment
 
 
 class AttachmentAdmin(ModelAdminExtension):
@@ -85,6 +90,18 @@ class StoryAdmin(ModelAdminExtension):
 
 
 admin.site.register(Story, StoryAdmin)
+
+
+class UseCaseCategoryResource(resources.ModelResource):
+    class Meta:
+        model = UseCaseCategory
+
+
+class UseCaseCategoryAdmin(ModelAdminExtension):
+    resource_class = UseCaseCategoryResource
+
+
+admin.site.register(UseCaseCategory, UseCaseCategoryAdmin)
 
 
 class UseCaseResource(resources.ModelResource):
@@ -157,3 +174,15 @@ class ExecutionRecordAdmin(ModelAdminExtension):
 
 
 admin.site.register(ExecutionRecord, ExecutionRecordAdmin)
+
+
+class ReliabilityRunResource(resources.ModelResource):
+    class Meta:
+        model = ReliabilityRun
+
+
+class ReliabilityRunAdmin(ModelAdminExtension):
+    resource_class = ReliabilityRunResource
+
+
+admin.site.register(ReliabilityRun, ReliabilityRunAdmin)

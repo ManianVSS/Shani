@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
+from api import ipte_util
 from ucm_drf import settings
 
 
@@ -19,14 +20,14 @@ class Attachment(models.Model):
 class Release(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, null=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
 
 
 class Epic(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, null=True)
-    weight = models.FloatField(null=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='epic_attachments', blank=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
@@ -38,8 +39,8 @@ class Epic(models.Model):
 class Feature(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, null=True)
-    weight = models.FloatField(null=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
 
     epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
@@ -56,13 +57,16 @@ class Sprint(models.Model):
 
 
 class Story(models.Model):
+    class Meta:
+        verbose_name_plural = "stories"
+
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, null=True)
-    weight = models.FloatField(null=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='story_attachments', blank=True)
     rank = models.IntegerField()
-    sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True)
+    sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
     feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
 
     def __str__(self):
@@ -71,7 +75,7 @@ class Story(models.Model):
 
 # class StringStep(models.Model):
 #     summary = models.CharField(max_length=1000, unique=True)
-#     description = models.CharField(max_length=10000, null=True)
+#     description = models.CharField(max_length=10000, null=True, blank=True)
 #
 #     def __str__(self):
 #         return str(self.summary)
@@ -83,9 +87,9 @@ class Story(models.Model):
 #
 #
 # class UseCaseStep(StringStep):
-#     actor = models.CharField(max_length=100, null=True)
-#     interface = models.CharField(max_length=100, null=True)
-#     action = models.CharField(max_length=100, null=True)
+#     actor = models.CharField(max_length=100, null=True, blank=True)
+#     interface = models.CharField(max_length=100, null=True, blank=True)
+#     action = models.CharField(max_length=100, null=True, blank=True)
 #
 #
 # class UseCasePostCondition(StringStep):
@@ -148,13 +152,25 @@ class ReviewStatus(models.TextChoices):
 #         self.tearDownSteps = None  # {}
 #         self.testDataSet = None  # {}
 
-
-class UseCase(models.Model):
-    feature = models.ForeignKey(Feature, on_delete=models.SET_NULL, null=True)
+class UseCaseCategory(models.Model):
+    class Meta:
+        verbose_name_plural = "use case categories"
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=10000, null=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.summary)
+
+
+class UseCase(models.Model):
+    category = models.ForeignKey(UseCaseCategory, on_delete=models.SET_NULL, null=True, blank=True)
+
+    name = models.CharField(max_length=100, unique=True)
+    summary = models.CharField(max_length=100)
+    description = models.CharField(max_length=10000, null=True, blank=True)
 
     # pre_conditions = models.ManyToManyField(UseCasePreCondition, related_name="pre_condition_use_cases", blank=True)
     # events = models.ManyToManyField(UseCaseStep, related_name="event_use_cases", blank=True)
@@ -163,11 +179,11 @@ class UseCase(models.Model):
 
     status = models.CharField(max_length=9, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
 
-    weight = models.FloatField(null=True)
-    consumer_score = models.FloatField(null=True)
-    serviceability_score = models.FloatField(null=True)
-    test_confidence = models.FloatField(null=True)
-    development_confidence = models.FloatField(null=True)
+    weight = models.FloatField(default=1)
+    consumer_score = models.FloatField(default=0)
+    serviceability_score = models.FloatField(default=0)
+    test_confidence = models.FloatField(default=0)
+    development_confidence = models.FloatField(default=0)
 
     attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
 
@@ -184,7 +200,7 @@ class Requirement(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=10000, null=True)
+    description = models.CharField(max_length=10000, null=True, blank=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
@@ -196,7 +212,7 @@ class TestCase(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=10000, null=True)
+    description = models.CharField(max_length=10000, null=True, blank=True)
 
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
 
@@ -219,7 +235,7 @@ class TestCase(models.Model):
     # execution_status = models.CharField(max_length=8, choices=TestExecutionStatus.choices,
     #                                     default=TestExecutionStatus.PENDING)
 
-    # defects = models.CharField(max_length=200, null=True)
+    # defects = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
@@ -227,7 +243,7 @@ class TestCase(models.Model):
 
 class Defect(models.Model):
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=10000, null=True)
+    description = models.CharField(max_length=10000, null=True, blank=True)
     external_id = models.CharField(max_length=50)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
@@ -235,7 +251,7 @@ class Defect(models.Model):
 
 class Run(models.Model):
     build = models.CharField(max_length=100)
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='runs')
@@ -259,7 +275,7 @@ class ExecutionRecord(models.Model):
 
     name = models.CharField(max_length=100)
     summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=10000, null=True)
+    description = models.CharField(max_length=10000, null=True, blank=True)
 
     status = models.CharField(max_length=8, choices=ExecutionRecordStatus.choices,
                               default=ExecutionRecordStatus.PENDING)
@@ -272,3 +288,43 @@ class ExecutionRecord(models.Model):
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
+
+
+class ReliabilityRunStatus(models.TextChoices):
+    PENDING = 'PENDING', _('Pending execution'),
+    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
+    COMPLETED = 'COMPLETED', _('Completed'),
+
+
+class ReliabilityRun(models.Model):
+    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='reliability_runs')
+
+    build = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True, blank=True)
+
+    start_time = models.DateTimeField(auto_now_add=True)
+    modified_time = models.DateTimeField(auto_now=True)
+
+    testName = models.CharField(max_length=200)
+    testEnvironmentType = models.CharField(max_length=200)
+    testEnvironmentName = models.CharField(max_length=200)
+
+    status = models.CharField(max_length=11, choices=ReliabilityRunStatus.choices,
+                              default=ReliabilityRunStatus.PENDING)
+
+    totalIterationCount = models.IntegerField(null=True, blank=True)
+    passedIterationCount = models.IntegerField(null=True, blank=True)
+    incidentCount = models.IntegerField(null=True, blank=True)
+    targetIPTI = models.FloatField(null=True, blank=True)
+    ipti = models.FloatField(null=True, blank=True)
+    # defects = models.CharField(max_length=200)
+    incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.testName) + ": " + str(self.release.name) + ": " + str(self.build)
+
+    def recalculate_ipti(self):
+        self.ipti = -1.0
+        if self.incidentCount and self.totalIterationCount:
+            if self.totalIterationCount > 0:
+                self.ipti = ipte_util.calculate_ipte(self.incidentCount, self.totalIterationCount)

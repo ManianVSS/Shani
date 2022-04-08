@@ -27,7 +27,7 @@ const Features = () => {
     { headerName: "Weight", field: "weight" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/features/").then((response) => {
+    axiosClient.get("/usecasecategories/").then((response) => {
       setFeatures(response.data.results);
     });
   }, []);
@@ -39,7 +39,7 @@ const Features = () => {
         defaultColDef={defaultColDef}
         columnDefs={columnDefs}
         onRowDoubleClicked={(data) => {
-          navigate("/features/" + data.data.id);
+          navigate("/usecasecategories/" + data.data.id);
         }}
       ></AgGridReact>
     </div>

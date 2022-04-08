@@ -114,4 +114,5 @@ GitHub.sublime-settings
 
 migrations/
 
-build
+# production
+/build

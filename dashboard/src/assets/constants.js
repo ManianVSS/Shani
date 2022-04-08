@@ -28,7 +28,7 @@ export const menuData = [
     url: "/testcases",
   },
   {
-    title: "Features",
+    title: "Use case categories",
     icon: <FaUsers style={{ marginRight: "0.5rem" }} />,
     url: "/features",
   },

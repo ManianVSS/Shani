@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+import django_env_overrides
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -13,7 +15,7 @@ SECRET_KEY = 'django-insecure-9=(@6%n=2c^$4%b1-0!7-k+=vjeo8pub3r&$$ijw(0tchsaxn4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -90,13 +92,14 @@ if os.getenv("mode", "staging") == "production":
             'PORT': os.getenv('DATABASE__PORT', '5432'),
         }
     }
-else:  # staging
+else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/db.sqlite3',
         }
     }
+print("Database object is :", str(DATABASES))
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -143,7 +146,7 @@ else:
                    os.path.join(BASE_DIR, MEDIA_URL)]
 
 MEDIA_BASE_NAME = 'media'
-MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_BASE_NAME)
+MEDIA_ROOT = os.path.join(os.getenv('DATA_MOUNT_DIR', BASE_DIR), MEDIA_BASE_NAME)
 # os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 # Default primary key field type
@@ -205,3 +208,4 @@ CORS_ALLOW_METHODS = [
 
 # ATTACHMENT_DIR = "./attachments"
 # os.makedirs(ATTACHMENT_DIR, exist_ok=True)
+django_env_overrides.apply_to(globals())

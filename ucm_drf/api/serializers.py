@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
-    Epic, Sprint, Story
+    Epic, Sprint, Story, UseCaseCategory
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,11 +53,17 @@ class StorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'rank', 'sprint', 'feature']
 
 
+class UseCaseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UseCaseCategory
+        fields = ['id', 'name', 'summary', 'description', 'weight', ]
+
+
 class UseCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UseCase
         fields = ['id', 'name', 'summary', 'description', 'status', 'weight', 'consumer_score', 'serviceability_score',
-                  'test_confidence', 'development_confidence', 'feature', 'requirements', 'attachments']
+                  'test_confidence', 'development_confidence', 'category', 'requirements', 'attachments']
 
 
 # class UseCaseStepSerializer(serializers.ModelSerializer):
@@ -96,3 +102,12 @@ class ExecutionRecordSerializer(serializers.ModelSerializer):
         model = ExecutionRecord
         fields = ['id', 'name', 'summary', 'description', 'status', 'acceptance_test', 'automated', 'defects', 'run',
                   'time', ]
+
+
+class ReliabilityRunSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Run
+        fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
+                  'testEnvironmentName', 'status',
+                  'totalIterationCount', 'passedIterationCount', 'incidentCount', 'targetIPTI', 'ipti', 'incidents',
+                  'release']
