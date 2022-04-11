@@ -5,10 +5,9 @@ from rest_framework_simplejwt import views as jwt_views
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 
 from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
-    RunViewSet, \
-    ExecutionRecordViewSet, AttachmentViewSet, get_score, get_use_case_category_score, get_use_case_score, DefectViewSet, \
-    ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, get_feature_completion, \
-    get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet
+    RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, get_score, get_use_case_category_score, get_use_case_score, \
+    DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, \
+    get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -50,10 +49,10 @@ urlpatterns = [
     path('auth/jwt/refresh', jwt_views.TokenRefreshView.as_view()),
 
     path('score/', get_score),
-    path('featurescore/<int:pk>', get_use_case_category_score),
-    path('usecasescore/<int:pk>', get_use_case_score),
-    path('usecasecompletion/<int:pk>', get_use_case_completion),
-    path('featurecompletion/<int:pk>', get_feature_completion),
+    path('use_case_category_score/<int:pk>', get_use_case_category_score),
+    path('use_case_score/<int:pk>', get_use_case_score),
+    path('use_case_completion/<int:pk>', get_use_case_completion),
+    path('use_case_category_completion/<int:pk>', get_use_case_category_completion),
     path('completion/', get_overall_completion),
 
     path('swagger/', schema_view, name='docs'),

@@ -422,8 +422,9 @@ def get_use_case_completion(request, pk):
     return Response(get_use_case_obj_completion(use_case))
 
 
-def get_feature_obj_completion(feature):
-    use_cases = UseCase.objects.filter(feature=feature, status=ReviewStatus.APPROVED)  # , status=ReviewStatus.APPROVED
+def get_use_case_category_obj_completion(use_case_category):
+    use_cases = UseCase.objects.filter(category=use_case_category,
+                                       status=ReviewStatus.APPROVED)  # , status=ReviewStatus.APPROVED
     result = {'total_tests': 0, 'unimplemented': not bool(use_cases), 'passed': 0, 'failed': 0, 'pending': 0,
               'completion': 0}
 
@@ -444,16 +445,16 @@ def get_feature_obj_completion(feature):
 
 
 @api_view(['GET'])
-def get_feature_completion(request, pk):
+def get_use_case_category_completion(request, pk):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     try:
-        feature = Feature.objects.get(pk=pk)
-    except Feature.DoesNotExist:
+        use_case_category = UseCaseCategory.objects.get(pk=pk)
+    except UseCaseCategory.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
-    return Response(get_feature_obj_completion(feature))
+    return Response(get_use_case_category_obj_completion(use_case_category))
 
 
 @api_view(['GET'])
@@ -461,22 +462,22 @@ def get_overall_completion(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    features = Feature.objects.all()
+    use_case_categories = UseCaseCategory.objects.all()
     result = {'total_tests': 0, 'passed': 0, 'failed': 0, 'pending': 0, 'completion': 0}
 
-    for feature in features:
-        feature_result = get_feature_obj_completion(feature)
-        result['total_tests'] += feature_result['total_tests']
-        result['passed'] += feature_result['passed']
-        result['failed'] += feature_result['passed']
-        result['pending'] += feature_result['passed']
-        result['completion'] += feature_result['completion']
-    if features:
-        result['completion'] /= len(features)
+    for use_case_category in use_case_categories:
+        use_case_category_result = get_use_case_category_obj_completion(use_case_category)
+        result['total_tests'] += use_case_category_result['total_tests']
+        result['passed'] += use_case_category_result['passed']
+        result['failed'] += use_case_category_result['failed']
+        result['pending'] += use_case_category_result['pending']
+        result['completion'] += use_case_category_result['completion']
+    if use_case_categories:
+        result['completion'] /= len(use_case_categories)
 
     result['completion'] = round(result['completion'], 2)
     return Response(result)
-    # return Response(get_feature_obj_completion(feature))
+    # return Response(get_use_case_category_completion(use_case_category))
 
 # class ParseExcel(APIView):
 #     def post(self, request, format=None):
