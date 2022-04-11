@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
-    Epic, Sprint, Story, UseCaseCategory
+    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -106,8 +106,7 @@ class ExecutionRecordSerializer(serializers.ModelSerializer):
 
 class ReliabilityRunSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Run
+        model = ReliabilityRun
         fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
-                  'testEnvironmentName', 'status',
-                  'totalIterationCount', 'passedIterationCount', 'incidentCount', 'targetIPTI', 'ipti', 'incidents',
-                  'release']
+                  'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
+                  'targetIPTI', 'ipti', 'incidents', 'release']
