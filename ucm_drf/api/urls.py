@@ -24,8 +24,8 @@ router.register(r'features', FeatureViewSet)
 router.register(r'sprints', SprintViewSet)
 router.register(r'stories', StoryViewSet)
 
-router.register(r'usecasecategories', UseCaseCategoryViewSet)
-router.register(r'usecases', UseCaseViewSet)
+router.register(r'use_case_categories', UseCaseCategoryViewSet)
+router.register(r'use_cases', UseCaseViewSet)
 # router.register(r'steps', StepViewSet)
 router.register(r'requirements', RequirementViewSet)
 router.register(r'testcases', TestCaseViewSet)
@@ -33,8 +33,8 @@ router.register(r'testcases', TestCaseViewSet)
 
 router.register(r'defects', DefectViewSet)
 router.register(r'runs', RunViewSet)
-router.register(r'executionrecords', ExecutionRecordViewSet)
-router.register(r'reliabilityruns', ReliabilityRunViewSet)
+router.register(r'execution_records', ExecutionRecordViewSet)
+router.register(r'reliability_runs', ReliabilityRunViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
