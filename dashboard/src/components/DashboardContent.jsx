@@ -28,7 +28,7 @@ const DashboardContent = () => {
     componentToRender = <Testcases />;
   } else if (componentMetaData === "/requirements") {
     componentToRender = <Requirements />;
-  } else if (componentMetaData === "/features") {
+  } else if (componentMetaData === "/usecasecategories") {
     componentToRender = <Features />;
   } else if (componentMetaData === "/runs") {
     componentToRender = <Runs />;
@@ -36,7 +36,7 @@ const DashboardContent = () => {
     componentToRender = <ExecutionRecords />;
   } else if (componentMetaData.indexOf("/usecases/") !== -1) {
     componentToRender = <IndividualUsecase />;
-  } else if (componentMetaData.indexOf("/features/") !== -1) {
+  } else if (componentMetaData.indexOf("/usecasecategories/") !== -1) {
     componentToRender = <IndividualFeature />;
   } else if (componentMetaData.indexOf("/testcases/") !== -1) {
     componentToRender = <IndividualTest />;

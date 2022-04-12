@@ -73,7 +73,7 @@ function App() {
           }
         />
         <Route
-          path="features"
+          path="usecasecategories"
           element={
             <StyletronProvider value={engine}>
               <BaseProvider theme={LightTheme}>
@@ -83,7 +83,7 @@ function App() {
           }
         />
         <Route
-          path="features/:featureid"
+          path="usecasecategories/:usecasecategoryid"
           element={
             <StyletronProvider value={engine}>
               <BaseProvider theme={LightTheme}>

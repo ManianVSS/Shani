@@ -24,14 +24,15 @@ const Usecases = () => {
     { headerName: "ID", field: "id" },
     { headerName: "Name", field: "name" },
     { headerName: "Summary", field: "summary" },
-    { headerName: "Feature", field: "feature" },
-    { headerName: "Modality Score", field: "modality_score" },
+    { headerName: "Usecase Category", field: "category" },
+    { headerName: "Consumer Score", field: "consumer_score" },
     { headerName: "Serviceability Score", field: "serviceability_score" },
     { headerName: "Test Confidence", field: "test_confidence" },
+    { headerName: "Development Confidence", field: "test_confidence" },
     { headerName: "Weight", field: "weight" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/usecases/").then((response) => {
+    axiosClient.get("/use_cases/").then((response) => {
       setUsecases(response.data.results);
     });
   }, []);

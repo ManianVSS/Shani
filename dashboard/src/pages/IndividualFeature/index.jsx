@@ -7,24 +7,26 @@ const IndividualFeature = (props) => {
   const [attachmentids, setAttachmentids] = React.useState([]);
   const [attachmentDetailss, setAttachmentDetailss] = React.useState([]);
 
-  const { featureid } = useParams();
+  const { usecasecategoryid } = useParams();
   React.useEffect(() => {
-    axiosClient.get("/features/" + featureid + "/").then((response) => {
-      setFeatureDetails(response.data);
-      setAttachmentids(response.data.attachments);
+    axiosClient
+      .get("/use_case_categories/" + usecasecategoryid + "/")
+      .then((response) => {
+        setFeatureDetails(response.data);
+        setAttachmentids(response.data.attachments);
 
-      response.data.attachments?.map((item) => {
-        axiosClient.get("/attachments/" + item + "/").then((res) => {
-          setAttachmentDetailss((oldArray) => [
-            ...oldArray,
-            {
-              name: res.data.name,
-              file: res.data.file,
-            },
-          ]);
+        response.data.attachments?.map((item) => {
+          axiosClient.get("/attachments/" + item + "/").then((res) => {
+            setAttachmentDetailss((oldArray) => [
+              ...oldArray,
+              {
+                name: res.data.name,
+                file: res.data.file,
+              },
+            ]);
+          });
         });
       });
-    });
   }, []);
   return (
     <>
@@ -41,7 +43,7 @@ const IndividualFeature = (props) => {
                 }}
               >
                 <tr>
-                  <th>Feature ID</th>
+                  <th>Usecase Category ID</th>
                 </tr>
               </thead>
               <tbody
@@ -50,7 +52,7 @@ const IndividualFeature = (props) => {
                 }}
               >
                 <tr>
-                  <td>{featureid}</td>
+                  <td>{usecasecategoryid}</td>
                 </tr>
               </tbody>
             </Table>
@@ -66,7 +68,7 @@ const IndividualFeature = (props) => {
                 }}
               >
                 <tr>
-                  <th>Feature Name</th>
+                  <th>Usecase Category Name</th>
                 </tr>
               </thead>
               <tbody
@@ -91,7 +93,7 @@ const IndividualFeature = (props) => {
                 }}
               >
                 <tr>
-                  <th>Feature Weight</th>
+                  <th>Usecase Category Weight</th>
                 </tr>
               </thead>
               <tbody

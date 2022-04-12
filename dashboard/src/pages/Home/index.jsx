@@ -93,6 +93,7 @@ const Home = () => {
     approved: 0,
   });
   const [score, setScore] = React.useState([]);
+  const [completion, setCompletion] = React.useState([]);
 
   const TestsPieChartData = [
     { name: "Automated", value: testsData.automated, color: "success" },
@@ -121,7 +122,7 @@ const Home = () => {
   }, []);
   React.useEffect(() => {
     let useCaseData = { total: 0, draft: 0, inreview: 0, approved: 0 };
-    axiosClient.get("/usecases/").then((response) => {
+    axiosClient.get("/use_cases/").then((response) => {
       response.data.results.map((item) => {
         useCaseData.total += 1;
         if (item.status === "DRAFT") {
@@ -140,7 +141,16 @@ const Home = () => {
       setScore(response.data);
     });
   }, []);
-
+  React.useEffect(() => {
+    let data = {};
+    axiosClient.get("/completion/").then((response) => {
+      data = response.data;
+      data.use_case_category_completion.map((item) => {
+        item.completion = item.completion * 100;
+      });
+      setCompletion(data);
+    });
+  }, []);
   return (
     <>
       <Container>
@@ -181,7 +191,7 @@ const Home = () => {
                   }}
                 >
                   <h4 style={{ marginTop: "5%" }}>
-                    {score.score === undefined ? 0 : score.score.toFixed(2)}
+                    {score.score === undefined ? 0 : score.score.toFixed(0)}%
                   </h4>
                 </Col>
               </Row>
@@ -201,7 +211,7 @@ const Home = () => {
           </Col>
           <Col sm={8}>
             <Widget
-              title="Feature Scores"
+              title="Usecase Category Scores"
               upperTitle
               bodyClass={classes.fullHeightBody}
               className={classes.card}
@@ -237,6 +247,7 @@ const Home = () => {
                   dataKey="score"
                   fill="#82ca9d"
                   label={{ position: "centerTop", fill: "#404040" }}
+                  unit="%"
                 />
               </BarChart>
             </Widget>
@@ -413,110 +424,109 @@ const Home = () => {
       </Container> */}
       <Container>
         <Row style={{ marginBottom: "10px" }}>
-          <Col>
-            <Widget
-              wrapper
-              header={
-                <div className={classes.mainChartHeader}>
-                  <Typography
-                    variant="h5"
-                    color="text"
-                    colorBrightness="secondary"
-                  >
-                    Some Line Chart
-                  </Typography>
-                  <div className={classes.mainChartHeaderLabels}>
-                    <div className={classes.mainChartHeaderLabel}>
-                      <Dot color="warning" />
-                      <Typography className={classes.mainChartLegentElement}>
-                        Tests
-                      </Typography>
-                    </div>
-                    <div className={classes.mainChartHeaderLabel}>
-                      <Dot color="primary" />
-                      <Typography className={classes.mainChartLegentElement}>
-                        Use Cases
-                      </Typography>
-                    </div>
-                    <div className={classes.mainChartHeaderLabel}>
-                      <Dot color="primary" />
-                      <Typography className={classes.mainChartLegentElement}>
-                        Use Case Categories
-                      </Typography>
-                    </div>
-                  </div>
-                  {/* <Select
-                  value={mainChartState}
-                  onChange={(e) => setMainChartState(e.target.value)}
-                  input={
-                    <OutlinedInput
-                      labelWidth={0}
-                      classes={{
-                        notchedOutline: classes.mainChartSelectRoot,
-                        input: classes.mainChartSelect,
-                      }}
-                    />
-                  }
-                  autoWidth
-                >
-                  <MenuItem value="daily">Daily</MenuItem>
-                  <MenuItem value="weekly">Weekly</MenuItem>
-                  <MenuItem value="monthly">Monthly</MenuItem>
-                </Select> */}
-                </div>
-              }
+          <Col sm={4}>
+            <div
+              style={{
+                width: "80%",
+                marginTop: "20%",
+                marginBottom: "5px",
+                marginLeft: "8%",
+              }}
             >
-              <ResponsiveContainer width="100%" minWidth={500} height={350}>
-                <ComposedChart
-                  margin={{ top: 0, right: -15, left: -15, bottom: 0 }}
-                  data={mainChartData}
+              <Row>
+                <Col
+                  sm={8}
+                  style={{
+                    background: "gray",
+                    color: "white",
+                    border: "1px solid gray",
+                    borderRadius: "25px",
+                    borderTopRightRadius: "0px",
+                    borderTopLeftRadius: "25px",
+                    borderBottomRightRadius: "0px",
+                    borderBottomLeftRadius: "25px",
+                  }}
                 >
-                  <YAxis
-                    ticks={[0, 2500, 5000, 7500]}
-                    tick={{
-                      fill: theme.palette.text.hint + "80",
-                      fontSize: 14,
-                    }}
-                    stroke={theme.palette.text.hint + "80"}
-                    tickLine={false}
-                  />
-                  <XAxis
-                    tickFormatter={(i) => i + 1}
-                    tick={{
-                      fill: theme.palette.text.hint + "80",
-                      fontSize: 14,
-                    }}
-                    stroke={theme.palette.text.hint + "80"}
-                    tickLine={false}
-                  />
-                  <Area
-                    type="natural"
-                    dataKey="desktop"
-                    fill={theme.palette.background.light}
-                    strokeWidth={0}
-                    activeDot={false}
-                  />
-                  <Line
-                    type="natural"
-                    dataKey="mobile"
-                    stroke={theme.palette.primary.main}
-                    strokeWidth={2}
-                    dot={false}
-                    activeDot={false}
-                  />
-                  <Line
-                    type="linear"
-                    dataKey="tablet"
-                    stroke={theme.palette.warning.main}
-                    strokeWidth={2}
-                    dot={{
-                      stroke: theme.palette.warning.dark,
-                      strokeWidth: 2,
-                      fill: theme.palette.warning.main,
-                    }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
+                  <h4 style={{ marginTop: "2%", fontSize: "20px" }}>
+                    Test Completion
+                  </h4>
+                </Col>
+                <Col
+                  sm={4}
+                  style={{
+                    border: "1px solid gray",
+                    borderTopRightRadius: "25px",
+                    borderTopLeftRadius: "0px",
+                    borderBottomRightRadius: "25px",
+                    borderBottomLeftRadius: "0px",
+                  }}
+                >
+                  <h4 style={{ marginTop: "5%" }}>
+                    {completion.completion === undefined
+                      ? 0
+                      : (completion.completion * 100).toFixed(0)}
+                    %
+                  </h4>
+                </Col>
+              </Row>
+            </div>
+            <div>
+              <GaugeChart
+                id="gauge-chart3"
+                nrOfLevels={3}
+                colors={["#62af95", "#3dac87", "#0caa09"]}
+                arcWidth={0.3}
+                percent={
+                  completion.completion === undefined
+                    ? 0
+                    : (completion.completion * 100).toFixed(0) / 100
+                }
+                textColor={"black"}
+              />
+            </div>
+          </Col>
+          <Col sm={8}>
+            <Widget
+              title="Test Completion Status(Usecase Category wise)"
+              upperTitle
+              bodyClass={classes.fullHeightBody}
+              className={classes.card}
+              disableWidgetMenu
+            >
+              <BarChart
+                width={650}
+                height={300}
+                // data={barChartData}
+                data={completion?.use_case_category_completion}
+                layout="vertical"
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                <XAxis
+                  type="number"
+                  axisLine={false}
+                  stroke="#a0a0a0"
+                  domain={[0, 100]}
+                  ticks={[0, 25, 50, 75, 100]}
+                  strokeWidth={0.5}
+                />
+                <YAxis dataKey="name" type="category" width={90} />
+                <Tooltip />
+                <Legend />
+                {/* <Bar dataKey="pv" fill="#8884d8" /> */}
+                <Bar
+                  dataKey="completion"
+                  fill="#40b7a9"
+                  label={{ position: "centerTop", fill: "#404040" }}
+                  legendType="triangle"
+                  unit="%"
+                />
+              </BarChart>
             </Widget>
           </Col>
         </Row>

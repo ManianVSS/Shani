@@ -27,7 +27,7 @@ const Features = () => {
     { headerName: "Weight", field: "weight" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/usecasecategories/").then((response) => {
+    axiosClient.get("/use_case_categories/").then((response) => {
       setFeatures(response.data.results);
     });
   }, []);
