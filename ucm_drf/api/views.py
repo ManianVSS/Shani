@@ -463,10 +463,13 @@ def get_overall_completion(request):
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     use_case_categories = UseCaseCategory.objects.all()
-    result = {'total_tests': 0, 'passed': 0, 'failed': 0, 'pending': 0, 'completion': 0}
+    result = {'total_tests': 0, 'passed': 0, 'failed': 0, 'pending': 0, 'completion': 0,
+              'use_case_category_completion': []}
 
     for use_case_category in use_case_categories:
         use_case_category_result = get_use_case_category_obj_completion(use_case_category)
+        use_case_category_result['name'] = use_case_category.name
+        result['use_case_category_completion'].append(use_case_category_result)
         result['total_tests'] += use_case_category_result['total_tests']
         result['passed'] += use_case_category_result['passed']
         result['failed'] += use_case_category_result['failed']
