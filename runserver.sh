@@ -6,6 +6,6 @@ export DATABASE__PASSWORD=testmgmtadmin@123
 export DATABASE__HOST=localhost
 export DATABASE__PORT=5432
 
-cd ucm_drf 
+cd test_mgmt 
 python3 manage.py runserver 0.0.0.0:8000
 cd ..

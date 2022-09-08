@@ -12,5 +12,5 @@ export DATABASE__PASSWORD=testmgmtadmin@123
 export DATABASE__HOST=localhost
 export DATABASE__PORT=5432
 
-cd ucm_drf && python3 manage.py makemigrations api && python3 manage.py migrate && cd ..
-cd ucm_drf && echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@myproject.com', 'password')" | python manage.py shell && cd ..
+cd test_mgmt && python3 manage.py makemigrations api && python3 manage.py migrate && cd ..
+cd test_mgmt && echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@myproject.com', 'password')" | python manage.py shell && cd ..

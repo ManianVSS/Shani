@@ -265,7 +265,6 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
     }
 
 
-# TODO
 class ReliabilityRunViewSet(viewsets.ModelViewSet):
     queryset = ReliabilityRun.objects.all()
     serializer_class = ReliabilityRunSerializer

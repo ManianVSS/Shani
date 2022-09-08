@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 
-from ucm_drf import settings
+from test_mgmt import settings
 
 urlpatterns = [
                   path('admin/', admin.site.urls),

@@ -10,11 +10,11 @@ RUN apt -y update \
     && apt -y install python-is-python3 python3-pip\	
 	&& rm -rf /var/cache/apt/*
 
-COPY ucm_drf /ucm_drf
-COPY dashboard/build /ucm_drf/build
-COPY scripts/* /ucm_drf
+COPY test_mgmt /test_mgmt
+COPY dashboard/build /test_mgmt/build
+COPY scripts/* /test_mgmt
 
-WORKDIR /ucm_drf
+WORKDIR /test_mgmt
 RUN pip install -r requirements.txt
 
 ENTRYPOINT ["bash", "entrypoint.sh"]

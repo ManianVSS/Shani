@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 from api import ipte_util
-from ucm_drf import settings
+from test_mgmt import settings
 
 
 # import jsonfield
