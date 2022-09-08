@@ -327,4 +327,4 @@ class ReliabilityRun(models.Model):
         self.ipti = -1.0
         if self.incidentCount and self.totalIterationCount:
             if self.totalIterationCount > 0:
-                self.ipti = ipte_util.calculate_ipte(self.incidentCount, self.totalIterationCount)
+                self.ipti = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)

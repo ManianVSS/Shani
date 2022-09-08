@@ -85,9 +85,9 @@ if os.getenv("mode", "staging") == "production":
     DATABASES = {
         'default': {
             'ENGINE': os.getenv('DATABASE__ENGINE', 'django.db.backends.postgresql_psycopg2'),
-            'NAME': os.getenv('DATABASE__NAME', 'testmanagement'),
-            'USER': os.getenv('DATABASE__USER', 'postgres'),
-            'PASSWORD': os.getenv('DATABASE__PASSWORD', 'postgres'),
+            'NAME': os.getenv('DATABASE__NAME', 'testmgmt'),
+            'USER': os.getenv('DATABASE__USER', 'testmgmtadmin'),
+            'PASSWORD': os.getenv('DATABASE__PASSWORD', 'testmgmtadmin@123'),
             'HOST': os.getenv('DATABASE__HOST', 'localhost'),
             'PORT': os.getenv('DATABASE__PORT', '5432'),
         }
