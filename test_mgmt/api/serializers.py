@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
-    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun
+    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -27,6 +27,30 @@ class ReleaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Release
         fields = ['id', 'name', 'summary', 'description', ]
+
+
+class OrgGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrgGroup
+        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'parent_org_group', 'leader', 'attachments', ]
+
+
+class EngineerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Engineer
+        fields = ['id', 'employee_id', 'auth_user', 'role', 'org_groups', 'attachments', ]
+
+
+class SiteHolidaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteHoliday
+        fields = ['id', 'name', 'date', 'summary', 'attachments', ]
+
+
+class LeaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Leave
+        fields = ['id', 'engineer', 'start_date', 'end_date', 'summary', 'attachments', ]
 
 
 class EpicSerializer(serializers.ModelSerializer):

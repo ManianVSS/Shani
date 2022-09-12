@@ -1,12 +1,10 @@
+from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 from api import ipte_util
 from test_mgmt import settings
-
-
-# import jsonfield
 
 
 class Attachment(models.Model):
@@ -21,6 +19,55 @@ class Release(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class OrgGroup(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group")
+    summary = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    parent_org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
+                                         related_name="sub_org_groups")
+    leader = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="lead_org_groups")
+    attachments = models.ManyToManyField(Attachment, related_name='org_group_attachments', blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Engineer(models.Model):
+    employee_id = models.CharField(max_length=20, null=True, unique=True)
+    auth_user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="engineer")
+    role = models.CharField(max_length=100, null=True)
+    org_groups = models.ManyToManyField(OrgGroup, related_name="engineers", blank=True, )
+    attachments = models.ManyToManyField(Attachment, related_name='engineer_attachments', blank=True)
+
+    def __str__(self):
+        return str(self.employee_id) + ": " + str(self.auth_user)
+
+
+class SiteHoliday(models.Model):
+    name = models.CharField(max_length=100)
+    date = models.DateField()
+    summary = models.CharField(max_length=100)
+    attachments = models.ManyToManyField(Attachment, related_name='site_holiday_attachments', blank=True)
+
+    def __str__(self):
+        return str(self.date) + ": " + str(self.name)
+
+
+class Leave(models.Model):
+    engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="leaves")
+    start_date = models.DateField()
+    end_date = models.DateField()
+    summary = models.CharField(max_length=100)
+    attachments = models.ManyToManyField(Attachment, related_name='leave_attachments', blank=True)
+
+    def __str__(self):
+        return str(self.engineer) + ": " + str(self.start_date) + "-" + str(self.end_date) + str(self.summary)
 
 
 class Epic(models.Model):
@@ -55,6 +102,9 @@ class Sprint(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    def __str__(self):
+        return str(self.release) + ": " + str(self.number)
+
 
 class Story(models.Model):
     class Meta:
@@ -73,84 +123,11 @@ class Story(models.Model):
         return str(self.name) + ": " + str(self.summary)
 
 
-# class StringStep(models.Model):
-#     summary = models.CharField(max_length=1000, unique=True)
-#     description = models.CharField(max_length=10000, null=True, blank=True)
-#
-#     def __str__(self):
-#         return str(self.summary)
-
-
-#
-# class UseCasePreCondition(StringStep):
-#     pass
-#
-#
-# class UseCaseStep(StringStep):
-#     actor = models.CharField(max_length=100, null=True, blank=True)
-#     interface = models.CharField(max_length=100, null=True, blank=True)
-#     action = models.CharField(max_length=100, null=True, blank=True)
-#
-#
-# class UseCasePostCondition(StringStep):
-#     pass
-#
-#
-# class TestCasePreCondition(StringStep):
-#     pass
-#
-#
-# class TestCaseStep(StringStep):
-#     pass
-#
-#
-# class TestCasePostCondition(StringStep):
-#     pass
-
-
 class ReviewStatus(models.TextChoices):
     DRAFT = 'DRAFT', _('Draft'),
     IN_REVIEW = 'IN_REVIEW', _('In Review'),
     APPROVED = 'APPROVED', _('Approved'),
 
-
-# class TestStep:
-#     def __init__(self):
-#         self.step = None
-#         self.testData = None  # {}
-#         self.testDataSet = None  # {}
-#         self.variableTestDataRules = None  # {}
-#         self.node = None
-#         self.numberOfThreads = 1
-#         self.maxRetries = 0
-#         self.steps = None
-#         self.runStepsInParallel = False
-#         self.condition = None
-#
-#
-# class TestScenario:
-#     def __init__(self):
-#         self.name = None
-#         self.description = None
-#         self.probability = 1.0
-#         self.setupSteps = None  # {}
-#         self.chaosConfiguration = None
-#         self.executionSteps = None  # {}
-#         self.tearDownSteps = None  # {}
-#         self.testDataSet = None  # {}
-#
-#
-# class TestFeature:
-#     def __init__(self):
-#         self.name = None
-#         self.description = None
-#         self.testJobs = None
-#         self.setupSteps = None  # {}
-#         self.scenarioSetupSteps = None  # {}
-#         self.testScenarios = None  # {}
-#         self.scenarioTearDownSteps = None  # {}
-#         self.tearDownSteps = None  # {}
-#         self.testDataSet = None  # {}
 
 class UseCaseCategory(models.Model):
     class Meta:
@@ -296,6 +273,7 @@ class ReliabilityRunStatus(models.TextChoices):
     COMPLETED = 'COMPLETED', _('Completed'),
 
 
+# noinspection PyTypeChecker
 class ReliabilityRun(models.Model):
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='reliability_runs')
 
@@ -328,3 +306,88 @@ class ReliabilityRun(models.Model):
         if self.incidentCount and self.totalIterationCount:
             if self.totalIterationCount > 0:
                 self.ipti = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
+
+
+class Environment(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    type = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=20000, null=True, blank=True)
+    purpose = models.CharField(max_length=1000, null=True, blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
+    current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments')
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.type)
+
+# class TestStep:
+#     def __init__(self):
+#         self.step = None
+#         self.testData = None  # {}
+#         self.testDataSet = None  # {}
+#         self.variableTestDataRules = None  # {}
+#         self.node = None
+#         self.numberOfThreads = 1
+#         self.maxRetries = 0
+#         self.steps = None
+#         self.runStepsInParallel = False
+#         self.condition = None
+#
+#
+# class TestScenario:
+#     def __init__(self):
+#         self.name = None
+#         self.description = None
+#         self.probability = 1.0
+#         self.setupSteps = None  # {}
+#         self.chaosConfiguration = None
+#         self.executionSteps = None  # {}
+#         self.tearDownSteps = None  # {}
+#         self.testDataSet = None  # {}
+#
+#
+# class TestFeature:
+#     def __init__(self):
+#         self.name = None
+#         self.description = None
+#         self.testJobs = None
+#         self.setupSteps = None  # {}
+#         self.scenarioSetupSteps = None  # {}
+#         self.testScenarios = None  # {}
+#         self.scenarioTearDownSteps = None  # {}
+#         self.tearDownSteps = None  # {}
+#         self.testDataSet = None  # {}
+
+
+# class StringStep(models.Model):
+#     summary = models.CharField(max_length=1000, unique=True)
+#     description = models.CharField(max_length=10000, null=True, blank=True)
+#
+#     def __str__(self):
+#         return str(self.summary)
+
+
+#
+# class UseCasePreCondition(StringStep):
+#     pass
+#
+#
+# class UseCaseStep(StringStep):
+#     actor = models.CharField(max_length=100, null=True, blank=True)
+#     interface = models.CharField(max_length=100, null=True, blank=True)
+#     action = models.CharField(max_length=100, null=True, blank=True)
+#
+#
+# class UseCasePostCondition(StringStep):
+#     pass
+#
+#
+# class TestCasePreCondition(StringStep):
+#     pass
+#
+#
+# class TestCaseStep(StringStep):
+#     pass
+#
+#
+# class TestCasePostCondition(StringStep):
+#     pass

@@ -6,24 +6,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
-    Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun
+    Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
+    SiteHoliday, Leave
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
-    ReliabilityRunSerializer
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser]
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAdminUser]
-
+    ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer
 
 boolean_fields_filter_lookups = ['exact']
 id_fields_filter_lookups = ['exact', 'in']
@@ -32,6 +20,39 @@ string_fields_filter_lookups = ['exact', 'startswith', 'contains', 'endswith', '
 compare_fields_filter_lookups = ['exact', 'lte', 'lt', 'gt', 'gte']
 default_search_fields = ['name', 'summary', 'description']
 default_ordering = ['id']
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
+    search_fields = ['id', 'username', 'first_name', 'last_name', 'email']
+    ordering_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': compare_fields_filter_lookups,
+        'username': string_fields_filter_lookups,
+        'first_name': string_fields_filter_lookups,
+        'last_name': string_fields_filter_lookups,
+        'email': string_fields_filter_lookups,
+        'is_staff': boolean_fields_filter_lookups,
+        'is_active': boolean_fields_filter_lookups,
+        'date_joined': compare_fields_filter_lookups,
+    }
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAdminUser]
+    search_fields = ['id', 'name', ]
+    ordering_fields = ['id', 'name', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': compare_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'permissions': id_fields_filter_lookups,
+    }
 
 
 # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -44,6 +65,7 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
     }
 
@@ -56,7 +78,72 @@ class ReleaseViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+    }
+
+
+class OrgGroupViewSet(viewsets.ModelViewSet):
+    queryset = OrgGroup.objects.all()
+    serializer_class = OrgGroupSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'auth_group', 'parent_org_group', 'leader', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': compare_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'auth_group': id_fields_filter_lookups,
+        'parent_org_group': id_fields_filter_lookups,
+        'leader': id_fields_filter_lookups,
+    }
+
+
+class EngineerViewSet(viewsets.ModelViewSet):
+    queryset = Engineer.objects.all()
+    serializer_class = EngineerSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'employee_id', 'auth_user', 'role', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': compare_fields_filter_lookups,
+        'employee_id': string_fields_filter_lookups,
+        'auth_user': id_fields_filter_lookups,
+        'role': string_fields_filter_lookups,
+        'org_groups': id_fields_filter_lookups,
+    }
+
+
+class SiteHolidayViewSet(viewsets.ModelViewSet):
+    queryset = SiteHoliday.objects.all()
+    serializer_class = SiteHolidaySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'date']
+    ordering = default_ordering
+    filterset_fields = {
+        'id': compare_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'date': compare_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+    }
+
+
+class LeaveViewSet(viewsets.ModelViewSet):
+    queryset = Leave.objects.all()
+    serializer_class = LeaveSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'engineer', 'start_date', 'end_date', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': compare_fields_filter_lookups,
+        'engineer': id_fields_filter_lookups,
+        'start_date': compare_fields_filter_lookups,
+        'end_date': compare_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
     }
 
@@ -69,6 +156,7 @@ class EpicViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', 'weight', 'release']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
@@ -85,6 +173,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', 'weight', 'epic']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
@@ -101,6 +190,7 @@ class SprintViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'number': string_fields_filter_lookups,
         'release__id': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
@@ -117,6 +207,7 @@ class StoryViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', 'weight', 'rank', 'sprint', 'feature']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
@@ -136,6 +227,7 @@ class UseCaseCategoryViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', 'weight', ]
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
@@ -151,6 +243,7 @@ class UseCaseViewSet(viewsets.ModelViewSet):
                        'serviceability_score', 'test_confidence', 'development_confidence', ]
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
 
@@ -174,6 +267,7 @@ class UseCaseViewSet(viewsets.ModelViewSet):
 #     ordering_fields = ['id', 'summary', 'actor', 'interface', 'action']
 #     ordering = default_ordering
 #     filterset_fields = {
+#         'id': compare_fields_filter_lookups,
 #         'summary': string_fields_filter_lookups,
 #
 #         'actor': string_fields_filter_lookups,
@@ -190,6 +284,7 @@ class RequirementViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', ]
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'use_cases__id': id_fields_filter_lookups,
@@ -204,6 +299,7 @@ class TestCaseViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', 'use_case', 'requirements', 'status', 'acceptance_test', 'automated']
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
@@ -222,6 +318,7 @@ class DefectViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', ]
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
@@ -239,6 +336,7 @@ class RunViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'build', 'name', 'time', ]
     ordering = default_ordering
     filterset_fields = {
+        'id': compare_fields_filter_lookups,
         'build': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'time': compare_fields_filter_lookups,
@@ -253,8 +351,9 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'time', ]
     ordering = default_ordering
     filterset_fields = {
+        # 'id': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
+        # 'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'acceptance_test': boolean_fields_filter_lookups,
         'automated': boolean_fields_filter_lookups,
@@ -275,16 +374,17 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
                        'targetIPTI', 'ipti']
     ordering = default_ordering
     filterset_fields = {
+        # 'id': compare_fields_filter_lookups,
         'build': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'start_time': compare_fields_filter_lookups,
-        'modified_time': compare_fields_filter_lookups,
+        # 'start_time': compare_fields_filter_lookups,
+        # 'modified_time': compare_fields_filter_lookups,
         'testName': string_fields_filter_lookups,
         'testEnvironmentType': string_fields_filter_lookups,
         'testEnvironmentName': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'targetIPTI': compare_fields_filter_lookups,
-        'incidents': id_fields_filter_lookups,
+        # 'incidents': id_fields_filter_lookups,
     }
 
 
@@ -319,8 +419,8 @@ def get_score(request):
             use_case_category_total_score += use_case.weight * use_case.get_score()
         use_case_category_score['cumulative_weight'] = use_case_category_total_weight
         use_case_category_score['cumulative_score'] = use_case_category_total_score
-        use_case_category_score[
-            'score'] = 0 if use_case_category_total_weight == 0 else use_case_category_total_score / use_case_category_total_weight
+        use_case_category_score['score'] = 0 if use_case_category_total_weight == 0 \
+            else use_case_category_total_score / use_case_category_total_weight
 
         score['use_case_category_scores'].append(use_case_category_score)
         total_weight += use_case_category.weight

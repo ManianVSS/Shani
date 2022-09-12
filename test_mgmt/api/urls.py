@@ -7,11 +7,12 @@ from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
     RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, get_score, get_use_case_category_score, get_use_case_score, \
     DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, \
-    get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet
+    get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
+    OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
-schema_view = get_schema_view(title='UCM-DRF API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])
+schema_view = get_schema_view(title='Test Management API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -35,6 +36,11 @@ router.register(r'defects', DefectViewSet)
 router.register(r'runs', RunViewSet)
 router.register(r'execution_records', ExecutionRecordViewSet)
 router.register(r'reliability_runs', ReliabilityRunViewSet)
+
+router.register(r'org_groups', OrgGroupViewSet)
+router.register(r'engineers', EngineerViewSet)
+router.register(r'site_holidays', SiteHolidayViewSet)
+router.register(r'leaves', LeaveViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

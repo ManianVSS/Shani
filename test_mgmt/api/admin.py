@@ -5,16 +5,11 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
-    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun
+    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
 admin.site.index_title = "Welcome to Shani Portal"
-
-
-class AttachmentResource(resources.ModelResource):
-    class Meta:
-        model = Attachment
 
 
 class ModelAdminExtension(ImportExportModelAdmin):
@@ -23,6 +18,11 @@ class ModelAdminExtension(ImportExportModelAdmin):
         if db_field.name == 'description':
             formfield.widget = forms.Textarea(attrs=formfield.widget.attrs)
         return formfield
+
+
+class AttachmentResource(resources.ModelResource):
+    class Meta:
+        model = Attachment
 
 
 class AttachmentAdmin(ModelAdminExtension):
@@ -42,6 +42,54 @@ class ReleaseAdmin(ModelAdminExtension):
 
 
 admin.site.register(Release, ReleaseAdmin)
+
+
+class OrgGroupResource(resources.ModelResource):
+    class Meta:
+        model = OrgGroup
+
+
+class OrgGroupAdmin(ModelAdminExtension):
+    resource_class = OrgGroupResource
+
+
+admin.site.register(OrgGroup, OrgGroupAdmin)
+
+
+class EngineerResource(resources.ModelResource):
+    class Meta:
+        model = Engineer
+
+
+class EngineerAdmin(ModelAdminExtension):
+    resource_class = EngineerResource
+
+
+admin.site.register(Engineer, EngineerAdmin)
+
+
+class SiteHolidayResource(resources.ModelResource):
+    class Meta:
+        model = SiteHoliday
+
+
+class SiteHolidayAdmin(ModelAdminExtension):
+    resource_class = SiteHolidayResource
+
+
+admin.site.register(SiteHoliday, SiteHolidayAdmin)
+
+
+class LeaveResource(resources.ModelResource):
+    class Meta:
+        model = Leave
+
+
+class LeaveAdmin(ModelAdminExtension):
+    resource_class = LeaveResource
+
+
+admin.site.register(Leave, LeaveAdmin)
 
 
 class EpicResource(resources.ModelResource):
