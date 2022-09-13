@@ -5,7 +5,8 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
-    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave
+    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
+    EngineerOrgGroupParticipation
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -32,18 +33,6 @@ class AttachmentAdmin(ModelAdminExtension):
 admin.site.register(Attachment, AttachmentAdmin)
 
 
-class ReleaseResource(resources.ModelResource):
-    class Meta:
-        model = Release
-
-
-class ReleaseAdmin(ModelAdminExtension):
-    resource_class = ReleaseResource
-
-
-admin.site.register(Release, ReleaseAdmin)
-
-
 class OrgGroupResource(resources.ModelResource):
     class Meta:
         model = OrgGroup
@@ -66,6 +55,30 @@ class EngineerAdmin(ModelAdminExtension):
 
 
 admin.site.register(Engineer, EngineerAdmin)
+
+
+class ReleaseResource(resources.ModelResource):
+    class Meta:
+        model = Release
+
+
+class ReleaseAdmin(ModelAdminExtension):
+    resource_class = ReleaseResource
+
+
+admin.site.register(Release, ReleaseAdmin)
+
+
+class EngineerOrgGroupParticipationResource(resources.ModelResource):
+    class Meta:
+        model = EngineerOrgGroupParticipation
+
+
+class EngineerOrgGroupParticipationAdmin(ModelAdminExtension):
+    resource_class = EngineerOrgGroupParticipationResource
+
+
+admin.site.register(EngineerOrgGroupParticipation, EngineerOrgGroupParticipationAdmin)
 
 
 class SiteHolidayResource(resources.ModelResource):

@@ -15,15 +15,6 @@ class Attachment(models.Model):
         return str(self.file.name)
 
 
-class Release(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.name)
-
-
 class OrgGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
     auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group")
@@ -41,12 +32,33 @@ class OrgGroup(models.Model):
 class Engineer(models.Model):
     employee_id = models.CharField(max_length=20, null=True, unique=True)
     auth_user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="engineer")
-    role = models.CharField(max_length=100, null=True)
-    org_groups = models.ManyToManyField(OrgGroup, related_name="engineers", blank=True, )
+    role = models.CharField(max_length=100, null=True, blank=True, )
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, related_name="engineers", blank=True, null=True)
     attachments = models.ManyToManyField(Attachment, related_name='engineer_attachments', blank=True)
 
     def __str__(self):
         return str(self.employee_id) + ": " + str(self.auth_user)
+
+
+class Release(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    summary = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="releases")
+
+    def __str__(self):
+        return str(self.name)
+
+
+class EngineerOrgGroupParticipation(models.Model):
+    engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="org_group_participation")
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.CASCADE, related_name="engineer_participation")
+    role = models.CharField(max_length=100, null=True, blank=True, )
+    capacity = models.FloatField(default=1.0)
+
+    def __str__(self):
+        return str(self.engineer) + ": " + str(self.org_group)
 
 
 class SiteHoliday(models.Model):
@@ -54,6 +66,8 @@ class SiteHoliday(models.Model):
     date = models.DateField()
     summary = models.CharField(max_length=100)
     attachments = models.ManyToManyField(Attachment, related_name='site_holiday_attachments', blank=True)
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="site_holidays")
 
     def __str__(self):
         return str(self.date) + ": " + str(self.name)
@@ -79,6 +93,8 @@ class Epic(models.Model):
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
 
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="epics")
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -92,15 +108,19 @@ class Feature(models.Model):
 
     epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
 
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="features")
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
 
 class Sprint(models.Model):
     number = models.IntegerField()
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='sprints')
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='sprints')
     start_date = models.DateField()
     end_date = models.DateField()
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="sprints")
 
     def __str__(self):
         return str(self.release) + ": " + str(self.number)
@@ -118,6 +138,8 @@ class Story(models.Model):
     rank = models.IntegerField()
     sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
     feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="stories")
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
@@ -137,6 +159,9 @@ class UseCaseCategory(models.Model):
     summary = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="use_case_categories")
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
@@ -164,6 +189,8 @@ class UseCase(models.Model):
 
     attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
 
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="use_cases")
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -178,6 +205,9 @@ class Requirement(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100)
     description = models.CharField(max_length=10000, null=True, blank=True)
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="requirements")
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
@@ -214,6 +244,8 @@ class TestCase(models.Model):
 
     # defects = models.CharField(max_length=200, null=True, blank=True)
 
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="testcases")
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -224,6 +256,7 @@ class Defect(models.Model):
     external_id = models.CharField(max_length=50)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="defects")
 
 
 class Run(models.Model):
@@ -232,6 +265,7 @@ class Run(models.Model):
     time = models.DateTimeField(auto_now_add=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='runs')
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="runs")
 
     def __str__(self):
         return str(self.build) + ": " + str(self.name)
@@ -263,6 +297,9 @@ class ExecutionRecord(models.Model):
     # defects = models.CharField(max_length=200)
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
 
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="execution_records")
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -293,19 +330,22 @@ class ReliabilityRun(models.Model):
     totalIterationCount = models.IntegerField(null=True, blank=True)
     passedIterationCount = models.IntegerField(null=True, blank=True)
     incidentCount = models.IntegerField(null=True, blank=True)
-    targetIPTI = models.FloatField(null=True, blank=True)
-    ipti = models.FloatField(null=True, blank=True)
+    targetIPTE = models.FloatField(null=True, blank=True)
+    ipte = models.FloatField(null=True, blank=True)
     # defects = models.CharField(max_length=200)
     incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="reliability_runs")
 
     def __str__(self):
         return str(self.name) + ": " + str(self.testName) + ": " + str(self.release.name) + ": " + str(self.build)
 
     def recalculate_ipti(self):
-        self.ipti = -1.0
+        self.ipte = -1.0
         if self.incidentCount and self.totalIterationCount:
             if self.totalIterationCount > 0:
-                self.ipti = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
+                self.ipte = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
 
 
 class Environment(models.Model):
@@ -315,6 +355,9 @@ class Environment(models.Model):
     purpose = models.CharField(max_length=1000, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments')
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="environments")
 
     def __str__(self):
         return str(self.name) + ": " + str(self.type)
