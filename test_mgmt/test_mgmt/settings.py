@@ -93,10 +93,11 @@ if os.getenv("mode", "staging") == "production":
         }
     }
 else:
+    os.makedirs(os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/data', exist_ok=True, )
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/db.sqlite3',
+            'NAME': os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/data/db.sqlite3',
         }
     }
 print("Database object is :", str(DATABASES))
@@ -134,7 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
+MEDIA_URL = '/data/'
 
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'build'),
@@ -145,7 +146,7 @@ else:
                    os.path.join(BASE_DIR, 'build/static'),
                    os.path.join(BASE_DIR, MEDIA_URL)]
 
-MEDIA_BASE_NAME = 'media'
+MEDIA_BASE_NAME = 'data'
 MEDIA_ROOT = os.path.join(os.getenv('DATA_MOUNT_DIR', BASE_DIR), MEDIA_BASE_NAME)
 # os.makedirs(MEDIA_ROOT, exist_ok=True)
 

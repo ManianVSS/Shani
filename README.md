@@ -3,13 +3,15 @@
 Test Management - Use-Cases, Requirements, BDD Test-Cases, TDD execution and dashboard
 
 ### **Development Setup**
+
 Note: Dashboard development setup is yet to be documented
 
 ##### **Installing python dependencies - Ubuntu**<br>
+
 > sudo apt update</br>
 > sudo apt install python3</br>
 > sudo apt install pip</br>
-> sudo apt install libpq-dev python-dev
+> sudo apt install libpq-dev</br>
 > cd test_mgmt</br>
 > pip install -r requirements.txt</br>
 
@@ -35,7 +37,7 @@ Admin console should be up on http://localhost:8000/admin
 > sudo apt install postgresql</br>
 > sudo systemctl enable postgresql.service </br>
 > sudo systemctl start postgresql.service </br>
-> sudo apt install libpq-dev python-dev
+> sudo apt install libpq-dev</br>
 > cd test_mgmt</br>
 > pip install -r requirements.txt</br>
 

@@ -5,9 +5,9 @@ LABEL maintainer="Manian VSS<manianvss@hotmail.com>"
 RUN apt -y update \
 	&& apt -y upgrade \
 	&& apt -y install curl sshpass iputils-ping vim wget netcat net-tools\
-	&& apt -y install libpq-dev \ 
 	&& apt -y install python3 \
-    && apt -y install python-is-python3 python3-pip\	
+    && apt -y install python-is-python3 python3-pip\
+    && apt -y install libpq-dev \
 	&& rm -rf /var/cache/apt/*
 
 COPY test_mgmt /test_mgmt
@@ -16,5 +16,8 @@ COPY scripts/* /test_mgmt
 
 WORKDIR /test_mgmt
 RUN pip install -r requirements.txt
+RUN bash cleandb.sh
 
-ENTRYPOINT ["bash", "entrypoint.sh"]
+EXPOSE 8000
+
+ENTRYPOINT ["python3", "manage.py", "runserver","0.0.0.0:8000"]
