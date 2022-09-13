@@ -7,12 +7,12 @@ from rest_framework.response import Response
 
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
     Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
-    SiteHoliday, Leave, EngineerOrgGroupParticipation
+    SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
     ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
-    EngineerOrgGroupParticipationSerializer
+    EngineerOrgGroupParticipationSerializer, EnvironmentSerializer
 
 boolean_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
@@ -404,6 +404,24 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
         'status': id_fields_filter_lookups,
         'targetIPTE': compare_fields_filter_lookups,
         'incidents': id_fields_filter_lookups,
+        'org_group__id': id_fields_filter_lookups,
+    }
+
+
+class EnvironmentViewSet(viewsets.ModelViewSet):
+    queryset = Environment.objects.all()
+    serializer_class = EnvironmentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'type': string_fields_filter_lookups,
+        'purpose': string_fields_filter_lookups,
+        'current_release__id': id_fields_filter_lookups,
         'org_group__id': id_fields_filter_lookups,
     }
 

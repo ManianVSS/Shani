@@ -8,7 +8,8 @@ from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet
     RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, get_score, get_use_case_category_score, get_use_case_score, \
     DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, \
     get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
-    OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet
+    OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
+    EnvironmentViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -18,6 +19,12 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'attachments', AttachmentViewSet)
+
+router.register(r'org_groups', OrgGroupViewSet)
+router.register(r'engineers', EngineerViewSet)
+router.register(r'engineer_org_group_participation', EngineerOrgGroupParticipationViewSet)
+router.register(r'site_holidays', SiteHolidayViewSet)
+router.register(r'leaves', LeaveViewSet)
 
 router.register(r'releases', ReleaseViewSet)
 router.register(r'epics', EpicViewSet)
@@ -37,11 +44,7 @@ router.register(r'runs', RunViewSet)
 router.register(r'execution_records', ExecutionRecordViewSet)
 router.register(r'reliability_runs', ReliabilityRunViewSet)
 
-router.register(r'org_groups', OrgGroupViewSet)
-router.register(r'engineers', EngineerViewSet)
-router.register(r'engineer_org_group_participation', EngineerOrgGroupParticipationViewSet)
-router.register(r'site_holidays', SiteHolidayViewSet)
-router.register(r'leaves', LeaveViewSet)
+router.register(r'environments', EnvironmentViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

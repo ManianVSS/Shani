@@ -18,7 +18,7 @@ class Attachment(models.Model):
 class OrgGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
     auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group")
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=1000, null=True, blank=True)
     parent_org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
                                          related_name="sub_org_groups")
@@ -42,7 +42,7 @@ class Engineer(models.Model):
 
 class Release(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=1000, null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="releases")
@@ -64,7 +64,7 @@ class EngineerOrgGroupParticipation(models.Model):
 class SiteHoliday(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField()
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='site_holiday_attachments', blank=True)
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
                                   related_name="site_holidays")
@@ -77,7 +77,7 @@ class Leave(models.Model):
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="leaves")
     start_date = models.DateField()
     end_date = models.DateField()
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='leave_attachments', blank=True)
 
     def __str__(self):
@@ -86,7 +86,7 @@ class Leave(models.Model):
 
 class Epic(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=1000, null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='epic_attachments', blank=True)
@@ -101,7 +101,7 @@ class Epic(models.Model):
 
 class Feature(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=1000, null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
@@ -131,7 +131,7 @@ class Story(models.Model):
         verbose_name_plural = "stories"
 
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=1000, null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='story_attachments', blank=True)
@@ -156,7 +156,7 @@ class UseCaseCategory(models.Model):
         verbose_name_plural = "use case categories"
 
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=1000, null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
 
@@ -171,7 +171,7 @@ class UseCase(models.Model):
     category = models.ForeignKey(UseCaseCategory, on_delete=models.SET_NULL, null=True, blank=True)
 
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=10000, null=True, blank=True)
 
     # pre_conditions = models.ManyToManyField(UseCasePreCondition, related_name="pre_condition_use_cases", blank=True)
@@ -203,7 +203,7 @@ class Requirement(models.Model):
     use_cases = models.ManyToManyField(UseCase, related_name='requirements', blank=True)
 
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=10000, null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
@@ -218,7 +218,7 @@ class TestCase(models.Model):
     requirements = models.ManyToManyField(Requirement, related_name='testcases', blank=True)
 
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=10000, null=True, blank=True)
 
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
@@ -251,7 +251,7 @@ class TestCase(models.Model):
 
 
 class Defect(models.Model):
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=10000, null=True, blank=True)
     external_id = models.CharField(max_length=50)
 
@@ -285,7 +285,7 @@ class ExecutionRecord(models.Model):
     # testcase = models.ForeignKey(TestCase, null=True, on_delete=models.SET_NULL, related_name='execution_records')
 
     name = models.CharField(max_length=100)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=10000, null=True, blank=True)
 
     status = models.CharField(max_length=8, choices=ExecutionRecordStatus.choices,
@@ -350,6 +350,7 @@ class ReliabilityRun(models.Model):
 
 class Environment(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    summary = models.CharField(max_length=100, null=True, blank=True)
     type = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=20000, null=True, blank=True)
     purpose = models.CharField(max_length=1000, null=True, blank=True)

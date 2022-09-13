@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation
+    EngineerOrgGroupParticipation, Environment
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -247,3 +247,15 @@ class ReliabilityRunAdmin(ModelAdminExtension):
 
 
 admin.site.register(ReliabilityRun, ReliabilityRunAdmin)
+
+
+class EnvironmentResource(resources.ModelResource):
+    class Meta:
+        model = Environment
+
+
+class EnvironmentAdmin(ModelAdminExtension):
+    resource_class = EnvironmentResource
+
+
+admin.site.register(Environment, EnvironmentAdmin)

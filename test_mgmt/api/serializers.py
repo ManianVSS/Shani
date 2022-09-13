@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation
+    EngineerOrgGroupParticipation, Environment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -142,3 +142,10 @@ class ReliabilityRunSerializer(serializers.ModelSerializer):
         fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                   'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
                   'targetIPTE', 'ipte', 'incidents', 'release', 'org_group', ]
+
+
+class EnvironmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Environment
+        fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'attachments', 'current_release',
+                  'org_group', ]
