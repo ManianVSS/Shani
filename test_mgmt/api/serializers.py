@@ -57,7 +57,7 @@ class SiteHolidaySerializer(serializers.ModelSerializer):
 class LeaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Leave
-        fields = ['id', 'engineer', 'start_date', 'end_date', 'summary', 'attachments', ]
+        fields = ['id', 'engineer', 'start_date', 'end_date', 'summary', 'attachments', 'status', ]
 
 
 class EpicSerializer(serializers.ModelSerializer):

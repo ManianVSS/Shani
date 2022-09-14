@@ -162,7 +162,7 @@ class LeaveViewSet(viewsets.ModelViewSet):
     serializer_class = LeaveSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'engineer', 'start_date', 'end_date', ]
+    ordering_fields = ['id', 'engineer', 'start_date', 'end_date', 'status', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -170,6 +170,7 @@ class LeaveViewSet(viewsets.ModelViewSet):
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
+        'status': id_fields_filter_lookups,
     }
 
 
