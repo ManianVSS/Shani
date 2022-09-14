@@ -74,15 +74,24 @@ class SiteHoliday(models.Model):
         return str(self.name) + ": " + str(self.date)
 
 
+class LeaveStatus(models.TextChoices):
+    DRAFT = 'DRAFT', _('Draft'),
+    IN_REVIEW = 'IN_REVIEW', _('In Review'),
+    APPROVED = 'APPROVED', _('Approved'),
+    CLOSED = 'CLOSED', _('Closed'),
+
+
 class Leave(models.Model):
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="leaves")
     start_date = models.DateField()
     end_date = models.DateField()
     summary = models.CharField(max_length=100, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='leave_attachments', blank=True)
+    status = models.CharField(max_length=9, choices=LeaveStatus.choices, default=LeaveStatus.DRAFT)
 
     def __str__(self):
-        return str(self.engineer) + " from " + str(self.start_date) + " to " + str(self.end_date)
+        return str(self.engineer) + " from " + str(self.start_date) + " to " + str(self.end_date) + " - " + str(
+            self.status)
 
 
 class Epic(models.Model):
