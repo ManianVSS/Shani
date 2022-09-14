@@ -37,7 +37,7 @@ class Engineer(models.Model):
     attachments = models.ManyToManyField(Attachment, related_name='engineer_attachments', blank=True)
 
     def __str__(self):
-        return str(self.employee_id) + ": " + str(self.auth_user)
+        return str(self.auth_user)
 
 
 class Release(models.Model):
@@ -58,7 +58,8 @@ class EngineerOrgGroupParticipation(models.Model):
     capacity = models.FloatField(default=1.0)
 
     def __str__(self):
-        return str(self.engineer) + ": " + str(self.org_group)
+        return str(self.engineer) + " participates in " + str(self.org_group) + " with capacity " + str(
+            self.capacity)
 
 
 class SiteHoliday(models.Model):
@@ -70,7 +71,7 @@ class SiteHoliday(models.Model):
                                   related_name="site_holidays")
 
     def __str__(self):
-        return str(self.date) + ": " + str(self.name)
+        return str(self.name) + ": " + str(self.date)
 
 
 class Leave(models.Model):
@@ -81,7 +82,7 @@ class Leave(models.Model):
     attachments = models.ManyToManyField(Attachment, related_name='leave_attachments', blank=True)
 
     def __str__(self):
-        return str(self.engineer) + ": " + str(self.start_date) + "-" + str(self.end_date) + str(self.summary)
+        return str(self.engineer) + " from " + str(self.start_date) + " to " + str(self.end_date)
 
 
 class Epic(models.Model):
