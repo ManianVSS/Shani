@@ -373,7 +373,36 @@ class Environment(models.Model):
     def __str__(self):
         return str(self.name) + ": " + str(self.type)
 
-# class TestStep:
+
+class Topic(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    summary = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=20000, null=True, blank=True)
+    parent_topic = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
+                                     related_name="sub_topics")
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.summary)
+
+
+class TopicEngineerStatus(models.TextChoices):
+    ASSIGNED = 'ASSIGNED', _('Assigned'),
+    IN_PROGRESS = 'IN_PROGRESS', _('In Progress'),
+    COMPLETED = 'COMPLETED', _('Completed'),
+
+
+class TopicEngineerAssignment(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="engineer_ratings")
+    engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="topic_ratings")
+    status = models.CharField(max_length=11, choices=TopicEngineerStatus.choices, default=TopicEngineerStatus.ASSIGNED)
+    rating = models.FloatField(default=0)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return str(self.topic.name) + ": " + str(self.engineer.name) + ": " + str(self.status)
+
+    # class TestStep:
 #     def __init__(self):
 #         self.step = None
 #         self.testData = None  # {}

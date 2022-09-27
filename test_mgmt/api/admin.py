@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment
+    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -259,3 +259,27 @@ class EnvironmentAdmin(ModelAdminExtension):
 
 
 admin.site.register(Environment, EnvironmentAdmin)
+
+
+class TopicResource(resources.ModelResource):
+    class Meta:
+        model = Topic
+
+
+class TopicAdmin(ModelAdminExtension):
+    resource_class = TopicResource
+
+
+admin.site.register(Topic, TopicAdmin)
+
+
+class TopicEngineerAssignmentResource(resources.ModelResource):
+    class Meta:
+        model = TopicEngineerAssignment
+
+
+class TopicEngineerAssignmentAdmin(ModelAdminExtension):
+    resource_class = TopicEngineerAssignmentResource
+
+
+admin.site.register(TopicEngineerAssignment, TopicEngineerAssignmentAdmin)

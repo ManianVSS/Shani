@@ -7,12 +7,12 @@ from rest_framework.response import Response
 
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
     Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
-    SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment
+    SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
     ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
-    EngineerOrgGroupParticipationSerializer, EnvironmentSerializer
+    EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, TopicEngineerAssignmentSerializer
 
 boolean_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
@@ -424,6 +424,40 @@ class EnvironmentViewSet(viewsets.ModelViewSet):
         'purpose': string_fields_filter_lookups,
         'current_release__id': id_fields_filter_lookups,
         'org_group__id': id_fields_filter_lookups,
+    }
+
+
+class TopicViewSet(viewsets.ModelViewSet):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'description', 'parent_topic', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
+        'parent_topic': id_fields_filter_lookups,
+    }
+
+
+class TopicEngineerAssignmentViewSet(viewsets.ModelViewSet):
+    queryset = TopicEngineerAssignment.objects.all()
+    serializer_class = TopicEngineerAssignmentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'topic': id_fields_filter_lookups,
+        'engineer': id_fields_filter_lookups,
+        'status': id_fields_filter_lookups,
+        'rating': compare_fields_filter_lookups,
+        'start_date': date_fields_filter_lookups,
+        'end_date': date_fields_filter_lookups,
     }
 
 

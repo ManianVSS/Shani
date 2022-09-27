@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment
+    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -149,3 +149,15 @@ class EnvironmentSerializer(serializers.ModelSerializer):
         model = Environment
         fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'attachments', 'current_release',
                   'org_group', ]
+
+
+class TopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = ['id', 'name', 'summary', 'description', 'parent_topic', ]
+
+
+class TopicEngineerAssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopicEngineerAssignment
+        fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', ]

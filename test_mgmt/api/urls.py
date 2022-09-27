@@ -9,7 +9,7 @@ from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet
     DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, \
     get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
     OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
-    EnvironmentViewSet
+    EnvironmentViewSet, TopicViewSet, TopicEngineerAssignmentViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -45,6 +45,9 @@ router.register(r'execution_records', ExecutionRecordViewSet)
 router.register(r'reliability_runs', ReliabilityRunViewSet)
 
 router.register(r'environments', EnvironmentViewSet)
+
+router.register(r'topics', TopicViewSet)
+router.register(r'topic_engineer_assignments', TopicEngineerAssignmentViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
