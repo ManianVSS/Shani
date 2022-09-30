@@ -9,7 +9,7 @@ from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet
     DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, \
     get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
     OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
-    EnvironmentViewSet, TopicViewSet, TopicEngineerAssignmentViewSet
+    EnvironmentViewSet, TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -25,6 +25,7 @@ router.register(r'engineers', EngineerViewSet)
 router.register(r'engineer_org_group_participation', EngineerOrgGroupParticipationViewSet)
 router.register(r'site_holidays', SiteHolidayViewSet)
 router.register(r'leaves', LeaveViewSet)
+router.register(r'engineer_org_group_participation_history', EngineerOrgGroupParticipationHistoryViewSet)
 
 router.register(r'releases', ReleaseViewSet)
 router.register(r'epics', EpicViewSet)

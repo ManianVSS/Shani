@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment
+    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -58,6 +58,12 @@ class LeaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Leave
         fields = ['id', 'engineer', 'start_date', 'end_date', 'summary', 'attachments', 'status', ]
+
+
+class EngineerOrgGroupParticipationHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EngineerOrgGroupParticipationHistory
+        fields = ['id', 'date', 'engineer', 'org_group', 'expected_capacity', 'capacity', ]
 
 
 class EpicSerializer(serializers.ModelSerializer):

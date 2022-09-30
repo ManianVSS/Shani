@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment
+    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -103,6 +103,18 @@ class LeaveAdmin(ModelAdminExtension):
 
 
 admin.site.register(Leave, LeaveAdmin)
+
+
+class EngineerOrgGroupParticipationHistoryResource(resources.ModelResource):
+    class Meta:
+        model = EngineerOrgGroupParticipationHistory
+
+
+class EngineerOrgGroupParticipationHistoryAdmin(ModelAdminExtension):
+    resource_class = EngineerOrgGroupParticipationHistoryResource
+
+
+admin.site.register(EngineerOrgGroupParticipationHistory, EngineerOrgGroupParticipationHistoryAdmin)
 
 
 class EpicResource(resources.ModelResource):

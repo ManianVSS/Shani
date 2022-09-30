@@ -94,6 +94,22 @@ class Leave(models.Model):
             self.status)
 
 
+class EngineerOrgGroupParticipationHistory(models.Model):
+    class Meta:
+        verbose_name_plural = "engineer org-group participation history"
+
+    date = models.DateField()
+    engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="org_group_participation_history")
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.CASCADE, related_name="engineer_participation_history")
+    expected_capacity = models.FloatField(default=1.0)
+    capacity = models.FloatField(default=1.0)
+
+    def __str__(self):
+        return "On " + str(self.date) + ", " + str(self.engineer) + " participated in " + str(
+            self.org_group) + " with capacity " + str(
+            self.capacity)
+
+
 class Epic(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)

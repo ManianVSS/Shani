@@ -7,12 +7,14 @@ from rest_framework.response import Response
 
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
     Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
-    SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment
+    SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, \
+    EngineerOrgGroupParticipationHistory
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
     ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
-    EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, TopicEngineerAssignmentSerializer
+    EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
+    EngineerOrgGroupParticipationHistorySerializer
 
 boolean_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
@@ -171,6 +173,23 @@ class LeaveViewSet(viewsets.ModelViewSet):
         'end_date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
+    }
+
+
+class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
+    queryset = EngineerOrgGroupParticipationHistory.objects.all()
+    serializer_class = EngineerOrgGroupParticipationHistorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'date', 'engineer', 'org_group', 'expected_capacity', 'capacity', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'date': date_fields_filter_lookups,
+        'engineer__id': id_fields_filter_lookups,
+        'org_group__id': id_fields_filter_lookups,
+        'expected_capacity': compare_fields_filter_lookups,
+        'capacity': compare_fields_filter_lookups,
     }
 
 
