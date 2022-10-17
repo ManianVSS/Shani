@@ -13,12 +13,12 @@ admin.site.site_title = "Shani Admin Portal"
 admin.site.index_title = "Welcome to Shani Portal"
 
 
-class ModelAdminExtension(ImportExportModelAdmin):
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        formfield = super(ModelAdminExtension, self).formfield_for_dbfield(db_field, **kwargs)
-        if db_field.name == 'description':
-            formfield.widget = forms.Textarea(attrs=formfield.widget.attrs)
-        return formfield
+# class ModelAdminExtension(ImportExportModelAdmin):
+#     def formfield_for_dbfield(self, db_field, **kwargs):
+#         formfield = super(ModelAdminExtension, self).formfield_for_dbfield(db_field, **kwargs)
+#         if db_field.name == 'description':
+#             formfield.widget = forms.Textarea(attrs=formfield.widget.attrs)
+#         return formfield
 
 
 class AttachmentResource(resources.ModelResource):
@@ -26,7 +26,7 @@ class AttachmentResource(resources.ModelResource):
         model = Attachment
 
 
-class AttachmentAdmin(ModelAdminExtension):
+class AttachmentAdmin(ImportExportModelAdmin):
     resource_class = AttachmentResource
 
 
@@ -38,7 +38,7 @@ class OrgGroupResource(resources.ModelResource):
         model = OrgGroup
 
 
-class OrgGroupAdmin(ModelAdminExtension):
+class OrgGroupAdmin(ImportExportModelAdmin):
     resource_class = OrgGroupResource
 
 
@@ -50,7 +50,7 @@ class EngineerResource(resources.ModelResource):
         model = Engineer
 
 
-class EngineerAdmin(ModelAdminExtension):
+class EngineerAdmin(ImportExportModelAdmin):
     resource_class = EngineerResource
 
 
@@ -62,7 +62,7 @@ class ReleaseResource(resources.ModelResource):
         model = Release
 
 
-class ReleaseAdmin(ModelAdminExtension):
+class ReleaseAdmin(ImportExportModelAdmin):
     resource_class = ReleaseResource
 
 
@@ -74,7 +74,7 @@ class EngineerOrgGroupParticipationResource(resources.ModelResource):
         model = EngineerOrgGroupParticipation
 
 
-class EngineerOrgGroupParticipationAdmin(ModelAdminExtension):
+class EngineerOrgGroupParticipationAdmin(ImportExportModelAdmin):
     resource_class = EngineerOrgGroupParticipationResource
 
 
@@ -86,7 +86,7 @@ class SiteHolidayResource(resources.ModelResource):
         model = SiteHoliday
 
 
-class SiteHolidayAdmin(ModelAdminExtension):
+class SiteHolidayAdmin(ImportExportModelAdmin):
     resource_class = SiteHolidayResource
 
 
@@ -98,7 +98,7 @@ class LeaveResource(resources.ModelResource):
         model = Leave
 
 
-class LeaveAdmin(ModelAdminExtension):
+class LeaveAdmin(ImportExportModelAdmin):
     resource_class = LeaveResource
 
 
@@ -110,7 +110,7 @@ class EngineerOrgGroupParticipationHistoryResource(resources.ModelResource):
         model = EngineerOrgGroupParticipationHistory
 
 
-class EngineerOrgGroupParticipationHistoryAdmin(ModelAdminExtension):
+class EngineerOrgGroupParticipationHistoryAdmin(ImportExportModelAdmin):
     resource_class = EngineerOrgGroupParticipationHistoryResource
 
 
@@ -122,7 +122,7 @@ class EpicResource(resources.ModelResource):
         model = Epic
 
 
-class EpicAdmin(ModelAdminExtension):
+class EpicAdmin(ImportExportModelAdmin):
     resource_class = EpicResource
 
 
@@ -134,7 +134,7 @@ class FeatureResource(resources.ModelResource):
         model = Feature
 
 
-class FeatureAdmin(ModelAdminExtension):
+class FeatureAdmin(ImportExportModelAdmin):
     resource_class = FeatureResource
 
 
@@ -146,7 +146,7 @@ class SprintResource(resources.ModelResource):
         model = Sprint
 
 
-class SprintAdmin(ModelAdminExtension):
+class SprintAdmin(ImportExportModelAdmin):
     resource_class = SprintResource
 
 
@@ -158,7 +158,7 @@ class StoryResource(resources.ModelResource):
         model = Story
 
 
-class StoryAdmin(ModelAdminExtension):
+class StoryAdmin(ImportExportModelAdmin):
     resource_class = StoryResource
 
 
@@ -170,7 +170,7 @@ class UseCaseCategoryResource(resources.ModelResource):
         model = UseCaseCategory
 
 
-class UseCaseCategoryAdmin(ModelAdminExtension):
+class UseCaseCategoryAdmin(ImportExportModelAdmin):
     resource_class = UseCaseCategoryResource
 
 
@@ -182,7 +182,7 @@ class UseCaseResource(resources.ModelResource):
         model = UseCase
 
 
-class UseCaseAdmin(ModelAdminExtension):
+class UseCaseAdmin(ImportExportModelAdmin):
     resource_class = UseCaseResource
 
 
@@ -194,7 +194,7 @@ class RequirementResource(resources.ModelResource):
         model = Requirement
 
 
-class RequirementAdmin(ModelAdminExtension):
+class RequirementAdmin(ImportExportModelAdmin):
     resource_class = RequirementResource
 
 
@@ -206,7 +206,7 @@ class TestCaseResource(resources.ModelResource):
         model = TestCase
 
 
-class TestCaseAdmin(ModelAdminExtension):
+class TestCaseAdmin(ImportExportModelAdmin):
     resource_class = TestCaseResource
 
 
@@ -218,7 +218,7 @@ class DefectResource(resources.ModelResource):
         model = Defect
 
 
-class DefectAdmin(ModelAdminExtension):
+class DefectAdmin(ImportExportModelAdmin):
     resource_class = DefectResource
 
 
@@ -230,7 +230,7 @@ class RunResource(resources.ModelResource):
         model = Run
 
 
-class RunAdmin(ModelAdminExtension):
+class RunAdmin(ImportExportModelAdmin):
     resource_class = RunResource
 
 
@@ -242,7 +242,7 @@ class ExecutionRecordResource(resources.ModelResource):
         model = ExecutionRecord
 
 
-class ExecutionRecordAdmin(ModelAdminExtension):
+class ExecutionRecordAdmin(ImportExportModelAdmin):
     resource_class = ExecutionRecordResource
 
 
@@ -254,7 +254,7 @@ class ReliabilityRunResource(resources.ModelResource):
         model = ReliabilityRun
 
 
-class ReliabilityRunAdmin(ModelAdminExtension):
+class ReliabilityRunAdmin(ImportExportModelAdmin):
     resource_class = ReliabilityRunResource
 
 
@@ -266,7 +266,7 @@ class EnvironmentResource(resources.ModelResource):
         model = Environment
 
 
-class EnvironmentAdmin(ModelAdminExtension):
+class EnvironmentAdmin(ImportExportModelAdmin):
     resource_class = EnvironmentResource
 
 
@@ -278,7 +278,7 @@ class TopicResource(resources.ModelResource):
         model = Topic
 
 
-class TopicAdmin(ModelAdminExtension):
+class TopicAdmin(ImportExportModelAdmin):
     resource_class = TopicResource
 
 
@@ -290,7 +290,7 @@ class TopicEngineerAssignmentResource(resources.ModelResource):
         model = TopicEngineerAssignment
 
 
-class TopicEngineerAssignmentAdmin(ModelAdminExtension):
+class TopicEngineerAssignmentAdmin(ImportExportModelAdmin):
     resource_class = TopicEngineerAssignmentResource
 
 

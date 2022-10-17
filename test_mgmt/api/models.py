@@ -19,7 +19,7 @@ class OrgGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
     auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group")
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     parent_org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
                                          related_name="sub_org_groups")
     leader = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="lead_org_groups")
@@ -43,7 +43,7 @@ class Engineer(models.Model):
 class Release(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="releases")
 
@@ -113,7 +113,7 @@ class EngineerOrgGroupParticipationHistory(models.Model):
 class Epic(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='epic_attachments', blank=True)
 
@@ -128,7 +128,7 @@ class Epic(models.Model):
 class Feature(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
 
@@ -158,7 +158,7 @@ class Story(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='story_attachments', blank=True)
     rank = models.IntegerField()
@@ -183,7 +183,7 @@ class UseCaseCategory(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
@@ -198,7 +198,7 @@ class UseCase(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=10000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     # pre_conditions = models.ManyToManyField(UseCasePreCondition, related_name="pre_condition_use_cases", blank=True)
     # events = models.ManyToManyField(UseCaseStep, related_name="event_use_cases", blank=True)
@@ -230,7 +230,7 @@ class Requirement(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=10000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
                                   related_name="requirements")
@@ -245,7 +245,7 @@ class TestCase(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=10000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
 
@@ -278,7 +278,7 @@ class TestCase(models.Model):
 
 class Defect(models.Model):
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=10000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     external_id = models.CharField(max_length=50)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
@@ -312,7 +312,7 @@ class ExecutionRecord(models.Model):
 
     name = models.CharField(max_length=100)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=10000, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     status = models.CharField(max_length=8, choices=ExecutionRecordStatus.choices,
                               default=ExecutionRecordStatus.PENDING)
@@ -378,7 +378,7 @@ class Environment(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
     type = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=20000, null=True, blank=True)
+    description = models.TextField( null=True, blank=True)
     purpose = models.CharField(max_length=1000, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments')
@@ -393,7 +393,7 @@ class Environment(models.Model):
 class Topic(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=20000, null=True, blank=True)
+    description = models.TextField( null=True, blank=True)
     parent_topic = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
                                      related_name="sub_topics")
 
@@ -459,7 +459,7 @@ class TopicEngineerAssignment(models.Model):
 
 # class StringStep(models.Model):
 #     summary = models.CharField(max_length=1000, unique=True)
-#     description = models.CharField(max_length=10000, null=True, blank=True)
+#     description = models.TextField( null=True, blank=True)
 #
 #     def __str__(self):
 #         return str(self.summary)
