@@ -713,7 +713,6 @@ def get_capacity_for_time_range(request):
     to_date = datetime.strptime(request.query_params.get('to'), '%Y-%m-%d').date()
 
     org_group_participation_qs = EngineerOrgGroupParticipation.objects.filter(org_group=org_group)
-    # participating_engineer_list = [item.engineer for item in org_group_participation_qs]
 
     work_days = numpy.busday_count(from_date,
                                    to_date + timedelta(days=1),
@@ -752,69 +751,48 @@ def get_capacity_for_time_range(request):
                                                'capacity': capacity,
                                                }
 
-        range_leaves = Leave.objects.filter(engineer__org_group=org_group,
-                                            start_date__gte=from_date, start_date__lte=to_date,
-                                            end_date__gte=from_date, end_date__lte=to_date)
-        # site_holidays = SiteHoliday.objects.filter(org_group=org_group, date__gte=from_date, date__lte=to_date)
-
     capacity_data = {
-        # 'total_days': (to_date - from_date).days + 1,
         'work_days': work_days,
-        # 'range_leaves': LeaveSerializer(range_leaves, many=True).data,
-        # 'site_holidays': SiteHolidaySerializer(site_holidays, many=True).data,
-        # 'engineer_list': EngineerSerializer(participating_engineer_list, many=True).data,
         'total_capacity': total_capacity,
         'engineer_data': engineer_data,
     }
 
-    # for range_leave in range_leaves:
-    #     employee_id = range_leave.engineer.employee_id
-    #     if employee_id not in capacity_data['engineer_data'].keys():
-    #         employee_name = str(range_leave.engineer.auth_user)
-    #         participation = EngineerOrgGroupParticipation.objects.filter(pk=employee_name)
-    #         if participation.count == 0:
-    #             continue
-    #         capacity_data['engineer_data'][employee_id] = {'id': employee_id,
-    #                                                        'name': employee_name
-    #                                                        }
-    #     engineer_data_obj = capacity_data['engineer_data'][employee_id]
-
     return Response(capacity_data)
 
-    # class ParseExcel(APIView):
-    #     def post(self, request, format=None):
-    #         try:
-    #             excel_file = request.FILES['files']
-    #         except MultiValueDictKeyError:
-    #             return redirect ("/error.html")
-    # @api_view(['GET'])
-    # def use_case_count(request):
-    #     count = UseCase.objects.all().count()
-    #     return Response(count, status=status.HTTP_200_OK)
+# class ParseExcel(APIView):
+#     def post(self, request, format=None):
+#         try:
+#             excel_file = request.FILES['files']
+#         except MultiValueDictKeyError:
+#             return redirect ("/error.html")
+# @api_view(['GET'])
+# def use_case_count(request):
+#     count = UseCase.objects.all().count()
+#     return Response(count, status=status.HTTP_200_OK)
 
-    #
-    # @api_view(['GET'])
-    # def requirement_count(request):
-    #     count = Requirement.objects.all().count()
-    #     return Response(count, status=status.HTTP_200_OK)
+#
+# @api_view(['GET'])
+# def requirement_count(request):
+#     count = Requirement.objects.all().count()
+#     return Response(count, status=status.HTTP_200_OK)
 
-    # @api_view(['GET'])
-    # def test_case_count(request):
-    #     count = TestCase.objects.all().count()
-    #     return Response(count, status=status.HTTP_200_OK)
+# @api_view(['GET'])
+# def test_case_count(request):
+#     count = TestCase.objects.all().count()
+#     return Response(count, status=status.HTTP_200_OK)
 
-    # class StepViewSet(viewsets.ModelViewSet):
-    #     queryset = Step.objects.all()
-    #     serializer_class = StepSerializer
-    #     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    #     search_fields = default_search_fields
-    #     ordering_fields = ['id', 'summary', 'actor', 'interface', 'action']
-    #     ordering = default_ordering
-    #     filterset_fields = {
-    #         'id': id_fields_filter_lookups,
-    #         'summary': string_fields_filter_lookups,
-    #
-    #         'actor': string_fields_filter_lookups,
-    #         'interface': string_fields_filter_lookups,
-    #         'action': string_fields_filter_lookups,
-    #     }
+# class StepViewSet(viewsets.ModelViewSet):
+#     queryset = Step.objects.all()
+#     serializer_class = StepSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     search_fields = default_search_fields
+#     ordering_fields = ['id', 'summary', 'actor', 'interface', 'action']
+#     ordering = default_ordering
+#     filterset_fields = {
+#         'id': id_fields_filter_lookups,
+#         'summary': string_fields_filter_lookups,
+#
+#         'actor': string_fields_filter_lookups,
+#         'interface': string_fields_filter_lookups,
+#         'action': string_fields_filter_lookups,
+#     }
