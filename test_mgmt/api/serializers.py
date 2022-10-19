@@ -3,7 +3,8 @@ from rest_framework import serializers
 
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory
+    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
+    Site
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,10 +31,16 @@ class OrgGroupSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'summary', 'auth_group', 'description', 'parent_org_group', 'leader', 'attachments', ]
 
 
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Site
+        fields = ['id', 'name', 'summary', 'attachments', ]
+
+
 class EngineerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Engineer
-        fields = ['id', 'employee_id', 'auth_user', 'role', 'org_group', 'attachments', 'org_group', ]  #
+        fields = ['id', 'employee_id', 'auth_user', 'role', 'org_group', 'site', 'attachments', ]
 
 
 class ReleaseSerializer(serializers.ModelSerializer):
@@ -51,7 +58,7 @@ class EngineerOrgGroupParticipationSerializer(serializers.ModelSerializer):
 class SiteHolidaySerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteHoliday
-        fields = ['id', 'name', 'date', 'summary', 'attachments', 'org_group', ]
+        fields = ['id', 'name', 'date', 'summary', 'attachments', 'site', ]
 
 
 class LeaveSerializer(serializers.ModelSerializer):

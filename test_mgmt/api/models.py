@@ -7,6 +7,7 @@ from api import ipte_util
 from test_mgmt import settings
 
 
+# TODO: To check if attachments can be overwritten with same file names from two records.
 class Attachment(models.Model):
     name = models.CharField(max_length=256)
     file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
@@ -29,11 +30,22 @@ class OrgGroup(models.Model):
         return str(self.name)
 
 
+class Site(models.Model):
+    name = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, null=True, blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='site_attachments', blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Engineer(models.Model):
     employee_id = models.CharField(max_length=20, null=True, unique=True)
     auth_user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="engineer")
     role = models.CharField(max_length=100, null=True, blank=True, )
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, related_name="engineers", blank=True, null=True)
+    site = models.ForeignKey(Site, null=True, blank=True, on_delete=models.SET_NULL,
+                             related_name="engineers")
     attachments = models.ManyToManyField(Attachment, related_name='engineer_attachments', blank=True)
 
     def __str__(self):
@@ -67,11 +79,11 @@ class SiteHoliday(models.Model):
     date = models.DateField()
     summary = models.CharField(max_length=100, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='site_holiday_attachments', blank=True)
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="site_holidays")
+    site = models.ForeignKey(Site, null=True, blank=True, on_delete=models.SET_NULL,
+                             related_name="site_holidays")
 
     def __str__(self):
-        return str(self.name) + ": " + str(self.date)
+        return str(self.site) + ": " + str(self.name) + ": " + str(self.date)
 
 
 class LeaveStatus(models.TextChoices):
@@ -378,7 +390,7 @@ class Environment(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
     type = models.CharField(max_length=100, null=True, blank=True)
-    description = models.TextField( null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     purpose = models.CharField(max_length=1000, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments')
@@ -393,7 +405,7 @@ class Environment(models.Model):
 class Topic(models.Model):
     name = models.CharField(max_length=100, unique=True)
     summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.TextField( null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     parent_topic = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
                                      related_name="sub_topics")
 

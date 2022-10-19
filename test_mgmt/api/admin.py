@@ -6,7 +6,8 @@ from import_export.admin import ImportExportModelAdmin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory
+    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
+    Site
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -43,6 +44,18 @@ class OrgGroupAdmin(ImportExportModelAdmin):
 
 
 admin.site.register(OrgGroup, OrgGroupAdmin)
+
+
+class SiteResource(resources.ModelResource):
+    class Meta:
+        model = Site
+
+
+class SiteAdmin(ImportExportModelAdmin):
+    resource_class = SiteResource
+
+
+admin.site.register(Site, SiteAdmin)
 
 
 class EngineerResource(resources.ModelResource):

@@ -1,3 +1,7 @@
+import json
+from datetime import datetime, timedelta
+
+import numpy
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse
 from rest_framework import permissions, status
@@ -8,13 +12,15 @@ from rest_framework.response import Response
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
     Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
     SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, \
-    EngineerOrgGroupParticipationHistory
+    EngineerOrgGroupParticipationHistory, Site
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
     ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
     EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
-    EngineerOrgGroupParticipationHistorySerializer
+    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer
+
+WORK_DAYS_MASK = [1, 1, 1, 1, 1, 0, 0]
 
 boolean_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
@@ -88,10 +94,24 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'auth_group__id': id_fields_filter_lookups,
-        'parent_org_group__id': id_fields_filter_lookups,
+        'auth_group': id_fields_filter_lookups,
+        'parent_org_group': id_fields_filter_lookups,
         'leader': id_fields_filter_lookups,
-        'engineer_participation__id': id_fields_filter_lookups,
+        'engineer_participation': id_fields_filter_lookups,
+    }
+
+
+class SiteViewSet(viewsets.ModelViewSet):
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
     }
 
 
@@ -105,10 +125,11 @@ class EngineerViewSet(viewsets.ModelViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'employee_id': string_fields_filter_lookups,
-        'auth_user__id': id_fields_filter_lookups,
+        'auth_user': id_fields_filter_lookups,
         'role': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
-        'org_group_participation__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'site': id_fields_filter_lookups,
+        'org_group_participation': id_fields_filter_lookups,
     }
 
 
@@ -123,7 +144,7 @@ class ReleaseViewSet(viewsets.ModelViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -136,8 +157,8 @@ class EngineerOrgGroupParticipationViewSet(viewsets.ModelViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'engineer__id': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'engineer': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
         'role': string_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
     }
@@ -148,14 +169,14 @@ class SiteHolidayViewSet(viewsets.ModelViewSet):
     serializer_class = SiteHolidaySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'date', 'org_group', ]
+    ordering_fields = ['id', 'name', 'date', 'site', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'site': id_fields_filter_lookups,
     }
 
 
@@ -168,7 +189,7 @@ class LeaveViewSet(viewsets.ModelViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'engineer__id': id_fields_filter_lookups,
+        'engineer': id_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
@@ -186,8 +207,8 @@ class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'date': date_fields_filter_lookups,
-        'engineer__id': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'engineer': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
         'expected_capacity': compare_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
     }
@@ -205,9 +226,9 @@ class EpicViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'release__id': id_fields_filter_lookups,
+        'release': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -223,9 +244,9 @@ class FeatureViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'epic__id': id_fields_filter_lookups,
+        'epic': id_fields_filter_lookups,
         'epic__name': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -239,11 +260,11 @@ class SprintViewSet(viewsets.ModelViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'number': string_fields_filter_lookups,
-        'release__id': id_fields_filter_lookups,
+        'release': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -260,11 +281,11 @@ class StoryViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
         'rank': compare_fields_filter_lookups,
-        'sprint__id': id_fields_filter_lookups,
+        'sprint': id_fields_filter_lookups,
         'sprint__number': compare_fields_filter_lookups,
-        'feature__id': id_fields_filter_lookups,
+        'feature': id_fields_filter_lookups,
         'feature__name': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -280,7 +301,7 @@ class UseCaseCategoryViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -298,15 +319,15 @@ class UseCaseViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
 
         'category__name': id_fields_filter_lookups,
-        'requirements__id': id_fields_filter_lookups,
-        # 'testcases__id': id_fields_filter_lookups,
+        'requirements': id_fields_filter_lookups,
+        # 'testcases': id_fields_filter_lookups,
 
         'weight': compare_fields_filter_lookups,
         'consumer_score': compare_fields_filter_lookups,
         'serviceability_score': compare_fields_filter_lookups,
         'test_confidence': compare_fields_filter_lookups,
         'development_confidence': compare_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -321,8 +342,8 @@ class RequirementViewSet(viewsets.ModelViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'use_cases__id': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'use_cases': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -340,9 +361,9 @@ class TestCaseViewSet(viewsets.ModelViewSet):
         'status': id_fields_filter_lookups,
         'acceptance_test': boolean_fields_filter_lookups,
         'automated': boolean_fields_filter_lookups,
-        'use_case__id': id_fields_filter_lookups,
-        'requirements__id': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'use_case': id_fields_filter_lookups,
+        'requirements': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -359,9 +380,9 @@ class DefectViewSet(viewsets.ModelViewSet):
         'description': string_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
 
-        'release__id': id_fields_filter_lookups,
+        'release': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -377,7 +398,7 @@ class RunViewSet(viewsets.ModelViewSet):
         'build': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -395,11 +416,11 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
         'status': id_fields_filter_lookups,
         'acceptance_test': boolean_fields_filter_lookups,
         'automated': boolean_fields_filter_lookups,
-        'defects__id': id_fields_filter_lookups,
-        'run__id': id_fields_filter_lookups,
+        'defects': id_fields_filter_lookups,
+        'run': id_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
-        # 'testcase__id': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        # 'testcase': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -424,7 +445,7 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
         'status': id_fields_filter_lookups,
         'targetIPTE': compare_fields_filter_lookups,
         'incidents': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -441,8 +462,8 @@ class EnvironmentViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'type': string_fields_filter_lookups,
         'purpose': string_fields_filter_lookups,
-        'current_release__id': id_fields_filter_lookups,
-        'org_group__id': id_fields_filter_lookups,
+        'current_release': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -673,41 +694,127 @@ def get_overall_completion(request):
     return Response(result)
     # return Response(get_use_case_category_completion(use_case_category))
 
-# class ParseExcel(APIView):
-#     def post(self, request, format=None):
-#         try:
-#             excel_file = request.FILES['files']
-#         except MultiValueDictKeyError:
-#             return redirect ("/error.html")
-# @api_view(['GET'])
-# def use_case_count(request):
-#     count = UseCase.objects.all().count()
-#     return Response(count, status=status.HTTP_200_OK)
 
-#
-# @api_view(['GET'])
-# def requirement_count(request):
-#     count = Requirement.objects.all().count()
-#     return Response(count, status=status.HTTP_200_OK)
+@api_view(['GET'])
+def get_capacity_for_time_range(request):
+    if not request.method == 'GET':
+        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    if not (('org_group' in request.GET) and ('from' in request.GET) and ('to' in request.GET)):
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST,
+                            content='One of the parameters (org_group/from/to) missing')
 
-# @api_view(['GET'])
-# def test_case_count(request):
-#     count = TestCase.objects.all().count()
-#     return Response(count, status=status.HTTP_200_OK)
+    try:
+        org_group = OrgGroup.objects.get(pk=request.query_params.get('org_group'))
+    except OrgGroup.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, content='Could not find org_group passed')
 
-# class StepViewSet(viewsets.ModelViewSet):
-#     queryset = Step.objects.all()
-#     serializer_class = StepSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-#     search_fields = default_search_fields
-#     ordering_fields = ['id', 'summary', 'actor', 'interface', 'action']
-#     ordering = default_ordering
-#     filterset_fields = {
-#         'id': id_fields_filter_lookups,
-#         'summary': string_fields_filter_lookups,
-#
-#         'actor': string_fields_filter_lookups,
-#         'interface': string_fields_filter_lookups,
-#         'action': string_fields_filter_lookups,
-#     }
+    from_date = datetime.strptime(request.query_params.get('from'), '%Y-%m-%d').date()
+    to_date = datetime.strptime(request.query_params.get('to'), '%Y-%m-%d').date()
+
+    org_group_participation_qs = EngineerOrgGroupParticipation.objects.filter(org_group=org_group)
+    # participating_engineer_list = [item.engineer for item in org_group_participation_qs]
+
+    work_days = numpy.busday_count(from_date,
+                                   to_date + timedelta(days=1),
+                                   weekmask=WORK_DAYS_MASK
+                                   )
+
+    total_capacity = 0
+    engineer_data = {}
+    for org_group_participation in org_group_participation_qs:
+        engineer = org_group_participation.engineer
+        engineer_leave_plans = Leave.objects.filter(engineer=engineer,
+                                                    start_date__gte=from_date, start_date__lte=to_date,
+                                                    end_date__gte=from_date, end_date__lte=to_date)
+        engineer_site_holidays = SiteHoliday.objects.filter(site=engineer.site,
+                                                            date__gte=from_date,
+                                                            date__lte=to_date)
+        engineer_site_holidays_dates = [item.date for item in engineer_site_holidays]
+        leave_count = 0
+        for engineer_leave in engineer_leave_plans:
+            leave_count = leave_count + numpy.busday_count(engineer_leave.start_date,
+                                                           engineer_leave.end_date + timedelta(days=1),
+                                                           weekmask=WORK_DAYS_MASK,
+                                                           holidays=engineer_site_holidays_dates)
+        site_holiday_count = len(engineer_site_holidays_dates)
+        available_days = work_days - leave_count - site_holiday_count
+        capacity = available_days * org_group_participation.capacity
+        total_capacity = total_capacity + capacity
+        engineer_data[engineer.employee_id] = {'employee_id': engineer.employee_id,
+                                               'name': engineer.auth_user.username,
+                                               'leave_plans': LeaveSerializer(engineer_leave_plans, many=True).data,
+                                               'engineer_site_holidays_dates': engineer_site_holidays_dates,
+                                               'leave_count': leave_count,
+                                               'site_holiday_count': site_holiday_count,
+                                               'available_days': available_days,
+                                               'participation_capacity': org_group_participation.capacity,
+                                               'capacity': capacity,
+                                               }
+
+        range_leaves = Leave.objects.filter(engineer__org_group=org_group,
+                                            start_date__gte=from_date, start_date__lte=to_date,
+                                            end_date__gte=from_date, end_date__lte=to_date)
+        # site_holidays = SiteHoliday.objects.filter(org_group=org_group, date__gte=from_date, date__lte=to_date)
+
+    capacity_data = {
+        # 'total_days': (to_date - from_date).days + 1,
+        'work_days': work_days,
+        # 'range_leaves': LeaveSerializer(range_leaves, many=True).data,
+        # 'site_holidays': SiteHolidaySerializer(site_holidays, many=True).data,
+        # 'engineer_list': EngineerSerializer(participating_engineer_list, many=True).data,
+        'total_capacity': total_capacity,
+        'engineer_data': engineer_data,
+    }
+
+    # for range_leave in range_leaves:
+    #     employee_id = range_leave.engineer.employee_id
+    #     if employee_id not in capacity_data['engineer_data'].keys():
+    #         employee_name = str(range_leave.engineer.auth_user)
+    #         participation = EngineerOrgGroupParticipation.objects.filter(pk=employee_name)
+    #         if participation.count == 0:
+    #             continue
+    #         capacity_data['engineer_data'][employee_id] = {'id': employee_id,
+    #                                                        'name': employee_name
+    #                                                        }
+    #     engineer_data_obj = capacity_data['engineer_data'][employee_id]
+
+    return Response(capacity_data)
+
+    # class ParseExcel(APIView):
+    #     def post(self, request, format=None):
+    #         try:
+    #             excel_file = request.FILES['files']
+    #         except MultiValueDictKeyError:
+    #             return redirect ("/error.html")
+    # @api_view(['GET'])
+    # def use_case_count(request):
+    #     count = UseCase.objects.all().count()
+    #     return Response(count, status=status.HTTP_200_OK)
+
+    #
+    # @api_view(['GET'])
+    # def requirement_count(request):
+    #     count = Requirement.objects.all().count()
+    #     return Response(count, status=status.HTTP_200_OK)
+
+    # @api_view(['GET'])
+    # def test_case_count(request):
+    #     count = TestCase.objects.all().count()
+    #     return Response(count, status=status.HTTP_200_OK)
+
+    # class StepViewSet(viewsets.ModelViewSet):
+    #     queryset = Step.objects.all()
+    #     serializer_class = StepSerializer
+    #     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #     search_fields = default_search_fields
+    #     ordering_fields = ['id', 'summary', 'actor', 'interface', 'action']
+    #     ordering = default_ordering
+    #     filterset_fields = {
+    #         'id': id_fields_filter_lookups,
+    #         'summary': string_fields_filter_lookups,
+    #
+    #         'actor': string_fields_filter_lookups,
+    #         'interface': string_fields_filter_lookups,
+    #         'action': string_fields_filter_lookups,
+    #     }
