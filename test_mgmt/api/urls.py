@@ -10,7 +10,7 @@ from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet
     get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
     OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
     EnvironmentViewSet, TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, \
-    get_capacity_for_time_range, SiteViewSet
+    get_capacity_for_time_range, SiteViewSet, TagViewSet, TestCaseCategoryViewSet, TestCaseViewSet
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -39,6 +39,8 @@ router.register(r'use_case_categories', UseCaseCategoryViewSet)
 router.register(r'use_cases', UseCaseViewSet)
 # router.register(r'steps', StepViewSet)
 router.register(r'requirements', RequirementViewSet)
+router.register(r'tags', TagViewSet)
+router.register(r'test_case_categories', TestCaseCategoryViewSet)
 router.register(r'testcases', TestCaseViewSet)
 # router.register(r'steps', StepViewSet)
 

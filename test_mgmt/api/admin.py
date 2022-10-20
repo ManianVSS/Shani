@@ -7,7 +7,7 @@ from import_export.admin import ImportExportModelAdmin
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
-    Site
+    Site, TestCaseCategory, Tag
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -212,6 +212,30 @@ class RequirementAdmin(ImportExportModelAdmin):
 
 
 admin.site.register(Requirement, RequirementAdmin)
+
+
+class TagResource(resources.ModelResource):
+    class Meta:
+        model = Tag
+
+
+class TagAdmin(ImportExportModelAdmin):
+    resource_class = TagResource
+
+
+admin.site.register(Tag, TagAdmin)
+
+
+class TestCaseCategoryResource(resources.ModelResource):
+    class Meta:
+        model = TestCaseCategory
+
+
+class TestCaseCategoryAdmin(ImportExportModelAdmin):
+    resource_class = TestCaseCategoryResource
+
+
+admin.site.register(TestCaseCategory, TestCaseCategoryAdmin)
 
 
 class TestCaseResource(resources.ModelResource):

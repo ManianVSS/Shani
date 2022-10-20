@@ -4,7 +4,7 @@ from rest_framework import serializers
 from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
-    Site
+    Site, TestCaseCategory, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -123,11 +123,23 @@ class RequirementSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'summary', 'description', 'use_cases', 'org_group', ]
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'summary', ]
+
+
+class TestCaseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestCaseCategory
+        fields = ['id', 'name', 'summary', 'description', 'weight', 'org_group', 'parent', ]
+
+
 class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCase
         fields = ['id', 'name', 'summary', 'description', 'status', 'acceptance_test', 'automated', 'use_case',
-                  'requirements', 'attachments', 'org_group', ]  # 'execution_status', 'defects'
+                  'requirements', 'attachments', 'org_group', 'parent', ]  # 'execution_status', 'defects'
 
 
 class DefectSerializer(serializers.ModelSerializer):

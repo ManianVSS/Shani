@@ -251,6 +251,32 @@ class Requirement(models.Model):
         return str(self.name) + ": " + str(self.summary)
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    summary = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.summary)
+
+
+class TestCaseCategory(models.Model):
+    class Meta:
+        verbose_name_plural = "test case categories"
+
+    name = models.CharField(max_length=100, unique=True)
+    summary = models.CharField(max_length=100, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
+
+    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name="use_case_categories")
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='sub_categories')
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.summary)
+
+
 class TestCase(models.Model):
     use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='testcases')
     requirements = models.ManyToManyField(Requirement, related_name='testcases', blank=True)
@@ -283,6 +309,8 @@ class TestCase(models.Model):
     # defects = models.CharField(max_length=200, null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="testcases")
+    parent = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='testcases')
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)

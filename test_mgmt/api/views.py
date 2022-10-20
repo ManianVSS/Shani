@@ -12,13 +12,13 @@ from rest_framework.response import Response
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
     Sprint, Story, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
     SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, \
-    EngineerOrgGroupParticipationHistory, Site
+    EngineerOrgGroupParticipationHistory, Site, TestCaseCategory, Tag
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
     TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
     ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
     EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
-    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer
+    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, TestCaseCategorySerializer, TagSerializer
 
 WORK_DAYS_MASK = [1, 1, 1, 1, 1, 0, 0]
 
@@ -347,6 +347,37 @@ class RequirementViewSet(viewsets.ModelViewSet):
     }
 
 
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+    }
+
+
+class TestCaseCategoryViewSet(viewsets.ModelViewSet):
+    queryset = TestCaseCategory.objects.all()
+    serializer_class = TestCaseCategorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'org_group', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'weight': compare_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'parent': id_fields_filter_lookups,
+    }
+
+
 class TestCaseViewSet(viewsets.ModelViewSet):
     queryset = TestCase.objects.all()
     serializer_class = TestCaseSerializer
@@ -364,6 +395,7 @@ class TestCaseViewSet(viewsets.ModelViewSet):
         'use_case': id_fields_filter_lookups,
         'requirements': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'parent': id_fields_filter_lookups,
     }
 
 
