@@ -10,7 +10,8 @@ from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet
     get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
     OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
     EnvironmentViewSet, TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, \
-    get_capacity_for_time_range, SiteViewSet, TagViewSet, TestCaseCategoryViewSet, TestCaseViewSet
+    get_org_capacity_for_time_range, SiteViewSet, TagViewSet, TestCaseCategoryViewSet, TestCaseViewSet, \
+    get_engineer_capacity_for_time_range
 
 # , use_case_count, requirement_count,     test_case_count
 
@@ -73,7 +74,8 @@ urlpatterns = [
     path('use_case_category_completion/<int:pk>', get_use_case_category_completion),
     path('completion', get_overall_completion),
 
-    path('capacity_view', get_capacity_for_time_range),
+    path('capacity_view', get_org_capacity_for_time_range),
+    path('engineer_capacity_view', get_engineer_capacity_for_time_range),
 
     path('swagger/', schema_view, name='docs'),
 ]

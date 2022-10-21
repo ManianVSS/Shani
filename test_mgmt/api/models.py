@@ -269,7 +269,7 @@ class TestCaseCategory(models.Model):
     weight = models.FloatField(null=True, blank=True)
 
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="use_case_categories")
+                                  related_name="test_case_categories")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
 

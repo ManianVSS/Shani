@@ -728,7 +728,7 @@ def get_overall_completion(request):
 
 
 @api_view(['GET'])
-def get_capacity_for_time_range(request):
+def get_org_capacity_for_time_range(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -787,6 +787,72 @@ def get_capacity_for_time_range(request):
         'work_days': work_days,
         'total_capacity': total_capacity,
         'engineer_data': engineer_data,
+    }
+
+    return Response(capacity_data)
+
+
+@api_view(['GET'])
+def get_engineer_capacity_for_time_range(request):
+    if not request.method == 'GET':
+        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    if not (('engineer' in request.GET) and ('from' in request.GET) and ('to' in request.GET)):
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST,
+                            content='One of the parameters (engineer/from/to) missing')
+
+    try:
+        engineer = Engineer.objects.get(pk=request.query_params.get('engineer'))
+    except Engineer.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, content='Could not find engineer passed')
+
+    from_date = datetime.strptime(request.query_params.get('from'), '%Y-%m-%d').date()
+    to_date = datetime.strptime(request.query_params.get('to'), '%Y-%m-%d').date()
+
+    org_group_participation_qs = EngineerOrgGroupParticipation.objects.filter(engineer=engineer)
+
+    work_days = numpy.busday_count(from_date,
+                                   to_date + timedelta(days=1),
+                                   weekmask=WORK_DAYS_MASK
+                                   )
+
+    engineer_leave_plans = Leave.objects.filter(engineer=engineer,
+                                                start_date__gte=from_date, start_date__lte=to_date,
+                                                end_date__gte=from_date, end_date__lte=to_date)
+    engineer_site_holidays = SiteHoliday.objects.filter(site=engineer.site,
+                                                        date__gte=from_date,
+                                                        date__lte=to_date)
+    engineer_site_holidays_dates = [item.date for item in engineer_site_holidays]
+    leave_count = 0
+    for engineer_leave in engineer_leave_plans:
+        leave_count = leave_count + numpy.busday_count(engineer_leave.start_date,
+                                                       engineer_leave.end_date + timedelta(days=1),
+                                                       weekmask=WORK_DAYS_MASK,
+                                                       holidays=engineer_site_holidays_dates)
+    site_holiday_count = len(engineer_site_holidays_dates)
+    available_days = work_days - leave_count - site_holiday_count
+
+    org_capacity_data = {}
+    for org_group_participation in org_group_participation_qs:
+        org_group = org_group_participation.org_group
+        participation_capacity = org_group_participation.capacity
+        capacity = participation_capacity * available_days
+        org_capacity_data[org_group.name] = {
+            'name': org_group.name,
+            'participation_capacity': participation_capacity,
+            'capacity': capacity,
+        }
+
+    capacity_data = {
+        'work_days': work_days,
+        'employee_id': engineer.employee_id,
+        'name': engineer.auth_user.username,
+        'leave_plans': LeaveSerializer(engineer_leave_plans, many=True).data,
+        'engineer_site_holidays_dates': engineer_site_holidays_dates,
+        'leave_count': leave_count,
+        'site_holiday_count': site_holiday_count,
+        'available_days': available_days,
+        'org_capacity_data': org_capacity_data,
     }
 
     return Response(capacity_data)
