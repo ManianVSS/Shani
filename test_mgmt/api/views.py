@@ -6,7 +6,8 @@ from django.contrib.auth.models import User, Group
 from django.http import HttpResponse
 from rest_framework import permissions, status
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
@@ -728,6 +729,7 @@ def get_overall_completion(request):
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
 def get_org_capacity_for_time_range(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -795,6 +797,7 @@ def get_org_capacity_for_time_range(request):
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
 def get_engineer_capacity_for_time_range(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
