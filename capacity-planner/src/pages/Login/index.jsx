@@ -36,6 +36,12 @@ function Login() {
         });
         window.localStorage.setItem("accessToken", response.data.access);
         window.localStorage.setItem("user", userName);
+
+        axiosClient
+          .get("/engineers/?auth_user__username=" + userName)
+          .then((res) => {
+            window.localStorage.setItem("userid", res.data.results[0].id);
+          });
       })
       .catch((error) => {
         alert.error(error.response.data.detail);

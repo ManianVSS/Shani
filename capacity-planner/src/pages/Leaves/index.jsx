@@ -27,6 +27,7 @@ const Leaves = () => {
   const [engineer, setEngineer] = useState(null);
   const [engineerAvailabilityData, setEngineerAvailabilityData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [leaveRecords, setLeaveRecords] = useState([]);
   const userData = useRecoilValue(authState);
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -56,7 +57,7 @@ const Leaves = () => {
       .post(
         "/leaves/",
         {
-          engineer: userData.userName,
+          engineer: window.localStorage.getItem("userid"),
           start_date: formatDate(startLeaveDate),
           end_date: formatDate(endLeaveDate),
           summary: "string",
@@ -84,16 +85,7 @@ const Leaves = () => {
 
     return [year, month, day].join("-");
   }
-  const getName = async (id) => {
-    // axiosClient.get("/engineers/" + id + "/").then((response) => {
-    //   // console.log(response.data.name);
-    //   return response.data.name;
-    // });
 
-    let res = await axiosClient.get("/engineers/" + id + "/");
-    return res.data.name;
-  };
-  console.log(getName(1));
   useEffect(() => {
     axiosClient.get("/engineers/").then((response) => {
       setEngineerData(response.data.results);
@@ -103,7 +95,7 @@ const Leaves = () => {
   const leaveData = engineerAvailabilityData.map((item) => {
     return (
       <tr key={item.id}>
-        <td>{getName(item.id)}</td>
+        {/* <td>{getName(item.id)}</td> */}
         <td>{item["summary"]}</td>
         <td>{item["status"]}</td>
         <td>{item["start_date"]}</td>
@@ -254,7 +246,7 @@ const Leaves = () => {
             <Table bordered style={{ marginTop: "40px" }}>
               <thead>
                 <tr>
-                  <th>Engineer Name</th>
+                  {/* <th>Engineer Name</th> */}
                   <th>Summary</th>
                   <th>Leave status</th>
                   <th>Start Date</th>
