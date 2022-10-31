@@ -14,7 +14,7 @@ import { DateRangePicker, START_DATE, END_DATE } from "react-nice-dates";
 import "react-nice-dates/build/style.css";
 import "./style.css";
 import Heading from "../../components/Heading";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { authState } from "../../state/authData";
 
 const Leaves = () => {
@@ -23,12 +23,14 @@ const Leaves = () => {
   const [startLeaveDate, setStartLeaveDate] = useState();
   const [endLeaveDate, setEndLeaveDate] = useState();
   const [show, setShow] = useState(false);
+  const [userData, setUserData] = useRecoilState(authState);
   const [engineerData, setEngineerData] = useState([]);
   const [engineer, setEngineer] = useState(null);
+  const [engineerName, setEngineerName] = useState(null);
   const [engineerAvailabilityData, setEngineerAvailabilityData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [leaveRecords, setLeaveRecords] = useState([]);
-  const userData = useRecoilValue(authState);
+
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
   const showDetails = () => {
@@ -51,6 +53,17 @@ const Leaves = () => {
         setEngineerAvailabilityData(response.data.results);
       });
   };
+  // const showAllLeaveDetails = () => {
+  //   axiosClient
+  //     .get("/leaves/?engineer=" + window.localStorage.getItem("userid"), {
+  //       headers: {
+  //         authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setEngineerAvailabilityData(response.data.results);
+  //     });
+  // };
 
   const applyLeave = () => {
     axiosClient
@@ -71,7 +84,7 @@ const Leaves = () => {
         }
       )
       .then((response) => {
-        setEngineerAvailabilityData(response.data.results);
+        showDetails();
       });
   };
   function formatDate(date) {
@@ -90,12 +103,18 @@ const Leaves = () => {
     axiosClient.get("/engineers/").then((response) => {
       setEngineerData(response.data.results);
     });
+    setUserData({
+      accessToken: window.localStorage.getItem("accessToken"),
+      authStatus: true,
+      errorMessage: "",
+      userName: window.localStorage.getItem("user"),
+    });
   }, []);
 
   const leaveData = engineerAvailabilityData.map((item) => {
     return (
       <tr key={item.id}>
-        {/* <td>{getName(item.id)}</td> */}
+        <td>{engineerName}</td>
         <td>{item["summary"]}</td>
         <td>{item["status"]}</td>
         <td>{item["start_date"]}</td>
@@ -103,6 +122,7 @@ const Leaves = () => {
       </tr>
     );
   });
+
   return (
     <div>
       <Modal show={showModal} onHide={handleClose}>
@@ -183,12 +203,19 @@ const Leaves = () => {
               <Form.Label>ENGINEER</Form.Label>
               <Form.Select
                 defaultValue="Choose..."
-                onChange={(event) => setEngineer(event.target.value)}
+                onChange={(event) => {
+                  setShow(false);
+                  setEngineer(event.target.value.split("_")[0]);
+                  setEngineerName(event.target.value.split("_")[1]);
+                }}
               >
                 <option>Choose...</option>
                 {engineerData.map((item) => {
                   return (
-                    <option value={item.id} key={item.id}>
+                    <option
+                      value={item.id + "_" + item.employee_id}
+                      key={item.id}
+                    >
                       {item.employee_id}
                     </option>
                   );
@@ -246,7 +273,7 @@ const Leaves = () => {
             <Table bordered style={{ marginTop: "40px" }}>
               <thead>
                 <tr>
-                  {/* <th>Engineer Name</th> */}
+                  <th>Engineer Name</th>
                   <th>Summary</th>
                   <th>Leave status</th>
                   <th>Start Date</th>

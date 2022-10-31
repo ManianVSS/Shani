@@ -6,9 +6,12 @@ import { DateRangePicker, START_DATE, END_DATE } from "react-nice-dates";
 import "react-nice-dates/build/style.css";
 import "./style.css";
 import Heading from "../../components/Heading";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/authData";
 
 const EngineerAvailability = () => {
   const [startDate, setStartDate] = useState();
+  const [userData, setUserData] = useRecoilState(authState);
   const [endDate, setEndDate] = useState();
   const [show, setShow] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
@@ -48,6 +51,12 @@ const EngineerAvailability = () => {
   useEffect(() => {
     axiosClient.get("/engineers/").then((response) => {
       setEngineerData(response.data.results);
+    });
+    setUserData({
+      accessToken: window.localStorage.getItem("accessToken"),
+      authStatus: true,
+      errorMessage: "",
+      userName: window.localStorage.getItem("user"),
     });
   }, []);
   return (

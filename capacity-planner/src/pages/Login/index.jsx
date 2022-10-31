@@ -125,12 +125,12 @@ function Login() {
               {/* <a className="small text-muted" href="#!">
                 Forgot password?
               </a> */}
-              <p className="mb-3 pb-lg-2" style={{ color: "#393f81" }}>
+              {/* <p className="mb-3 pb-lg-2" style={{ color: "#393f81" }}>
                 Don't have an account?{" "}
                 <a href="" style={{ color: "#393f81" }}>
                   Register here
                 </a>
-              </p>
+              </p> */}
 
               {/* <div className="d-flex flex-row justify-content-start">
                 <a href="#!" className="small text-muted me-1">

@@ -8,8 +8,11 @@ import "./style.css";
 import Heading from "../../components/Heading";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/authData";
 
 const Capacity = () => {
+  const [userData, setUserData] = useRecoilState(authState);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [show, setShow] = useState(false);
@@ -94,7 +97,14 @@ const Capacity = () => {
     axiosClient.get("/org_groups/").then((response) => {
       setOrgData(response.data.results);
     });
+    setUserData({
+      accessToken: window.localStorage.getItem("accessToken"),
+      authStatus: true,
+      errorMessage: "",
+      userName: window.localStorage.getItem("user"),
+    });
   }, []);
+
   function formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
