@@ -23,7 +23,7 @@ from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, Req
 
 WORK_DAYS_MASK = [1, 1, 1, 1, 1, 0, 0]
 
-boolean_fields_filter_lookups = ['exact', ]
+exact_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
 string_fields_filter_lookups = ['exact', 'iexact', 'icontains', 'regex', ]
 # 'startswith', 'endswith', 'istartswith','iendswith', 'contains',
@@ -49,8 +49,8 @@ class UserViewSet(viewsets.ModelViewSet):
         'first_name': string_fields_filter_lookups,
         'last_name': string_fields_filter_lookups,
         'email': string_fields_filter_lookups,
-        'is_staff': boolean_fields_filter_lookups,
-        'is_active': boolean_fields_filter_lookups,
+        'is_staff': exact_fields_filter_lookups,
+        'is_active': exact_fields_filter_lookups,
         'date_joined': date_fields_filter_lookups,
     }
 
@@ -125,16 +125,13 @@ class EngineerViewSet(viewsets.ModelViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'employee_id': string_fields_filter_lookups,
-        'name': ['iexact'],
+        'employee_id': exact_fields_filter_lookups,
+        'name': exact_fields_filter_lookups,
         'auth_user': id_fields_filter_lookups,
-        'role': string_fields_filter_lookups,
+        'role': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'site': id_fields_filter_lookups,
-        'org_group_participation': id_fields_filter_lookups,
-        'auth_user__first_name': string_fields_filter_lookups,
-        'auth_user__last_name': string_fields_filter_lookups,
-        'auth_user__email': string_fields_filter_lookups,
+        'auth_user__username': exact_fields_filter_lookups,
     }
 
 
@@ -395,8 +392,8 @@ class TestCaseViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
-        'acceptance_test': boolean_fields_filter_lookups,
-        'automated': boolean_fields_filter_lookups,
+        'acceptance_test': exact_fields_filter_lookups,
+        'automated': exact_fields_filter_lookups,
         'use_case': id_fields_filter_lookups,
         'requirements': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
@@ -451,8 +448,8 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         # 'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
-        'acceptance_test': boolean_fields_filter_lookups,
-        'automated': boolean_fields_filter_lookups,
+        'acceptance_test': exact_fields_filter_lookups,
+        'automated': exact_fields_filter_lookups,
         'defects': id_fields_filter_lookups,
         'run': id_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
