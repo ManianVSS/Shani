@@ -40,7 +40,7 @@ class SiteSerializer(serializers.ModelSerializer):
 class EngineerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Engineer
-        fields = ['id', 'employee_id', 'auth_user', 'role', 'org_group', 'site', 'attachments', ]
+        fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'org_group', 'site', 'attachments', ]
 
 
 class ReleaseSerializer(serializers.ModelSerializer):

@@ -41,6 +41,7 @@ class Site(models.Model):
 
 class Engineer(models.Model):
     employee_id = models.CharField(max_length=20, null=True, unique=True)
+    name = models.CharField(max_length=100, default='<unnamed>')
     auth_user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="engineer")
     role = models.CharField(max_length=100, null=True, blank=True, )
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, related_name="engineers", blank=True, null=True)

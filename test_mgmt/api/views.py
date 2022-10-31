@@ -121,12 +121,11 @@ class EngineerViewSet(viewsets.ModelViewSet):
     serializer_class = EngineerSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'employee_id', 'auth_user', 'role', ]
+    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'employee_id': string_fields_filter_lookups,
-        'auth_user': id_fields_filter_lookups,
         'role': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'site': id_fields_filter_lookups,
@@ -729,7 +728,7 @@ def get_overall_completion(request):
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((IsAuthenticated,))
 def get_org_capacity_for_time_range(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -797,7 +796,7 @@ def get_org_capacity_for_time_range(request):
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((IsAuthenticated,))
 def get_engineer_capacity_for_time_range(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
