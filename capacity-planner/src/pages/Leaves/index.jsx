@@ -50,9 +50,7 @@ const Leaves = () => {
         setEngineerAvailabilityData(response.data.results);
       });
   };
-  console.log("====================================");
-  console.log(userData);
-  console.log("====================================");
+
   const applyLeave = () => {
     axiosClient
       .post(
@@ -86,16 +84,26 @@ const Leaves = () => {
 
     return [year, month, day].join("-");
   }
+  const getName = async (id) => {
+    // axiosClient.get("/engineers/" + id + "/").then((response) => {
+    //   // console.log(response.data.name);
+    //   return response.data.name;
+    // });
 
+    let res = await axiosClient.get("/engineers/" + id + "/");
+    return res.data.name;
+  };
+  console.log(getName(1));
   useEffect(() => {
     axiosClient.get("/engineers/").then((response) => {
       setEngineerData(response.data.results);
     });
   }, []);
+
   const leaveData = engineerAvailabilityData.map((item) => {
     return (
       <tr key={item.id}>
-        <td>{item["name"]}</td>
+        <td>{getName(item.id)}</td>
         <td>{item["summary"]}</td>
         <td>{item["status"]}</td>
         <td>{item["start_date"]}</td>
@@ -169,6 +177,13 @@ const Leaves = () => {
         </Modal.Footer>
       </Modal>
       <Heading heading={"LEAVES DATA"} />
+      <Button
+        variant="success"
+        style={{ marginLeft: "75%" }}
+        onClick={handleShow}
+      >
+        +
+      </Button>
       <Container>
         <Form>
           <Row className="mb-3">
@@ -231,13 +246,6 @@ const Leaves = () => {
               }}
             >
               Fetch Data
-            </Button>
-            <Button
-              variant="success"
-              style={{ marginLeft: "75%" }}
-              onClick={handleShow}
-            >
-              Apply Leave
             </Button>
           </div>
         </Form>
