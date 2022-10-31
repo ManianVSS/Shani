@@ -121,15 +121,20 @@ class EngineerViewSet(viewsets.ModelViewSet):
     serializer_class = EngineerSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', ]
+    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'employee_id': string_fields_filter_lookups,
+        'name': ['iexact'],
+        'auth_user': id_fields_filter_lookups,
         'role': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'site': id_fields_filter_lookups,
         'org_group_participation': id_fields_filter_lookups,
+        'auth_user__first_name': string_fields_filter_lookups,
+        'auth_user__last_name': string_fields_filter_lookups,
+        'auth_user__email': string_fields_filter_lookups,
     }
 
 
