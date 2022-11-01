@@ -16,8 +16,10 @@ import "./style.css";
 import Heading from "../../components/Heading";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { authState } from "../../state/authData";
+import { useAlert } from "react-alert";
 
 const Leaves = () => {
+  const alert = useAlert();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [startLeaveDate, setStartLeaveDate] = useState();
@@ -25,33 +27,39 @@ const Leaves = () => {
   const [show, setShow] = useState(false);
   const [userData, setUserData] = useRecoilState(authState);
   const [engineerData, setEngineerData] = useState([]);
-  const [engineer, setEngineer] = useState(null);
+  const [engineer, setEngineer] = useState("Choose...");
   const [engineerName, setEngineerName] = useState(null);
   const [engineerAvailabilityData, setEngineerAvailabilityData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [leaveRecords, setLeaveRecords] = useState([]);
+  const [summary, setSummary] = useState("");
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
   const showDetails = () => {
-    axiosClient
-      .get(
-        "/leaves/?engineer=" +
-          engineer +
-          "&from=" +
-          formatDate(startDate) +
-          "&to=" +
-          formatDate(endDate),
-        {
-          headers: {
-            authorization:
-              "Bearer " + window.localStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        setEngineerAvailabilityData(response.data.results);
-      });
+    setShow(false);
+    if (engineer !== "Choose...") {
+      axiosClient
+        .get(
+          "/leaves/?engineer=" +
+            engineer +
+            "&from=" +
+            formatDate(startDate) +
+            "&to=" +
+            formatDate(endDate),
+          {
+            headers: {
+              authorization:
+                "Bearer " + window.localStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((response) => {
+          setEngineerAvailabilityData(response.data.results);
+          setShow(true);
+        });
+    } else {
+      alert.error("Please choose valid engineer");
+    }
   };
   // const showAllLeaveDetails = () => {
   //   axiosClient
@@ -73,7 +81,7 @@ const Leaves = () => {
           engineer: window.localStorage.getItem("userid"),
           start_date: formatDate(startLeaveDate),
           end_date: formatDate(endLeaveDate),
-          summary: "string",
+          summary: summary,
           status: "DRAFT",
         },
         {
@@ -134,7 +142,11 @@ const Leaves = () => {
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Summary</Form.Label>
-                <Form.Control type="text" placeholder="Summary" />
+                <Form.Control
+                  type="text"
+                  placeholder="Summary"
+                  onChange={(event) => setSummary(event.target.value)}
+                />
               </Form.Group>
 
               <Form.Group as={Col} controlId="formGridState">

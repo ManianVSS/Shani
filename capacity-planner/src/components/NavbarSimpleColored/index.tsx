@@ -158,16 +158,14 @@ export function NavbarSimpleColored() {
         </Navbar.Section>
 
         <Navbar.Section className={classes.footer}>
-          {/* <a
+          <a
             href="#"
             className={classes.link}
             onClick={(event) => event.preventDefault()}
           >
-            <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-            <span>Change account</span>
-          </a> */}
-          {/* <p>{authData.value.user.firstName}</p> */}
-
+            <IconUser className={classes.linkIcon} stroke={1.5} />
+            <span>{auth.userName.toUpperCase()}</span>
+          </a>
           <a
             href="#"
             className={classes.link}
