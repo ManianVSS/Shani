@@ -70,7 +70,7 @@ function Login() {
         <MDBRow className="g-0">
           <MDBCol md="6">
             <MDBCardImage
-              src="/assets/images/login.svg"
+              src="/static/images/login.svg"
               alt="login form"
               className="rounded-start w-100"
             />
@@ -117,6 +117,7 @@ function Login() {
                 <Button
                   variant="primary"
                   onClick={handleSubmit(handleRegistration)}
+                  type="submit"
                 >
                   Submit
                 </Button>
