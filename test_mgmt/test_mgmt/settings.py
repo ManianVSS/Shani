@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     # Added for filtering
     'django_filters',
 
-    'corsheaders',
+    # 'corsheaders',
 
     # Import export
     'import_export',
@@ -45,12 +45,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'api.middlewares.CustomCorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'test_mgmt.urls'
@@ -134,17 +135,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/data/'
 
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'build'),
                         os.path.join(BASE_DIR, 'build/static'),
-                        os.path.join(BASE_DIR, MEDIA_URL)]
+                        os.path.join(BASE_DIR, STATIC_URL)]
 else:
     STATIC_ROOT = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, '.build'),
                    os.path.join(BASE_DIR, 'build/static'),
-                   os.path.join(BASE_DIR, MEDIA_URL)]
+                   os.path.join(BASE_DIR, STATIC_URL)]
 
 MEDIA_BASE_NAME = 'data'
 MEDIA_ROOT = os.path.join(os.getenv('DATA_MOUNT_DIR', BASE_DIR), MEDIA_BASE_NAME)
@@ -180,31 +181,31 @@ REST_FRAMEWORK = {
 
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "accept-encoding",
-    "authorization",
-    "content-type",
-    "dnt",
-    "origin",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-    "access-control-allow-origin",
-    "access-control-allow-methods",
-]
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-# CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', 'http://127.0.0.1:3000']
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = [
+#     "accept",
+#     "accept-encoding",
+#     "authorization",
+#     "content-type",
+#     "dnt",
+#     "origin",
+#     "user-agent",
+#     "x-csrftoken",
+#     "x-requested-with",
+#     "access-control-allow-origin",
+#     "access-control-allow-methods",
+# ]
+#
+# CORS_ALLOW_METHODS = [
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+# ]
+# # CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', 'http://127.0.0.1:3000']
 
 
 # ATTACHMENT_DIR = "./attachments"

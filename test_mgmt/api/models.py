@@ -274,6 +274,9 @@ class TestCaseCategory(models.Model):
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
 
+    tags = models.ManyToManyField(Tag, related_name='test_categories', blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='test_case_category_attachments', blank=True)
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -313,6 +316,9 @@ class TestCase(models.Model):
     parent = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='testcases')
 
+    tags = models.ManyToManyField(Tag, related_name='test_cases', blank=True)
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -320,10 +326,11 @@ class TestCase(models.Model):
 class Defect(models.Model):
     summary = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    external_id = models.CharField(max_length=50)
+    external_id = models.CharField(max_length=50, blank=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
     org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="defects")
+    attachments = models.ManyToManyField(Attachment, related_name='defect_attachments', blank=True)
 
 
 class Run(models.Model):

@@ -1,9 +1,9 @@
 import axios from "axios";
 
 // const accessToken = localStorage.getItem("accessToken");
-export const axiosClient = axios.create({
-  //   baseURL: "http://10.12.60.24:8000/api",
-  baseURL: "http://localhost:8000/api",
+export const axiosClient = axios.create({  
+  // baseURL: "http://localhost:8000/api",
+  baseURL: "/api",
   headers: { "Content-Type": "application/json" },
 });
 
