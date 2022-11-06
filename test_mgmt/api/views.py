@@ -368,15 +368,13 @@ class TestCaseCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = TestCaseCategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'org_group', ]
+    ordering_fields = ['id', 'name', 'parent', 'owner', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'weight': compare_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
         'parent': id_fields_filter_lookups,
+        'owner': string_fields_filter_lookups,
     }
 
 
@@ -385,19 +383,20 @@ class TestCaseViewSet(viewsets.ModelViewSet):
     serializer_class = TestCaseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'use_case', 'requirements', 'status', 'acceptance_test', 'automated']
+    ordering_fields = ['id', 'name', 'description', 'implemented', 'automated', 'estimate', 'status',
+                       'implementation_reference', 'external_id']
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
-        'acceptance_test': exact_fields_filter_lookups,
+        'implemented': exact_fields_filter_lookups,
         'automated': exact_fields_filter_lookups,
-        'use_case': id_fields_filter_lookups,
-        'requirements': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
+        'estimate': datetime_fields_filter_lookups,
+        'implementation_reference': id_fields_filter_lookups,
+        'external_id': id_fields_filter_lookups,
+        'parent_category': id_fields_filter_lookups,
     }
 
 
