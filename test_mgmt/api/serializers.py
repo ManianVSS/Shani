@@ -132,16 +132,13 @@ class TagSerializer(serializers.ModelSerializer):
 class TestCaseCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCaseCategory
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'org_group', 'parent', 'tags', 'attachments', ]
-
+        fields = ['id', 'name', 'parent', 'owner', 'tags', ]
 
 class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCase
-        fields = ['id', 'name', 'summary', 'description', 'status', 'acceptance_test', 'automated', 'use_case',
-                  'requirements', 'attachments', 'org_group', 'parent', 'tags',
-                  'external_id']
-
+        fields = ['id', 'name', 'description', 'attachments', 'parent_category', 'implemented', 'automated',
+                  'testcase_tags', 'estimate', 'status', 'implementation_reference', 'external_id']
 
 class DefectSerializer(serializers.ModelSerializer):
     class Meta:

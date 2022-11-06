@@ -265,42 +265,46 @@ class TestCaseCategory(models.Model):
         verbose_name_plural = "test case categories"
 
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True, related_name='test_categories')
+    owner = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="category_owner")
+    tags = models.ManyToManyField(Tag, related_name='test_category_tags', blank=True)
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="test_case_categories")
-    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
-                               related_name='sub_categories')
+    # summary = models.CharField(max_length=100, null=True, blank=True)
+    # description = models.TextField(null=True, blank=True)
+    # weight = models.FloatField(null=True, blank=True)
 
-    tags = models.ManyToManyField(Tag, related_name='test_categories', blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='test_case_category_attachments', blank=True)
+    # org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
+    #                               related_name="test_case_categories")
+    # tags = models.ManyToManyField(Tag, related_name='test_categories', blank=True)
+    # attachments = models.ManyToManyField(Attachment, related_name='test_case_category_attachments', blank=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
 
 class TestCase(models.Model):
-    use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='testcases')
-    requirements = models.ManyToManyField(Requirement, related_name='testcases', blank=True)
+    # use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='testcases')
+    # requirements = models.ManyToManyField(Requirement, related_name='testcases', blank=True)
 
+    # summary = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
-    summary = models.CharField(max_length=100, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
+    description = models.TextField(max_length=100, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
+    parent_category = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, related_name='parent_category')
+    implemented = models.BooleanField(default=False)
+    automated = models.BooleanField(default=False)
+    testcase_tags = models.ManyToManyField(Tag, related_name='test_cases_tags', blank=True)
+    estimate = models.TimeField(auto_now_add=False, null=True, blank=True)
 
     status = models.CharField(max_length=9, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
-
+    implementation_reference = models.BinaryField(null=True, blank=False)
+    external_ref_id = models.BigIntegerField(null=True, blank=False)
     # bdd_test_case = jsonfield.JSONField()
     # setup_steps = models.ManyToManyField(TestCasePreCondition, related_name="setup_steps_test_cases", blank=True)
     # steps = models.ManyToManyField(TestCaseStep, related_name="steps_test_cases", blank=True)
     # teardown_steps = models.ManyToManyField(TestCasePostCondition, related_name="teardown_steps_test_cases",
     # blank=True)
-
-    acceptance_test = models.BooleanField(default=False)
-    automated = models.BooleanField(default=False)
+    # acceptance_test = models.BooleanField(default=False)
 
     # class TestExecutionStatus(models.TextChoices):
     #     PENDING = 'PENDING', _('Pending'),
