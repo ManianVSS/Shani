@@ -11,13 +11,21 @@ RUN apt -y update \
 	&& rm -rf /var/cache/apt/*
 
 COPY test_mgmt /test_mgmt
-COPY dashboard/build /test_mgmt/build
+COPY frontend/build /test_mgmt/build
 COPY scripts/* /test_mgmt
 
 WORKDIR /test_mgmt
 RUN pip install -r requirements.txt
 RUN bash cleandb.sh
 
-EXPOSE 8000
+ENV DATABASE__NAME=testmgmt
+ENV DATABASE__USER=testmgmtadmin
+ENV DATABASE__PASSWORD=testmgmtadmin@123
+ENV DATABASE__HOST=localhost
+ENV DATABASE__PORT=5432
 
-ENTRYPOINT ["python3", "manage.py", "runserver","0.0.0.0:8000"]
+ENV mode=production
+ENV DJANGO__bool__DEBUG=False
+
+EXPOSE 8000
+ENTRYPOINT ["python3", "manage.py", "runserver","0.0.0.0:8000 --insecure"]

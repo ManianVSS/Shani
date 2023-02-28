@@ -63,6 +63,8 @@ Admin console should be up on http://localhost:8000/admin
 ##### **Running server**
 
 > cd test_mgmt</br>
-> python manage.py runserver 0.0.0.0:8000</br>
+> export DJANGO__SECRET_KEY='django-insecure-9=(@6%n=2c^$4%b1-0!7-k+=vjeo8pub3r&$$ijw(0tchsaxn4'</br>
+> export DJANGO__bool__DEBUG=False</br>
+> python manage.py runserver 0.0.0.0:8000 --insecure</br>
 
 Admin console should be up on http://localhost:8000/admin

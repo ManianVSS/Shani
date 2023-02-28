@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9=(@6%n=2c^$4%b1-0!7-k+=vjeo8pub3r&$$ijw(0tchsaxn4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # bool(os.getenv("DEBUG", 'True'))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -141,14 +141,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/data/'
 
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'build'),
-                        os.path.join(BASE_DIR, 'build/static'),
-                        os.path.join(BASE_DIR, STATIC_URL)]
-else:
-    STATIC_ROOT = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, '.build'),
-                   os.path.join(BASE_DIR, 'build/static'),
-                   os.path.join(BASE_DIR, STATIC_URL)]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'build'),
+                    os.path.join(BASE_DIR, 'build/static'),
+                    os.path.join(BASE_DIR, STATIC_URL)]
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_BASE_NAME = 'data'
 MEDIA_ROOT = os.path.join(os.getenv('DATA_MOUNT_DIR', BASE_DIR), MEDIA_BASE_NAME)
