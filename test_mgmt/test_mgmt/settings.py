@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     # Import export
     'import_export',
 
+    # Reverse proxy config
+    # 'revproxy',
+
     'api',
 ]
 

@@ -5,12 +5,14 @@ from rest_framework_simplejwt import views as jwt_views
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 
 from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
-    RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, get_score, get_use_case_category_score, get_use_case_score, \
-    DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, StoryViewSet, get_use_case_completion, \
-    get_use_case_category_completion, get_overall_completion, UseCaseCategoryViewSet, ReliabilityRunViewSet, \
-    OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
-    EnvironmentViewSet, TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, \
-    get_org_capacity_for_time_range, SiteViewSet, TagViewSet, TestCaseCategoryViewSet, TestCaseViewSet, \
+    RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, \
+    StoryViewSet, UseCaseCategoryViewSet, ReliabilityRunViewSet, OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, \
+    LeaveViewSet, EngineerOrgGroupParticipationViewSet, EnvironmentViewSet, TopicViewSet, \
+    TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, SiteViewSet, TagViewSet, \
+    TestCaseCategoryViewSet, FeedbackViewSet
+
+from .apiviews import get_score, get_use_case_category_score, get_use_case_score, get_use_case_completion, \
+    get_use_case_category_completion, get_overall_completion, get_org_capacity_for_time_range, \
     get_engineer_capacity_for_time_range
 
 # , use_case_count, requirement_count,     test_case_count
@@ -54,6 +56,8 @@ router.register(r'environments', EnvironmentViewSet)
 
 router.register(r'topics', TopicViewSet)
 router.register(r'topic_engineer_assignments', TopicEngineerAssignmentViewSet)
+
+router.register(r'feedbacks', FeedbackViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

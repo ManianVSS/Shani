@@ -7,7 +7,7 @@ from import_export.admin import ImportExportModelAdmin
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
-    Site, TestCaseCategory, Tag
+    Site, TestCaseCategory, Tag, Feedback
 
 admin.site.site_header = "Shani Administration"
 admin.site.site_title = "Shani Admin Portal"
@@ -332,3 +332,15 @@ class TopicEngineerAssignmentAdmin(ImportExportModelAdmin):
 
 
 admin.site.register(TopicEngineerAssignment, TopicEngineerAssignmentAdmin)
+
+
+class FeedbackResource(resources.ModelResource):
+    class Meta:
+        model = Feedback
+
+
+class FeedbackAdmin(ImportExportModelAdmin):
+    resource_class = FeedbackResource
+
+
+admin.site.register(Feedback, FeedbackAdmin)
