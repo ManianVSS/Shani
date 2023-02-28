@@ -8,6 +8,7 @@ from test_mgmt import settings
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('api/', include('api.urls')),
+                  path('siteconfig/api/', include('siteconfig.urls')),
                   path('automation/api/', include('automation.urls')),
                   re_path('(^(?!(api|admin|data|automation)).*$)',
                           TemplateView.as_view(template_name='index.html')),
