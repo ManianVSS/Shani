@@ -8,6 +8,9 @@ from api.models import Attachment
 
 # Test steps for step repository
 class SiteSettings(models.Model):
+    class Meta:
+        verbose_name_plural = "site settings"
+
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
