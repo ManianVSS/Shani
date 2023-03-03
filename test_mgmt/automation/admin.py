@@ -14,6 +14,7 @@ class StepResource(resources.ModelResource):
 
 class StepAdmin(ImportExportModelAdmin):
     resource_class = StepResource
+    save_as = True
 
 
 admin.site.register(Step, StepAdmin)
