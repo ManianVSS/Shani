@@ -42,6 +42,5 @@ class Step(models.Model):
 
     attachments = models.ManyToManyField(Attachment, related_name='step_attachments', blank=True)
 
-
-def __str__(self):
-    return str(self.name) + ": " + str(self.summary)
+    def __str__(self):
+        return str(self.name) + ": " + str(self.summary)
