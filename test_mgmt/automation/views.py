@@ -14,7 +14,8 @@ class StepViewSet(viewsets.ModelViewSet):
     serializer_class = StepSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'description', 'eta', 'test_design_status', 'automation_status', ]
+    ordering_fields = ['id', 'name', 'summary', 'description', 'eta', 'test_design_owner', 'modified_by',
+                       'test_design_status', 'automation_owner', 'automation_status', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -22,6 +23,9 @@ class StepViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'eta': compare_fields_filter_lookups,
+        'test_design_owner': id_fields_filter_lookups,
+        'modified_by': id_fields_filter_lookups,
         'test_design_status': id_fields_filter_lookups,
+        'automation_owner': id_fields_filter_lookups,
         'automation_status': id_fields_filter_lookups,
     }

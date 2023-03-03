@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy
 
-from api.models import Attachment
+from api.models import Attachment, Engineer
 
 
 # Create your models here.
@@ -26,13 +26,22 @@ class Step(models.Model):
     description = models.TextField(null=True, blank=True)
     eta = models.FloatField(null=True, blank=True, verbose_name='estimated time to execute')
 
+    test_design_owner = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name='step_test_owners',
+                                          verbose_name='test design owner', null=True, blank=True)
+    modified_by = models.ForeignKey(Engineer, on_delete=models.CASCADE, verbose_name='modified by', null=True,
+                                    blank=True)
+
     test_design_status = models.CharField(max_length=9, choices=StepDesignStatus.choices,
                                           default=StepDesignStatus.DRAFT, verbose_name='test design status')
 
     automation_status = models.CharField(max_length=13, choices=StepAutomationStatus.choices,
                                          default=StepAutomationStatus.NOT_AUTOMATED, verbose_name='automation status')
 
+    automation_owner = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name='step_automation_owners',
+                                         verbose_name='automation owner', null=True, blank=True)
+
     attachments = models.ManyToManyField(Attachment, related_name='step_attachments', blank=True)
 
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
+
+def __str__(self):
+    return str(self.name) + ": " + str(self.summary)
