@@ -7,6 +7,7 @@ from test_mgmt import settings
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
+                  # For Advanced filters path('advanced_filters/', include('advanced_filters.urls')),
                   path('api/', include('api.urls')),
                   path('siteconfig/api/', include('siteconfig.urls')),
                   path('automation/api/', include('automation.urls')),
