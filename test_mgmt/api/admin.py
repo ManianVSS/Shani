@@ -37,7 +37,8 @@ class CustomModelAdmin(ImportExportModelAdmin):
             return True
         if super().has_change_permission(request, obj):
             try:
-                return obj.is_owner(request.user) or obj.is_member(request.user)
+                can_change = obj.is_owner(request.user) or obj.is_member(request.user)
+                return can_change
             except FieldDoesNotExist:
                 return True
         else:
@@ -52,7 +53,8 @@ class CustomModelAdmin(ImportExportModelAdmin):
             return True
         if super().has_delete_permission(request, obj):
             try:
-                return obj.is_owner(request.user)
+                can_delete = obj.is_owner(request.user)
+                return can_delete
             except FieldDoesNotExist:
                 return True
         else:

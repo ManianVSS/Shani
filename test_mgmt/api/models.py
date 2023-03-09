@@ -14,7 +14,7 @@ class OrgGroup(models.Model):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
-                                         related_name="sub_org_groups", verbose_name='parent organization group')
+                                  related_name="sub_org_groups", verbose_name='parent organization group')
     leaders = models.ManyToManyField(User, blank=True, related_name="org_group_leaders")
     members = models.ManyToManyField(User, blank=True, related_name="org_group_members")
 
@@ -40,9 +40,16 @@ class OrgModel(models.Model):
                                   verbose_name='organization group')
 
     def is_owner(self, user):
-        return (self.org_group is None) or (hasattr(self.org_group, 'is_owner') and self.org_group.is_owner(user))
+        if self.org_group is None:
+            return False
+        is_owner = self.org_group.is_owner(user)
+        return is_owner
+
     def is_member(self, user):
-        return (self.org_group is None) or (hasattr(self.org_group, 'is_member') and self.org_group.is_member(user))
+        if self.org_group is None:
+            return False
+        is_member = self.org_group.is_member(user)
+        return is_member
 
 
 # TODO: To check if attachments can be overwritten with same file names from two records.
@@ -110,6 +117,10 @@ class SiteHoliday(models.Model):
     def is_owner(self, user):
         return (self.site is None) or (hasattr(self.site, 'is_owner') and self.site.is_owner(user))
 
+    # noinspection PyMethodMayBeStatic
+    def is_member(self, user):
+        return False
+
 
 class LeaveStatus(models.TextChoices):
     DRAFT = 'DRAFT', _('Draft'),
@@ -132,6 +143,10 @@ class Leave(models.Model):
 
     def is_owner(self, user):
         return (self.engineer is None) or (hasattr(self.engineer, 'is_owner') and self.engineer.is_owner(user))
+
+    # noinspection PyMethodMayBeStatic
+    def is_member(self, user):
+        return False
 
 
 class EngineerOrgGroupParticipationHistory(OrgModel):

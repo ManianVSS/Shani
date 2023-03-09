@@ -3,23 +3,43 @@ from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups
-from automation.models import Step
-from automation.serializers import StepSerializer
+from automation.models import Step, ProductFeature
+from automation.serializers import StepSerializer, ProductFeatureSerializer
 
 
 # Create your views here.
+
+class ProductFeatureViewSet(viewsets.ModelViewSet):
+    queryset = ProductFeature.objects.all()
+    serializer_class = ProductFeatureSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'org_group', 'name', 'tags', 'owner', 'status', 'automation_owner', 'details_file', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
+        'tags': exact_fields_filter_lookups,
+        'owner': id_fields_filter_lookups,
+        'status': id_fields_filter_lookups,
+        'automation_owner': id_fields_filter_lookups,
+    }
+
 
 class StepViewSet(viewsets.ModelViewSet):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'description', 'expected_results', 'eta', 'tags', 'test_design_owner',
-                       'test_design_status', 'automation_owner', 'automation_code_reference', 'automation_status',
-                       'org_group', ]
+    ordering_fields = ['id', 'org_group', 'name', 'expected_results', 'eta', 'tags', 'test_design_owner',
+                       'test_design_status', 'automation_owner', 'automation_code_reference', 'automation_status', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
@@ -31,6 +51,4 @@ class StepViewSet(viewsets.ModelViewSet):
         'automation_owner': id_fields_filter_lookups,
         'automation_code_reference': string_fields_filter_lookups,
         'automation_status': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-
     }
