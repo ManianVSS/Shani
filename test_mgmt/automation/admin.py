@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import RelatedOnlyFieldListFilter
 from import_export import resources
 
 from api.admin import CustomModelAdmin
@@ -14,8 +15,13 @@ class ProductFeatureResource(resources.ModelResource):
 class ProductFeatureAdmin(CustomModelAdmin):
     resource_class = ProductFeatureResource
     # save_as = True
-    list_filter = ['org_group', 'tags', 'owner', 'status', 'automation_owner', ]
-
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        ('owner', RelatedOnlyFieldListFilter),
+        'status',
+        ('automation_owner', RelatedOnlyFieldListFilter),
+    )
     search_fields = ['name', 'summary', 'description', ]
 
 
@@ -30,8 +36,14 @@ class StepResource(resources.ModelResource):
 class StepAdmin(CustomModelAdmin):
     resource_class = StepResource
     # save_as = True
-    list_filter = ['org_group', 'tags', 'test_design_owner', 'test_design_status', 'automation_owner',
-                   'automation_status', ]
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        ('test_design_owner', RelatedOnlyFieldListFilter),
+        'test_design_status',
+        ('automation_owner', RelatedOnlyFieldListFilter),
+        'automation_status',
+    )
 
     search_fields = ['name', 'summary', 'description', 'expected_results', 'automation_code_reference', ]
 
