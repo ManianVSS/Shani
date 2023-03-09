@@ -62,25 +62,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
 
-class AttachmentViewSet(viewsets.ModelViewSet):
-    queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name']
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-    }
-
-
 class OrgGroupViewSet(viewsets.ModelViewSet):
     queryset = OrgGroup.objects.all()
     serializer_class = OrgGroupSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'auth_group', 'parent_org_group', 'leader', ]
+    ordering_fields = ['id', 'name', 'auth_group', 'parent_org_group', 'leaders', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -88,8 +75,21 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'auth_group': id_fields_filter_lookups,
         'parent_org_group': id_fields_filter_lookups,
-        'leader': id_fields_filter_lookups,
-        'engineer_participation': id_fields_filter_lookups,
+        'leaders': id_fields_filter_lookups,
+    }
+
+
+class AttachmentViewSet(viewsets.ModelViewSet):
+    queryset = Attachment.objects.all()
+    serializer_class = AttachmentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'org_group', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -98,12 +98,13 @@ class SiteViewSet(viewsets.ModelViewSet):
     serializer_class = SiteSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', ]
+    ordering_fields = ['id', 'name', 'org_group', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
     }
 
 

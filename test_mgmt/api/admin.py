@@ -1,6 +1,5 @@
-from django import forms
 from django.contrib import admin
-# Register your models here.
+from django.core.exceptions import FieldDoesNotExist
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -10,12 +9,62 @@ from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Fea
     Site, TestCaseCategory, Tag, Feedback
 
 
+class CustomModelAdmin(ImportExportModelAdmin):
+    save_as = True
+    search_fields = ['name', 'summary', 'description', ]
+
+    def has_view_permission(self, request, obj=None):
+        if (request is None) or (request.user is None):
+            return False
+        if request.user.is_superuser:
+            return True
+        if obj is None:
+            return True
+        if super().has_view_permission(request, obj):
+            return True
+
+        try:
+            return obj.is_owner(request.user) or obj.is_member(request.user)
+        except FieldDoesNotExist:
+            return False
+
+    def has_change_permission(self, request, obj=None):
+        if (request is None) or (request.user is None):
+            return False
+        if request.user.is_superuser:
+            return True
+        if obj is None:
+            return True
+        if super().has_change_permission(request, obj):
+            try:
+                return obj.is_owner(request.user) or obj.is_member(request.user)
+            except FieldDoesNotExist:
+                return True
+        else:
+            return False
+
+    def has_delete_permission(self, request, obj=None):
+        if (request is None) or (request.user is None):
+            return False
+        if request.user.is_superuser:
+            return True
+        if obj is None:
+            return True
+        if super().has_delete_permission(request, obj):
+            try:
+                return obj.is_owner(request.user)
+            except FieldDoesNotExist:
+                return True
+        else:
+            return False
+
+
 class AttachmentResource(resources.ModelResource):
     class Meta:
         model = Attachment
 
 
-class AttachmentAdmin(ImportExportModelAdmin):
+class AttachmentAdmin(CustomModelAdmin):
     resource_class = AttachmentResource
 
 
@@ -27,7 +76,7 @@ class OrgGroupResource(resources.ModelResource):
         model = OrgGroup
 
 
-class OrgGroupAdmin(ImportExportModelAdmin):
+class OrgGroupAdmin(CustomModelAdmin):
     resource_class = OrgGroupResource
 
 
@@ -39,7 +88,7 @@ class SiteResource(resources.ModelResource):
         model = Site
 
 
-class SiteAdmin(ImportExportModelAdmin):
+class SiteAdmin(CustomModelAdmin):
     resource_class = SiteResource
 
 
@@ -51,7 +100,7 @@ class EngineerResource(resources.ModelResource):
         model = Engineer
 
 
-class EngineerAdmin(ImportExportModelAdmin):
+class EngineerAdmin(CustomModelAdmin):
     resource_class = EngineerResource
 
 
@@ -63,7 +112,7 @@ class ReleaseResource(resources.ModelResource):
         model = Release
 
 
-class ReleaseAdmin(ImportExportModelAdmin):
+class ReleaseAdmin(CustomModelAdmin):
     resource_class = ReleaseResource
 
 
@@ -75,7 +124,7 @@ class EngineerOrgGroupParticipationResource(resources.ModelResource):
         model = EngineerOrgGroupParticipation
 
 
-class EngineerOrgGroupParticipationAdmin(ImportExportModelAdmin):
+class EngineerOrgGroupParticipationAdmin(CustomModelAdmin):
     resource_class = EngineerOrgGroupParticipationResource
 
 
@@ -87,7 +136,7 @@ class SiteHolidayResource(resources.ModelResource):
         model = SiteHoliday
 
 
-class SiteHolidayAdmin(ImportExportModelAdmin):
+class SiteHolidayAdmin(CustomModelAdmin):
     resource_class = SiteHolidayResource
 
 
@@ -99,7 +148,7 @@ class LeaveResource(resources.ModelResource):
         model = Leave
 
 
-class LeaveAdmin(ImportExportModelAdmin):
+class LeaveAdmin(CustomModelAdmin):
     resource_class = LeaveResource
 
 
@@ -111,7 +160,7 @@ class EngineerOrgGroupParticipationHistoryResource(resources.ModelResource):
         model = EngineerOrgGroupParticipationHistory
 
 
-class EngineerOrgGroupParticipationHistoryAdmin(ImportExportModelAdmin):
+class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
     resource_class = EngineerOrgGroupParticipationHistoryResource
 
 
@@ -123,7 +172,7 @@ class EpicResource(resources.ModelResource):
         model = Epic
 
 
-class EpicAdmin(ImportExportModelAdmin):
+class EpicAdmin(CustomModelAdmin):
     resource_class = EpicResource
 
 
@@ -135,7 +184,7 @@ class FeatureResource(resources.ModelResource):
         model = Feature
 
 
-class FeatureAdmin(ImportExportModelAdmin):
+class FeatureAdmin(CustomModelAdmin):
     resource_class = FeatureResource
 
 
@@ -147,7 +196,7 @@ class SprintResource(resources.ModelResource):
         model = Sprint
 
 
-class SprintAdmin(ImportExportModelAdmin):
+class SprintAdmin(CustomModelAdmin):
     resource_class = SprintResource
 
 
@@ -159,7 +208,7 @@ class StoryResource(resources.ModelResource):
         model = Story
 
 
-class StoryAdmin(ImportExportModelAdmin):
+class StoryAdmin(CustomModelAdmin):
     resource_class = StoryResource
 
 
@@ -171,7 +220,7 @@ class UseCaseCategoryResource(resources.ModelResource):
         model = UseCaseCategory
 
 
-class UseCaseCategoryAdmin(ImportExportModelAdmin):
+class UseCaseCategoryAdmin(CustomModelAdmin):
     resource_class = UseCaseCategoryResource
 
 
@@ -183,7 +232,7 @@ class UseCaseResource(resources.ModelResource):
         model = UseCase
 
 
-class UseCaseAdmin(ImportExportModelAdmin):
+class UseCaseAdmin(CustomModelAdmin):
     resource_class = UseCaseResource
 
 
@@ -195,7 +244,7 @@ class RequirementResource(resources.ModelResource):
         model = Requirement
 
 
-class RequirementAdmin(ImportExportModelAdmin):
+class RequirementAdmin(CustomModelAdmin):
     resource_class = RequirementResource
 
 
@@ -207,7 +256,7 @@ class TagResource(resources.ModelResource):
         model = Tag
 
 
-class TagAdmin(ImportExportModelAdmin):
+class TagAdmin(CustomModelAdmin):
     resource_class = TagResource
 
 
@@ -219,7 +268,7 @@ class TestCaseCategoryResource(resources.ModelResource):
         model = TestCaseCategory
 
 
-class TestCaseCategoryAdmin(ImportExportModelAdmin):
+class TestCaseCategoryAdmin(CustomModelAdmin):
     resource_class = TestCaseCategoryResource
 
 
@@ -231,7 +280,7 @@ class TestCaseResource(resources.ModelResource):
         model = TestCase
 
 
-class TestCaseAdmin(ImportExportModelAdmin):
+class TestCaseAdmin(CustomModelAdmin):
     resource_class = TestCaseResource
 
 
@@ -243,7 +292,7 @@ class DefectResource(resources.ModelResource):
         model = Defect
 
 
-class DefectAdmin(ImportExportModelAdmin):
+class DefectAdmin(CustomModelAdmin):
     resource_class = DefectResource
 
 
@@ -255,7 +304,7 @@ class RunResource(resources.ModelResource):
         model = Run
 
 
-class RunAdmin(ImportExportModelAdmin):
+class RunAdmin(CustomModelAdmin):
     resource_class = RunResource
 
 
@@ -267,7 +316,7 @@ class ExecutionRecordResource(resources.ModelResource):
         model = ExecutionRecord
 
 
-class ExecutionRecordAdmin(ImportExportModelAdmin):
+class ExecutionRecordAdmin(CustomModelAdmin):
     resource_class = ExecutionRecordResource
 
 
@@ -279,7 +328,7 @@ class ReliabilityRunResource(resources.ModelResource):
         model = ReliabilityRun
 
 
-class ReliabilityRunAdmin(ImportExportModelAdmin):
+class ReliabilityRunAdmin(CustomModelAdmin):
     resource_class = ReliabilityRunResource
 
 
@@ -291,7 +340,7 @@ class EnvironmentResource(resources.ModelResource):
         model = Environment
 
 
-class EnvironmentAdmin(ImportExportModelAdmin):
+class EnvironmentAdmin(CustomModelAdmin):
     resource_class = EnvironmentResource
 
 
@@ -303,7 +352,7 @@ class TopicResource(resources.ModelResource):
         model = Topic
 
 
-class TopicAdmin(ImportExportModelAdmin):
+class TopicAdmin(CustomModelAdmin):
     resource_class = TopicResource
 
 
@@ -315,7 +364,7 @@ class TopicEngineerAssignmentResource(resources.ModelResource):
         model = TopicEngineerAssignment
 
 
-class TopicEngineerAssignmentAdmin(ImportExportModelAdmin):
+class TopicEngineerAssignmentAdmin(CustomModelAdmin):
     resource_class = TopicEngineerAssignmentResource
 
 
@@ -327,7 +376,7 @@ class FeedbackResource(resources.ModelResource):
         model = Feedback
 
 
-class FeedbackAdmin(ImportExportModelAdmin):
+class FeedbackAdmin(CustomModelAdmin):
     resource_class = FeedbackResource
 
 

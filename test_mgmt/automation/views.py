@@ -15,8 +15,8 @@ class StepViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'description', 'expected_results', 'eta', 'tags', 'test_design_owner',
-                       'modified_by', 'test_design_status', 'automation_owner', 'automation_code_reference',
-                       'automation_status', ]
+                       'test_design_status', 'automation_owner', 'automation_code_reference', 'automation_status',
+                       'org_group', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -27,10 +27,10 @@ class StepViewSet(viewsets.ModelViewSet):
         'eta': compare_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'test_design_owner': id_fields_filter_lookups,
-        'modified_by': id_fields_filter_lookups,
         'test_design_status': id_fields_filter_lookups,
         'automation_owner': id_fields_filter_lookups,
         'automation_code_reference': string_fields_filter_lookups,
         'automation_status': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
 
     }

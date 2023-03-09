@@ -19,22 +19,22 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['id', 'url', 'name']
 
 
-class AttachmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Attachment
-        fields = ['id', 'name', 'file']
-
-
 class OrgGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrgGroup
-        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'parent_org_group', 'leader', 'attachments', ]
+        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'parent_org_group', 'leaders', ]
+
+
+class AttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = ['id', 'name', 'file', 'org_group', ]
 
 
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
-        fields = ['id', 'name', 'summary', 'attachments', ]
+        fields = ['id', 'name', 'summary', 'org_group', 'attachments', ]
 
 
 class EngineerSerializer(serializers.ModelSerializer):
@@ -126,7 +126,7 @@ class RequirementSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'name', 'summary', 'description', ]
+        fields = ['id', 'name', 'summary', 'description','org_group', ]
 
 
 class TestCaseCategorySerializer(serializers.ModelSerializer):
@@ -180,13 +180,13 @@ class EnvironmentSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ['id', 'name', 'summary', 'description', 'parent_topic', ]
+        fields = ['id', 'name', 'summary', 'description', 'parent_topic','org_group', ]
 
 
 class TopicEngineerAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicEngineerAssignment
-        fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', ]
+        fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date','org_group', ]
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

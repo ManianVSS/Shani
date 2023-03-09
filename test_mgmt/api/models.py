@@ -7,8 +7,46 @@ from api import ipte_util
 from test_mgmt import settings
 
 
+class OrgGroup(models.Model):
+    name = models.CharField(max_length=256, unique=True)
+    auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group",
+                                      verbose_name='authorization group')
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
+                                         related_name="sub_org_groups", verbose_name='parent organization group')
+    leaders = models.ManyToManyField(User, blank=True, related_name="org_group_leaders")
+    members = models.ManyToManyField(User, blank=True, related_name="org_group_members")
+
+    def __str__(self):
+        return str(self.name)
+
+    def is_owner(self, user):
+        # noinspection PyUnresolvedReferences
+        return ((self.leaders is not None) and (user in self.leaders.all())) or (
+                (self.org_group is not None) and self.org_group.is_owner(user))
+
+    def is_member(self, user):
+        # noinspection PyUnresolvedReferences
+        return ((self.members is not None) and (user in self.members.all())) or (
+                (self.org_group is not None) and self.org_group.is_member(user))
+
+
+class OrgModel(models.Model):
+    class Meta:
+        abstract = True
+
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group')
+
+    def is_owner(self, user):
+        return (self.org_group is None) or (hasattr(self.org_group, 'is_owner') and self.org_group.is_owner(user))
+    def is_member(self, user):
+        return (self.org_group is None) or (hasattr(self.org_group, 'is_member') and self.org_group.is_member(user))
+
+
 # TODO: To check if attachments can be overwritten with same file names from two records.
-class Attachment(models.Model):
+class Attachment(OrgModel):
     name = models.CharField(max_length=256)
     file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
 
@@ -16,22 +54,7 @@ class Attachment(models.Model):
         return str(self.file.name)
 
 
-class OrgGroup(models.Model):
-    name = models.CharField(max_length=256, unique=True)
-    auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group",
-                                      verbose_name='authorization group')
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    parent_org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
-                                         related_name="sub_org_groups", verbose_name='parent organization group')
-    leader = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="lead_org_groups")
-    attachments = models.ManyToManyField(Attachment, related_name='org_group_attachments', blank=True)
-
-    def __str__(self):
-        return str(self.name)
-
-
-class Site(models.Model):
+class Site(OrgModel):
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='site_attachments', blank=True)
@@ -40,13 +63,12 @@ class Site(models.Model):
         return str(self.name)
 
 
-class Engineer(models.Model):
+class Engineer(OrgModel):
     employee_id = models.CharField(max_length=20, null=True, unique=True, verbose_name='employee id')
     name = models.CharField(max_length=256, default='<unnamed>')
     auth_user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="engineer",
                                      verbose_name='authorization user')
     role = models.CharField(max_length=256, null=True, blank=True, )
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, related_name="engineers", blank=True, null=True)
     site = models.ForeignKey(Site, null=True, blank=True, on_delete=models.SET_NULL,
                              related_name="engineers")
     attachments = models.ManyToManyField(Attachment, related_name='engineer_attachments', blank=True)
@@ -55,22 +77,17 @@ class Engineer(models.Model):
         return str(self.auth_user)
 
 
-class Release(models.Model):
+class Release(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="releases",
-                                  verbose_name='organization group')
 
     def __str__(self):
         return str(self.name)
 
 
-class EngineerOrgGroupParticipation(models.Model):
+class EngineerOrgGroupParticipation(OrgModel):
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="org_group_participation")
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.CASCADE, related_name="engineer_participation",
-                                  verbose_name='organization group')
     role = models.CharField(max_length=256, null=True, blank=True, )
     capacity = models.FloatField(default=1.0)
 
@@ -89,6 +106,9 @@ class SiteHoliday(models.Model):
 
     def __str__(self):
         return str(self.site) + ": " + str(self.name) + ": " + str(self.date)
+
+    def is_owner(self, user):
+        return (self.site is None) or (hasattr(self.site, 'is_owner') and self.site.is_owner(user))
 
 
 class LeaveStatus(models.TextChoices):
@@ -110,15 +130,16 @@ class Leave(models.Model):
         return str(self.engineer) + " from " + str(self.start_date) + " to " + str(self.end_date) + " - " + str(
             self.status)
 
+    def is_owner(self, user):
+        return (self.engineer is None) or (hasattr(self.engineer, 'is_owner') and self.engineer.is_owner(user))
 
-class EngineerOrgGroupParticipationHistory(models.Model):
+
+class EngineerOrgGroupParticipationHistory(OrgModel):
     class Meta:
         verbose_name_plural = "engineer org-group participation history"
 
     date = models.DateField()
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="org_group_participation_history")
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.CASCADE, related_name="engineer_participation_history",
-                                  verbose_name='organization group')
     expected_capacity = models.FloatField(default=1.0, verbose_name='expected capacity')
     capacity = models.FloatField(default=1.0)
 
@@ -128,7 +149,7 @@ class EngineerOrgGroupParticipationHistory(models.Model):
             self.capacity)
 
 
-class Epic(models.Model):
+class Epic(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -137,14 +158,11 @@ class Epic(models.Model):
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="epics",
-                                  verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
 
-class Feature(models.Model):
+class Feature(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -153,27 +171,21 @@ class Feature(models.Model):
 
     epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="features",
-                                  verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
 
-class Sprint(models.Model):
+class Sprint(OrgModel):
     number = models.IntegerField()
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='sprints')
     start_date = models.DateField(verbose_name='start date')
     end_date = models.DateField(verbose_name='end date')
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="sprints",
-                                  verbose_name='organization group')
-
     def __str__(self):
         return str(self.release) + ": " + str(self.number)
 
 
-class Story(models.Model):
+class Story(OrgModel):
     class Meta:
         verbose_name_plural = "stories"
 
@@ -186,9 +198,6 @@ class Story(models.Model):
     sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
     feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="stories",
-                                  verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -199,7 +208,7 @@ class ReviewStatus(models.TextChoices):
     APPROVED = 'APPROVED', _('Approved'),
 
 
-class UseCaseCategory(models.Model):
+class UseCaseCategory(OrgModel):
     class Meta:
         verbose_name_plural = "use case categories"
 
@@ -208,14 +217,11 @@ class UseCaseCategory(models.Model):
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="use_case_categories", verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
 
-class UseCase(models.Model):
+class UseCase(OrgModel):
     category = models.ForeignKey(UseCaseCategory, on_delete=models.SET_NULL, null=True, blank=True)
 
     name = models.CharField(max_length=256, unique=True)
@@ -237,32 +243,26 @@ class UseCase(models.Model):
 
     attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="use_cases",
-                                  verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
     def get_score(self):
         return (self.consumer_score + self.serviceability_score + self.test_confidence + self.development_confidence) \
-               / 4
+            / 4
 
 
-class Requirement(models.Model):
+class Requirement(OrgModel):
     use_cases = models.ManyToManyField(UseCase, related_name='requirements', blank=True)
 
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="requirements", verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
 
-class Tag(models.Model):
+class Tag(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -271,7 +271,7 @@ class Tag(models.Model):
         return str(self.name) + ": " + str(self.summary)
 
 
-class TestCaseCategory(models.Model):
+class TestCaseCategory(OrgModel):
     class Meta:
         verbose_name_plural = "test case categories"
 
@@ -279,9 +279,6 @@ class TestCaseCategory(models.Model):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
-
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="test_case_categories", verbose_name='organization group')
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
 
@@ -292,7 +289,7 @@ class TestCaseCategory(models.Model):
         return str(self.name) + ": " + str(self.summary)
 
 
-class TestCase(models.Model):
+class TestCase(OrgModel):
     use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='testcases')
     requirements = models.ManyToManyField(Requirement, related_name='testcases', blank=True)
 
@@ -322,9 +319,6 @@ class TestCase(models.Model):
     #                                     default=TestExecutionStatus.PENDING)
 
     # defects = models.CharField(max_length=256, null=True, blank=True)
-
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="testcases",
-                                  verbose_name='organization group')
     parent = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='testcases', verbose_name='test case category')
 
@@ -335,25 +329,21 @@ class TestCase(models.Model):
         return str(self.name) + ": " + str(self.summary)
 
 
-class Defect(models.Model):
+class Defect(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="defects",
-                                  verbose_name='organization group')
     attachments = models.ManyToManyField(Attachment, related_name='defect_attachments', blank=True)
 
 
-class Run(models.Model):
+class Run(OrgModel):
     build = models.CharField(max_length=256)
     name = models.CharField(max_length=256, unique=True)
     time = models.DateTimeField(auto_now_add=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='runs')
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="runs",
-                                  verbose_name='organization group')
 
     def __str__(self):
         return str(self.build) + ": " + str(self.name)
@@ -365,7 +355,7 @@ class ExecutionRecordStatus(models.TextChoices):
     FAILED = 'FAILED', _('Failed'),
 
 
-class ExecutionRecord(models.Model):
+class ExecutionRecord(OrgModel):
     run = models.ForeignKey(Run, null=True, on_delete=models.SET_NULL, related_name='execution_records')
     time = models.DateTimeField(auto_now_add=True)
 
@@ -385,9 +375,6 @@ class ExecutionRecord(models.Model):
     # defects = models.CharField(max_length=200)
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="execution_records", verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
 
@@ -399,7 +386,7 @@ class ReliabilityRunStatus(models.TextChoices):
 
 
 # noinspection PyTypeChecker
-class ReliabilityRun(models.Model):
+class ReliabilityRun(OrgModel):
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='reliability_runs')
 
     build = models.CharField(max_length=256)
@@ -423,9 +410,6 @@ class ReliabilityRun(models.Model):
     # defects = models.CharField(max_length=200)
     incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="reliability_runs", verbose_name='organization group')
-
     def __str__(self):
         return str(self.name) + ": " + str(self.testName) + ": " + str(self.release.name) + ": " + str(self.build)
 
@@ -436,7 +420,7 @@ class ReliabilityRun(models.Model):
                 self.ipte = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
 
 
-class Environment(models.Model):
+class Environment(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     type = models.CharField(max_length=256, null=True, blank=True)
@@ -446,14 +430,11 @@ class Environment(models.Model):
     current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments',
                                         verbose_name='currently release')
 
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL,
-                                  related_name="environments")
-
     def __str__(self):
         return str(self.name) + ": " + str(self.type)
 
 
-class Topic(models.Model):
+class Topic(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -470,7 +451,7 @@ class TopicEngineerStatus(models.TextChoices):
     COMPLETED = 'COMPLETED', _('Completed'),
 
 
-class TopicEngineerAssignment(models.Model):
+class TopicEngineerAssignment(OrgModel):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="engineer_ratings")
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="topic_ratings")
     status = models.CharField(max_length=11, choices=TopicEngineerStatus.choices, default=TopicEngineerStatus.ASSIGNED)
@@ -482,15 +463,12 @@ class TopicEngineerAssignment(models.Model):
         return str(self.topic.name) + ": " + str(self.engineer.name) + ": " + str(self.status)
 
 
-class Feedback(models.Model):
+class Feedback(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
-
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='feedbacks')
-    org_group = models.ForeignKey(OrgGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="feedbacks",
-                                  verbose_name='organization group')
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
@@ -534,7 +512,7 @@ class Feedback(models.Model):
 #         self.testDataSet = None  # {}
 
 
-# class StringStep(models.Model):
+# class StringStep(OrgModel):
 #     summary = models.CharField(max_length=1024, unique=True)
 #     description = models.TextField( null=True, blank=True)
 #
