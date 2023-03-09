@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from test_mgmt import settings
 
 urlpatterns = [
+                  path('admin/', include('massadmin.urls')),
                   path('admin/', admin.site.urls),
                   # For Advanced filters path('advanced_filters/', include('advanced_filters.urls')),
                   path('api/', include('api.urls')),

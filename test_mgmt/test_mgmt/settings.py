@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     # 'guardian',
 
+    'massadmin',
+
     # Reverse proxy config
     # 'revproxy',
 

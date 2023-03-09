@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.core.exceptions import FieldDoesNotExist
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+from massadmin.massadmin import MassEditMixin
 
 from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
@@ -9,7 +10,7 @@ from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Fea
     Site, TestCaseCategory, Tag, Feedback
 
 
-class CustomModelAdmin(ImportExportModelAdmin):
+class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     save_as = True
     search_fields = ['name', 'summary', 'description', ]
 

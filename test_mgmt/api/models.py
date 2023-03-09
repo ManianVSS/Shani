@@ -115,7 +115,7 @@ class SiteHoliday(models.Model):
         return str(self.site) + ": " + str(self.name) + ": " + str(self.date)
 
     def is_owner(self, user):
-        return (self.site is None) or (hasattr(self.site, 'is_owner') and self.site.is_owner(user))
+        return (self.site is not None) and (hasattr(self.site, 'is_owner') and self.site.is_owner(user))
 
     # noinspection PyMethodMayBeStatic
     def is_member(self, user):
@@ -142,7 +142,7 @@ class Leave(models.Model):
             self.status)
 
     def is_owner(self, user):
-        return (self.engineer is None) or (hasattr(self.engineer, 'is_owner') and self.engineer.is_owner(user))
+        return (self.engineer is not None) and (hasattr(self.engineer, 'is_owner') and self.engineer.is_owner(user))
 
     # noinspection PyMethodMayBeStatic
     def is_member(self, user):

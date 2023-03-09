@@ -24,6 +24,12 @@ class ProductFeatureAdmin(CustomModelAdmin):
     )
     search_fields = ['name', 'summary', 'description', ]
 
+    # def get_form(self, request, obj=None, **kwargs):
+    #     form = super().get_form(request, obj, **kwargs)
+    #     form.base_fields['owner'].initial = request.user
+    #     form.base_fields['automation_owner'].initial = request.user
+    #     return form
+
 
 admin.site.register(ProductFeature, ProductFeatureAdmin)
 
@@ -46,6 +52,12 @@ class StepAdmin(CustomModelAdmin):
     )
 
     search_fields = ['name', 'summary', 'description', 'expected_results', 'automation_code_reference', ]
+
+    # def get_form(self, request, obj=None, **kwargs):
+    #     form = super().get_form(request, obj, **kwargs)
+    #     form.base_fields['test_design_owner'].initial = request.user
+    #     form.base_fields['automation_owner'].initial = request.user
+    #     return form
 
 
 admin.site.register(Step, StepAdmin)

@@ -86,9 +86,10 @@ class Step(OrgModel):
         return str(self.name)
 
     def is_owner(self, user):
-        return (user == self.test_design_owner) or (self.feature is None) or (
-                hasattr(self.feature, 'is_owner') and self.feature.is_owner(user)) or super().is_owner(user)
+        return (user == self.test_design_owner) or (
+                (self.feature is not None) and hasattr(self.feature, 'is_owner') and self.feature.is_owner(
+            user)) or super().is_owner(user)
 
     def is_member(self, user):
-        return (user == self.automation_owner) or (self.feature is None) or (
-                hasattr(self.feature, 'is_member') and self.feature.is_member(user))
+        return (user == self.automation_owner) or (
+                (self.feature is not None) and hasattr(self.feature, 'is_member') and self.feature.is_member(user))
