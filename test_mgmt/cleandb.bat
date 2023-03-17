@@ -1,5 +1,6 @@
-del /y api/migrations
-del /y automation/migrations
-del /y siteconfig/migrations
-del /y data/db.sqlite3
+del /s /q api\migrations
+del /s /q automation\migrations
+del /s /q siteconfig/migrations
+del /s /q data\db.sqlite3
 migrate.bat
+python manage.py createsuperuser

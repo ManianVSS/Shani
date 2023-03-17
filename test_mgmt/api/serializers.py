@@ -22,7 +22,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class OrgGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrgGroup
-        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'parent_org_group', 'leaders', ]
+        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'org_group', 'leaders', ]
 
 
 class AttachmentSerializer(serializers.ModelSerializer):

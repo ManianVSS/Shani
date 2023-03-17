@@ -12,7 +12,8 @@ from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Fea
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     save_as = True
-    search_fields = ['name', 'summary', 'description', ]
+
+    # search_fields = ['name', 'summary', 'description', ]
 
     def has_view_permission(self, request, obj=None):
         if (request is None) or (request.user is None):
