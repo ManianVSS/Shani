@@ -1,22 +1,15 @@
 from django.urls import include, path
 from rest_framework import routers
-from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt import views as jwt_views
-from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 
-from .apiviews import get_score, get_use_case_category_score, get_use_case_score, get_use_case_completion, \
-    get_use_case_category_completion, get_overall_completion, get_org_capacity_for_time_range, \
+from .apiviews import get_score, get_use_case_category_score, get_use_case_score, get_org_capacity_for_time_range, \
     get_engineer_capacity_for_time_range
-from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
+from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, FeatureViewSet, \
     RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, \
     StoryViewSet, UseCaseCategoryViewSet, ReliabilityRunViewSet, OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, \
     LeaveViewSet, EngineerOrgGroupParticipationViewSet, EnvironmentViewSet, TopicViewSet, \
     TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, SiteViewSet, TagViewSet, \
-    TestCaseCategoryViewSet, FeedbackViewSet
-
-# , use_case_count, requirement_count,     test_case_count
-
-schema_view = get_schema_view(title='Test Management API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])
+    FeedbackViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -42,8 +35,6 @@ router.register(r'use_cases', UseCaseViewSet)
 # router.register(r'steps', StepViewSet)
 router.register(r'requirements', RequirementViewSet)
 router.register(r'tags', TagViewSet)
-router.register(r'test_case_categories', TestCaseCategoryViewSet)
-router.register(r'testcases', TestCaseViewSet)
 # router.register(r'steps', StepViewSet)
 
 router.register(r'defects', DefectViewSet)
@@ -73,12 +64,10 @@ urlpatterns = [
     path('score/', get_score),
     path('use_case_category_score/<int:pk>', get_use_case_category_score),
     path('use_case_score/<int:pk>', get_use_case_score),
-    path('use_case_completion/<int:pk>', get_use_case_completion),
-    path('use_case_category_completion/<int:pk>', get_use_case_category_completion),
-    path('completion', get_overall_completion),
+    # path('use_case_completion/<int:pk>', get_use_case_completion),
+    # path('use_case_category_completion/<int:pk>', get_use_case_category_completion),
+    # path('completion', get_overall_completion),
 
     path('capacity_view', get_org_capacity_for_time_range),
     path('engineer_capacity_view', get_engineer_capacity_for_time_range),
-
-    path('swagger/', schema_view, name='docs'),
 ]

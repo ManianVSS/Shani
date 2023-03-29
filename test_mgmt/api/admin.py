@@ -5,10 +5,10 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from api.models import UseCase, Requirement, TestCase, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
+from api.models import UseCase, Requirement, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
-    Site, TestCaseCategory, Tag, Feedback
+    Site, Tag, Feedback
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -271,30 +271,6 @@ class TagAdmin(CustomModelAdmin):
 
 
 admin.site.register(Tag, TagAdmin)
-
-
-class TestCaseCategoryResource(resources.ModelResource):
-    class Meta:
-        model = TestCaseCategory
-
-
-class TestCaseCategoryAdmin(CustomModelAdmin):
-    resource_class = TestCaseCategoryResource
-
-
-admin.site.register(TestCaseCategory, TestCaseCategoryAdmin)
-
-
-class TestCaseResource(resources.ModelResource):
-    class Meta:
-        model = TestCase
-
-
-class TestCaseAdmin(CustomModelAdmin):
-    resource_class = TestCaseResource
-
-
-admin.site.register(TestCase, TestCaseAdmin)
 
 
 class DefectResource(resources.ModelResource):

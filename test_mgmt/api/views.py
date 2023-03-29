@@ -2,17 +2,17 @@ from django.contrib.auth.models import User, Group
 from rest_framework import permissions
 from rest_framework import viewsets
 
-from .models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
+from .models import UseCase, Requirement, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
     Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
     SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, \
-    EngineerOrgGroupParticipationHistory, Site, TestCaseCategory, Tag, Feedback
+    EngineerOrgGroupParticipationHistory, Site, Tag, Feedback
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
-    TestCaseSerializer, FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
+    FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
     DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
     ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
     EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, \
     TopicEngineerAssignmentSerializer, EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, \
-    TestCaseCategorySerializer, TagSerializer, FeedbackSerializer
+    TagSerializer, FeedbackSerializer
 
 exact_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
@@ -353,44 +353,6 @@ class TagViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-    }
-
-
-class TestCaseCategoryViewSet(viewsets.ModelViewSet):
-    queryset = TestCaseCategory.objects.all()
-    serializer_class = TestCaseCategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'weight': compare_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
-    }
-
-
-class TestCaseViewSet(viewsets.ModelViewSet):
-    queryset = TestCase.objects.all()
-    serializer_class = TestCaseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'use_case', 'requirements', 'status', 'acceptance_test', 'automated']
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
-        'acceptance_test': exact_fields_filter_lookups,
-        'automated': exact_fields_filter_lookups,
-        'use_case': id_fields_filter_lookups,
-        'requirements': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
     }
 
 

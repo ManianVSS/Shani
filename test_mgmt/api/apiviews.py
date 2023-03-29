@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import UseCase, TestCase, Feature, ExecutionRecord, ReviewStatus, ExecutionRecordStatus, UseCaseCategory, \
+from .models import UseCase, Feature, UseCaseCategory, \
     OrgGroup, Engineer, \
     SiteHoliday, Leave, EngineerOrgGroupParticipation
 from .serializers import SiteHolidaySerializer, LeaveSerializer
@@ -112,101 +112,101 @@ def get_use_case_score(request, pk):
     return Response(use_case_score)
 
 
-def get_use_case_obj_completion(use_case):
-    testcases = TestCase.objects.filter(use_case=use_case)  # , status=ReviewStatus.APPROVED
-
-    result = {'total_tests': len(testcases), 'unimplemented': not bool(testcases), 'passed': 0, 'failed': 0,
-              'pending': 0, 'completion': 0}
-
-    for testcase in testcases:
-        last_execution_record = ExecutionRecord.objects.filter(name=testcase.name).order_by('-time')[0]
-
-        if not last_execution_record or (last_execution_record.status == ExecutionRecordStatus.PENDING):
-            result['pending'] += 1
-        elif last_execution_record.status == ExecutionRecordStatus.PASS:
-            result['passed'] += 1
-        else:
-            result['failed'] += 1
-
-    if len(testcases) > 0:
-        result['completion'] = result['passed'] / result['total_tests']
-
-    result['completion'] = round(result['completion'], 2)
-    return result
-
-
-@api_view(['GET'])
-def get_use_case_completion(request, pk):
-    if not request.method == 'GET':
-        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    try:
-        use_case = UseCase.objects.get(pk=pk)
-    except UseCase.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-
-    return Response(get_use_case_obj_completion(use_case))
+# def get_use_case_obj_completion(use_case):
+#     testcases = TestCase.objects.filter(use_case=use_case)  # , status=ReviewStatus.APPROVED
+#
+#     result = {'total_tests': len(testcases), 'unimplemented': not bool(testcases), 'passed': 0, 'failed': 0,
+#               'pending': 0, 'completion': 0}
+#
+#     for testcase in testcases:
+#         last_execution_record = ExecutionRecord.objects.filter(name=testcase.name).order_by('-time')[0]
+#
+#         if not last_execution_record or (last_execution_record.status == ExecutionRecordStatus.PENDING):
+#             result['pending'] += 1
+#         elif last_execution_record.status == ExecutionRecordStatus.PASS:
+#             result['passed'] += 1
+#         else:
+#             result['failed'] += 1
+#
+#     if len(testcases) > 0:
+#         result['completion'] = result['passed'] / result['total_tests']
+#
+#     result['completion'] = round(result['completion'], 2)
+#     return result
 
 
-def get_use_case_category_obj_completion(use_case_category):
-    use_cases = UseCase.objects.filter(category=use_case_category,
-                                       status=ReviewStatus.APPROVED)  # , status=ReviewStatus.APPROVED
-    result = {'total_tests': 0, 'unimplemented': not bool(use_cases), 'passed': 0, 'failed': 0, 'pending': 0,
-              'completion': 0}
-
-    for use_case in use_cases:
-        use_case_result = get_use_case_obj_completion(use_case)
-        result['total_tests'] += use_case_result['total_tests']
-        result['passed'] += use_case_result['passed']
-        result['failed'] += use_case_result['passed']
-        result['pending'] += use_case_result['passed']
-        result['completion'] += use_case_result['completion']
-    if use_cases:
-        # result['passed'] /= len(use_cases)
-        # result['failed'] /= len(use_cases)
-        # result['pending'] /= len(use_cases)
-        result['completion'] /= len(use_cases)
-    result['completion'] = round(result['completion'], 2)
-    return result
+# @api_view(['GET'])
+# def get_use_case_completion(request, pk):
+#     if not request.method == 'GET':
+#         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+#
+#     try:
+#         use_case = UseCase.objects.get(pk=pk)
+#     except UseCase.DoesNotExist:
+#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#
+#     return Response(get_use_case_obj_completion(use_case))
 
 
-@api_view(['GET'])
-def get_use_case_category_completion(request, pk):
-    if not request.method == 'GET':
-        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+# def get_use_case_category_obj_completion(use_case_category):
+#     use_cases = UseCase.objects.filter(category=use_case_category,
+#                                        status=ReviewStatus.APPROVED)  # , status=ReviewStatus.APPROVED
+#     result = {'total_tests': 0, 'unimplemented': not bool(use_cases), 'passed': 0, 'failed': 0, 'pending': 0,
+#               'completion': 0}
+#
+#     for use_case in use_cases:
+#         use_case_result = get_use_case_obj_completion(use_case)
+#         result['total_tests'] += use_case_result['total_tests']
+#         result['passed'] += use_case_result['passed']
+#         result['failed'] += use_case_result['passed']
+#         result['pending'] += use_case_result['passed']
+#         result['completion'] += use_case_result['completion']
+#     if use_cases:
+#         # result['passed'] /= len(use_cases)
+#         # result['failed'] /= len(use_cases)
+#         # result['pending'] /= len(use_cases)
+#         result['completion'] /= len(use_cases)
+#     result['completion'] = round(result['completion'], 2)
+#     return result
 
-    try:
-        use_case_category = UseCaseCategory.objects.get(pk=pk)
-    except UseCaseCategory.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
-    return Response(get_use_case_category_obj_completion(use_case_category))
+# @api_view(['GET'])
+# def get_use_case_category_completion(request, pk):
+#     if not request.method == 'GET':
+#         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+#
+#     try:
+#         use_case_category = UseCaseCategory.objects.get(pk=pk)
+#     except UseCaseCategory.DoesNotExist:
+#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#
+#     return Response(get_use_case_category_obj_completion(use_case_category))
 
 
-@api_view(['GET'])
-def get_overall_completion(request):
-    if not request.method == 'GET':
-        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    use_case_categories = UseCaseCategory.objects.all()
-    result = {'total_tests': 0, 'passed': 0, 'failed': 0, 'pending': 0, 'completion': 0,
-              'use_case_category_completion': []}
-
-    for use_case_category in use_case_categories:
-        use_case_category_result = get_use_case_category_obj_completion(use_case_category)
-        use_case_category_result['name'] = use_case_category.name
-        result['use_case_category_completion'].append(use_case_category_result)
-        result['total_tests'] += use_case_category_result['total_tests']
-        result['passed'] += use_case_category_result['passed']
-        result['failed'] += use_case_category_result['failed']
-        result['pending'] += use_case_category_result['pending']
-        result['completion'] += use_case_category_result['completion']
-    if use_case_categories:
-        result['completion'] /= len(use_case_categories)
-
-    result['completion'] = round(result['completion'], 2)
-    return Response(result)
-    # return Response(get_use_case_category_completion(use_case_category))
+# @api_view(['GET'])
+# def get_overall_completion(request):
+#     if not request.method == 'GET':
+#         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+#
+#     use_case_categories = UseCaseCategory.objects.all()
+#     result = {'total_tests': 0, 'passed': 0, 'failed': 0, 'pending': 0, 'completion': 0,
+#               'use_case_category_completion': []}
+#
+#     for use_case_category in use_case_categories:
+#         use_case_category_result = get_use_case_category_obj_completion(use_case_category)
+#         use_case_category_result['name'] = use_case_category.name
+#         result['use_case_category_completion'].append(use_case_category_result)
+#         result['total_tests'] += use_case_category_result['total_tests']
+#         result['passed'] += use_case_category_result['passed']
+#         result['failed'] += use_case_category_result['failed']
+#         result['pending'] += use_case_category_result['pending']
+#         result['completion'] += use_case_category_result['completion']
+#     if use_case_categories:
+#         result['completion'] /= len(use_case_categories)
+#
+#     result['completion'] = round(result['completion'], 2)
+#     return Response(result)
+#     # return Response(get_use_case_category_completion(use_case_category))
 
 
 @api_view(['GET'])
@@ -344,41 +344,3 @@ def get_engineer_capacity_for_time_range(request):
     }
 
     return Response(capacity_data)
-
-# class ParseExcel(APIView):
-#     def post(self, request, format=None):
-#         try:
-#             excel_file = request.FILES['files']
-#         except MultiValueDictKeyError:
-#             return redirect ("/error.html")
-# @api_view(['GET'])
-# def use_case_count(request):
-#     count = UseCase.objects.all().count()
-#     return Response(count, status=status.HTTP_200_OK)
-
-#
-# @api_view(['GET'])
-# def requirement_count(request):
-#     count = Requirement.objects.all().count()
-#     return Response(count, status=status.HTTP_200_OK)
-
-# @api_view(['GET'])
-# def test_case_count(request):
-#     count = TestCase.objects.all().count()
-#     return Response(count, status=status.HTTP_200_OK)
-
-# class StepViewSet(viewsets.ModelViewSet):
-#     queryset = Step.objects.all()
-#     serializer_class = StepSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-#     search_fields = default_search_fields
-#     ordering_fields = ['id', 'summary', 'actor', 'interface', 'action']
-#     ordering = default_ordering
-#     filterset_fields = {
-#         'id': id_fields_filter_lookups,
-#         'summary': string_fields_filter_lookups,
-#
-#         'actor': string_fields_filter_lookups,
-#         'interface': string_fields_filter_lookups,
-#         'action': string_fields_filter_lookups,
-#     }

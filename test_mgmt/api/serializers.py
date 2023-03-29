@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from api.models import UseCase, Requirement, TestCase, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
+from api.models import UseCase, Requirement, Feature, Run, ExecutionRecord, Attachment, Defect, Release, \
     Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
-    Site, TestCaseCategory, Tag, Feedback
+    Site, Tag, Feedback
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -127,20 +127,6 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', ]
-
-
-class TestCaseCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TestCaseCategory
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'org_group', 'parent', 'tags', 'attachments', ]
-
-
-class TestCaseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TestCase
-        fields = ['id', 'name', 'summary', 'description', 'status', 'acceptance_test', 'automated', 'use_case',
-                  'requirements', 'attachments', 'org_group', 'parent', 'tags',
-                  'external_id']
 
 
 class DefectSerializer(serializers.ModelSerializer):

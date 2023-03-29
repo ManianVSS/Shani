@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.contrib.admin import RelatedOnlyFieldListFilter
 from import_export import resources
 
 from api.admin import CustomModelAdmin
-from automation.models import Step, ProductFeature, Attachment
+from .models import Attachment, Tag, FeatureCategory, Feature
 
 
 class AttachmentResource(resources.ModelResource):
@@ -18,63 +17,37 @@ class AttachmentAdmin(CustomModelAdmin):
 admin.site.register(Attachment, AttachmentAdmin)
 
 
-# Register your models here.
-class ProductFeatureResource(resources.ModelResource):
+class TagResource(resources.ModelResource):
     class Meta:
-        model = ProductFeature
+        model = Tag
 
 
-class ProductFeatureAdmin(CustomModelAdmin):
-    resource_class = ProductFeatureResource
-    # save_as = True
-    list_filter = (
-        ('org_group', RelatedOnlyFieldListFilter),
-        ('tags', RelatedOnlyFieldListFilter),
-        ('owner', RelatedOnlyFieldListFilter),
-        'status',
-        ('automation_owner', RelatedOnlyFieldListFilter),
-    )
-    search_fields = ['name', 'summary', 'description', ]
-
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super().get_form(request, obj, **kwargs)
-    #     form.base_fields['owner'].initial = request.user
-    #     form.base_fields['automation_owner'].initial = request.user
-    #     return form
+class TagAdmin(CustomModelAdmin):
+    resource_class = TagResource
 
 
-admin.site.register(ProductFeature, ProductFeatureAdmin)
+admin.site.register(Tag, TagAdmin)
 
 
-class StepResource(resources.ModelResource):
+class FeatureCategoryResource(resources.ModelResource):
     class Meta:
-        model = Step
+        model = FeatureCategory
 
 
-class StepAdmin(CustomModelAdmin):
-    resource_class = StepResource
-    # save_as = True
-    list_filter = (
-        ('org_group', RelatedOnlyFieldListFilter),
-        ('tags', RelatedOnlyFieldListFilter),
-        ('test_design_owner', RelatedOnlyFieldListFilter),
-        'test_design_status',
-        ('automation_owner', RelatedOnlyFieldListFilter),
-        'automation_status',
-    )
-
-    search_fields = ['name', 'summary', 'description', 'expected_results', 'automation_code_reference', ]
-
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super().get_form(request, obj, **kwargs)
-    #     form.base_fields['test_design_owner'].initial = request.user
-    #     form.base_fields['automation_owner'].initial = request.user
-    #     return form
+class FeatureCategoryAdmin(CustomModelAdmin):
+    resource_class = FeatureCategoryResource
 
 
-admin.site.register(Step, StepAdmin)
+admin.site.register(FeatureCategory, FeatureCategoryAdmin)
 
-# For django guardian ImportExportMixin, GuardedModelAdmin
-# For advanced filters AdminAdvancedFiltersMixin,
-# e.g. advanced_filter_fields = ('tags', 'test_design_owner', 'modified_by', 'test_design_status', 'automation_owner',
-#                           'automation_status',)
+
+class FeatureResource(resources.ModelResource):
+    class Meta:
+        model = Feature
+
+
+class FeatureAdmin(CustomModelAdmin):
+    resource_class = FeatureResource
+
+
+admin.site.register(Feature, FeatureAdmin)

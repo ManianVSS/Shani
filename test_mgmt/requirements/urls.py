@@ -1,16 +1,17 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from automation.views import StepViewSet, AttachmentViewSet, ProductFeatureViewSet
+from .views import AttachmentViewSet, TagViewSet, FeatureCategoryViewSet, FeatureViewSet
 
 router = routers.DefaultRouter()
 
 router.register(r'attachments', AttachmentViewSet)
-router.register(r'features', ProductFeatureViewSet)
-router.register(r'steps', StepViewSet)
+router.register(r'tags', TagViewSet)
+router.register(r'featurecategories', FeatureCategoryViewSet)
+router.register(r'features', FeatureViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
 ]

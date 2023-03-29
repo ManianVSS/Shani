@@ -285,64 +285,6 @@ class Tag(OrgModel):
         return str(self.name) + ": " + str(self.summary)
 
 
-class TestCaseCategory(OrgModel):
-    class Meta:
-        verbose_name_plural = "test case categories"
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
-                               related_name='sub_categories')
-
-    tags = models.ManyToManyField(Tag, related_name='test_categories', blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='test_case_category_attachments', blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
-class TestCase(OrgModel):
-    use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='testcases')
-    requirements = models.ManyToManyField(Requirement, related_name='testcases', blank=True)
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-    attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
-
-    status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
-
-    # bdd_test_case = jsonfield.JSONField()
-    # setup_steps = models.ManyToManyField(TestCasePreCondition, related_name="setup_steps_test_cases", blank=True)
-    # steps = models.ManyToManyField(TestCaseStep, related_name="steps_test_cases", blank=True)
-    # teardown_steps = models.ManyToManyField(TestCasePostCondition, related_name="teardown_steps_test_cases",
-    # blank=True)
-
-    acceptance_test = models.BooleanField(default=False, verbose_name='is acceptance test')
-    automated = models.BooleanField(default=False, verbose_name='is automated')
-
-    # class TestExecutionStatus(models.TextChoices):
-    #     PENDING = 'PENDING', _('Pending'),
-    #     FAILED = 'FAILED', _('Failed'),
-    #     PASSED = 'PASSED', _('Passed'),
-    #
-    # execution_status = models.CharField(max_length=8, choices=TestExecutionStatus.choices,
-    #                                     default=TestExecutionStatus.PENDING)
-
-    # defects = models.CharField(max_length=256, null=True, blank=True)
-    parent = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, blank=True,
-                               related_name='testcases', verbose_name='test case category')
-
-    tags = models.ManyToManyField(Tag, related_name='test_cases', blank=True)
-    external_id = models.CharField(max_length=256, blank=True, null=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
 class Defect(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
