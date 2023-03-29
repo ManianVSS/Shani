@@ -2,8 +2,18 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy
 
-from api.models import Attachment, Engineer, Tag, OrgModel
+from api.models import Tag, OrgModel, OrgGroup
 from test_mgmt import settings
+
+
+class Attachment(OrgModel):
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='automation_attachments')
+
+    def __str__(self):
+        return str(self.file.name)
 
 
 # Create your models here.

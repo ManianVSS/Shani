@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.core.exceptions import FieldDoesNotExist
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -70,6 +71,7 @@ class AttachmentResource(resources.ModelResource):
 
 class AttachmentAdmin(CustomModelAdmin):
     resource_class = AttachmentResource
+    search_fields = ['name', ' file', ]
 
 
 admin.site.register(Attachment, AttachmentAdmin)
@@ -153,6 +155,10 @@ class LeaveResource(resources.ModelResource):
 
 
 class LeaveAdmin(CustomModelAdmin):
+    list_filter = (
+        ('engineer', RelatedOnlyFieldListFilter),
+        'status',
+    )
     resource_class = LeaveResource
 
 

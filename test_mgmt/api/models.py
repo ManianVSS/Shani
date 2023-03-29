@@ -2,7 +2,6 @@ from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
 from api import ipte_util
 from test_mgmt import settings
 
@@ -52,7 +51,6 @@ class OrgModel(models.Model):
         return is_member
 
 
-# TODO: To check if attachments can be overwritten with same file names from two records.
 class Attachment(OrgModel):
     name = models.CharField(max_length=256)
     file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
@@ -219,6 +217,7 @@ class Story(OrgModel):
 
 class ReviewStatus(models.TextChoices):
     DRAFT = 'DRAFT', _('Draft'),
+    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
     IN_REVIEW = 'IN_REVIEW', _('In Review'),
     APPROVED = 'APPROVED', _('Approved'),
 
@@ -248,7 +247,7 @@ class UseCase(OrgModel):
     # post_conditions = models.ManyToManyField(UseCasePostCondition, related_name="post_condition_use_cases",
     # blank=True)
 
-    status = models.CharField(max_length=9, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
+    status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
 
     weight = models.FloatField(default=1)
     consumer_score = models.FloatField(default=0, verbose_name='consumer score')
@@ -314,7 +313,7 @@ class TestCase(OrgModel):
 
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
 
-    status = models.CharField(max_length=9, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
+    status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
 
     # bdd_test_case = jsonfield.JSONField()
     # setup_steps = models.ManyToManyField(TestCasePreCondition, related_name="setup_steps_test_cases", blank=True)

@@ -1,8 +1,6 @@
-from django.shortcuts import render
 from rest_framework import viewsets, permissions
 
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups
 from siteconfig.models import SiteSettings
 from siteconfig.serializers import SiteSettingsSerializer
 

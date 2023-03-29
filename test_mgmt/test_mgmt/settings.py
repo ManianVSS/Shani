@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Added for Django Rest Framework
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
@@ -63,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'test_mgmt.urls'

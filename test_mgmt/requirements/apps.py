@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SiteconfigConfig(AppConfig):
+class RequirementsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'siteconfig'
+    name = 'requirements'

@@ -126,7 +126,7 @@ class RequirementSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'name', 'summary', 'description','org_group', ]
+        fields = ['id', 'name', 'summary', 'description', 'org_group', ]
 
 
 class TestCaseCategorySerializer(serializers.ModelSerializer):
@@ -180,13 +180,13 @@ class EnvironmentSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ['id', 'name', 'summary', 'description', 'parent_topic','org_group', ]
+        fields = ['id', 'name', 'summary', 'description', 'parent_topic', 'org_group', ]
 
 
 class TopicEngineerAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicEngineerAssignment
-        fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date','org_group', ]
+        fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', 'org_group', ]
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

@@ -4,16 +4,15 @@ from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt import views as jwt_views
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 
+from .apiviews import get_score, get_use_case_category_score, get_use_case_score, get_use_case_completion, \
+    get_use_case_category_completion, get_overall_completion, get_org_capacity_for_time_range, \
+    get_engineer_capacity_for_time_range
 from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, TestCaseViewSet, FeatureViewSet, \
     RunViewSet, ExecutionRecordViewSet, AttachmentViewSet, DefectViewSet, ReleaseViewSet, EpicViewSet, SprintViewSet, \
     StoryViewSet, UseCaseCategoryViewSet, ReliabilityRunViewSet, OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, \
     LeaveViewSet, EngineerOrgGroupParticipationViewSet, EnvironmentViewSet, TopicViewSet, \
     TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, SiteViewSet, TagViewSet, \
     TestCaseCategoryViewSet, FeedbackViewSet
-
-from .apiviews import get_score, get_use_case_category_score, get_use_case_score, get_use_case_completion, \
-    get_use_case_category_completion, get_overall_completion, get_org_capacity_for_time_range, \
-    get_engineer_capacity_for_time_range
 
 # , use_case_count, requirement_count,     test_case_count
 
