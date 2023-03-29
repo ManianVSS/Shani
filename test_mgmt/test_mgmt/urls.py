@@ -16,12 +16,15 @@ urlpatterns = [
                   # For Advanced filters path('advanced_filters/', include('advanced_filters.urls')),
                   path('api/', include('api.urls')),
                   path('siteconfig/', include('siteconfig.urls')),
-                  path('automation/', include('automation.urls')),
-                  path('testdesign/', include('testdesign.urls')),
                   path('requirements/', include('requirements.urls')),
+                  path('workitems/', include('workitems.urls')),
+                  path('testdesign/', include('testdesign.urls')),
+                  path('automation/', include('automation.urls')),
+                  path('execution/', include('execution.urls')),
                   path('swagger/', schema_view, name='docs'),
-                  re_path('(^(?!(api|admin|data|automation|requirements|testdesign|swagger)).*$)',
-                          TemplateView.as_view(template_name='index.html')),
+                  re_path(
+                      '(^(?!(data|admin|api|siteconfig|requirements|workitems|testdesign|automation|execution|swagger)).*$)',
+                      TemplateView.as_view(template_name='index.html')),
               ] + static(settings.STATIC_URL,
                          document_root=settings.STATICFILES_DIRS) \
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

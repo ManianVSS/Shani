@@ -2,7 +2,6 @@ from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from api import ipte_util
 from test_mgmt import settings
 
 
@@ -82,15 +81,6 @@ class Engineer(OrgModel):
         return str(self.auth_user)
 
 
-class Release(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.name)
-
-
 class EngineerOrgGroupParticipation(OrgModel):
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="org_group_participation")
     role = models.CharField(max_length=256, null=True, blank=True, )
@@ -160,59 +150,6 @@ class EngineerOrgGroupParticipationHistory(OrgModel):
         return "On " + str(self.date) + ", " + str(self.engineer) + " participated in " + str(
             self.org_group) + " with capacity " + str(
             self.capacity)
-
-
-class Epic(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='epic_attachments', blank=True)
-
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
-class Feature(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
-
-    epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
-class Sprint(OrgModel):
-    number = models.IntegerField()
-    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='sprints')
-    start_date = models.DateField(verbose_name='start date')
-    end_date = models.DateField(verbose_name='end date')
-
-    def __str__(self):
-        return str(self.release) + ": " + str(self.number)
-
-
-class Story(OrgModel):
-    class Meta:
-        verbose_name_plural = "stories"
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='story_attachments', blank=True)
-    rank = models.IntegerField()
-    sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
-    feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
 
 
 class ReviewStatus(models.TextChoices):
@@ -285,111 +222,6 @@ class Tag(OrgModel):
         return str(self.name) + ": " + str(self.summary)
 
 
-class Defect(OrgModel):
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    external_id = models.CharField(max_length=50, blank=True)
-
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
-    attachments = models.ManyToManyField(Attachment, related_name='defect_attachments', blank=True)
-
-
-class Run(OrgModel):
-    build = models.CharField(max_length=256)
-    name = models.CharField(max_length=256, unique=True)
-    time = models.DateTimeField(auto_now_add=True)
-
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='runs')
-
-    def __str__(self):
-        return str(self.build) + ": " + str(self.name)
-
-
-class ExecutionRecordStatus(models.TextChoices):
-    PENDING = 'PENDING', _('Pending execution'),
-    PASS = 'PASS', _('Passed'),
-    FAILED = 'FAILED', _('Failed'),
-
-
-class ExecutionRecord(OrgModel):
-    run = models.ForeignKey(Run, null=True, on_delete=models.SET_NULL, related_name='execution_records')
-    time = models.DateTimeField(auto_now_add=True)
-
-    # use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='execution_records')
-    # testcase = models.ForeignKey(TestCase, null=True, on_delete=models.SET_NULL, related_name='execution_records')
-
-    name = models.CharField(max_length=256)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-    status = models.CharField(max_length=8, choices=ExecutionRecordStatus.choices,
-                              default=ExecutionRecordStatus.PENDING)
-
-    acceptance_test = models.BooleanField(default=False, verbose_name='is acceptance test')
-    automated = models.BooleanField(default=False, verbose_name='is automated')
-
-    # defects = models.CharField(max_length=200)
-    defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
-class ReliabilityRunStatus(models.TextChoices):
-    PENDING = 'PENDING', _('Pending execution'),
-    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
-    COMPLETED = 'COMPLETED', _('Completed'),
-
-
-# noinspection PyTypeChecker
-class ReliabilityRun(OrgModel):
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='reliability_runs')
-
-    build = models.CharField(max_length=256)
-    name = models.CharField(max_length=256, null=True, blank=True)
-
-    start_time = models.DateTimeField(auto_now_add=True, verbose_name='start time')
-    modified_time = models.DateTimeField(auto_now=True, verbose_name='modified time')
-
-    testName = models.CharField(max_length=200, verbose_name='test name')
-    testEnvironmentType = models.CharField(max_length=200, verbose_name='test environment type')
-    testEnvironmentName = models.CharField(max_length=200, verbose_name='test environment name')
-
-    status = models.CharField(max_length=11, choices=ReliabilityRunStatus.choices,
-                              default=ReliabilityRunStatus.PENDING)
-
-    totalIterationCount = models.IntegerField(null=True, blank=True, verbose_name='total iteration count')
-    passedIterationCount = models.IntegerField(null=True, blank=True, verbose_name='passed iteration count')
-    incidentCount = models.IntegerField(null=True, blank=True, verbose_name='incident count')
-    targetIPTE = models.FloatField(null=True, blank=True, verbose_name='target IPTE')
-    ipte = models.FloatField(null=True, blank=True, verbose_name='IPTE')
-    # defects = models.CharField(max_length=200)
-    incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.testName) + ": " + str(self.release.name) + ": " + str(self.build)
-
-    def recalculate_ipte(self):
-        self.ipte = -1.0
-        if self.incidentCount and self.totalIterationCount:
-            if self.totalIterationCount > 0:
-                self.ipte = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
-
-
-class Environment(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    type = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    purpose = models.CharField(max_length=1024, null=True, blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
-    current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments',
-                                        verbose_name='currently release')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.type)
-
-
 class Topic(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -418,86 +250,3 @@ class TopicEngineerAssignment(OrgModel):
     def __str__(self):
         return str(self.topic.name) + ": " + str(self.engineer.name) + ": " + str(self.status)
 
-
-class Feedback(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    time = models.DateTimeField(auto_now_add=True)
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='feedbacks')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-# class TestStep:
-#     def __init__(self):
-#         self.step = None
-#         self.testData = None  # {}
-#         self.testDataSet = None  # {}
-#         self.variableTestDataRules = None  # {}
-#         self.node = None
-#         self.numberOfThreads = 1
-#         self.maxRetries = 0
-#         self.steps = None
-#         self.runStepsInParallel = False
-#         self.condition = None
-#
-#
-# class TestScenario:
-#     def __init__(self):
-#         self.name = None
-#         self.description = None
-#         self.probability = 1.0
-#         self.setupSteps = None  # {}
-#         self.chaosConfiguration = None
-#         self.executionSteps = None  # {}
-#         self.tearDownSteps = None  # {}
-#         self.testDataSet = None  # {}
-#
-#
-# class TestFeature:
-#     def __init__(self):
-#         self.name = None
-#         self.description = None
-#         self.testJobs = None
-#         self.setupSteps = None  # {}
-#         self.scenarioSetupSteps = None  # {}
-#         self.testScenarios = None  # {}
-#         self.scenarioTearDownSteps = None  # {}
-#         self.tearDownSteps = None  # {}
-#         self.testDataSet = None  # {}
-
-
-# class StringStep(OrgModel):
-#     summary = models.CharField(max_length=1024, unique=True)
-#     description = models.TextField( null=True, blank=True)
-#
-#     def __str__(self):
-#         return str(self.summary)
-
-
-#
-# class UseCasePreCondition(StringStep):
-#     pass
-#
-#
-# class UseCaseStep(StringStep):
-#     actor = models.CharField(max_length=256, null=True, blank=True)
-#     interface = models.CharField(max_length=256, null=True, blank=True)
-#     action = models.CharField(max_length=256, null=True, blank=True)
-#
-#
-# class UseCasePostCondition(StringStep):
-#     pass
-#
-#
-# class TestCasePreCondition(StringStep):
-#     pass
-#
-#
-# class TestCaseStep(StringStep):
-#     pass
-#
-#
-# class TestCasePostCondition(StringStep):
-#     pass

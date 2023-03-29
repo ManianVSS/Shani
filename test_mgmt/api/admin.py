@@ -5,10 +5,8 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from api.models import UseCase, Requirement, ExecutionRecord, Run, Feature, Attachment, Defect, Release, \
-    Epic, Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, \
-    Site, Tag, Feedback
+from api.models import UseCase, Requirement, Attachment, UseCaseCategory, OrgGroup, Engineer, SiteHoliday, Leave, \
+    EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -113,18 +111,6 @@ class EngineerAdmin(CustomModelAdmin):
 admin.site.register(Engineer, EngineerAdmin)
 
 
-class ReleaseResource(resources.ModelResource):
-    class Meta:
-        model = Release
-
-
-class ReleaseAdmin(CustomModelAdmin):
-    resource_class = ReleaseResource
-
-
-admin.site.register(Release, ReleaseAdmin)
-
-
 class EngineerOrgGroupParticipationResource(resources.ModelResource):
     class Meta:
         model = EngineerOrgGroupParticipation
@@ -177,54 +163,6 @@ class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
 admin.site.register(EngineerOrgGroupParticipationHistory, EngineerOrgGroupParticipationHistoryAdmin)
 
 
-class EpicResource(resources.ModelResource):
-    class Meta:
-        model = Epic
-
-
-class EpicAdmin(CustomModelAdmin):
-    resource_class = EpicResource
-
-
-admin.site.register(Epic, EpicAdmin)
-
-
-class FeatureResource(resources.ModelResource):
-    class Meta:
-        model = Feature
-
-
-class FeatureAdmin(CustomModelAdmin):
-    resource_class = FeatureResource
-
-
-admin.site.register(Feature, FeatureAdmin)
-
-
-class SprintResource(resources.ModelResource):
-    class Meta:
-        model = Sprint
-
-
-class SprintAdmin(CustomModelAdmin):
-    resource_class = SprintResource
-
-
-admin.site.register(Sprint, SprintAdmin)
-
-
-class StoryResource(resources.ModelResource):
-    class Meta:
-        model = Story
-
-
-class StoryAdmin(CustomModelAdmin):
-    resource_class = StoryResource
-
-
-admin.site.register(Story, StoryAdmin)
-
-
 class UseCaseCategoryResource(resources.ModelResource):
     class Meta:
         model = UseCaseCategory
@@ -273,66 +211,6 @@ class TagAdmin(CustomModelAdmin):
 admin.site.register(Tag, TagAdmin)
 
 
-class DefectResource(resources.ModelResource):
-    class Meta:
-        model = Defect
-
-
-class DefectAdmin(CustomModelAdmin):
-    resource_class = DefectResource
-
-
-admin.site.register(Defect, DefectAdmin)
-
-
-class RunResource(resources.ModelResource):
-    class Meta:
-        model = Run
-
-
-class RunAdmin(CustomModelAdmin):
-    resource_class = RunResource
-
-
-admin.site.register(Run, RunAdmin)
-
-
-class ExecutionRecordResource(resources.ModelResource):
-    class Meta:
-        model = ExecutionRecord
-
-
-class ExecutionRecordAdmin(CustomModelAdmin):
-    resource_class = ExecutionRecordResource
-
-
-admin.site.register(ExecutionRecord, ExecutionRecordAdmin)
-
-
-class ReliabilityRunResource(resources.ModelResource):
-    class Meta:
-        model = ReliabilityRun
-
-
-class ReliabilityRunAdmin(CustomModelAdmin):
-    resource_class = ReliabilityRunResource
-
-
-admin.site.register(ReliabilityRun, ReliabilityRunAdmin)
-
-
-class EnvironmentResource(resources.ModelResource):
-    class Meta:
-        model = Environment
-
-
-class EnvironmentAdmin(CustomModelAdmin):
-    resource_class = EnvironmentResource
-
-
-admin.site.register(Environment, EnvironmentAdmin)
-
-
 class TopicResource(resources.ModelResource):
     class Meta:
         model = Topic
@@ -356,14 +234,3 @@ class TopicEngineerAssignmentAdmin(CustomModelAdmin):
 
 admin.site.register(TopicEngineerAssignment, TopicEngineerAssignmentAdmin)
 
-
-class FeedbackResource(resources.ModelResource):
-    class Meta:
-        model = Feedback
-
-
-class FeedbackAdmin(CustomModelAdmin):
-    resource_class = FeedbackResource
-
-
-admin.site.register(Feedback, FeedbackAdmin)

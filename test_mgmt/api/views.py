@@ -2,17 +2,13 @@ from django.contrib.auth.models import User, Group
 from rest_framework import permissions
 from rest_framework import viewsets
 
-from .models import UseCase, Requirement, Feature, Run, ExecutionRecord, Attachment, Defect, Release, Epic, \
-    Sprint, Story, UseCaseCategory, ReliabilityRun, OrgGroup, Engineer, \
-    SiteHoliday, Leave, EngineerOrgGroupParticipation, Environment, Topic, TopicEngineerAssignment, \
-    EngineerOrgGroupParticipationHistory, Site, Tag, Feedback
+from .models import UseCase, Requirement, Attachment, UseCaseCategory, OrgGroup, Engineer, SiteHoliday, Leave, \
+    EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
+
 from .serializers import UserSerializer, GroupSerializer, UseCaseSerializer, RequirementSerializer, \
-    FeatureSerializer, RunSerializer, ExecutionRecordSerializer, AttachmentSerializer, \
-    DefectSerializer, ReleaseSerializer, EpicSerializer, SprintSerializer, StorySerializer, UseCaseCategorySerializer, \
-    ReliabilityRunSerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, LeaveSerializer, \
-    EngineerOrgGroupParticipationSerializer, EnvironmentSerializer, TopicSerializer, \
-    TopicEngineerAssignmentSerializer, EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, \
-    TagSerializer, FeedbackSerializer
+    AttachmentSerializer, UseCaseCategorySerializer, OrgGroupSerializer, EngineerSerializer, SiteHolidaySerializer, \
+    LeaveSerializer, EngineerOrgGroupParticipationSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
+    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, TagSerializer
 
 exact_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
@@ -127,21 +123,6 @@ class EngineerViewSet(viewsets.ModelViewSet):
     }
 
 
-class ReleaseViewSet(viewsets.ModelViewSet):
-    queryset = Release.objects.all()
-    serializer_class = ReleaseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
 class EngineerOrgGroupParticipationViewSet(viewsets.ModelViewSet):
     queryset = EngineerOrgGroupParticipation.objects.all()
     serializer_class = EngineerOrgGroupParticipationSerializer
@@ -205,81 +186,6 @@ class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
         'org_group': id_fields_filter_lookups,
         'expected_capacity': compare_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
-    }
-
-
-class EpicViewSet(viewsets.ModelViewSet):
-    queryset = Epic.objects.all()
-    serializer_class = EpicSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'release', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'weight': compare_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class FeatureViewSet(viewsets.ModelViewSet):
-    queryset = Feature.objects.all()
-    serializer_class = FeatureSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'epic', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'weight': compare_fields_filter_lookups,
-        'epic': id_fields_filter_lookups,
-        'epic__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class SprintViewSet(viewsets.ModelViewSet):
-    queryset = Sprint.objects.all()
-    serializer_class = SprintSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'number': string_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
-        'start_date': date_fields_filter_lookups,
-        'end_date': date_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class StoryViewSet(viewsets.ModelViewSet):
-    queryset = Story.objects.all()
-    serializer_class = StorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'rank', 'sprint', 'feature', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'weight': compare_fields_filter_lookups,
-        'rank': compare_fields_filter_lookups,
-        'sprint': id_fields_filter_lookups,
-        'sprint__number': compare_fields_filter_lookups,
-        'feature': id_fields_filter_lookups,
-        'feature__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
     }
 
 
@@ -356,106 +262,6 @@ class TagViewSet(viewsets.ModelViewSet):
     }
 
 
-class DefectViewSet(viewsets.ModelViewSet):
-    queryset = Defect.objects.all()
-    serializer_class = DefectSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'description': string_fields_filter_lookups,
-        'external_id': string_fields_filter_lookups,
-
-        'release': id_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class RunViewSet(viewsets.ModelViewSet):
-    queryset = Run.objects.all()
-    serializer_class = RunSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'build', 'name', 'time', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'build': string_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'time': datetime_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class ExecutionRecordViewSet(viewsets.ModelViewSet):
-    queryset = ExecutionRecord.objects.all()
-    serializer_class = ExecutionRecordSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'time', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        # 'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        # 'summary': string_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
-        'acceptance_test': exact_fields_filter_lookups,
-        'automated': exact_fields_filter_lookups,
-        'defects': id_fields_filter_lookups,
-        'run': id_fields_filter_lookups,
-        'time': datetime_fields_filter_lookups,
-        # 'testcase': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class ReliabilityRunViewSet(viewsets.ModelViewSet):
-    queryset = ReliabilityRun.objects.all()
-    serializer_class = ReliabilityRunSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
-                       'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
-                       'targetIPTE', 'ipte', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'build': string_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'start_time': datetime_fields_filter_lookups,
-        'modified_time': datetime_fields_filter_lookups,
-        'testName': string_fields_filter_lookups,
-        'testEnvironmentType': string_fields_filter_lookups,
-        'testEnvironmentName': string_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
-        'targetIPTE': compare_fields_filter_lookups,
-        'incidents': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
-class EnvironmentViewSet(viewsets.ModelViewSet):
-    queryset = Environment.objects.all()
-    serializer_class = EnvironmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'type': string_fields_filter_lookups,
-        'purpose': string_fields_filter_lookups,
-        'current_release': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }
-
-
 class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
@@ -490,18 +296,3 @@ class TopicEngineerAssignmentViewSet(viewsets.ModelViewSet):
     }
 
 
-class FeedbackViewSet(viewsets.ModelViewSet):
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'description', 'release', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'description': string_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
-    }

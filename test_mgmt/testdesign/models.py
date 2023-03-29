@@ -1,8 +1,6 @@
-from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from api import ipte_util
 from api.models import OrgModel, OrgGroup, ReviewStatus
 from test_mgmt import settings
 

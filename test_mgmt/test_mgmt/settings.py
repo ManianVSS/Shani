@@ -52,9 +52,11 @@ INSTALLED_APPS = [
 
     'api',
     'siteconfig',
-    'automation',
     'requirements',
+    'workitems',
     'testdesign',
+    'automation',
+    'execution',
 ]
 
 MIDDLEWARE = [
