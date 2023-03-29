@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from .models import UseCase, Requirement, Attachment, UseCaseCategory, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
+from .models import Attachment, OrgGroup, Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -65,31 +65,6 @@ class EngineerOrgGroupParticipationHistorySerializer(serializers.ModelSerializer
         fields = ['id', 'date', 'engineer', 'org_group', 'expected_capacity', 'capacity', ]
 
 
-class UseCaseCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UseCaseCategory
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'org_group', ]
-
-
-class UseCaseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UseCase
-        fields = ['id', 'name', 'summary', 'description', 'status', 'weight', 'consumer_score', 'serviceability_score',
-                  'test_confidence', 'development_confidence', 'category', 'requirements', 'attachments', 'org_group', ]
-
-
-# class UseCaseStepSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Step
-#         fields = ['id', 'summary', 'description', 'actor', 'interface', 'action']
-
-
-class RequirementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Requirement
-        fields = ['id', 'name', 'summary', 'description', 'use_cases', 'org_group', ]
-
-
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -106,4 +81,3 @@ class TopicEngineerAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicEngineerAssignment
         fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', 'org_group', ]
-

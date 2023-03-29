@@ -1,12 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from automation.views import StepViewSet, AttachmentViewSet, ProductFeatureViewSet
+from automation.views import StepViewSet, AttachmentViewSet
 
 router = routers.DefaultRouter()
 
 router.register(r'attachments', AttachmentViewSet)
-router.register(r'features', ProductFeatureViewSet)
 router.register(r'steps', StepViewSet)
 
 # Wire up our API using automatic URL routing.

@@ -3,9 +3,8 @@ from rest_framework import routers
 from rest_framework_simplejwt import views as jwt_views
 
 from .apiviews import get_org_capacity_for_time_range, get_engineer_capacity_for_time_range
-from .views import UserViewSet, GroupViewSet, UseCaseViewSet, RequirementViewSet, AttachmentViewSet, \
-    UseCaseCategoryViewSet, OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, \
-    EngineerOrgGroupParticipationViewSet, TopicViewSet, TopicEngineerAssignmentViewSet, \
+from .views import UserViewSet, GroupViewSet, AttachmentViewSet, OrgGroupViewSet, EngineerViewSet, SiteHolidayViewSet, \
+    LeaveViewSet, EngineerOrgGroupParticipationViewSet, TopicViewSet, TopicEngineerAssignmentViewSet, \
     EngineerOrgGroupParticipationHistoryViewSet, SiteViewSet, TagViewSet
 
 router = routers.DefaultRouter()
@@ -21,13 +20,7 @@ router.register(r'site_holidays', SiteHolidayViewSet)
 router.register(r'leaves', LeaveViewSet)
 router.register(r'engineer_org_group_participation_history', EngineerOrgGroupParticipationHistoryViewSet)
 
-router.register(r'use_case_categories', UseCaseCategoryViewSet)
-router.register(r'use_cases', UseCaseViewSet)
-# router.register(r'steps', StepViewSet)
-router.register(r'requirements', RequirementViewSet)
 router.register(r'tags', TagViewSet)
-# router.register(r'steps', StepViewSet)
-
 
 router.register(r'topics', TopicViewSet)
 router.register(r'topic_engineer_assignments', TopicEngineerAssignmentViewSet)

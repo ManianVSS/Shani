@@ -24,7 +24,8 @@ class ReleaseSerializer(serializers.ModelSerializer):
 class DefectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Defect
-        fields = ['id', 'summary', 'description', 'external_id', 'release', 'attachments', 'org_group', ]
+        fields = ['id', 'summary', 'description', 'external_id', 'release', 'details_file', 'attachments',
+                  'org_group', ]
 
 
 class RunSerializer(serializers.ModelSerializer):
@@ -51,5 +52,5 @@ class ReliabilityRunSerializer(serializers.ModelSerializer):
 class EnvironmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Environment
-        fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'attachments', 'current_release',
-                  'org_group', ]
+        fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'details_file', 'attachments',
+                  'current_release', 'org_group', ]

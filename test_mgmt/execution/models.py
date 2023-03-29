@@ -3,12 +3,11 @@ from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup
 from execution import ipte_util
-from test_mgmt import settings
 
 
 class Attachment(OrgModel):
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
+    file = models.FileField(upload_to='execution', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_attachments')
 
@@ -44,6 +43,7 @@ class Defect(OrgModel):
     external_id = models.CharField(max_length=50, blank=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
+    details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='defect_attachments', blank=True)
 
 
@@ -68,9 +68,6 @@ class ExecutionRecord(OrgModel):
     run = models.ForeignKey(Run, null=True, on_delete=models.SET_NULL, related_name='execution_records')
     time = models.DateTimeField(auto_now_add=True)
 
-    # use_case = models.ForeignKey(UseCase, on_delete=models.SET_NULL, null=True, related_name='execution_records')
-    # testcase = models.ForeignKey(TestCase, null=True, on_delete=models.SET_NULL, related_name='execution_records')
-
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -81,7 +78,6 @@ class ExecutionRecord(OrgModel):
     acceptance_test = models.BooleanField(default=False, verbose_name='is acceptance test')
     automated = models.BooleanField(default=False, verbose_name='is automated')
 
-    # defects = models.CharField(max_length=200)
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
 
     def __str__(self):
@@ -116,7 +112,6 @@ class ReliabilityRun(OrgModel):
     incidentCount = models.IntegerField(null=True, blank=True, verbose_name='incident count')
     targetIPTE = models.FloatField(null=True, blank=True, verbose_name='target IPTE')
     ipte = models.FloatField(null=True, blank=True, verbose_name='IPTE')
-    # defects = models.CharField(max_length=200)
     incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
 
     def __str__(self):
@@ -135,6 +130,7 @@ class Environment(OrgModel):
     type = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     purpose = models.CharField(max_length=1024, null=True, blank=True)
+    details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments',
                                         verbose_name='currently release')

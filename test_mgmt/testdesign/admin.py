@@ -49,6 +49,12 @@ class TestCaseResource(resources.ModelResource):
 
 class TestCaseAdmin(CustomModelAdmin):
     resource_class = TestCaseResource
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        'status',
+    )
+    search_fields = ['name', 'summary', 'description', ]
 
 
 admin.site.register(TestCase, TestCaseAdmin)

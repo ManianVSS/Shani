@@ -3,7 +3,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from import_export import resources
 
 from api.admin import CustomModelAdmin
-from automation.models import Step, ProductFeature, Attachment
+from automation.models import Step, Attachment
 
 
 class AttachmentResource(resources.ModelResource):
@@ -16,34 +16,6 @@ class AttachmentAdmin(CustomModelAdmin):
 
 
 admin.site.register(Attachment, AttachmentAdmin)
-
-
-# Register your models here.
-class ProductFeatureResource(resources.ModelResource):
-    class Meta:
-        model = ProductFeature
-
-
-class ProductFeatureAdmin(CustomModelAdmin):
-    resource_class = ProductFeatureResource
-    # save_as = True
-    list_filter = (
-        ('org_group', RelatedOnlyFieldListFilter),
-        ('tags', RelatedOnlyFieldListFilter),
-        ('owner', RelatedOnlyFieldListFilter),
-        'status',
-        ('automation_owner', RelatedOnlyFieldListFilter),
-    )
-    search_fields = ['name', 'summary', 'description', ]
-
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super().get_form(request, obj, **kwargs)
-    #     form.base_fields['owner'].initial = request.user
-    #     form.base_fields['automation_owner'].initial = request.user
-    #     return form
-
-
-admin.site.register(ProductFeature, ProductFeatureAdmin)
 
 
 class StepResource(resources.ModelResource):

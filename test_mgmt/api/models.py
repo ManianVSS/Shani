@@ -159,60 +159,6 @@ class ReviewStatus(models.TextChoices):
     APPROVED = 'APPROVED', _('Approved'),
 
 
-class UseCaseCategory(OrgModel):
-    class Meta:
-        verbose_name_plural = "use case categories"
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
-class UseCase(OrgModel):
-    category = models.ForeignKey(UseCaseCategory, on_delete=models.SET_NULL, null=True, blank=True)
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-    # pre_conditions = models.ManyToManyField(UseCasePreCondition, related_name="pre_condition_use_cases", blank=True)
-    # events = models.ManyToManyField(UseCaseStep, related_name="event_use_cases", blank=True)
-    # post_conditions = models.ManyToManyField(UseCasePostCondition, related_name="post_condition_use_cases",
-    # blank=True)
-
-    status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
-
-    weight = models.FloatField(default=1)
-    consumer_score = models.FloatField(default=0, verbose_name='consumer score')
-    serviceability_score = models.FloatField(default=0, verbose_name='serviceability score')
-    test_confidence = models.FloatField(default=0, verbose_name='test confidence')
-    development_confidence = models.FloatField(default=0, verbose_name='development confidence')
-
-    attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-    def get_score(self):
-        return (self.consumer_score + self.serviceability_score + self.test_confidence + self.development_confidence) \
-            / 4
-
-
-class Requirement(OrgModel):
-    use_cases = models.ManyToManyField(UseCase, related_name='requirements', blank=True)
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
-
 class Tag(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)

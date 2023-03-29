@@ -3,12 +3,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy
 
 from api.models import Tag, OrgModel, OrgGroup
-from test_mgmt import settings
+from requirements.models import Feature
 
 
 class Attachment(OrgModel):
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
+    file = models.FileField(upload_to='automation', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='automation_attachments')
 
@@ -16,42 +16,6 @@ class Attachment(OrgModel):
         return str(self.file.name)
 
 
-# Create your models here.
-# Test steps for step repository
-class ProductFeature(OrgModel):
-    # The status of a step's test design
-    class FeatureDesignStatus(models.TextChoices):
-        DRAFT = 'DRAFT', gettext_lazy('Draft'),
-        IN_REVIEW = 'IN_REVIEW', gettext_lazy('In Review'),
-        ACCEPTED = 'ACCEPTED', gettext_lazy('Accepted'),
-
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    tags = models.ManyToManyField(Tag, related_name='features', blank=True)
-
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='automation_feature_owners',
-                              verbose_name='test design owner', null=True, blank=True)
-
-    status = models.CharField(max_length=9, choices=FeatureDesignStatus.choices, default=FeatureDesignStatus.DRAFT)
-
-    automation_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feature_automation_owners',
-                                         verbose_name='automation owner', null=True, blank=True)
-
-    details_file = models.FileField(upload_to='automation', blank=True, null=True, verbose_name='File with details')
-    attachments = models.ManyToManyField(Attachment, related_name='product_feature_attachments', blank=True)
-
-    def __str__(self):
-        return str(self.name)
-
-    def is_owner(self, user):
-        return (user == self.owner) or super().is_owner(user)
-
-    def is_member(self, user):
-        return user == self.automation_owner
-
-
-# Test steps for step repository
 class Step(OrgModel):
     # The status of a step's test design
     class StepDesignStatus(models.TextChoices):
@@ -66,7 +30,7 @@ class Step(OrgModel):
         IN_REVIEW = 'IN_REVIEW', gettext_lazy('In Review'),
         ACCEPTED = 'ACCEPTED', gettext_lazy('Accepted'),
 
-    feature = models.ForeignKey(ProductFeature, on_delete=models.CASCADE, related_name='steps', null=True, blank=True)
+    feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name='steps', null=True, blank=True)
 
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)

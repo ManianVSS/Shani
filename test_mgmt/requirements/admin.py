@@ -1,8 +1,9 @@
 from django.contrib import admin
+from django.contrib.admin import RelatedOnlyFieldListFilter
 from import_export import resources
 
 from api.admin import CustomModelAdmin
-from .models import Attachment, Tag, FeatureCategory, Feature
+from .models import Attachment, Tag, FeatureCategory, Feature, Requirement, UseCase
 
 
 class AttachmentResource(resources.ModelResource):
@@ -36,7 +37,11 @@ class FeatureCategoryResource(resources.ModelResource):
 
 class FeatureCategoryAdmin(CustomModelAdmin):
     resource_class = FeatureCategoryResource
-
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
 
 admin.site.register(FeatureCategory, FeatureCategoryAdmin)
 
@@ -48,6 +53,36 @@ class FeatureResource(resources.ModelResource):
 
 class FeatureAdmin(CustomModelAdmin):
     resource_class = FeatureResource
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        'status',
+    )
+    search_fields = ['name', 'summary', 'description', ]
 
 
 admin.site.register(Feature, FeatureAdmin)
+
+
+class UseCaseResource(resources.ModelResource):
+    class Meta:
+        model = UseCase
+
+
+class UseCaseAdmin(CustomModelAdmin):
+    resource_class = UseCaseResource
+
+
+admin.site.register(UseCase, UseCaseAdmin)
+
+
+class RequirementResource(resources.ModelResource):
+    class Meta:
+        model = Requirement
+
+
+class RequirementAdmin(CustomModelAdmin):
+    resource_class = RequirementResource
+
+
+admin.site.register(Requirement, RequirementAdmin)

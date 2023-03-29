@@ -5,8 +5,8 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from api.models import UseCase, Requirement, Attachment, UseCaseCategory, OrgGroup, Engineer, SiteHoliday, Leave, \
-    EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
+from api.models import Attachment, OrgGroup, Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -163,42 +163,6 @@ class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
 admin.site.register(EngineerOrgGroupParticipationHistory, EngineerOrgGroupParticipationHistoryAdmin)
 
 
-class UseCaseCategoryResource(resources.ModelResource):
-    class Meta:
-        model = UseCaseCategory
-
-
-class UseCaseCategoryAdmin(CustomModelAdmin):
-    resource_class = UseCaseCategoryResource
-
-
-admin.site.register(UseCaseCategory, UseCaseCategoryAdmin)
-
-
-class UseCaseResource(resources.ModelResource):
-    class Meta:
-        model = UseCase
-
-
-class UseCaseAdmin(CustomModelAdmin):
-    resource_class = UseCaseResource
-
-
-admin.site.register(UseCase, UseCaseAdmin)
-
-
-class RequirementResource(resources.ModelResource):
-    class Meta:
-        model = Requirement
-
-
-class RequirementAdmin(CustomModelAdmin):
-    resource_class = RequirementResource
-
-
-admin.site.register(Requirement, RequirementAdmin)
-
-
 class TagResource(resources.ModelResource):
     class Meta:
         model = Tag
@@ -233,4 +197,3 @@ class TopicEngineerAssignmentAdmin(CustomModelAdmin):
 
 
 admin.site.register(TopicEngineerAssignment, TopicEngineerAssignmentAdmin)
-

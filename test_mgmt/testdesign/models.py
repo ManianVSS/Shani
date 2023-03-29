@@ -2,12 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup, ReviewStatus
-from test_mgmt import settings
 
 
 class Attachment(OrgModel):
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
+    file = models.FileField(upload_to='test_design', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='test_attachments')
 
