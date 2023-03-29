@@ -3,8 +3,9 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+from massadmin.massadmin import MassEditMixin
 
-from siteconfig.models import SiteSettings
+from .models import SiteSettings, DisplayItem
 
 
 def reload_admin_site_name(site_name):
@@ -34,15 +35,27 @@ def update_admin_site_name(sender, instance, **kwargs):
 reload_admin_site_name(None)
 
 
-# Register your models here.
+class DisplayItemResource(resources.ModelResource):
+    class Meta:
+        model = DisplayItem
+
+
+class DisplayItemAdmin(MassEditMixin, ImportExportModelAdmin):
+    resource_class = DisplayItemResource
+    save_as = True
+
+
+admin.site.register(DisplayItem, DisplayItemAdmin)
+
 
 class SiteSettingsResource(resources.ModelResource):
     class Meta:
         model = SiteSettings
 
 
-class SiteSettingsAdmin(ImportExportModelAdmin):
+class SiteSettingsAdmin(MassEditMixin, ImportExportModelAdmin):
     resource_class = SiteSettingsResource
+    save_as = True
 
 
 admin.site.register(SiteSettings, SiteSettingsAdmin)
