@@ -7,6 +7,8 @@ import {
   IconFileAnalytics,
   IconAdjustments,
   IconLock,
+  IconHome,
+  TablerIcon,
 } from "@tabler/icons";
 
 import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
@@ -18,48 +20,12 @@ import { Menu, PersonIcon, LogOutIcon } from "evergreen-ui";
 import { useRecoilState } from "recoil";
 import { colorScheme, sideBar } from "../../state/mode";
 import DarkModeToggle from "react-dark-mode-toggle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Settings } from "@mui/icons-material";
-
-const mockdata = [
-  { label: "Home", icon: IconGauge, link: "/" },
-  {
-    label: "Category 1",
-    icon: IconNotes,
-    initiallyOpened: false,
-    links: [
-      { label: "Sub Category 1", link: "/category2" },
-      { label: "Sub Category 2", link: "/" },
-      { label: "Sub Category 3", link: "/" },
-      { label: "Sub Category 4", link: "/" },
-    ],
-    link: "/",
-  },
-  {
-    label: "Category 3",
-    icon: IconCalendarStats,
-    links: [
-      { label: "Upcoming releases", link: "/" },
-      { label: "Previous releases", link: "/" },
-      { label: "Releases schedule", link: "/" },
-    ],
-    link: "/",
-  },
-  { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
-  { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
-  { label: "Settings", icon: IconAdjustments, link: "/" },
-  {
-    label: "Security",
-    icon: IconLock,
-    links: [
-      { label: "Enable 2FA", link: "/" },
-      //   { label: "Change password", link: "/" },
-      { label: "Recovery codes", link: "/" },
-    ],
-    link: "/",
-  },
-];
+import { axiosClient } from "../../hooks/api";
+import { globalNavData } from "../../state/globalNavData";
+import { allPagesData } from "../../state/allPagesData";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -99,17 +65,74 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function NavbarNested() {
+  const [nav, setNav] = useRecoilState(globalNavData);
+  const [allPages, setAllPages] = useRecoilState(allPagesData);
+  const getNavigationData = () => {
+    let navData: { label: string; icon: TablerIcon; link: string }[] = [];
+    axiosClient.get("site_details").then((respose) => {
+      respose.data.map((item) => {
+        navData.push({
+          label: item["name"],
+          icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
+          link: item["name"] === "Home" ? "/" : "/category/" + item["name"],
+        });
+      });
+      setAllPages(respose.data);
+      setNav(navData);
+    });
+  };
+
   const navigate = useNavigate();
   const { classes } = useStyles();
-  const links = mockdata.map((item) => (
-    <LinksGroup {...item} key={item.label} />
-  ));
+  // let mockdata = [
+  //   { label: "Home", icon: IconHome, link: "/" },
+  //   {
+  //     label: "Category 1",
+  //     icon: IconNotes,
+  //     initiallyOpened: false,
+  //     links: [
+  //       { label: "Sub Category 1", link: "/category2" },
+  //       { label: "Sub Category 2", link: "/" },
+  //       { label: "Sub Category 3", link: "/" },
+  //       { label: "Sub Category 4", link: "/" },
+  //     ],
+  //     link: "/",
+  //   },
+  //   {
+  //     label: "Category 3",
+  //     icon: IconCalendarStats,
+  //     links: [
+  //       { label: "Upcoming releases", link: "/" },
+  //       { label: "Previous releases", link: "/" },
+  //       { label: "Releases schedule", link: "/" },
+  //     ],
+  //     link: "/",
+  //   },
+  //   { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
+  //   { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
+  //   { label: "Settings", icon: IconAdjustments, link: "/" },
+  //   {
+  //     label: "Security",
+  //     icon: IconLock,
+  //     links: [
+  //       { label: "Enable 2FA", link: "/" },
+  //       //   { label: "Change password", link: "/" },
+  //       { label: "Recovery codes", link: "/" },
+  //     ],
+  //     link: "/",
+  //   },
+  // ];
+
+  const links = nav.map((item) => <LinksGroup {...item} key={item.label} />);
   const [mode, setMode] = useRecoilState(colorScheme);
   const [isDarkMode, setIsDarkMode] = useState(
     window.localStorage.getItem("testCenterTheme") === "dark"
   );
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
 
+  useEffect(() => {
+    getNavigationData();
+  }, []);
   return (
     <Navbar
       // height={800}
@@ -121,9 +144,9 @@ export function NavbarNested() {
         <Group position="apart">
           {/* <Logo width={120} /> */}
           <p style={{ fontSize: "20px" }}>
-            <b>Test Center</b>
+            <b>Dashboard</b>
           </p>
-          <Code sx={{ fontWeight: 700 }}>v3.1.2</Code>
+          <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
           <DarkModeToggle
             onChange={() => {
               setIsDarkMode((curr) => !curr);

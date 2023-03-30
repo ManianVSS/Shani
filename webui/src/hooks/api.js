@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosClient = axios.create({
-  baseURL: "",
+  baseURL: "http://localhost:8000/siteconfig/api/",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",

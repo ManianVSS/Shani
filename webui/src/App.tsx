@@ -7,10 +7,11 @@ import Home from "./pages/Home";
 
 import { MantineThemeOverride, ColorScheme } from "@mantine/core";
 import { colorScheme } from "./state/mode";
-import Category2 from "./pages/Category2";
+import Category from "./pages/Category";
 import "@tremor/react/dist/esm/tremor.css";
 import Dashboard from "./pages/Dashboard";
 import Documentation from "./pages/Documentation";
+import { globalNavData } from "./state/globalNavData";
 
 export default function App() {
   const mode = useRecoilValue(colorScheme);
@@ -24,13 +25,16 @@ export default function App() {
       colorScheme: "light",
     };
   }
-
+  const navData = useRecoilValue(globalNavData);
   return (
     <MantineProvider theme={darkTheme} withGlobalStyles withNormalizeCSS>
       <Router>
         <Routes>
           <Route path="/" element={<Layout page={<Home />} />} />
-          <Route path="/category2" element={<Layout page={<Category2 />} />} />
+          <Route
+            path={`/category/:categoryName`}
+            element={<Layout page={<Category />} />}
+          />
           <Route path="/dashboard" element={<Layout page={<Dashboard />} />} />
           <Route
             path="/documentation"
