@@ -6,12 +6,12 @@ RUN apt -y update \
 	&& apt -y upgrade \
 	&& apt -y install curl sshpass iputils-ping vim wget netcat net-tools\
 	&& apt -y install python3 \
-    && apt -y install python-is-python3 python3-pip\
-    && apt -y install libpq-dev \
+	&& apt -y install python-is-python3 python3-pip\
+	&& apt -y install libpq-dev \
 	&& rm -rf /var/cache/apt/*
 
 COPY test_mgmt /test_mgmt
-COPY frontend/build /test_mgmt/build
+COPY webui/build /test_mgmt/build
 COPY scripts/* /test_mgmt
 
 WORKDIR /test_mgmt

@@ -1,3 +1,11 @@
-dashboard/node_modules/
-dashboard/src/
-dashboard/public/
+webui/node_modules/
+webui/src/
+webui/public/
+
+webui/dashboard/node_modules/
+webui/dashboard/src/
+webui/dashboard/public/
+
+webui/frontend/node_modules/
+webui/frontend/src/
+webui/frontend/public/
