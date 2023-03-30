@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import SiteSettings, DisplayItem
+from .models import SiteSettings, DisplayItem, Page
 
 
 class DisplayItemSerializer(serializers.ModelSerializer):
@@ -9,7 +9,13 @@ class DisplayItemSerializer(serializers.ModelSerializer):
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'link', 'image', ]
 
 
+class PagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Page
+        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'image', 'display_items', ]
+
+
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
-        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'email', 'logo', 'display_items', ]
+        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'email', 'logo', 'pages', ]

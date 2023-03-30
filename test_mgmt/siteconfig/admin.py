@@ -5,7 +5,7 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import SiteSettings, DisplayItem
+from .models import SiteSettings, DisplayItem, Page
 
 
 def reload_admin_site_name(site_name):
@@ -46,6 +46,19 @@ class DisplayItemAdmin(MassEditMixin, ImportExportModelAdmin):
 
 
 admin.site.register(DisplayItem, DisplayItemAdmin)
+
+
+class PageResource(resources.ModelResource):
+    class Meta:
+        model = Page
+
+
+class PageAdmin(MassEditMixin, ImportExportModelAdmin):
+    resource_class = PageResource
+    save_as = True
+
+
+admin.site.register(Page, PageAdmin)
 
 
 class SiteSettingsResource(resources.ModelResource):
