@@ -88,11 +88,24 @@ def get_site_details(request):
                 'summary': page.summary,
                 'description': page.description,
                 'image': PagesSerializer(page).data['image'],
-                'display_items': display_items,
                 "org_group": OrgGroupSerializer(page.org_group).data['id'] if page.org_group else None,
+                'display_items': display_items,
             }
             all_pages.append(page_details)
 
+        display_items = []
+        for display_item_info in site_settings.display_items.all().order_by('sort_order'):
+            display_items.append({
+                "id": display_item_info.id,
+                "sort_order": display_item_info.sort_order,
+                "name": display_item_info.name,
+                "summary": display_item_info.summary,
+                "description": display_item_info.description,
+                "link": display_item_info.link,
+                'image': DisplayItemSerializer(display_item_info).data['image'],
+                "org_group": OrgGroupSerializer(display_item_info.org_group).data[
+                    'id'] if display_item_info.org_group else None,
+            })
         site_details = {
             "id": site_settings.id,
             'sort_order': site_settings.sort_order,
@@ -101,8 +114,10 @@ def get_site_details(request):
             'description': site_settings.description,
             'email': site_settings.email,
             'logo': SiteSettingsSerializer(site_settings).data['logo'],
-            'pages': all_pages,
+            'image': SiteSettingsSerializer(site_settings).data['image'],
+            'display_items': display_items,
             "org_group": OrgGroupSerializer(site_settings.org_group).data['id'] if site_settings.org_group else None,
+            'pages': all_pages,
         }
         all_sites_details.append(site_details)
 

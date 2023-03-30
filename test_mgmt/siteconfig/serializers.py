@@ -18,4 +18,5 @@ class PagesSerializer(serializers.ModelSerializer):
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
-        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'email', 'logo', 'pages', ]
+        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'email', 'logo', 'image', 'display_items',
+                  'pages', ]

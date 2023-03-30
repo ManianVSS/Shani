@@ -37,6 +37,8 @@ class SiteSettings(OrgModel):
     description = models.TextField(null=True, blank=True)
     email = models.CharField(max_length=300, blank=True)
     logo = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='logo image file')
+    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    display_items = models.ManyToManyField(DisplayItem, related_name='site_settings', blank=True)
     pages = models.ManyToManyField(Page, related_name='site_settings', blank=True)
 
     def __str__(self):
