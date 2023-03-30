@@ -64,7 +64,7 @@ def get_site_details(request):
             "summary": display_item_info.summary,
             "description": display_item_info.description,
             "link": display_item_info.link,
-            'image': DisplayItemSerializer(site_settings).data['image'],
+            'image': DisplayItemSerializer(display_item_info).data['image'],
         })
 
     site_details = {
