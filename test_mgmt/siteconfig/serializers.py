@@ -12,4 +12,4 @@ class DisplayItemSerializer(serializers.ModelSerializer):
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
-        fields = ['id', 'name', 'summary', 'description', 'email', 'logo', 'display_items', ]
+        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'email', 'logo', 'display_items', ]
