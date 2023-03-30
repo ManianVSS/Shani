@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups
 from siteconfig.models import SiteSettings, DisplayItem
@@ -59,7 +60,8 @@ def get_site_details(request):
                 "description": display_item_info.description,
                 "link": display_item_info.link,
                 'image': DisplayItemSerializer(display_item_info).data['image'],
-                'org_group': display_item_info.org_group,
+                "org_group": OrgGroupSerializer(display_item_info.org_group).data[
+                    'id'] if display_item_info.org_group else None,
             })
 
         site_details = {
@@ -71,7 +73,7 @@ def get_site_details(request):
             'email': site_settings.email,
             'logo': SiteSettingsSerializer(site_settings).data['logo'],
             'display_items': display_items,
-            'org_group': site_settings.org_group,
+            "org_group": OrgGroupSerializer(site_settings.org_group).data['id'] if site_settings.org_group else None,
         }
         all_sites_details.append(site_details)
 
