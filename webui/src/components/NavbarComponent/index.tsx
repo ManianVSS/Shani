@@ -17,7 +17,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { Button } from "react-bootstrap";
 import { Menu, PersonIcon, LogOutIcon } from "evergreen-ui";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { colorScheme, sideBar } from "../../state/mode";
 import DarkModeToggle from "react-dark-mode-toggle";
 import { useEffect, useState } from "react";
@@ -65,27 +65,12 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function NavbarNested() {
-  const [nav, setNav] = useRecoilState(globalNavData);
-  const [allPages, setAllPages] = useRecoilState(allPagesData);
-  const getNavigationData = () => {
-    let navData: { label: string; icon: TablerIcon; link: string }[] = [];
-    axiosClient.get("site_details").then((respose) => {
-      respose.data.map((item) => {
-        navData.push({
-          label: item["name"],
-          icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
-          link: item["name"] === "Home" ? "/" : "/category/" + item["name"],
-        });
-      });
-      setAllPages(respose.data);
-      setNav(navData);
-    });
-  };
+  const navData = useRecoilValue(globalNavData);
 
   const navigate = useNavigate();
   const { classes } = useStyles();
   // let mockdata = [
-  //   { label: "Home", icon: IconHome, link: "/" },
+  //   { label: "Home", icon: IconHome, links: [], link: "/" },
   //   {
   //     label: "Category 1",
   //     icon: IconNotes,
@@ -123,16 +108,15 @@ export function NavbarNested() {
   //   },
   // ];
 
-  const links = nav.map((item) => <LinksGroup {...item} key={item.label} />);
+  const links = navData.map((item) => (
+    <LinksGroup {...item} key={item.label} />
+  ));
   const [mode, setMode] = useRecoilState(colorScheme);
   const [isDarkMode, setIsDarkMode] = useState(
     window.localStorage.getItem("testCenterTheme") === "dark"
   );
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
 
-  useEffect(() => {
-    getNavigationData();
-  }, []);
   return (
     <Navbar
       // height={800}

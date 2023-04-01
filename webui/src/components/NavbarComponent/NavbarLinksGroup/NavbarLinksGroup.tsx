@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, redirect, Link } from "react-router-dom";
 import {
   Group,
   Box,
@@ -86,17 +86,20 @@ export function LinksGroup({
   const ChevronIcon = theme.dir === "ltr" ? IconChevronRight : IconChevronLeft;
 
   const items = (hasLinks ? links : []).map((link) => (
-    <Text<"a">
-      component="a"
-      className={classes.link}
-      key={link.label}
-      onClick={(event) => {
-        event.preventDefault();
-        navigate(link.link);
-      }}
-    >
-      {link.label}
-    </Text>
+    <Link to={`/site/${link.link}`}>
+      <Text<"a">
+        component="a"
+        className={classes.link}
+        key={link.label}
+        // onClick={(event) => {
+        //   event.preventDefault();
+        //   navigate(link.link, { replace: true });
+        //   window.location.pathname = "/site/" + link.link;
+        // }}
+      >
+        {link.label}
+      </Text>
+    </Link>
   ));
   const navigate = useNavigate();
   return (
@@ -104,9 +107,10 @@ export function LinksGroup({
       <UnstyledButton
         onClick={() => {
           if (hasLinks) {
+            navigate(link, { replace: true });
             setOpened((o) => !o);
           } else {
-            navigate(link);
+            navigate(link, { replace: true });
           }
         }}
         className={classes.control}

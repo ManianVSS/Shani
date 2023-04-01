@@ -1,10 +1,13 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import BootstrapCard from "../../components/BootstrapCard";
-import { category2Data } from "../../data/category2";
+
 import { Route, Switch, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { allPagesData } from "../../state/allPagesData";
+import { CardItem001 } from "../../components/CardItem001";
+import CardItem002 from "../../components/CardItem002";
+import HeroComponent from "../../components/HeroComponent";
 
 const Category2 = () => {
   const { categoryName } = useParams();
@@ -13,17 +16,56 @@ const Category2 = () => {
   let pageData = allPages.filter((page) => {
     return page.name === categoryName;
   });
-  console.log(pageData);
+
+  // let fdata = allPages.filter((eachVal) => {
+  //   let opt = eachVal.details.some(({ gradingDetails }) =>
+  //     gradingDetails.some(({ grade }) => grade === "A")
+  //   );
+  //   return opt;
+  // });
+
+  let fdata = allPages.filter((eachVal) => {
+    let opt = eachVal?.pages.some(({ name }) => name === categoryName);
+    return opt;
+  });
+
+  let sfData = fdata[0]?.pages?.filter((page) => {
+    return page.name === categoryName;
+  });
+
+  let result = fdata.length === 0 ? pageData : sfData;
+
   return (
     <div>
-      <h1>{categoryName}</h1>
-      <h2>{pageData[0]?.description}</h2>
+      <div
+        style={{
+          background: "white",
+          border: "2px solid #404040",
+          borderRadius: "15px",
+        }}
+      >
+        <h1 style={{ textAlign: "center" }}>{categoryName}</h1>
+      </div>
+      {/* <h2>{result[0]?.description}</h2> */}
+      <HeroComponent
+        headline={result[0]?.description}
+        images={
+          "https://thevirtualinstructor.com/blog/wp-content/uploads/2013/08/understanding-abstract-art.jpg"
+        }
+      />
+
       <Container>
         <Row className="justify-content-md-center">
-          {pageData[0]?.display_items.map((item) => {
+          {result[0]?.display_items.map((item) => {
             return (
               <Col md="auto" key={item.name}>
-                <BootstrapCard name={item.name} summary={item.summary} />
+                {/* <BootstrapCard name={item.name} summary={item.summary} /> */}
+
+                <CardItem001
+                  name={item.name}
+                  summary={item.summary}
+                  image={"http://localhost:8000" + item.image}
+                />
               </Col>
             );
           })}
