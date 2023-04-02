@@ -8,6 +8,7 @@ import { allPagesData } from "../../state/allPagesData";
 import { CardItem001 } from "../../components/CardItem001";
 import CardItem002 from "../../components/CardItem002";
 import HeroComponent from "../../components/HeroComponent";
+import CardItem003 from "../../components/CardItem003";
 
 const Category2 = () => {
   const { categoryName } = useParams();
@@ -37,7 +38,7 @@ const Category2 = () => {
 
   return (
     <div>
-      <div
+      {/* <div
         style={{
           background: "white",
           border: "2px solid #404040",
@@ -45,25 +46,30 @@ const Category2 = () => {
         }}
       >
         <h1 style={{ textAlign: "center" }}>{categoryName}</h1>
-      </div>
+      </div> */}
       {/* <h2>{result[0]?.description}</h2> */}
+
       <HeroComponent
-        headline={result[0]?.description}
-        images={
-          "https://thevirtualinstructor.com/blog/wp-content/uploads/2013/08/understanding-abstract-art.jpg"
-        }
+        headline={categoryName}
+        description={result[0]?.description.toUpperCase()}
+        images={"http://localhost:8000" + result[0]?.image}
       />
 
-      <Container>
+      <Container style={{ marginTop: "35px" }}>
         <Row className="justify-content-md-center">
           {result[0]?.display_items.map((item) => {
             return (
               <Col md="auto" key={item.name}>
                 {/* <BootstrapCard name={item.name} summary={item.summary} /> */}
 
-                <CardItem001
+                {/* <CardItem001
                   name={item.name}
                   summary={item.summary}
+                  image={"http://localhost:8000" + item.image}
+                /> */}
+                <CardItem003
+                  name={item.name}
+                  description={item.summary}
                   image={"http://localhost:8000" + item.image}
                 />
               </Col>
