@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups
+    compare_fields_filter_lookups, exact_fields_filter_lookups
 from .models import Attachment, Tag, FeatureCategory, Feature, Requirement, UseCase
 from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
     RequirementSerializer, UseCaseSerializer
@@ -12,12 +12,13 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', ]
+    ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -26,7 +27,7 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -34,6 +35,7 @@ class TagViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -42,7 +44,7 @@ class FeatureCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = FeatureCategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'parent', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'parent', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -52,6 +54,7 @@ class FeatureCategoryViewSet(viewsets.ModelViewSet):
         'parent': id_fields_filter_lookups,
         'tags': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
 
     }
 
@@ -61,7 +64,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
     serializer_class = FeatureSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -72,6 +75,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
         'tags': id_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
 
     }
 
@@ -82,7 +86,7 @@ class UseCaseViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'weight', 'consumer_score',
-                       'serviceability_score', 'test_confidence', 'development_confidence', ]
+                       'serviceability_score', 'test_confidence', 'development_confidence', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -98,6 +102,7 @@ class UseCaseViewSet(viewsets.ModelViewSet):
         'test_confidence': compare_fields_filter_lookups,
         'development_confidence': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -106,7 +111,7 @@ class RequirementViewSet(viewsets.ModelViewSet):
     serializer_class = RequirementSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -114,4 +119,5 @@ class RequirementViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'use_cases': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }

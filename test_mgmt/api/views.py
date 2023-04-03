@@ -79,12 +79,13 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', ]
+    ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -93,13 +94,15 @@ class SiteViewSet(viewsets.ModelViewSet):
     serializer_class = SiteSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', ]
+    ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+
     }
 
 
@@ -108,7 +111,7 @@ class EngineerViewSet(viewsets.ModelViewSet):
     serializer_class = EngineerSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', ]
+    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -117,6 +120,7 @@ class EngineerViewSet(viewsets.ModelViewSet):
         'auth_user': id_fields_filter_lookups,
         'role': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
         'site': id_fields_filter_lookups,
         'auth_user__username': exact_fields_filter_lookups,
     }
@@ -127,12 +131,13 @@ class EngineerOrgGroupParticipationViewSet(viewsets.ModelViewSet):
     serializer_class = EngineerOrgGroupParticipationSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'engineer', 'org_group', 'role', 'capacity', ]
+    ordering_fields = ['id', 'engineer', 'org_group', 'published', 'role', 'capacity', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'engineer': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
         'role': string_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
     }
@@ -176,13 +181,14 @@ class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = EngineerOrgGroupParticipationHistorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'date', 'engineer', 'org_group', 'expected_capacity', 'capacity', ]
+    ordering_fields = ['id', 'date', 'engineer', 'org_group', 'published', 'expected_capacity', 'capacity', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'date': date_fields_filter_lookups,
         'engineer': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
         'expected_capacity': compare_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
     }
@@ -193,13 +199,15 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -208,7 +216,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     serializer_class = TopicSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'description', 'parent_topic', ]
+    ordering_fields = ['id', 'name', 'summary', 'description', 'parent_topic', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -216,6 +224,8 @@ class TopicViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'parent_topic': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -224,7 +234,8 @@ class TopicEngineerAssignmentViewSet(viewsets.ModelViewSet):
     serializer_class = TopicEngineerAssignmentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', ]
+    ordering_fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', 'org_group',
+                       'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -234,4 +245,6 @@ class TopicEngineerAssignmentViewSet(viewsets.ModelViewSet):
         'rating': compare_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }

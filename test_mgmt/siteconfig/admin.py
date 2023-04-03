@@ -2,10 +2,9 @@ from django.contrib import admin
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from import_export import resources
-from import_export.admin import ImportExportModelAdmin
-from massadmin.massadmin import MassEditMixin
 
-from .models import SiteSettings, DisplayItem, Page
+from api.admin import CustomModelAdmin
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
 
 
 def reload_admin_site_name(site_name):
@@ -14,10 +13,7 @@ def reload_admin_site_name(site_name):
 
         # noinspection PyBroadException
         try:
-            site_settings_count = SiteSettings.objects.all().count()
-            if site_settings_count > 0:
-                site_settings = SiteSettings.objects.all()[0]
-                site_name = site_settings.name
+            site_name = get_default_settings().name
         except Exception as e:
             print("Defaulting site name Shani as no site_setting data found")
 
@@ -40,9 +36,8 @@ class DisplayItemResource(resources.ModelResource):
         model = DisplayItem
 
 
-class DisplayItemAdmin(MassEditMixin, ImportExportModelAdmin):
+class DisplayItemAdmin(CustomModelAdmin):
     resource_class = DisplayItemResource
-    save_as = True
 
 
 admin.site.register(DisplayItem, DisplayItemAdmin)
@@ -53,12 +48,35 @@ class PageResource(resources.ModelResource):
         model = Page
 
 
-class PageAdmin(MassEditMixin, ImportExportModelAdmin):
+class PageAdmin(CustomModelAdmin):
     resource_class = PageResource
-    save_as = True
 
 
 admin.site.register(Page, PageAdmin)
+
+
+class CategoryResource(resources.ModelResource):
+    class Meta:
+        model = Category
+
+
+class CategoryAdmin(CustomModelAdmin):
+    resource_class = CategoryResource
+
+
+admin.site.register(Category, CategoryAdmin)
+
+
+class CatalogResource(resources.ModelResource):
+    class Meta:
+        model = Catalog
+
+
+class CatalogAdmin(CustomModelAdmin):
+    resource_class = CatalogResource
+
+
+admin.site.register(Catalog, CatalogAdmin)
 
 
 class SiteSettingsResource(resources.ModelResource):
@@ -66,9 +84,8 @@ class SiteSettingsResource(resources.ModelResource):
         model = SiteSettings
 
 
-class SiteSettingsAdmin(MassEditMixin, ImportExportModelAdmin):
+class SiteSettingsAdmin(CustomModelAdmin):
     resource_class = SiteSettingsResource
-    save_as = True
 
 
 admin.site.register(SiteSettings, SiteSettingsAdmin)

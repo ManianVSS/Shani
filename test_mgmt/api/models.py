@@ -34,6 +34,7 @@ class OrgModel(models.Model):
     class Meta:
         abstract = True
 
+    published = models.BooleanField(default=False, verbose_name='is published content')
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group')
 

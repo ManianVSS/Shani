@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, date_fields_filter_lookups
+    compare_fields_filter_lookups, date_fields_filter_lookups, exact_fields_filter_lookups
 from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feedback
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EpicSerializer, FeatureSerializer, \
     SprintSerializer, StorySerializer, FeedbackSerializer
@@ -12,12 +12,13 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', ]
+    ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -26,7 +27,7 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -34,6 +35,7 @@ class TagViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -42,13 +44,14 @@ class ReleaseViewSet(viewsets.ModelViewSet):
     serializer_class = ReleaseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -57,7 +60,7 @@ class EpicViewSet(viewsets.ModelViewSet):
     serializer_class = EpicSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'release', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'release', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -67,6 +70,7 @@ class EpicViewSet(viewsets.ModelViewSet):
         'release': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -75,7 +79,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
     serializer_class = FeatureSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'epic', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'epic', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -85,6 +89,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
         'epic': id_fields_filter_lookups,
         'epic__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -93,7 +98,7 @@ class SprintViewSet(viewsets.ModelViewSet):
     serializer_class = SprintSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', ]
+    ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -103,6 +108,7 @@ class SprintViewSet(viewsets.ModelViewSet):
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -111,7 +117,7 @@ class StoryViewSet(viewsets.ModelViewSet):
     serializer_class = StorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'rank', 'sprint', 'feature', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'rank', 'sprint', 'feature', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -124,6 +130,7 @@ class StoryViewSet(viewsets.ModelViewSet):
         'feature': id_fields_filter_lookups,
         'feature__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -141,4 +148,5 @@ class FeedbackViewSet(viewsets.ModelViewSet):
         'description': string_fields_filter_lookups,
         'release': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }

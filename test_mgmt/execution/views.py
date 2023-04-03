@@ -12,12 +12,13 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', ]
+    ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -26,7 +27,7 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -34,6 +35,7 @@ class TagViewSet(viewsets.ModelViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -42,13 +44,14 @@ class ReleaseViewSet(viewsets.ModelViewSet):
     serializer_class = ReleaseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -57,7 +60,7 @@ class DefectViewSet(viewsets.ModelViewSet):
     serializer_class = DefectSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', ]
+    ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -68,6 +71,7 @@ class DefectViewSet(viewsets.ModelViewSet):
         'release': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -76,7 +80,7 @@ class RunViewSet(viewsets.ModelViewSet):
     serializer_class = RunSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'build', 'name', 'time', ]
+    ordering_fields = ['id', 'build', 'name', 'time', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -84,6 +88,7 @@ class RunViewSet(viewsets.ModelViewSet):
         'name': string_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -92,7 +97,8 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
     serializer_class = ExecutionRecordSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'time', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'time', 'org_group',
+                       'published', ]
     ordering = default_ordering
     filterset_fields = {
         # 'id': id_fields_filter_lookups,
@@ -106,6 +112,7 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
         'time': datetime_fields_filter_lookups,
         # 'testcase': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -116,7 +123,7 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                        'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
-                       'targetIPTE', 'ipte', 'org_group', ]
+                       'targetIPTE', 'ipte', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -131,6 +138,7 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
         'targetIPTE': compare_fields_filter_lookups,
         'incidents': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 
@@ -139,7 +147,7 @@ class EnvironmentViewSet(viewsets.ModelViewSet):
     serializer_class = EnvironmentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', ]
+    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -149,4 +157,5 @@ class EnvironmentViewSet(viewsets.ModelViewSet):
         'purpose': string_fields_filter_lookups,
         'current_release': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }

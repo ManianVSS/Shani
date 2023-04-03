@@ -1,9 +1,12 @@
 from django.db import models
 
-from api.models import OrgModel
+from api.models import OrgModel, OrgGroup
 
 
 class DisplayItem(OrgModel):
+    class Meta:
+        verbose_name_plural = "display items"
+
     sort_order = models.IntegerField(default=0)
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -22,6 +25,41 @@ class Page(OrgModel):
     description = models.TextField(null=True, blank=True)
     image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
     display_items = models.ManyToManyField(DisplayItem, related_name='pages', blank=True)
+    iframe_link = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Category(OrgModel):
+    class Meta:
+        verbose_name_plural = "categories"
+
+    sort_order = models.IntegerField(default=0)
+    name = models.CharField(default='Home', max_length=256, unique=True)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    display_items = models.ManyToManyField(DisplayItem, related_name='categories', blank=True)
+    pages = models.ManyToManyField(Page, related_name='categories', blank=True)
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='siteconfig_categories')
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Catalog(OrgModel):
+    sort_order = models.IntegerField(default=0)
+    name = models.CharField(default='Home', max_length=256, unique=True)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    logo = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='logo image file')
+    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    display_items = models.ManyToManyField(DisplayItem, related_name='catalogs', blank=True)
+    categories = models.ManyToManyField(Category, related_name='catalogs', blank=True)
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='siteconfig_catalogs')
 
     def __str__(self):
         return str(self.name)
@@ -38,8 +76,14 @@ class SiteSettings(OrgModel):
     email = models.CharField(max_length=300, blank=True)
     logo = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='logo image file')
     image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
-    display_items = models.ManyToManyField(DisplayItem, related_name='site_settings', blank=True)
-    pages = models.ManyToManyField(Page, related_name='site_settings', blank=True)
+    catalogs = models.ManyToManyField(Catalog, related_name='site_settings', blank=True)
 
     def __str__(self):
         return str(self.name)
+
+
+def get_default_settings():
+    site_settings_count = SiteSettings.objects.all().count()
+    if site_settings_count > 0:
+        return SiteSettings.objects.all().order_by('sort_order')[0]
+    return None
