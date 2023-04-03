@@ -8,7 +8,7 @@ const CardItem003 = (props) => {
         <Card.Img
           src={props.image}
           alt="Card image"
-          style={{ width: "300px" }}
+          style={{ width: "300px", height: "300px" }}
         />
         <Card.ImgOverlay>
           <Card.Title
