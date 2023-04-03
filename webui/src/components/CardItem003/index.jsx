@@ -4,7 +4,7 @@ import { Button, Card } from "react-bootstrap";
 const CardItem003 = (props) => {
   return (
     <div>
-      <Card className="bg-dark text-white">
+      <Card className="bg-dark text-white m-4">
         <Card.Img
           src={props.image}
           alt="Card image"

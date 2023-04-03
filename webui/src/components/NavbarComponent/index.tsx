@@ -161,11 +161,11 @@ export function NavbarNested() {
             <Popover id={`popover-positioned-${"top"}`}>
               <Popover.Body style={{ margin: 0, padding: 0 }}>
                 <Menu>
-                  <Menu.Group>
+                  {/* <Menu.Group>
                     <Menu.Item icon={PersonIcon} style={{ margin: 0 }}>
                       Profile
                     </Menu.Item>
-                  </Menu.Group>
+                  </Menu.Group> */}
                   <Menu.Group>
                     <Menu.Item
                       icon={Settings}
@@ -178,7 +178,7 @@ export function NavbarNested() {
                     </Menu.Item>
                   </Menu.Group>
                   <Menu.Divider />
-                  <Menu.Group>
+                  {/* <Menu.Group>
                     <Menu.Item
                       icon={LogOutIcon}
                       intent="danger"
@@ -186,7 +186,7 @@ export function NavbarNested() {
                     >
                       Logout
                     </Menu.Item>
-                  </Menu.Group>
+                  </Menu.Group> */}
                 </Menu>
               </Popover.Body>
             </Popover>
@@ -195,8 +195,8 @@ export function NavbarNested() {
           <div>
             <UserButton
               image=""
-              name="Aditya Sheshagiri"
-              email="aditya@something.com"
+              name="User Name"
+              email="user@something.com"
             />
           </div>
         </OverlayTrigger>
