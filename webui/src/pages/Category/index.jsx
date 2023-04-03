@@ -9,6 +9,7 @@ import { CardItem001 } from "../../components/CardItem001";
 import CardItem002 from "../../components/CardItem002";
 import HeroComponent from "../../components/HeroComponent";
 import CardItem003 from "../../components/CardItem003";
+import { baseURL } from "../../hooks/baseURL";
 
 const Category2 = () => {
   const { categoryName } = useParams();
@@ -52,7 +53,7 @@ const Category2 = () => {
       <HeroComponent
         headline={categoryName}
         description={result[0]?.description.toUpperCase()}
-        images={"http://localhost:8000" + result[0]?.image}
+        images={baseURL + result[0]?.image}
       />
 
       <Container style={{ marginTop: "35px" }}>
@@ -70,7 +71,8 @@ const Category2 = () => {
                 <CardItem003
                   name={item.name}
                   description={item.summary}
-                  image={"http://localhost:8000" + item.image}
+                  image={baseURL + item.image}
+                  link={item.link}
                 />
               </Col>
             );

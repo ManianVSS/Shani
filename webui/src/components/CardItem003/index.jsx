@@ -45,7 +45,7 @@ const CardItem003 = (props) => {
               borderRadius: "10px",
             }}
           >
-            <Button variant="primary">Launch</Button>
+            <Button variant="primary" onClick={()=>{window.open(props.link, "_blank")}}>Launch</Button>
           </div>
         </Card.ImgOverlay>
       </Card>
