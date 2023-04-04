@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 
 from .views import AttachmentViewSet, TagViewSet, ReleaseViewSet, DefectViewSet, RunViewSet, ExecutionRecordViewSet, \
-    ReliabilityRunViewSet, EnvironmentViewSet
+    ReliabilityRunViewSet, EnvironmentViewSet, get_ipte_for_iterations, get_iterations_for_ipte
 
 router = routers.DefaultRouter()
 
@@ -20,4 +20,6 @@ router.register(r'environments', EnvironmentViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/ipte/ipte_for_iterations', get_ipte_for_iterations),
+    path('api/ipte/iterations_for_ipte', get_iterations_for_ipte),
 ]

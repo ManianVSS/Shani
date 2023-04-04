@@ -1,7 +1,11 @@
-from rest_framework import viewsets, permissions
+from django.http.response import HttpResponse
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     datetime_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups
+from . import ipte_util
 from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
     ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer
@@ -159,3 +163,49 @@ class EnvironmentViewSet(viewsets.ModelViewSet):
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
+
+
+@api_view(['GET'])
+def get_ipte_for_iterations(request):
+    if not request.method == 'GET':
+        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    response = ""
+    if 'number_of_iterations' not in request.GET:
+        response = response + "Warning: Missing parameter number_of_iterations;"
+    if 'number_of_incidents' not in request.GET:
+        response = response + "Warning: Missing parameter number_of_incidents;"
+    if 'confidence_interval' not in request.GET:
+        response = response + "Warning: Missing parameter confidence_interval;"
+    number_of_iterations = int(request.GET.get('number_of_iterations', '1000'))
+    number_of_incidents = int(request.GET.get('number_of_incidents', '0'))
+    confidence_interval = float(request.GET.get('confidence_interval', '0.9'))
+    ipte = ipte_util.calculate_ipte(number_of_iterations, number_of_incidents, confidence_interval)
+
+    response = str(ipte) + " is the IPTE for " + str(number_of_iterations) + " iterations with " + str(
+        number_of_incidents) + " incidents with confidence interval " + str(confidence_interval) + ";" + response
+    return Response(response)
+
+
+@api_view(['GET'])
+# @permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_iterations_for_ipte(request):
+    if not request.method == 'GET':
+        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    response = ""
+    if 'required_ipte' not in request.GET:
+        response = response + "Warning: Missing parameter required_ipte;"
+    if 'number_of_incidents' not in request.GET:
+        response = response + "Warning: Missing parameter number_of_incidents;"
+    if 'confidence_interval' not in request.GET:
+        response = response + "Warning: Missing parameter confidence_interval;"
+    required_ipte = float(request.GET.get('required_ipte', '1.0'))
+    number_of_incidents = int(request.GET.get('number_of_incidents', '0'))
+    confidence_interval = float(request.GET.get('confidence_interval', '0.9'))
+    number_of_iterations = ipte_util.calculate_iterations_required(required_ipte, number_of_incidents,
+                                                                   confidence_interval)
+    response = str(number_of_iterations) + " is the number of iterations required for " + str(
+        required_ipte) + " ipte with " + str(number_of_incidents) + " incidents with confidence interval " + str(
+        confidence_interval) + ";" + response
+    return Response(response)
