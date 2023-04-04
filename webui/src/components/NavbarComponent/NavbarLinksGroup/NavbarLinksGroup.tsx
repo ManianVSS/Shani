@@ -86,7 +86,7 @@ export function LinksGroup({
   const ChevronIcon = theme.dir === "ltr" ? IconChevronRight : IconChevronLeft;
 
   const items = (hasLinks ? links : []).map((link) => (
-    <Link to={`/site/${link.link}`}>
+    <Link to={`${link.link}`}>
       <Text<"a">
         component="a"
         className={classes.link}

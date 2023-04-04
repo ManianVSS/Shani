@@ -21,8 +21,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { colorScheme, sideBar } from "../../state/mode";
 import DarkModeToggle from "react-dark-mode-toggle";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Settings } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
+import { AddHomeOutlined, AdminPanelSettings, Settings } from "@mui/icons-material";
 import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
 import { allPagesData } from "../../state/allPagesData";
@@ -40,9 +40,8 @@ const useStyles = createStyles((theme) => ({
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    borderBottom: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
   },
 
   links: {
@@ -58,57 +57,69 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
-    borderTop: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderTop: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
   },
 }));
 
 export function NavbarNested() {
   const navData = useRecoilValue(globalNavData);
+  const { siteid, catalogid, categoryid, pageid } = useParams();
+  
+
+  let siteData:any[] = []
+  siteData = navData.filter((site) => {
+    return site.id === parseInt(siteid??"0");
+  });
+  
+  let catalogData:any[] = []
+  catalogData = siteData[0]?.catalogs?.filter((catalog) => {
+    return catalog.id === parseInt(catalogid??"0");
+  });
+ 
 
   const navigate = useNavigate();
   const { classes } = useStyles();
-  // let mockdata = [
-  //   { label: "Home", icon: IconHome, links: [], link: "/" },
-  //   {
-  //     label: "Category 1",
-  //     icon: IconNotes,
-  //     initiallyOpened: false,
-  //     links: [
-  //       { label: "Sub Category 1", link: "/category2" },
-  //       { label: "Sub Category 2", link: "/" },
-  //       { label: "Sub Category 3", link: "/" },
-  //       { label: "Sub Category 4", link: "/" },
-  //     ],
-  //     link: "/",
-  //   },
-  //   {
-  //     label: "Category 3",
-  //     icon: IconCalendarStats,
-  //     links: [
-  //       { label: "Upcoming releases", link: "/" },
-  //       { label: "Previous releases", link: "/" },
-  //       { label: "Releases schedule", link: "/" },
-  //     ],
-  //     link: "/",
-  //   },
-  //   { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
-  //   { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
-  //   { label: "Settings", icon: IconAdjustments, link: "/" },
-  //   {
-  //     label: "Security",
-  //     icon: IconLock,
-  //     links: [
-  //       { label: "Enable 2FA", link: "/" },
-  //       //   { label: "Change password", link: "/" },
-  //       { label: "Recovery codes", link: "/" },
-  //     ],
-  //     link: "/",
-  //   },
-  // ];
-
-  const links = navData.map((item) => (
+  let mockdata = [
+    { label: "Home", icon: IconHome, links: [], link: "/" },
+    {
+      label: "Category 1",
+      icon: IconNotes,
+      initiallyOpened: false,
+      links: [
+        { label: "Sub Category 1", link: "/category2" },
+        { label: "Sub Category 2", link: "/" },
+        { label: "Sub Category 3", link: "/" },
+        { label: "Sub Category 4", link: "/" },
+      ],
+      link: "/",
+    },
+    {
+      label: "Category 3",
+      icon: IconCalendarStats,
+      links: [
+        { label: "Upcoming releases", link: "/" },
+        { label: "Previous releases", link: "/" },
+        { label: "Releases schedule", link: "/" },
+      ],
+      link: "/",
+    },
+    { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
+    { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
+    { label: "Settings", icon: IconAdjustments, link: "/" },
+    {
+      label: "Security",
+      icon: IconLock,
+      links: [
+        { label: "Enable 2FA", link: "/" },
+        //   { label: "Change password", link: "/" },
+        { label: "Recovery codes", link: "/" },
+      ],
+      link: "/",
+    },
+  ];
+let data = catalogData ??[{ label: "Home", icon: IconHome, link: "/" }]
+  const links = data[0]?.categories?.map((item) => (
     <LinksGroup {...item} key={item.label} />
   ));
   const [mode, setMode] = useRecoilState(colorScheme);
@@ -161,11 +172,20 @@ export function NavbarNested() {
             <Popover id={`popover-positioned-${"top"}`}>
               <Popover.Body style={{ margin: 0, padding: 0 }}>
                 <Menu>
-                  {/* <Menu.Group>
-                    <Menu.Item icon={PersonIcon} style={{ margin: 0 }}>
-                      Profile
+                  <Menu.Group>
+                    <Menu.Item icon={AdminPanelSettings} style={{ margin: 0 }} onClick={() => {
+                      window.open("http://" + window.location.host + "/admin/", "_blank")
+                    }}>
+                      Admin
                     </Menu.Item>
-                  </Menu.Group> */}
+                  </Menu.Group>
+                  <Menu.Group>
+                    <Menu.Item icon={AddHomeOutlined} style={{ margin: 0 }} onClick={() => {
+                      window.open("http://" + window.location.host + "/swagger/", "_blank")
+                    }}>
+                      Swagger
+                    </Menu.Item>
+                  </Menu.Group>
                   <Menu.Group>
                     <Menu.Item
                       icon={Settings}

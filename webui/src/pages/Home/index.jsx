@@ -17,16 +17,14 @@ const Home = () => {
   const navigateToFirstItem = () => {
     let navData = [];
     axiosClient.get("site_details").then((respose) => {
-      respose.data.map((item) => {
-        navData.push({
-          label: item["name"],
-          icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
-          link: "/site/" + item["name"],
-        });
-      });
-      navigate(navData[0].link);
-      // setAllPages(respose.data);
-      // setNav(navData);
+      // respose.data[0].catalogs.map((item) => {
+      //   navData.push({
+      //     label: item["name"],
+      //     icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
+      //     link: "/site/" + item["id"],
+      //   });
+      // });
+      navigate("/site/"+respose.data[0].id+"/catalog/"+respose.data[0].catalogs[0].id);
     });
   };
 

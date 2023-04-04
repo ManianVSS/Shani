@@ -28,37 +28,60 @@ export default function App() {
 
   const [nav, setNav] = useRecoilState(globalNavData);
   const [allPages, setAllPages] = useRecoilState(allPagesData);
-  function getItemsFromArray(items): customLinks[] {
+  function getItemsFromArray(items, siteID, catalogID, categoryID): customLinks[] {
     let children: customLinks[] = [];
     items.map((item) => {
       children.push({
         label: item.name,
-        link: item.name.replace(" ", "_"),
+        link: "/site/" + siteID + "/catalog/" + catalogID + "/category/" + categoryID + "/page/" + item["id"],
       });
     });
     return children;
   }
+
+  function getAllCategories(items, siteID, catalogID): any[] {
+    let children: any[] = [];
+    items.map((item) => {
+      children.push({
+        label: item["name"],
+        icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
+        links:
+          item["pages"].length === 0 ? [] : getItemsFromArray(item["pages"], siteID, catalogID, item["id"]),
+        link: "/site/" + siteID + "/catalog/" + catalogID + "/category/" + item["id"],
+      });
+    });
+    return children;
+  }
+
+  function getAllCatalogs(items, siteID): any[] {
+    let children: any[] = [];
+    items.map((item) => {
+      children.push({
+        id: item.id,
+        name: item.name,
+        link: "/site/" + siteID + "/catalog/" + item["id"],
+        categories: getAllCategories(item["categories"], siteID, item.id),
+      });
+    });
+    return children;
+  }
+
   const getNavigationData = () => {
-    let navData: {
-      label: string;
-      icon: TablerIcon;
-      links: { label: string; link: string }[];
-      link: string;
-    }[] = [];
+    let data: any[] = [];
     axiosClient.get("site_details").then((respose) => {
       respose.data.map((item) => {
-        navData.push({
-          label: item["name"],
-          icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
-          links:
-            item["pages"].length === 0 ? [] : getItemsFromArray(item["pages"]),
-          link: "/site/" + item["name"],
-        });
+        data.push({
+          id: item["id"],
+          name: item["name"],
+          catalogs: getAllCatalogs(item["catalogs"], item["id"]),
+        })
       });
       setAllPages(respose.data);
-      setNav(navData);
+      setNav(data);
     });
   };
+  
+
 
   if (mode === "dark") {
     var darkTheme: MantineThemeOverride = {
@@ -79,14 +102,22 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Layout page={<Home />} />} />
           <Route
-            path={`/site/:categoryName`}
+            path={`/site/:siteid/catalog/:catalogid`}
             element={<Layout page={<Category />} />}
           />
-          <Route path="/dashboard" element={<Layout page={<Dashboard />} />} />
+          <Route
+            path={`/site/:siteid/catalog/:catalogid/category/:categoryid`}
+            element={<Layout page={<Category />} />}
+          />
+          <Route
+            path={`/site/:siteid/catalog/:catalogid/category/:categoryid/page/:pageid`}
+            element={<Layout page={<Category />} />}
+          />
+          {/* <Route path="/dashboard" element={<Layout page={<Dashboard />} />} />
           <Route
             path="/documentation"
             element={<Layout page={<Documentation />} />}
-          />
+          /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

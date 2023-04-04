@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import BootstrapCard from "../../components/BootstrapCard";
 
@@ -12,12 +12,33 @@ import CardItem003 from "../../components/CardItem003";
 import { baseURL } from "../../hooks/baseURL";
 
 const Category2 = () => {
-  const { categoryName } = useParams();
+  const { siteid, catalogid, categoryid, pageid } = useParams();
   const allPages = useRecoilValue(allPagesData);
-
-  let pageData = allPages.filter((page) => {
-    return page.name === categoryName;
+  let siteData = []
+  siteData = allPages.filter((site) => {
+    return site.id === parseInt(siteid);
   });
+
+  let catalogData = [];
+  let categoryData = [];
+  let pageData = [];
+
+  if (catalogid) {
+    catalogData = (siteData || [])[0]?.catalogs?.filter((catalog) => {
+      return catalog.id === parseInt(catalogid);
+    });
+    if (categoryid) {
+      categoryData = (catalogData || [])[0]?.categories?.filter((category) => {
+        return category.id === parseInt(categoryid);
+      });
+      if (pageid) {
+        pageData = (categoryData || [])[0]?.pages?.filter((page) => {
+          return page.id === parseInt(pageid);
+        });
+      }
+    }
+  }
+
 
   // let fdata = allPages.filter((eachVal) => {
   //   let opt = eachVal.details.some(({ gradingDetails }) =>
@@ -25,33 +46,21 @@ const Category2 = () => {
   //   );
   //   return opt;
   // });
-
-  let fdata = allPages.filter((eachVal) => {
-    let opt = eachVal?.pages.some(({ name }) => name === categoryName);
-    return opt;
-  });
-
-  let sfData = fdata[0]?.pages?.filter((page) => {
-    return page.name === categoryName;
-  });
-
-  let result = fdata.length === 0 ? pageData : sfData;
+  let result = []
+  // result = pageid ? pageData??[] : siteData;
+  if (pageid) {
+    result = pageData ?? [];
+  } else if (categoryid && !pageid) {
+    result = categoryData ?? [];
+  } else if (catalogid && !categoryid) {
+    result = catalogData ?? [];
+  }
 
   return (
     <div>
-      {/* <div
-        style={{
-          background: "white",
-          border: "2px solid #404040",
-          borderRadius: "15px",
-        }}
-      >
-        <h1 style={{ textAlign: "center" }}>{categoryName}</h1>
-      </div> */}
-      {/* <h2>{result[0]?.description}</h2> */}
 
       <HeroComponent
-        headline={categoryName}
+        headline={result[0]?.name.toUpperCase()}
         description={result[0]?.description.toUpperCase()}
         images={baseURL + result[0]?.image}
       />
@@ -61,7 +70,6 @@ const Category2 = () => {
           {result[0]?.display_items.map((item) => {
             return (
               <Col md="auto" key={item.name}>
-                {/* <BootstrapCard name={item.name} summary={item.summary} /> */}
 
                 {/* <CardItem001
                   name={item.name}
