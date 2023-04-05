@@ -1,0 +1,13 @@
+.catalogDropDownButton{
+    font-weight: "bold";
+    border: "none";
+    color: "#404040";
+    background: white;
+}
+
+.catalogDropDownButton:hover{
+    font-weight: "bold";
+    border: "none";
+    color: "#404040";
+    background: white;
+}

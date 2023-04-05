@@ -15,17 +15,22 @@ import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
 import { UserButton } from "./UserButton";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown, Form } from "react-bootstrap";
 import { Menu, PersonIcon, LogOutIcon } from "evergreen-ui";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { colorScheme, sideBar } from "../../state/mode";
 import DarkModeToggle from "react-dark-mode-toggle";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AddHomeOutlined, AdminPanelSettings, Settings } from "@mui/icons-material";
+import {
+  AddHomeOutlined,
+  AdminPanelSettings,
+  Settings,
+} from "@mui/icons-material";
 import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
 import { allPagesData } from "../../state/allPagesData";
+import "./style.css";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -40,8 +45,9 @@ const useStyles = createStyles((theme) => ({
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-      }`,
+    borderBottom: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
   },
 
   links: {
@@ -57,68 +63,76 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
-    borderTop: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-      }`,
+    borderTop: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
   },
 }));
 
 export function NavbarNested() {
   const navData = useRecoilValue(globalNavData);
   const { siteid, catalogid, categoryid, pageid } = useParams();
-  
 
-  let siteData:any[] = []
+  let siteData: any[] = [];
   siteData = navData.filter((site) => {
-    return site.id === parseInt(siteid??"0");
+    return site.id === parseInt(siteid ?? "0");
   });
-  
-  let catalogData:any[] = []
+
+  let catalogMenu: any[] = [];
+  siteData[0]?.catalogs?.map((item) => {
+    catalogMenu.push({
+      id: item.id,
+      name: item.name,
+      link: "/site/" + siteid + "/catalog/" + item.id,
+    });
+  });
+
+  let catalogData: any[] = [];
   catalogData = siteData[0]?.catalogs?.filter((catalog) => {
-    return catalog.id === parseInt(catalogid??"0");
+    return catalog.id === parseInt(catalogid ?? "0");
   });
- 
 
   const navigate = useNavigate();
   const { classes } = useStyles();
-  let mockdata = [
-    { label: "Home", icon: IconHome, links: [], link: "/" },
-    {
-      label: "Category 1",
-      icon: IconNotes,
-      initiallyOpened: false,
-      links: [
-        { label: "Sub Category 1", link: "/category2" },
-        { label: "Sub Category 2", link: "/" },
-        { label: "Sub Category 3", link: "/" },
-        { label: "Sub Category 4", link: "/" },
-      ],
-      link: "/",
-    },
-    {
-      label: "Category 3",
-      icon: IconCalendarStats,
-      links: [
-        { label: "Upcoming releases", link: "/" },
-        { label: "Previous releases", link: "/" },
-        { label: "Releases schedule", link: "/" },
-      ],
-      link: "/",
-    },
-    { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
-    { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
-    { label: "Settings", icon: IconAdjustments, link: "/" },
-    {
-      label: "Security",
-      icon: IconLock,
-      links: [
-        { label: "Enable 2FA", link: "/" },
-        //   { label: "Change password", link: "/" },
-        { label: "Recovery codes", link: "/" },
-      ],
-      link: "/",
-    },
-  ];
-let data = catalogData ??[{ label: "Home", icon: IconHome, link: "/" }]
+  // let mockdata = [
+  //   { label: "Home", icon: IconHome, links: [], link: "/" },
+  //   {
+  //     label: "Category 1",
+  //     icon: IconNotes,
+  //     initiallyOpened: false,
+  //     links: [
+  //       { label: "Sub Category 1", link: "/category2" },
+  //       { label: "Sub Category 2", link: "/" },
+  //       { label: "Sub Category 3", link: "/" },
+  //       { label: "Sub Category 4", link: "/" },
+  //     ],
+  //     link: "/",
+  //   },
+  //   {
+  //     label: "Category 3",
+  //     icon: IconCalendarStats,
+  //     links: [
+  //       { label: "Upcoming releases", link: "/" },
+  //       { label: "Previous releases", link: "/" },
+  //       { label: "Releases schedule", link: "/" },
+  //     ],
+  //     link: "/",
+  //   },
+  //   { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
+  //   { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
+  //   { label: "Settings", icon: IconAdjustments, link: "/" },
+  //   {
+  //     label: "Security",
+  //     icon: IconLock,
+  //     links: [
+  //       { label: "Enable 2FA", link: "/" },
+  //       //   { label: "Change password", link: "/" },
+  //       { label: "Recovery codes", link: "/" },
+  //     ],
+  //     link: "/",
+  //   },
+  // ];
+  let data = catalogData ?? [{ label: "Home", icon: IconHome, link: "/" }];
   const links = data[0]?.categories?.map((item) => (
     <LinksGroup {...item} key={item.label} />
   ));
@@ -127,6 +141,11 @@ let data = catalogData ??[{ label: "Home", icon: IconHome, link: "/" }]
     window.localStorage.getItem("testCenterTheme") === "dark"
   );
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
+
+  const onChange = (event) => {
+    const value = event.target.value;
+    navigate(value);
+  };
 
   return (
     <Navbar
@@ -138,9 +157,46 @@ let data = catalogData ??[{ label: "Home", icon: IconHome, link: "/" }]
       <Navbar.Section className={classes.header}>
         <Group position="apart">
           {/* <Logo width={120} /> */}
-          <p style={{ fontSize: "20px" }}>
-            <b>Dashboard</b>
-          </p>
+
+          {/* <b>Dashboard</b> */}
+          {/* <Dropdown>
+            <Dropdown.Toggle
+              variant={isDarkMode ? "secondary" : "info"}
+              id="dropdown-basic"
+            >
+              {catalogMenu[0]?.name}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu variant="dark">
+              {catalogMenu.map((item) => {
+                return (
+                  <Dropdown.Item href={item.link} value={item.id}>
+                    {item.name}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown> */}
+
+          <Form.Select
+            aria-label=""
+            onChange={onChange}
+            // onClick={() => {
+            //   navigate(0);
+            // }}
+          >
+            {catalogMenu.map((item) => {
+              return (
+                <option
+                  value={item.link}
+                  selected={item.link === catalogData[0]?.link}
+                >
+                  {item.name}
+                </option>
+              );
+            })}
+          </Form.Select>
+
           <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
           <DarkModeToggle
             onChange={() => {
@@ -173,16 +229,30 @@ let data = catalogData ??[{ label: "Home", icon: IconHome, link: "/" }]
               <Popover.Body style={{ margin: 0, padding: 0 }}>
                 <Menu>
                   <Menu.Group>
-                    <Menu.Item icon={AdminPanelSettings} style={{ margin: 0 }} onClick={() => {
-                      window.open("http://" + window.location.host + "/admin/", "_blank")
-                    }}>
+                    <Menu.Item
+                      icon={AdminPanelSettings}
+                      style={{ margin: 0 }}
+                      onClick={() => {
+                        window.open(
+                          "http://" + window.location.host + "/admin/",
+                          "_blank"
+                        );
+                      }}
+                    >
                       Admin
                     </Menu.Item>
                   </Menu.Group>
                   <Menu.Group>
-                    <Menu.Item icon={AddHomeOutlined} style={{ margin: 0 }} onClick={() => {
-                      window.open("http://" + window.location.host + "/swagger/", "_blank")
-                    }}>
+                    <Menu.Item
+                      icon={AddHomeOutlined}
+                      style={{ margin: 0 }}
+                      onClick={() => {
+                        window.open(
+                          "http://" + window.location.host + "/swagger/",
+                          "_blank"
+                        );
+                      }}
+                    >
                       Swagger
                     </Menu.Item>
                   </Menu.Group>
@@ -213,11 +283,7 @@ let data = catalogData ??[{ label: "Home", icon: IconHome, link: "/" }]
           }
         >
           <div>
-            <UserButton
-              image=""
-              name="User Name"
-              email="user@something.com"
-            />
+            <UserButton image="" name="User Name" email="user@something.com" />
           </div>
         </OverlayTrigger>
       </Navbar.Section>

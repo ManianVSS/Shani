@@ -24,7 +24,12 @@ const Home = () => {
       //     link: "/site/" + item["id"],
       //   });
       // });
-      navigate("/site/"+respose.data[0].id+"/catalog/"+respose.data[0].catalogs[0].id);
+      navigate(
+        "/site/" +
+          respose.data[0]?.id +
+          "/catalog/" +
+          respose.data[0]?.catalogs[0]?.id
+      );
     });
   };
 
