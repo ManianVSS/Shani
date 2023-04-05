@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import BootstrapCard from "../../components/BootstrapCard";
 
-import { Route, Switch, useParams } from "react-router-dom";
+import { Route, Switch, useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { allPagesData } from "../../state/allPagesData";
 import { CardItem001 } from "../../components/CardItem001";
@@ -12,9 +12,10 @@ import CardItem003 from "../../components/CardItem003";
 import { baseURL } from "../../hooks/baseURL";
 
 const Category2 = () => {
+  const navigate = useNavigate();
   const { siteid, catalogid, categoryid, pageid } = useParams();
   const allPages = useRecoilValue(allPagesData);
-  let siteData = []
+  let siteData = [];
   siteData = allPages.filter((site) => {
     return site.id === parseInt(siteid);
   });
@@ -39,14 +40,13 @@ const Category2 = () => {
     }
   }
 
-
   // let fdata = allPages.filter((eachVal) => {
   //   let opt = eachVal.details.some(({ gradingDetails }) =>
   //     gradingDetails.some(({ grade }) => grade === "A")
   //   );
   //   return opt;
   // });
-  let result = []
+  let result = [];
   // result = pageid ? pageData??[] : siteData;
   if (pageid) {
     result = pageData ?? [];
@@ -56,9 +56,11 @@ const Category2 = () => {
     result = catalogData ?? [];
   }
 
+  if (catalogData?.length === 0) {
+    navigate("notFound");
+  }
   return (
     <div>
-
       <HeroComponent
         headline={result[0]?.name.toUpperCase()}
         description={result[0]?.description.toUpperCase()}
@@ -70,7 +72,6 @@ const Category2 = () => {
           {result[0]?.display_items.map((item) => {
             return (
               <Col md="auto" key={item.name}>
-
                 {/* <CardItem001
                   name={item.name}
                   summary={item.summary}

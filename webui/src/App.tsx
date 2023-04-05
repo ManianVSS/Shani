@@ -28,12 +28,25 @@ export default function App() {
 
   const [nav, setNav] = useRecoilState(globalNavData);
   const [allPages, setAllPages] = useRecoilState(allPagesData);
-  function getItemsFromArray(items, siteID, catalogID, categoryID): customLinks[] {
+  function getItemsFromArray(
+    items,
+    siteID,
+    catalogID,
+    categoryID
+  ): customLinks[] {
     let children: customLinks[] = [];
     items.map((item) => {
       children.push({
         label: item.name,
-        link: "/site/" + siteID + "/catalog/" + catalogID + "/category/" + categoryID + "/page/" + item["id"],
+        link:
+          "/site/" +
+          siteID +
+          "/catalog/" +
+          catalogID +
+          "/category/" +
+          categoryID +
+          "/page/" +
+          item["id"],
       });
     });
     return children;
@@ -46,8 +59,16 @@ export default function App() {
         label: item["name"],
         icon: item["name"] === "Home" ? IconHome : IconFileAnalytics,
         links:
-          item["pages"].length === 0 ? [] : getItemsFromArray(item["pages"], siteID, catalogID, item["id"]),
-        link: "/site/" + siteID + "/catalog/" + catalogID + "/category/" + item["id"],
+          item["pages"].length === 0
+            ? []
+            : getItemsFromArray(item["pages"], siteID, catalogID, item["id"]),
+        link:
+          "/site/" +
+          siteID +
+          "/catalog/" +
+          catalogID +
+          "/category/" +
+          item["id"],
       });
     });
     return children;
@@ -74,14 +95,12 @@ export default function App() {
           id: item["id"],
           name: item["name"],
           catalogs: getAllCatalogs(item["catalogs"], item["id"]),
-        })
+        });
       });
       setAllPages(respose.data);
       setNav(data);
     });
   };
-  
-
 
   if (mode === "dark") {
     var darkTheme: MantineThemeOverride = {
@@ -119,6 +138,7 @@ export default function App() {
             element={<Layout page={<Documentation />} />}
           /> */}
           <Route path="*" element={<NotFound />} />
+          <Route path="/notfound" element={<NotFound />} />
         </Routes>
       </Router>
     </MantineProvider>
