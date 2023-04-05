@@ -123,7 +123,7 @@ def get_default_site_details_api(request):
 
 def get_all_site_settings():
     all_site_settings = []
-    for site_settings in SiteSettings.objects.all().order_by('sort_order'):
+    for site_settings in SiteSettings.objects.filter(published=True).order_by('sort_order'):
         site_details = get_site_settings_as_dict(site_settings)
         all_site_settings.append(site_details)
     return all_site_settings
@@ -149,7 +149,7 @@ def get_site_settings_as_dict(site_settings):
 def get_catalog_details_for_site_settings(site_settings):
     all_catalogs_detail = []
     if site_settings.catalogs is not None:
-        for catalog in site_settings.catalogs.all().order_by('sort_order'):
+        for catalog in site_settings.catalogs.filter(published=True).order_by('sort_order'):
             category_detail = get_catalog_as_dict(catalog)
             all_catalogs_detail.append(category_detail)
 
@@ -174,7 +174,7 @@ def get_catalog_as_dict(catalog):
 def get_category_details_for_catalog(catalog):
     all_categories_detail = []
     if catalog.categories is not None:
-        for category in catalog.categories.all().order_by('sort_order'):
+        for category in catalog.categories.filter(published=True).order_by('sort_order'):
             category_detail = get_category_as_dict(category)
             all_categories_detail.append(category_detail)
 
@@ -199,7 +199,7 @@ def get_category_as_dict(category):
 def get_page_details_for_category(category):
     all_pages = []
     if category.pages is not None:
-        for page in category.pages.all().order_by('sort_order'):
+        for page in category.pages.filter(published=True).order_by('sort_order'):
             page_details = get_page_as_dict(page)
             all_pages.append(page_details)
     return all_pages
@@ -223,7 +223,7 @@ def get_page_as_dict(page):
 def get_entity_display_items(entity):
     display_items = []
     if entity.display_items is not None:
-        for display_item_info in entity.display_items.all().order_by('sort_order'):
+        for display_item_info in entity.display_items.filter(published=True).order_by('sort_order'):
             display_items.append(get_display_item_as_dict(display_item_info))
     return display_items
 
