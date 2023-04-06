@@ -10,9 +10,12 @@ import CardItem002 from "../../components/CardItem002";
 import HeroComponent from "../../components/HeroComponent";
 import CardItem003 from "../../components/CardItem003";
 import { baseURL } from "../../hooks/baseURL";
+import IframeComponent from "../../components/IframeComponent";
+import { useWindowSize } from "../../hooks/windowSize";
 
 const Category2 = () => {
   const navigate = useNavigate();
+  const pageSize = useWindowSize();
   const { siteid, catalogid, categoryid, pageid } = useParams();
   const allPages = useRecoilValue(allPagesData);
   let siteData = [];
@@ -49,7 +52,7 @@ const Category2 = () => {
   //   return opt;
   // });
   let result = [];
-  
+
   if (pageid) {
     result = pageData ?? [];
   } else if (categoryid && !pageid) {
@@ -61,8 +64,10 @@ const Category2 = () => {
   if (catalogData?.length === 0) {
     navigate("notFound");
   }
-  
-  document.title = (siteData??[])[0]?.name;
+
+  document.title = (siteData ?? [])[0]?.name;
+  console.log(pageSize.height);
+  console.log(pageSize.width);
   return (
     <div>
       <HeroComponent
@@ -71,28 +76,32 @@ const Category2 = () => {
         images={baseURL + result[0]?.image}
       />
       {/* <iframe src="https://www.youtube.com/embed/uXWycyeTeCs" ></iframe> */}
-      <Container style={{ marginTop: "35px" }}>
-        <Row className="justify-content-md-center">
-          {result[0]?.display_items.map((item) => {
-            return (
-              <Col md="auto" key={item.name}>
-                {/* <CardItem001
+
+      {result[0]?.iframe_link?.length === 0 ?
+        <Container style={{ marginTop: "35px" }}>
+          <Row className="justify-content-md-center">
+            {result[0]?.display_items.map((item) => {
+              return (
+                <Col md="auto" key={item.name}>
+                  {/* <CardItem001
                   name={item.name}
                   summary={item.summary}
                   image={"http://localhost:8000" + item.image}
                 /> */}
-                <CardItem003
-                  name={item.name}
-                  description={item.summary}
-                  image={baseURL + item.image}
-                  link={item.link}
-                />
-              </Col>
-            );
-          })}
-        </Row>
-        
-      </Container>
+                  <CardItem003
+                    name={item.name}
+                    description={item.summary}
+                    image={baseURL + item.image}
+                    link={item.link}
+                  />
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
+        :
+        <IframeComponent link={result[0]?.iframe_link} width={pageSize.width * 0.8} height={pageSize.height * 0.7} />
+        }
     </div>
   );
 };

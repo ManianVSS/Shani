@@ -36,6 +36,7 @@
     "react-draggable": "^4.4.5",
     "react-hook-form": "^7.39.1",
     "react-icons": "^4.3.1",
+    "react-iframe": "^1.8.5",
     "react-lazy-hero": "^2.0.0",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
