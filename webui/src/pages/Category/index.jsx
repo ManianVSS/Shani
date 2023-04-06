@@ -24,6 +24,7 @@ const Category2 = () => {
   let categoryData = [];
   let pageData = [];
 
+
   if (catalogid) {
     catalogData = (siteData || [])[0]?.catalogs?.filter((catalog) => {
       return catalog.id === parseInt(catalogid);
@@ -32,6 +33,7 @@ const Category2 = () => {
       categoryData = (catalogData || [])[0]?.categories?.filter((category) => {
         return category.id === parseInt(categoryid);
       });
+
       if (pageid) {
         pageData = (categoryData || [])[0]?.pages?.filter((page) => {
           return page.id === parseInt(pageid);
@@ -47,7 +49,7 @@ const Category2 = () => {
   //   return opt;
   // });
   let result = [];
-  // result = pageid ? pageData??[] : siteData;
+  
   if (pageid) {
     result = pageData ?? [];
   } else if (categoryid && !pageid) {
@@ -59,6 +61,8 @@ const Category2 = () => {
   if (catalogData?.length === 0) {
     navigate("notFound");
   }
+  
+  document.title = (siteData??[])[0]?.name;
   return (
     <div>
       <HeroComponent
