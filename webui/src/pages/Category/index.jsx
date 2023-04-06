@@ -70,7 +70,7 @@ const Category2 = () => {
         description={result[0]?.description.toUpperCase()}
         images={baseURL + result[0]?.image}
       />
-
+      {/* <iframe src="https://www.youtube.com/embed/uXWycyeTeCs" ></iframe> */}
       <Container style={{ marginTop: "35px" }}>
         <Row className="justify-content-md-center">
           {result[0]?.display_items.map((item) => {
@@ -91,6 +91,7 @@ const Category2 = () => {
             );
           })}
         </Row>
+        
       </Container>
     </div>
   );
