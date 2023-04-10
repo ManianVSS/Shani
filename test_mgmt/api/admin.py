@@ -22,11 +22,11 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
         if obj is None:
             return True
         if super().has_view_permission(request, obj):
-            return True
-
-        try:
-            return obj.is_owner(request.user) or obj.is_member(request.user)
-        except FieldDoesNotExist:
+            try:
+                return obj.can_read(request.user)
+            except FieldDoesNotExist:
+                return False
+        else:
             return False
 
     def has_change_permission(self, request, obj=None):
@@ -38,8 +38,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return True
         if super().has_change_permission(request, obj):
             try:
-                can_change = obj.is_owner(request.user) or obj.is_member(request.user)
-                return can_change
+                return obj.can_modify(request.user)
             except FieldDoesNotExist:
                 return True
         else:
@@ -54,8 +53,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return True
         if super().has_delete_permission(request, obj):
             try:
-                can_delete = obj.is_owner(request.user)
-                return can_delete
+                return obj.can_delete(request.user)
             except FieldDoesNotExist:
                 return True
         else:

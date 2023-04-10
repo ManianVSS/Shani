@@ -5,7 +5,32 @@ from django.utils.translation import gettext_lazy as _
 from test_mgmt import settings
 
 
-class OrgGroup(models.Model):
+# noinspection PyMethodMayBeStatic
+class BaseModel(models.Model):
+    class Meta:
+        abstract = True
+
+    def is_guest(self, user):
+        return user is not None
+
+    def is_member(self, user):
+        return user is not None
+
+    def is_owner(self, user):
+        return user is not None
+
+    def can_read(self, user):
+        return self.is_owner(user) or self.is_member(user) or self.is_guest(user)
+
+    def can_modify(self, user):
+        return self.is_owner(user) or self.is_member(user)
+
+    def can_delete(self, user):
+        return self.is_owner(user)
+
+
+# noinspection PyUnresolvedReferences
+class OrgGroup(BaseModel):
     name = models.CharField(max_length=256, unique=True)
     auth_group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.SET_NULL, related_name="org_group",
                                       verbose_name='authorization group')
@@ -15,22 +40,26 @@ class OrgGroup(models.Model):
                                   related_name="sub_org_groups", verbose_name='parent organization group')
     leaders = models.ManyToManyField(User, blank=True, related_name="org_group_leaders")
     members = models.ManyToManyField(User, blank=True, related_name="org_group_members")
+    guests = models.ManyToManyField(User, blank=True, related_name="org_group_guests")
 
     def __str__(self):
         return str(self.name)
 
     def is_owner(self, user):
-        # noinspection PyUnresolvedReferences
         return ((self.leaders is not None) and (user in self.leaders.all())) or (
                 (self.org_group is not None) and self.org_group.is_owner(user))
 
     def is_member(self, user):
-        # noinspection PyUnresolvedReferences
         return ((self.members is not None) and (user in self.members.all())) or (
                 (self.org_group is not None) and self.org_group.is_member(user))
 
+    def is_guest(self, user):
+        return ((self.guests is not None) and (user in self.guests.all())) or (
+                (self.org_group is not None) and self.org_group.is_guest(user))
 
-class OrgModel(models.Model):
+
+# noinspection PyUnresolvedReferences
+class OrgModel(BaseModel):
     class Meta:
         abstract = True
 
@@ -49,6 +78,12 @@ class OrgModel(models.Model):
             return False
         is_member = self.org_group.is_member(user)
         return is_member
+
+    def is_guest(self, user):
+        if self.org_group is None:
+            return False
+        is_guest = self.org_group.is_guest(user)
+        return is_guest
 
 
 class Attachment(OrgModel):
@@ -196,4 +231,3 @@ class TopicEngineerAssignment(OrgModel):
 
     def __str__(self):
         return str(self.topic.name) + ": " + str(self.engineer.name) + ": " + str(self.status)
-
