@@ -24,7 +24,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return True
         if super().has_view_permission(request, obj):
             try:
-                return obj.can_read(request.user)
+                return not hasattr(obj, 'can_read') or obj.can_read(request.user)
             except FieldDoesNotExist:
                 return False
         else:
@@ -39,7 +39,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return True
         if super().has_change_permission(request, obj):
             try:
-                return obj.can_modify(request.user)
+                return not hasattr(obj, 'can_modify') or obj.can_modify(request.user)
             except FieldDoesNotExist:
                 return True
         else:
@@ -54,11 +54,25 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return True
         if super().has_delete_permission(request, obj):
             try:
-                return obj.can_delete(request.user)
+                return not hasattr(obj, 'can_delete') or obj.can_delete(request.user)
             except FieldDoesNotExist:
                 return True
         else:
             return False
+
+    # Allow only listing of entities that can be viewed by the user
+    def get_queryset(self, request):
+        if request.user.is_superuser or not hasattr(self.model, 'can_read'):
+            return self.model.objects.all()
+
+        try:
+            can_view_filter = [obj.id for obj in self.model.objects.all() if obj.can_read(request.user)]
+            return self.model.objects.filter(id__in=can_view_filter)
+        except FieldDoesNotExist:
+            return self.model.objects.all()
+        except Exception as e:
+            print(str(e))
+            return self.model.objects.none()
 
 
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
@@ -87,6 +101,7 @@ class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', ' file', ]
 
     list_filter = (
+        'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -102,6 +117,7 @@ class OrgGroupResource(resources.ModelResource):
 class OrgGroupAdmin(CustomModelAdmin):
     resource_class = OrgGroupResource
     list_filter = (
+        'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('leaders', RelatedOnlyFieldListFilter),
         ('members', RelatedOnlyFieldListFilter),

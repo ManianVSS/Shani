@@ -13,6 +13,12 @@ class AttachmentResource(resources.ModelResource):
 
 class AttachmentAdmin(CustomModelAdmin):
     resource_class = AttachmentResource
+    search_fields = ['name', ' file', ]
+
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
 
 
 admin.site.register(Attachment, AttachmentAdmin)
@@ -25,6 +31,12 @@ class TagResource(resources.ModelResource):
 
 class TagAdmin(CustomModelAdmin):
     resource_class = TagResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+
+    search_fields = ['name', 'summary', 'description', ]
 
 
 admin.site.register(Tag, TagAdmin)
@@ -38,6 +50,7 @@ class StepResource(resources.ModelResource):
 class StepAdmin(CustomModelAdmin):
     resource_class = StepResource
     list_filter = (
+        'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
         ('test_design_owner', RelatedOnlyFieldListFilter),

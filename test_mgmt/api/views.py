@@ -58,7 +58,7 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
     serializer_class = OrgGroupSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', ]
+    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -67,6 +67,7 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
         'auth_group': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'leaders': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 

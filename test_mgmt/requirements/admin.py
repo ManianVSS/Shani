@@ -13,6 +13,12 @@ class AttachmentResource(resources.ModelResource):
 
 class AttachmentAdmin(CustomModelAdmin):
     resource_class = AttachmentResource
+    search_fields = ['name', ' file', ]
+
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
 
 
 admin.site.register(Attachment, AttachmentAdmin)
@@ -25,6 +31,12 @@ class TagResource(resources.ModelResource):
 
 class TagAdmin(CustomModelAdmin):
     resource_class = TagResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+
+    search_fields = ['name', 'summary', 'description', ]
 
 
 admin.site.register(Tag, TagAdmin)
@@ -38,8 +50,11 @@ class FeatureCategoryResource(resources.ModelResource):
 class FeatureCategoryAdmin(CustomModelAdmin):
     resource_class = FeatureCategoryResource
     list_filter = (
+        'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
+        'weight',
+        ('parent', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
 
@@ -55,11 +70,13 @@ class FeatureResource(resources.ModelResource):
 class FeatureAdmin(CustomModelAdmin):
     resource_class = FeatureResource
     list_filter = (
+        'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
         'status',
+        ('parent', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['name', 'summary', 'description', ]
+    search_fields = ['name', 'summary', 'description', 'status', 'external_id', ]
 
 
 admin.site.register(Feature, FeatureAdmin)
@@ -72,6 +89,14 @@ class UseCaseResource(resources.ModelResource):
 
 class UseCaseAdmin(CustomModelAdmin):
     resource_class = UseCaseResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        'status',
+        'weight',
+        ('feature', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', 'status', ]
 
 
 admin.site.register(UseCase, UseCaseAdmin)
@@ -84,6 +109,12 @@ class RequirementResource(resources.ModelResource):
 
 class RequirementAdmin(CustomModelAdmin):
     resource_class = RequirementResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('use_cases', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
 
 
 admin.site.register(Requirement, RequirementAdmin)

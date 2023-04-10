@@ -10,6 +10,8 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    published = models.BooleanField(default=False, verbose_name='is published content')
+
     def __str__(self):
         if hasattr(self, 'name'):
             string_value = str(self.name)
@@ -30,7 +32,7 @@ class BaseModel(models.Model):
         return user is not None
 
     def can_read(self, user):
-        return self.is_owner(user) or self.is_member(user) or self.is_guest(user)
+        return self.is_owner(user) or self.is_member(user) or (self.published and self.is_guest(user))
 
     def can_modify(self, user):
         return self.is_owner(user) or self.is_member(user)
@@ -70,7 +72,6 @@ class OrgModel(BaseModel):
     class Meta:
         abstract = True
 
-    published = models.BooleanField(default=False, verbose_name='is published content')
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group')
 

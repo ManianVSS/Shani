@@ -58,7 +58,7 @@ class Sprint(OrgModel):
     end_date = models.DateField(verbose_name='end date')
 
     def __str__(self):
-        return str(self.release) + ": " + str(self.number)
+        return "Sprint-" + str(self.number) + " for release " + str(self.release.name if self.release else "<unset>")
 
 
 class Story(OrgModel):
