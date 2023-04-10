@@ -1,7 +1,6 @@
 from django.db import models
 
 from api.models import OrgModel, OrgGroup, ReviewStatus
-from test_mgmt import settings
 
 
 class Attachment(OrgModel):
@@ -10,9 +9,6 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirement_attachments')
 
-    def __str__(self):
-        return str(self.file.name)
-
 
 class Tag(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -20,9 +16,6 @@ class Tag(OrgModel):
     description = models.TextField(null=True, blank=True)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirement_tags')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
 
 
 class FeatureCategory(OrgModel):
@@ -40,9 +33,6 @@ class FeatureCategory(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='feature_category_attachments', blank=True)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='feature_categories')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
 
 
 class Feature(OrgModel):
@@ -64,9 +54,6 @@ class Feature(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirement_features')
 
-    def __str__(self):
-        return str(self.name)
-
 
 class UseCase(OrgModel):
     feature = models.ForeignKey(Feature, on_delete=models.SET_NULL, null=True, blank=True, related_name="use_cases")
@@ -85,9 +72,6 @@ class UseCase(OrgModel):
     details_file = models.FileField(upload_to='requirements', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
 
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
     def get_score(self):
         return (self.consumer_score + self.serviceability_score + self.test_confidence + self.development_confidence) \
             / 4
@@ -99,6 +83,3 @@ class Requirement(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)

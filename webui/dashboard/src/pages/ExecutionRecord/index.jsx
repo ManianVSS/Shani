@@ -26,7 +26,7 @@ const ExecutionRecords = () => {
     { headerName: "Defects", field: "defects" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/execution_records/").then((response) => {
+    axiosClient.get("/execution/api/execution_records/").then((response) => {
       setExecutionRecords(response.data.results);
     });
   }, []);

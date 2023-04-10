@@ -24,7 +24,7 @@ const Requirements = () => {
     { headerName: "Summary", field: "summary" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/requirements/").then((response) => {
+    axiosClient.get("/requirements/api/requirements/").then((response) => {
       setRequirements(response.data.results);
     });
   }, []);

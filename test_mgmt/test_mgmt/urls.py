@@ -21,9 +21,10 @@ urlpatterns = [
                   path('testdesign/', include('testdesign.urls')),
                   path('automation/', include('automation.urls')),
                   path('execution/', include('execution.urls')),
+                  path('people/', include('people.urls')),
                   path('swagger/', schema_view, name='docs'),
                   re_path(
-                      '(^(?!(data|admin|api|siteconfig|requirements|workitems|testdesign|automation|execution|swagger)).*$)',
+                      '(^(?!(data|admin|api|siteconfig|requirements|workitems|testdesign|automation|execution|people|swagger)).*$)',
                       TemplateView.as_view(template_name='index.html')),
               ] + static(settings.STATIC_URL,
                          document_root=settings.STATICFILES_DIRS) \

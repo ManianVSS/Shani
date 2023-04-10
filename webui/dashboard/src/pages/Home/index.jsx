@@ -108,7 +108,7 @@ const Home = () => {
   var theme = useTheme();
   React.useEffect(() => {
     let testsData = { total: 0, automated: 0, manual: 0 };
-    axiosClient.get("/testcases/").then((response) => {
+    axiosClient.get("/testdesign/api/testcases/").then((response) => {
       response.data.results.map((item) => {
         testsData.total += 1;
         if (item.automated) {
@@ -122,7 +122,7 @@ const Home = () => {
   }, []);
   React.useEffect(() => {
     let useCaseData = { total: 0, draft: 0, inreview: 0, approved: 0 };
-    axiosClient.get("/use_cases/").then((response) => {
+    axiosClient.get("/requirements/api/use_cases/").then((response) => {
       response.data.results.map((item) => {
         useCaseData.total += 1;
         if (item.status === "DRAFT") {
@@ -137,13 +137,13 @@ const Home = () => {
     });
   }, []);
   React.useEffect(() => {
-    axiosClient.get("/score/").then((response) => {
+    axiosClient.get("/execution/api/score/").then((response) => {
       setScore(response.data);
     });
   }, []);
   React.useEffect(() => {
     let data = {};
-    axiosClient.get("/completion/").then((response) => {
+    axiosClient.get("/execution/api/completion/").then((response) => {
       data = response.data;
       data.use_case_category_completion.map((item) => {
         item.completion = item.completion * 100;

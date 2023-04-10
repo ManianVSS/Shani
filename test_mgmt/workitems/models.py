@@ -10,9 +10,6 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='workitem_attachments')
 
-    def __str__(self):
-        return str(self.file.name)
-
 
 class Tag(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -21,9 +18,6 @@ class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='workitem_tags')
 
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
 
 class Release(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -31,9 +25,6 @@ class Release(OrgModel):
     description = models.TextField(null=True, blank=True)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_releases')
-
-    def __str__(self):
-        return str(self.name)
 
 
 class Epic(OrgModel):
@@ -47,9 +38,6 @@ class Epic(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_epics')
 
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
 
 class Feature(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -61,9 +49,6 @@ class Feature(OrgModel):
     epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_features')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
 
 
 class Sprint(OrgModel):
@@ -89,9 +74,6 @@ class Story(OrgModel):
     sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
     feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
 
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
 
 class Feedback(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -99,6 +81,3 @@ class Feedback(OrgModel):
     description = models.TextField(null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='feedbacks')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)

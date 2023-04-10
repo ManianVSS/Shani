@@ -8,5 +8,6 @@ rm -rf workitems/migrations
 rm -rf testdesign/migrations
 rm -rf automation/migrations
 rm -rf execution/migrations
+rm -rf people/migrations
 rm data/db.sqlite3
 bash migrate.sh

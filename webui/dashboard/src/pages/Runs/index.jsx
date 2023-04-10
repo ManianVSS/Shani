@@ -28,7 +28,7 @@ const Runs = () => {
     },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/runs/").then((response) => {
+    axiosClient.get("/execution/api/runs/").then((response) => {
       setRuns(response.data.results);
     });
   }, []);

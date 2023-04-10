@@ -43,6 +43,7 @@ class FeatureCategoryAdmin(CustomModelAdmin):
     )
     search_fields = ['name', 'summary', 'description', ]
 
+
 admin.site.register(FeatureCategory, FeatureCategoryAdmin)
 
 

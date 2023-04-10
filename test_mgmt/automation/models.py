@@ -12,9 +12,6 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='automation_attachments')
 
-    def __str__(self):
-        return str(self.file.name)
-
 
 class Step(OrgModel):
     # The status of a step's test design
@@ -55,9 +52,6 @@ class Step(OrgModel):
 
     details_file = models.FileField(upload_to='automation', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='step_attachments', blank=True)
-
-    def __str__(self):
-        return str(self.name)
 
     def is_owner(self, user):
         return (user == self.test_design_owner) or (

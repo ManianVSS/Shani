@@ -27,7 +27,7 @@ const Testcases = () => {
     { headerName: "Automated", field: "automated" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/testcases/").then((response) => {
+    axiosClient.get("/testdesign/api/testcases/").then((response) => {
       setTestcases(response.data.results);
     });
   }, []);

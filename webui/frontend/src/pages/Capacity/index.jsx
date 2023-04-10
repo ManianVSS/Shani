@@ -22,7 +22,7 @@ const Capacity = () => {
   const showDetails = () => {
     axiosClient
       .get(
-        "/capacity_view?org_group=" +
+        "/people/api/capacity_view?org_group=" +
           org +
           "&from=" +
           formatDate(startDate) +
@@ -94,7 +94,7 @@ const Capacity = () => {
     );
   }
   useEffect(() => {
-    axiosClient.get("/org_groups/").then((response) => {
+    axiosClient.get("/api/org_groups/").then((response) => {
       setOrgData(response.data.results);
     });
     setUserData({

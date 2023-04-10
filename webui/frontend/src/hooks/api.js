@@ -2,8 +2,8 @@ import axios from "axios";
 
 // const accessToken = localStorage.getItem("accessToken");
 export const axiosClient = axios.create({  
-  // baseURL: "http://localhost:8000/api",
-  baseURL: "/api",
+  // baseURL: "http://localhost:8000",
+  baseURL: "",
   headers: { "Content-Type": "application/json" },
 });
 

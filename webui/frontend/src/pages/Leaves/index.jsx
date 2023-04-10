@@ -108,7 +108,7 @@ const Leaves = () => {
   }
 
   useEffect(() => {
-    axiosClient.get("/engineers/").then((response) => {
+    axiosClient.get("/people/api/engineers/").then((response) => {
       setEngineerData(response.data.results);
     });
     setUserData({

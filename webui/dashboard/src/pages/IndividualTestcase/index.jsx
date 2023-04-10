@@ -9,12 +9,12 @@ const IndividualTestcase = (props) => {
 
   const { testcaseid } = useParams();
   React.useEffect(() => {
-    axiosClient.get("/testcases/" + testcaseid + "/").then((response) => {
+    axiosClient.get("/testdesign/api/testcases/" + testcaseid + "/").then((response) => {
       setTestCaseDetails(response.data);
       setAttachmentids(response.data.attachments);
 
       response.data.attachments?.map((item) => {
-        axiosClient.get("/attachments/" + item + "/").then((res) => {
+        axiosClient.get("/testdesign/api/attachments/" + item + "/").then((res) => {
           setAttachmentDetailss((oldArray) => [
             ...oldArray,
             {

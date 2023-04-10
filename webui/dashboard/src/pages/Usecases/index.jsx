@@ -32,7 +32,7 @@ const Usecases = () => {
     { headerName: "Weight", field: "weight" },
   ]);
   React.useEffect(() => {
-    axiosClient.get("/use_cases/").then((response) => {
+    axiosClient.get("/requirements/api/use_cases/").then((response) => {
       setUsecases(response.data.results);
     });
   }, []);

@@ -9,12 +9,12 @@ const IndividualUsecase = (props) => {
 
   const { usecaseid } = useParams();
   React.useEffect(() => {
-    axiosClient.get("/use_cases/" + usecaseid + "/").then((response) => {
+    axiosClient.get("/requirements/api/use_cases/" + usecaseid + "/").then((response) => {
       setUsecaseDetails(response.data);
       setAttachmentids(response.data.attachments);
 
       response.data.attachments?.map((item) => {
-        axiosClient.get("/attachments/" + item + "/").then((res) => {
+        axiosClient.get("/requirements/api/attachments/" + item + "/").then((res) => {
           setAttachmentDetailss((oldArray) => [
             ...oldArray,
             {

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'testdesign',
     'automation',
     'execution',
+    'people',
 ]
 
 MIDDLEWARE = [

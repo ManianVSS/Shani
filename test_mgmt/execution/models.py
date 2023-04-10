@@ -11,9 +11,6 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_attachments')
 
-    def __str__(self):
-        return str(self.file.name)
-
 
 class Tag(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -22,9 +19,6 @@ class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_tags')
 
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
-
 
 class Release(OrgModel):
     name = models.CharField(max_length=256, unique=True)
@@ -32,9 +26,6 @@ class Release(OrgModel):
     description = models.TextField(null=True, blank=True)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_releases')
-
-    def __str__(self):
-        return str(self.name)
 
 
 class Defect(OrgModel):
@@ -53,9 +44,6 @@ class Run(OrgModel):
     time = models.DateTimeField(auto_now_add=True)
 
     release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='runs')
-
-    def __str__(self):
-        return str(self.build) + ": " + str(self.name)
 
 
 class ExecutionRecordStatus(models.TextChoices):
@@ -79,9 +67,6 @@ class ExecutionRecord(OrgModel):
     automated = models.BooleanField(default=False, verbose_name='is automated')
 
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.summary)
 
 
 class ReliabilityRunStatus(models.TextChoices):
@@ -134,6 +119,3 @@ class Environment(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments',
                                         verbose_name='currently release')
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.type)

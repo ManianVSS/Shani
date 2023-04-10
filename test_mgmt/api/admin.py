@@ -1,12 +1,12 @@
 from django.contrib import admin
-from django.contrib.admin import RelatedOnlyFieldListFilter
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from api.models import Attachment, OrgGroup, Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
-    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Tag
+from .models import Attachment, OrgGroup
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -60,6 +60,22 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return False
 
 
+class CustomUserAdmin(CustomModelAdmin, UserAdmin):
+    pass
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
+
+class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
+    pass
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, CustomGroupAdmin)
+
+
 class AttachmentResource(resources.ModelResource):
     class Meta:
         model = Attachment
@@ -84,114 +100,3 @@ class OrgGroupAdmin(CustomModelAdmin):
 
 admin.site.register(OrgGroup, OrgGroupAdmin)
 
-
-class SiteResource(resources.ModelResource):
-    class Meta:
-        model = Site
-
-
-class SiteAdmin(CustomModelAdmin):
-    resource_class = SiteResource
-
-
-admin.site.register(Site, SiteAdmin)
-
-
-class EngineerResource(resources.ModelResource):
-    class Meta:
-        model = Engineer
-
-
-class EngineerAdmin(CustomModelAdmin):
-    resource_class = EngineerResource
-
-
-admin.site.register(Engineer, EngineerAdmin)
-
-
-class EngineerOrgGroupParticipationResource(resources.ModelResource):
-    class Meta:
-        model = EngineerOrgGroupParticipation
-
-
-class EngineerOrgGroupParticipationAdmin(CustomModelAdmin):
-    resource_class = EngineerOrgGroupParticipationResource
-
-
-admin.site.register(EngineerOrgGroupParticipation, EngineerOrgGroupParticipationAdmin)
-
-
-class SiteHolidayResource(resources.ModelResource):
-    class Meta:
-        model = SiteHoliday
-
-
-class SiteHolidayAdmin(CustomModelAdmin):
-    resource_class = SiteHolidayResource
-
-
-admin.site.register(SiteHoliday, SiteHolidayAdmin)
-
-
-class LeaveResource(resources.ModelResource):
-    class Meta:
-        model = Leave
-
-
-class LeaveAdmin(CustomModelAdmin):
-    list_filter = (
-        ('engineer', RelatedOnlyFieldListFilter),
-        'status',
-    )
-    resource_class = LeaveResource
-
-
-admin.site.register(Leave, LeaveAdmin)
-
-
-class EngineerOrgGroupParticipationHistoryResource(resources.ModelResource):
-    class Meta:
-        model = EngineerOrgGroupParticipationHistory
-
-
-class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
-    resource_class = EngineerOrgGroupParticipationHistoryResource
-
-
-admin.site.register(EngineerOrgGroupParticipationHistory, EngineerOrgGroupParticipationHistoryAdmin)
-
-
-class TagResource(resources.ModelResource):
-    class Meta:
-        model = Tag
-
-
-class TagAdmin(CustomModelAdmin):
-    resource_class = TagResource
-
-
-admin.site.register(Tag, TagAdmin)
-
-
-class TopicResource(resources.ModelResource):
-    class Meta:
-        model = Topic
-
-
-class TopicAdmin(CustomModelAdmin):
-    resource_class = TopicResource
-
-
-admin.site.register(Topic, TopicAdmin)
-
-
-class TopicEngineerAssignmentResource(resources.ModelResource):
-    class Meta:
-        model = TopicEngineerAssignment
-
-
-class TopicEngineerAssignmentAdmin(CustomModelAdmin):
-    resource_class = TopicEngineerAssignmentResource
-
-
-admin.site.register(TopicEngineerAssignment, TopicEngineerAssignmentAdmin)

@@ -23,7 +23,7 @@ Note: Dashboard development setup is yet to be documented
 ##### **Running server**
 
 > cd test_mgmt</br>
-> python manage.py runserver</br>
+> python manage.py runserver 0.0.0.0:8000</br>
 
 Admin console should be up on http://localhost:8000/admin
 

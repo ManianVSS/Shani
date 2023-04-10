@@ -10,13 +10,13 @@ const IndividualFeature = (props) => {
   const { usecasecategoryid } = useParams();
   React.useEffect(() => {
     axiosClient
-      .get("/use_case_categories/" + usecasecategoryid + "/")
+      .get("/requirements/api/use_case_categories/" + usecasecategoryid + "/")
       .then((response) => {
         setFeatureDetails(response.data);
         setAttachmentids(response.data.attachments);
 
         response.data.attachments?.map((item) => {
-          axiosClient.get("/attachments/" + item + "/").then((res) => {
+          axiosClient.get("/requirements/api/attachments/" + item + "/").then((res) => {
             setAttachmentDetailss((oldArray) => [
               ...oldArray,
               {
