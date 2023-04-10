@@ -69,40 +69,36 @@ const Category2 = () => {
   console.log(pageSize.height);
   console.log(pageSize.width);
   return (
-    <div>
-      <HeroComponent
-        headline={result[0]?.name.toUpperCase()}
-        description={result[0]?.description.toUpperCase()}
-        images={baseURL + result[0]?.image}
-      />
-      {/* <iframe src="https://www.youtube.com/embed/uXWycyeTeCs" ></iframe> */}
-
+    <>
       {result[0]?.iframe_link?.length === 0 ?
-        <Container style={{ marginTop: "35px" }}>
-          <Row className="justify-content-md-center">
-            {result[0]?.display_items.map((item) => {
-              return (
-                <Col md="auto" key={item.name}>
-                  {/* <CardItem001
-                  name={item.name}
-                  summary={item.summary}
-                  image={"http://localhost:8000" + item.image}
-                /> */}
-                  <CardItem003
-                    name={item.name}
-                    description={item.summary}
-                    image={baseURL + item.image}
-                    link={item.link}
-                  />
-                </Col>
-              );
-            })}
-          </Row>
-        </Container>
+        <>
+          <HeroComponent
+            headline={result[0]?.name.toUpperCase()}
+            description={result[0]?.description.toUpperCase()}
+            images={baseURL + result[0]?.image}
+          />
+          <Container style={{ marginTop: "35px" }}>
+            <Row className="justify-content-md-center">
+              {result[0]?.display_items.map((item) => {
+                return (
+                  <Col md="auto" key={item.name}>
+                    <CardItem003
+                      name={item.name}
+                      description={item.summary}
+                      image={baseURL + item.image}
+                      link={item.link}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Container>
+        </>
         :
         <IframeComponent link={result[0]?.iframe_link} width={pageSize.width * 0.8} height={pageSize.height * 0.7} />
-        }
-    </div>
+      }
+
+    </>
   );
 };
 
