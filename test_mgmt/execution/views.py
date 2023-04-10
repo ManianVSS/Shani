@@ -149,7 +149,7 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
 class EnvironmentViewSet(viewsets.ModelViewSet):
     queryset = Environment.objects.all()
     serializer_class = EnvironmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', 'published', ]
     ordering = default_ordering

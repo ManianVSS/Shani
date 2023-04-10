@@ -100,7 +100,7 @@ class SiteHolidayViewSet(viewsets.ModelViewSet):
 class LeaveViewSet(viewsets.ModelViewSet):
     queryset = Leave.objects.all()
     serializer_class = LeaveSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
     ordering_fields = ['id', 'engineer', 'start_date', 'end_date', 'status', ]
     ordering = default_ordering
@@ -117,7 +117,7 @@ class LeaveViewSet(viewsets.ModelViewSet):
 class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
     queryset = EngineerOrgGroupParticipationHistory.objects.all()
     serializer_class = EngineerOrgGroupParticipationHistorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
     ordering_fields = ['id', 'date', 'engineer', 'org_group', 'published', 'expected_capacity', 'capacity', ]
     ordering = default_ordering
@@ -153,7 +153,7 @@ class TopicViewSet(viewsets.ModelViewSet):
 class TopicEngineerAssignmentViewSet(viewsets.ModelViewSet):
     queryset = TopicEngineerAssignment.objects.all()
     serializer_class = TopicEngineerAssignmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
     ordering_fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', 'org_group',
                        'published', ]

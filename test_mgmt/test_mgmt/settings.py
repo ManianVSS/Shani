@@ -16,6 +16,7 @@ SECRET_KEY = 'django-insecure-9=(@6%n=2c^$4%b1-0!7-k+=vjeo8pub3r&$$ijw(0tchsaxn4
 DEBUG = True  # bool(os.getenv("DEBUG", 'True'))
 
 ALLOWED_HOSTS = ["*"]
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Application definition
 

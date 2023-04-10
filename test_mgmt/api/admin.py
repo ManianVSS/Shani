@@ -62,6 +62,9 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
 
     # Allow only listing of entities that can be viewed by the user
     def get_queryset(self, request):
+        if request.user is None:
+            return self.model.objects.none()
+
         if request.user.is_superuser or not hasattr(self.model, 'can_read'):
             return self.model.objects.all()
 
