@@ -95,7 +95,7 @@ const Category2 = () => {
           </Container>
         </>
         :
-        <IframeComponent link={result[0]?.iframe_link} width={pageSize.width * 0.8} height={pageSize.height * 0.7} />
+        <IframeComponent link={result[0]?.iframe_link} width={pageSize.width * 0.8} height={pageSize.height * 0.95} />
       }
 
     </>
