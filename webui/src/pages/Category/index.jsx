@@ -12,10 +12,12 @@ import CardItem003 from "../../components/CardItem003";
 import { baseURL } from "../../hooks/baseURL";
 import IframeComponent from "../../components/IframeComponent";
 import { useWindowSize } from "../../hooks/windowSize";
+import { sideBar } from "../../state/mode";
 
 const Category2 = () => {
   const navigate = useNavigate();
   const pageSize = useWindowSize();
+  const sideBarState = useRecoilValue(sideBar);
   const { siteid, catalogid, categoryid, pageid } = useParams();
   const allPages = useRecoilValue(allPagesData);
   let siteData = [];
@@ -66,11 +68,11 @@ const Category2 = () => {
   }
 
   document.title = (siteData ?? [])[0]?.name;
-  console.log(pageSize.height);
   console.log(pageSize.width);
+
   return (
     <>
-      {result[0]?.iframe_link?.length === 0 ?
+      {((result[0]?.iframe_link?.length === 0) || (result[0]?.iframe_link?.length === undefined)) ?
         <>
           <HeroComponent
             headline={result[0]?.name.toUpperCase()}
@@ -95,7 +97,7 @@ const Category2 = () => {
           </Container>
         </>
         :
-        <IframeComponent link={result[0]?.iframe_link} width={pageSize.width * 0.8} height={pageSize.height * 0.95} />
+        <IframeComponent link={result[0]?.iframe_link} width={sideBar === "open" ? pageSize.width * 0.8 : pageSize.width} height={pageSize.height * 0.95} />
       }
 
     </>

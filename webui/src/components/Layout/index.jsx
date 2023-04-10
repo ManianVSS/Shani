@@ -30,7 +30,7 @@ const Layout = (props) => {
         </AppShell>
       ) : (
         <div>
-          <Draggable>
+          <Draggable >
             <Popover
               position={Position.BOTTOM_RIGHT}
               content={
@@ -55,7 +55,7 @@ const Layout = (props) => {
               }
             >
               <div>
-                <FloatingButton />
+                <FloatingButton style={{zIndex:1}} />
               </div>
             </Popover>
           </Draggable>
