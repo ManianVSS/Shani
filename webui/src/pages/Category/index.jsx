@@ -68,8 +68,6 @@ const Category2 = () => {
   }
 
   document.title = (siteData ?? [])[0]?.name;
-  console.log(pageSize.width);
-
   return (
     <>
       {((result[0]?.iframe_link?.length === 0) || (result[0]?.iframe_link?.length === undefined)) ?

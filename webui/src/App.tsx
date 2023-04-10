@@ -17,11 +17,30 @@ import { axiosClient } from "./hooks/api";
 import { IconFileAnalytics, IconHome, TablerIcon } from "@tabler/icons";
 import { useEffect } from "react";
 import NotFound from "./pages/NotFound";
+import CapacityApp from "./capacity-planner/CapacityApp";
+import AlertTemplate from "./capacity-planner/components/AlertTemplate";
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import { PrivateRoute } from "./hooks/PrivateRoute";
+import CapacityLayout from "./capacity-planner/components/CapacityLayout";
+import Capacity from "./capacity-planner/pages/Capacity";
+import EngineerAvailability from "./capacity-planner/pages/EngineerAvailability";
+import Leaves from "./capacity-planner/pages/Leaves";
+import Login from "./capacity-planner/pages/Login";
+import { CapacityPrivateRoute } from "./capacity-planner/CapacityPrivateRoute";
+import CapacityHome from "./capacity-planner/pages/CapacityHome";
 
 interface customLinks {
   label: string;
   link: string;
 }
+const options = {
+  // you can also just use 'bottom center'
+  position: positions.TOP_RIGHT,
+  timeout: 5000,
+  offset: "30px",
+  // you can also just use 'scale'
+  transition: transitions.SCALE,
+};
 
 export default function App() {
   const mode = useRecoilValue(colorScheme);
@@ -116,31 +135,65 @@ export default function App() {
     getNavigationData();
   }, []);
   return (
-    <MantineProvider theme={darkTheme} withGlobalStyles withNormalizeCSS>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout page={<Home />} />} />
-          <Route
-            path={`/site/:siteid/catalog/:catalogid`}
-            element={<Layout page={<Category />} />}
-          />
-          <Route
-            path={`/site/:siteid/catalog/:catalogid/category/:categoryid`}
-            element={<Layout page={<Category />} />}
-          />
-          <Route
-            path={`/site/:siteid/catalog/:catalogid/category/:categoryid/page/:pageid`}
-            element={<Layout page={<Category />} />}
-          />
-          {/* <Route path="/dashboard" element={<Layout page={<Dashboard />} />} />
+    <AlertProvider template={AlertTemplate} {...options}>
+      <MantineProvider theme={darkTheme} withGlobalStyles withNormalizeCSS>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout page={<Home />} />} />
+            <Route
+              path={`/site/:siteid/catalog/:catalogid`}
+              element={<Layout page={<Category />} />}
+            />
+            <Route
+              path={`/site/:siteid/catalog/:catalogid/category/:categoryid`}
+              element={<Layout page={<Category />} />}
+            />
+            <Route
+              path={`/site/:siteid/catalog/:catalogid/category/:categoryid/page/:pageid`}
+              element={<Layout page={<Category />} />}
+            />
+
+            {/* <Route path="/dashboard" element={<Layout page={<Dashboard />} />} />
           <Route
             path="/documentation"
             element={<Layout page={<Documentation />} />}
           /> */}
-          <Route path="*" element={<NotFound />} />
-          <Route path="/notfound" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </MantineProvider>
+
+            <Route path="/capacity-planner" element={<CapacityPrivateRoute />}>
+              <Route
+                path="/capacity-planner"
+                element={<CapacityLayout page={<CapacityHome />} auth={true} />}
+              />
+            </Route>
+            <Route path="/capacity-planner/capacity" element={<CapacityPrivateRoute />}>
+              <Route
+                path="/capacity-planner/capacity"
+                element={<CapacityLayout page={<Capacity />} auth={true} />}
+              />
+            </Route>
+            <Route path="/capacity-planner/engineer-availability" element={<CapacityPrivateRoute />}>
+              <Route
+                path="/capacity-planner/engineer-availability"
+                element={
+                  <CapacityLayout page={<EngineerAvailability />} auth={true} />
+                }
+              />
+            </Route>
+            <Route path="/capacity-planner/leaves" element={<CapacityPrivateRoute />}>
+              <Route
+                path="/capacity-planner/leaves"
+                element={<CapacityLayout page={<Leaves />} auth={true} />}
+              />
+            </Route>
+            <Route
+              path="/capacity-planner/login"
+              element={<CapacityLayout page={<Login />} auth={false} />}
+            />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/notfound" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </MantineProvider>
+    </AlertProvider>
   );
 }

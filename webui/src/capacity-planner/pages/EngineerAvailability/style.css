@@ -1,0 +1,17 @@
+.nice-dates-navigation,
+.nice-dates-day {
+  color: rgba(17, 17, 17);
+}
+.nice-dates-popover {
+  box-shadow: none;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  max-width: 380px;
+  transition: none;
+}
+.date-range input {
+  border-radius: 5px;
+  height: 38px;
+  margin-right: 5px;
+  border: 1px solid #bfbfbf;
+}
