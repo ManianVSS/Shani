@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from siteconfig.views import SiteSettingsViewSet, DisplayItemViewSet, get_all_site_details_api, PageViewSet, \
+from .views import SiteSettingsViewSet, DisplayItemViewSet, get_all_site_details_api, PageViewSet, \
     get_default_site_details_api, CategoryViewSet, CatalogViewSet
 
 router = routers.DefaultRouter()

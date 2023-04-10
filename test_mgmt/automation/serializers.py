@@ -1,12 +1,18 @@
 from rest_framework import serializers
 
-from automation.models import Attachment, Step
+from .models import Attachment, Step, Tag
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'published', ]
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'summary', 'description', 'org_group', 'published', ]
 
 
 class StepSerializer(serializers.ModelSerializer):

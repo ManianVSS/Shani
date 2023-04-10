@@ -2,8 +2,8 @@ from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups
-from automation.models import Step, Attachment
-from automation.serializers import StepSerializer, AttachmentSerializer
+from .models import Step, Attachment, Tag
+from .serializers import StepSerializer, AttachmentSerializer, TagSerializer
 
 
 class AttachmentViewSet(viewsets.ModelViewSet):
@@ -21,13 +21,31 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     }
 
 
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+    }
+
+
 class StepViewSet(viewsets.ModelViewSet):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'feature', 'org_group', 'published', 'name', 'expected_results', 'eta', 'tags', 'test_design_owner',
-                       'test_design_status', 'automation_owner', 'automation_code_reference', 'automation_status', ]
+    ordering_fields = ['id', 'feature', 'org_group', 'published', 'name', 'expected_results', 'eta', 'tags',
+                       'test_design_owner', 'test_design_status', 'automation_owner', 'automation_code_reference',
+                       'automation_status', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,

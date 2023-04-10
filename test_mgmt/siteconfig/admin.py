@@ -1,3 +1,5 @@
+import sys
+
 from django.contrib import admin
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
@@ -28,7 +30,8 @@ def update_admin_site_name(sender, instance, **kwargs):
     reload_admin_site_name(instance.name)
 
 
-reload_admin_site_name(None)
+if 'runserver' in sys.argv:
+    reload_admin_site_name(None)
 
 
 class DisplayItemResource(resources.ModelResource):

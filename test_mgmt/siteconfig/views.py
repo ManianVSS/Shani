@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups
-from siteconfig.models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
-from siteconfig.serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
+from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
     CategorySerializer
 
 

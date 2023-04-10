@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
@@ -85,6 +86,10 @@ class AttachmentAdmin(CustomModelAdmin):
     resource_class = AttachmentResource
     search_fields = ['name', ' file', ]
 
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+
 
 admin.site.register(Attachment, AttachmentAdmin)
 
@@ -96,7 +101,14 @@ class OrgGroupResource(resources.ModelResource):
 
 class OrgGroupAdmin(CustomModelAdmin):
     resource_class = OrgGroupResource
+    list_filter = (
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('leaders', RelatedOnlyFieldListFilter),
+        ('members', RelatedOnlyFieldListFilter),
+        ('guests', RelatedOnlyFieldListFilter),
+    )
+
+    search_fields = ['name', 'summary', 'description', ]
 
 
 admin.site.register(OrgGroup, OrgGroupAdmin)
-

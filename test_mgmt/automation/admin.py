@@ -3,7 +3,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from import_export import resources
 
 from api.admin import CustomModelAdmin
-from automation.models import Step, Attachment
+from .models import Step, Attachment, Tag
 
 
 class AttachmentResource(resources.ModelResource):
@@ -18,6 +18,18 @@ class AttachmentAdmin(CustomModelAdmin):
 admin.site.register(Attachment, AttachmentAdmin)
 
 
+class TagResource(resources.ModelResource):
+    class Meta:
+        model = Tag
+
+
+class TagAdmin(CustomModelAdmin):
+    resource_class = TagResource
+
+
+admin.site.register(Tag, TagAdmin)
+
+
 class StepResource(resources.ModelResource):
     class Meta:
         model = Step
@@ -25,7 +37,6 @@ class StepResource(resources.ModelResource):
 
 class StepAdmin(CustomModelAdmin):
     resource_class = StepResource
-    # save_as = True
     list_filter = (
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
