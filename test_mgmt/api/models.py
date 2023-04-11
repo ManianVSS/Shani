@@ -74,6 +74,14 @@ class OrgModel(BaseModel):
 
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group')
+    def can_read(self, user):
+        return self.org_group.is_owner(user) or self.org_group.is_member(user) or (self.published and self.org_group.is_guest(user))
+
+    def can_modify(self, user):
+        return self.org_group.is_owner(user) or self.org_group.is_member(user)
+
+    def can_delete(self, user):
+        return self.org_group.is_owner(user)
 
     def is_owner(self, user):
         if self.org_group is None:

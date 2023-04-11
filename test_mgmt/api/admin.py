@@ -64,18 +64,20 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     def get_queryset(self, request):
         if request.user is None:
             return self.model.objects.none()
-
-        if request.user.is_superuser or not hasattr(self.model, 'can_read'):
+        else:
             return self.model.objects.all()
 
-        try:
-            can_view_filter = [obj.id for obj in self.model.objects.all() if obj.can_read(request.user)]
-            return self.model.objects.filter(id__in=can_view_filter)
-        except FieldDoesNotExist:
-            return self.model.objects.all()
-        except Exception as e:
-            print(str(e))
-            return self.model.objects.none()
+        # if request.user.is_superuser or not hasattr(self.model, 'can_read'):
+        #     return self.model.objects.all()
+
+        # try:
+        #     can_view_filter = [obj.id for obj in self.model.objects.all() if obj.can_read(request.user)]
+        #     return self.model.objects.filter(id__in=can_view_filter)
+        # except FieldDoesNotExist:
+        #     return self.model.objects.all()
+        # except Exception as e:
+        #     print(str(e))
+        #     return self.model.objects.none()
 
 
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
