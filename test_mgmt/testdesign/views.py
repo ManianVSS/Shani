@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups
+    compare_fields_filter_lookups, exact_fields_filter_lookups, DjangoObjectPermissionsOrAnonReadOnly
 from .models import Attachment, Tag, TestCaseCategory, TestCase
 from .serializers import AttachmentSerializer, TagSerializer, TestCaseCategorySerializer, TestCaseSerializer
 
@@ -9,7 +9,7 @@ from .serializers import AttachmentSerializer, TagSerializer, TestCaseCategorySe
 class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -24,7 +24,7 @@ class AttachmentViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -41,7 +41,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class TestCaseCategoryViewSet(viewsets.ModelViewSet):
     queryset = TestCaseCategory.objects.all()
     serializer_class = TestCaseCategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'parent', 'org_group', 'published', ]
     ordering = default_ordering
@@ -60,7 +60,7 @@ class TestCaseCategoryViewSet(viewsets.ModelViewSet):
 class TestCaseViewSet(viewsets.ModelViewSet):
     queryset = TestCase.objects.all()
     serializer_class = TestCaseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'type', 'external_id', 'org_group', 'published', ]
     ordering = default_ordering

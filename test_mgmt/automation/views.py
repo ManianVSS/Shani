@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups
+    compare_fields_filter_lookups, exact_fields_filter_lookups, DjangoObjectPermissionsOrAnonReadOnly
 from .models import Step, Attachment, Tag
 from .serializers import StepSerializer, AttachmentSerializer, TagSerializer
 
@@ -9,7 +9,7 @@ from .serializers import StepSerializer, AttachmentSerializer, TagSerializer
 class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -24,7 +24,7 @@ class AttachmentViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -41,7 +41,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class StepViewSet(viewsets.ModelViewSet):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'feature', 'org_group', 'published', 'name', 'expected_results', 'eta', 'tags',
                        'test_design_owner', 'test_design_status', 'automation_owner', 'automation_code_reference',

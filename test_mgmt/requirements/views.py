@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups
+    compare_fields_filter_lookups, exact_fields_filter_lookups, DjangoObjectPermissionsOrAnonReadOnly
 from .models import Attachment, Tag, FeatureCategory, Feature, Requirement, UseCase
 from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
     RequirementSerializer, UseCaseSerializer
@@ -10,7 +10,7 @@ from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySer
 class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -25,7 +25,7 @@ class AttachmentViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -42,7 +42,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class FeatureCategoryViewSet(viewsets.ModelViewSet):
     queryset = FeatureCategory.objects.all()
     serializer_class = FeatureCategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'parent', 'org_group', 'published', ]
     ordering = default_ordering
@@ -62,7 +62,7 @@ class FeatureCategoryViewSet(viewsets.ModelViewSet):
 class FeatureViewSet(viewsets.ModelViewSet):
     queryset = Feature.objects.all()
     serializer_class = FeatureSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'published', ]
     ordering = default_ordering
@@ -83,7 +83,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
 class UseCaseViewSet(viewsets.ModelViewSet):
     queryset = UseCase.objects.all()
     serializer_class = UseCaseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'weight', 'consumer_score',
                        'serviceability_score', 'test_confidence', 'development_confidence', 'org_group', 'published', ]
@@ -109,7 +109,7 @@ class UseCaseViewSet(viewsets.ModelViewSet):
 class RequirementViewSet(viewsets.ModelViewSet):
     queryset = Requirement.objects.all()
     serializer_class = RequirementSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering

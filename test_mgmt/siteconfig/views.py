@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups
+    compare_fields_filter_lookups, exact_fields_filter_lookups, DjangoObjectPermissionsOrAnonReadOnly
 from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
     CategorySerializer
@@ -14,7 +14,7 @@ from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSeri
 class DisplayItemViewSet(viewsets.ModelViewSet):
     queryset = DisplayItem.objects.all()
     serializer_class = DisplayItemSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['id', 'sort_order', 'name']
@@ -32,7 +32,7 @@ class DisplayItemViewSet(viewsets.ModelViewSet):
 class PageViewSet(viewsets.ModelViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']
@@ -50,7 +50,7 @@ class PageViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']
@@ -68,7 +68,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class CatalogViewSet(viewsets.ModelViewSet):
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']
@@ -86,7 +86,7 @@ class CatalogViewSet(viewsets.ModelViewSet):
 class SiteSettingsViewSet(viewsets.ModelViewSet):
     queryset = SiteSettings.objects.all()
     serializer_class = SiteSettingsSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'email', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']

@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, date_fields_filter_lookups, exact_fields_filter_lookups
+    compare_fields_filter_lookups, date_fields_filter_lookups, exact_fields_filter_lookups, \
+    DjangoObjectPermissionsOrAnonReadOnly
 from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feedback
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EpicSerializer, FeatureSerializer, \
     SprintSerializer, StorySerializer, FeedbackSerializer
@@ -10,7 +11,7 @@ from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer,
 class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -25,7 +26,7 @@ class AttachmentViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -42,7 +43,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class ReleaseViewSet(viewsets.ModelViewSet):
     queryset = Release.objects.all()
     serializer_class = ReleaseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -58,7 +59,7 @@ class ReleaseViewSet(viewsets.ModelViewSet):
 class EpicViewSet(viewsets.ModelViewSet):
     queryset = Epic.objects.all()
     serializer_class = EpicSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'release', 'org_group', 'published', ]
     ordering = default_ordering
@@ -77,7 +78,7 @@ class EpicViewSet(viewsets.ModelViewSet):
 class FeatureViewSet(viewsets.ModelViewSet):
     queryset = Feature.objects.all()
     serializer_class = FeatureSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'epic', 'org_group', 'published', ]
     ordering = default_ordering
@@ -96,7 +97,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
 class SprintViewSet(viewsets.ModelViewSet):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', 'published', ]
     ordering = default_ordering
@@ -115,7 +116,7 @@ class SprintViewSet(viewsets.ModelViewSet):
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'rank', 'sprint', 'feature', 'org_group', 'published', ]
     ordering = default_ordering
@@ -137,7 +138,7 @@ class StoryViewSet(viewsets.ModelViewSet):
 class FeedbackViewSet(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'description', 'release', ]
     ordering = default_ordering

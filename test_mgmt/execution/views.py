@@ -4,7 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    datetime_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups
+    datetime_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
+    DjangoObjectPermissionsOrAnonReadOnly
 from . import ipte_util
 from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
@@ -14,7 +15,7 @@ from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer,
 class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -29,7 +30,7 @@ class AttachmentViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -46,7 +47,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class ReleaseViewSet(viewsets.ModelViewSet):
     queryset = Release.objects.all()
     serializer_class = ReleaseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -62,7 +63,7 @@ class ReleaseViewSet(viewsets.ModelViewSet):
 class DefectViewSet(viewsets.ModelViewSet):
     queryset = Defect.objects.all()
     serializer_class = DefectSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', 'org_group', 'published', ]
     ordering = default_ordering
@@ -82,7 +83,7 @@ class DefectViewSet(viewsets.ModelViewSet):
 class RunViewSet(viewsets.ModelViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'time', 'org_group', 'published', ]
     ordering = default_ordering
@@ -99,7 +100,7 @@ class RunViewSet(viewsets.ModelViewSet):
 class ExecutionRecordViewSet(viewsets.ModelViewSet):
     queryset = ExecutionRecord.objects.all()
     serializer_class = ExecutionRecordSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'time', 'org_group',
                        'published', ]
@@ -123,7 +124,7 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
 class ReliabilityRunViewSet(viewsets.ModelViewSet):
     queryset = ReliabilityRun.objects.all()
     serializer_class = ReliabilityRunSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                        'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
@@ -147,9 +148,9 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
 
 
 class EnvironmentViewSet(viewsets.ModelViewSet):
-    queryset = Environment.objects.all()
+    queryset = Environment.objects.filter(published=True)
     serializer_class = EnvironmentSerializer
-    permission_classes = [permissions.DjangoObjectPermissions]
+    permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', 'published', ]
     ordering = default_ordering
@@ -188,7 +189,7 @@ def get_ipte_for_iterations(request):
 
 
 @api_view(['GET'])
-# @permission_classes([permissions.IsAuthenticatedOrReadOnly])
+# @permission_classes([DjangoObjectPermissionsOrAnonReadOnly])
 def get_iterations_for_ipte(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions
 from rest_framework import viewsets
+from rest_framework.permissions import DjangoObjectPermissions
 
 from .models import Attachment, OrgGroup
 from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer
@@ -16,6 +17,14 @@ datetime_fields_filter_lookups = ['exact', 'lte', 'gte', 'range', ]
 # time, hour, minute, second
 default_search_fields = ['name', 'summary', 'description', ]
 default_ordering = ['id', ]
+
+
+class DjangoObjectPermissionsOrAnonReadOnly(DjangoObjectPermissions):
+    """
+    Similar to DjangoObjectPermissions, except that anonymous users are
+    allowed read-only access.
+    """
+    authenticated_users_only = False
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -56,7 +65,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 class OrgGroupViewSet(viewsets.ModelViewSet):
     queryset = OrgGroup.objects.all()
     serializer_class = OrgGroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'published', ]
     ordering = default_ordering
@@ -74,7 +83,7 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
 class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
