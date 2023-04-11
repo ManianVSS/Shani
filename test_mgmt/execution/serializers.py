@@ -53,4 +53,4 @@ class EnvironmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Environment
         fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'details_file', 'attachments',
-                  'current_release', 'org_group', 'published', ]
+                  'current_release', 'properties', 'org_group', 'published', ]
