@@ -1,9 +1,9 @@
 import sys
 
 from django.contrib import admin
+from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
-from import_export import resources
 
 from api.admin import CustomModelAdmin
 from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
@@ -34,61 +34,46 @@ if 'runserver' in sys.argv:
     reload_admin_site_name(None)
 
 
-class DisplayItemResource(resources.ModelResource):
-    class Meta:
-        model = DisplayItem
-
-
+@admin.register(DisplayItem)
 class DisplayItemAdmin(CustomModelAdmin):
-    resource_class = DisplayItemResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', 'link']
 
 
-admin.site.register(DisplayItem, DisplayItemAdmin)
-
-
-class PageResource(resources.ModelResource):
-    class Meta:
-        model = Page
-
-
+@admin.register(Page)
 class PageAdmin(CustomModelAdmin):
-    resource_class = PageResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', 'iframe_link']
 
 
-admin.site.register(Page, PageAdmin)
-
-
-class CategoryResource(resources.ModelResource):
-    class Meta:
-        model = Category
-
-
+@admin.register(Category)
 class CategoryAdmin(CustomModelAdmin):
-    resource_class = CategoryResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
 
 
-admin.site.register(Category, CategoryAdmin)
-
-
-class CatalogResource(resources.ModelResource):
-    class Meta:
-        model = Catalog
-
-
+@admin.register(Catalog)
 class CatalogAdmin(CustomModelAdmin):
-    resource_class = CatalogResource
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
 
 
-admin.site.register(Catalog, CatalogAdmin)
-
-
-class SiteSettingsResource(resources.ModelResource):
-    class Meta:
-        model = SiteSettings
-
-
+@admin.register(SiteSettings)
 class SiteSettingsAdmin(CustomModelAdmin):
-    resource_class = SiteSettingsResource
-
-
-admin.site.register(SiteSettings, SiteSettingsAdmin)
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', 'email', ]

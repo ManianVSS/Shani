@@ -3,7 +3,6 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
-from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
@@ -95,32 +94,18 @@ class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
 admin.site.unregister(Group)
 admin.site.register(Group, CustomGroupAdmin)
 
-#TODO: Use @admin.register notation
-class AttachmentResource(resources.ModelResource):
-    class Meta:
-        model = Attachment
 
-
+@admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
-    resource_class = AttachmentResource
-    search_fields = ['name', ' file', ]
-
+    search_fields = ['name', 'file', ]
     list_filter = (
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
 
-admin.site.register(Attachment, AttachmentAdmin)
-
-
-class OrgGroupResource(resources.ModelResource):
-    class Meta:
-        model = OrgGroup
-
-
+@admin.register(OrgGroup)
 class OrgGroupAdmin(CustomModelAdmin):
-    resource_class = OrgGroupResource
     list_filter = (
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
@@ -128,8 +113,4 @@ class OrgGroupAdmin(CustomModelAdmin):
         ('members', RelatedOnlyFieldListFilter),
         ('guests', RelatedOnlyFieldListFilter),
     )
-
     search_fields = ['name', 'summary', 'description', ]
-
-
-admin.site.register(OrgGroup, OrgGroupAdmin)
