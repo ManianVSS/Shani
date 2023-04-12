@@ -95,7 +95,7 @@ class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
 admin.site.unregister(Group)
 admin.site.register(Group, CustomGroupAdmin)
 
-
+#TODO: Use @admin.register notation
 class AttachmentResource(resources.ModelResource):
     class Meta:
         model = Attachment

@@ -117,7 +117,7 @@ class Environment(OrgModel):
     purpose = models.CharField(max_length=1024, null=True, blank=True)
     details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
-    current_release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='environments',
+    current_release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='environments',
                                         verbose_name='currently release')
     properties = models.JSONField(null=True, blank=True)
 
