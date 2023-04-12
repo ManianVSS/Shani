@@ -28,30 +28,27 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Added for Django Rest Framework
-    'rest_framework',
+    'rest_framework',  # Added for Django Rest Framework
     'rest_framework.authtoken',
     'rest_framework_swagger',
 
-    # Added for filtering
-    'django_filters',
+    'django_filters',  # Added for filtering
 
     # 'corsheaders',
 
-    # Import export
-    'import_export',
+    'import_export',  # Import export
 
-    # Advanced filters
-    # 'advanced_filters',
+    # 'advanced_filters',  # Advanced filters
 
     # 'guardian',
 
     'massadmin',
 
-    # Reverse proxy config
-    # 'revproxy',
+    # 'revproxy', # Reverse proxy config
 
-    'api',
+    'dbbackup',  # django-dbbackup
+
+    'api',  # Project modules
     'siteconfig',
     'requirements',
     'workitems',
