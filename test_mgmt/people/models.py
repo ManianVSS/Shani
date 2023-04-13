@@ -6,10 +6,10 @@ from api.models import OrgModel, OrgGroup, BaseModel
 
 
 class Attachment(OrgModel):
-    name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='execution', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='people_attachments')
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to='execution', blank=False, null=False)
 
 
 class Site(OrgModel):

@@ -7,19 +7,20 @@ from requirements.models import Feature
 
 
 class Attachment(OrgModel):
-    name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='automation', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='automation_attachments')
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to='automation', blank=False, null=False)
 
 
 class Tag(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='automation_tags')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='automation_tags')
 
+#TODO: Add Automation Feature and Scenario
 
 class Step(OrgModel):
     # The status of a step's test design

@@ -5,55 +5,53 @@ from test_mgmt import settings
 
 
 class Attachment(OrgModel):
-    name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='workitem_attachments')
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
 
 
 class Tag(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='workitem_tags')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='workitem_tags')
 
 
 class Release(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='work_item_releases')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_releases')
 
 
 class Epic(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='work_item_epics')
+    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='epic_attachments', blank=True)
 
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_epics')
-
 
 class Feature(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='work_item_features')
+    epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
 
-    epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_features')
-
 
 class Sprint(OrgModel):
-    number = models.IntegerField()
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='sprints')
+    number = models.IntegerField()
     start_date = models.DateField(verbose_name='start date')
     end_date = models.DateField(verbose_name='end date')
 
@@ -65,14 +63,14 @@ class Story(OrgModel):
     class Meta:
         verbose_name_plural = "stories"
 
+    sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
+    feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='story_attachments', blank=True)
     rank = models.IntegerField()
-    sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
-    feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
 
 
 class Feedback(OrgModel):

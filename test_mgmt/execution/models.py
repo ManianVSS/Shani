@@ -6,44 +6,42 @@ from execution import ipte_util
 
 
 class Attachment(OrgModel):
-    name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='execution', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_attachments')
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to='execution', blank=False, null=False)
 
 
 class Tag(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='execution_tags')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='execution_tags')
 
 
 class Release(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='execution_releases')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='execution_releases')
 
 
 class Defect(OrgModel):
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='defects')
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True)
-
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='defects')
     details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='defect_attachments', blank=True)
 
 
 class Run(OrgModel):
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
     build = models.CharField(max_length=256)
     name = models.CharField(max_length=256, unique=True)
     time = models.DateTimeField(auto_now_add=True)
-
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='runs')
 
 
 class ExecutionRecordStatus(models.TextChoices):
@@ -117,7 +115,8 @@ class Environment(OrgModel):
     purpose = models.CharField(max_length=1024, null=True, blank=True)
     details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
-    current_release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='environments',
+    current_release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
+                                        related_name='environments',
                                         verbose_name='currently release')
     properties = models.JSONField(null=True, blank=True)
 

@@ -77,7 +77,7 @@ class OrgModel(BaseModel):
 
     def can_read(self, user):
         return self.org_group.is_owner(user) or self.org_group.is_member(user) or (
-                    self.published and self.org_group.is_guest(user))
+                self.published and self.org_group.is_guest(user))
 
     def can_modify(self, user):
         return self.org_group.is_owner(user) or self.org_group.is_member(user)
@@ -112,7 +112,7 @@ class ReviewStatus(models.TextChoices):
 
 
 class Attachment(OrgModel):
-    name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='api_attachments')
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)

@@ -4,43 +4,47 @@ from api.models import OrgModel, OrgGroup, ReviewStatus
 
 
 class Attachment(OrgModel):
-    name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='requirements', blank=False, null=False)
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirement_attachments')
+    name = models.CharField(max_length=256)
+    file = models.FileField(upload_to='requirements', blank=False, null=False)
 
 
 class Tag(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='requirement_tags')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='requirement_tags')
 
 
 class FeatureCategory(OrgModel):
     class Meta:
         verbose_name_plural = "feature categories"
 
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='feature_categories')
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='sub_categories')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
-    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
-                               related_name='sub_categories')
+
     tags = models.ManyToManyField(Tag, related_name='feature_categories', blank=True)
     details_file = models.FileField(upload_to='requirements', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='feature_category_attachments', blank=True)
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='feature_categories')
 
 
 class Feature(OrgModel):
     # The status of a step's test design
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='requirement_features')
     parent = models.ForeignKey(FeatureCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='features', verbose_name='feature category')
+    name = models.CharField(max_length=256, unique=True)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+
     description = models.TextField(null=True, blank=True)
 
     status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
@@ -50,9 +54,6 @@ class Feature(OrgModel):
 
     details_file = models.FileField(upload_to='requirements', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
-
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='requirement_features')
 
 
 class UseCase(OrgModel):
@@ -83,3 +84,5 @@ class Requirement(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+
+# TODO: Add user segment with use-case variations
