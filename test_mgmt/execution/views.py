@@ -112,7 +112,7 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
         'status': id_fields_filter_lookups,
         'acceptance_test': exact_fields_filter_lookups,
         'automated': exact_fields_filter_lookups,
-        'defects': id_fields_filter_lookups,
+        # 'defects': id_fields_filter_lookups,
         'run': id_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
         # 'testcase': id_fields_filter_lookups,

@@ -17,6 +17,7 @@ DEBUG = True  # bool(os.getenv("DEBUG", 'True'))
 
 ALLOWED_HOSTS = ["*"]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+# APPEND_SLASH = False
 
 # Application definition
 
