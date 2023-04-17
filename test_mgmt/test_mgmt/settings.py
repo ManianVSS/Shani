@@ -35,7 +35,7 @@ INSTALLED_APPS = [
 
     'django_filters',  # Added for filtering
 
-    # 'corsheaders',
+    'corsheaders',
 
     'import_export',  # Import export
 
@@ -60,9 +60,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'api.middlewares.CustomCorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'api.middlewares.CustomCorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -199,31 +200,31 @@ REST_FRAMEWORK = {
 
 }
 
-# CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOW_HEADERS = [
-#     "accept",
-#     "accept-encoding",
-#     "authorization",
-#     "content-type",
-#     "dnt",
-#     "origin",
-#     "user-agent",
-#     "x-csrftoken",
-#     "x-requested-with",
-#     "access-control-allow-origin",
-#     "access-control-allow-methods",
-# ]
-#
-# CORS_ALLOW_METHODS = [
-#     'DELETE',
-#     'GET',
-#     'OPTIONS',
-#     'PATCH',
-#     'POST',
-#     'PUT',
-# ]
-# # CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', 'http://127.0.0.1:3000']
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "access-control-allow-origin",
+    "access-control-allow-methods",
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+# CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', 'http://127.0.0.1:3000']
 
 
 # ATTACHMENT_DIR = "./attachments"

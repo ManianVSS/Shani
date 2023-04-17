@@ -7,13 +7,15 @@ import {
   LogOutIcon,
   Button,
 } from "evergreen-ui";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { globalNavData } from "../../state/globalNavData";
 import { useNavigate } from "react-router-dom";
 import { axiosClient } from "../../hooks/api";
 import { IconFileAnalytics, IconHome } from "@tabler/icons";
+import { colorScheme } from "../../state/mode";
 
 const Home = () => {
+  const currentTheme = useRecoilValue(colorScheme);
   const navigateToFirstItem = () => {
     let navData = [];
     axiosClient.get("site_details").then((respose) => {
@@ -36,6 +38,7 @@ const Home = () => {
   const navigate = useNavigate();
   useEffect(() => {
     navigateToFirstItem();
+    window.localStorage.setItem("testCenterTheme", currentTheme)
   }, []);
   return <div>Home</div>;
 };

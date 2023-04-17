@@ -20,10 +20,10 @@ import { axiosClientForCapacity } from "../../capacityApi";
 
 const Leaves = () => {
   const alert = useAlert();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [startLeaveDate, setStartLeaveDate] = useState();
-  const [endLeaveDate, setEndLeaveDate] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [startLeaveDate, setStartLeaveDate] = useState(new Date());
+  const [endLeaveDate, setEndLeaveDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [userData, setUserData] = useRecoilState(authState);
   const [engineerData, setEngineerData] = useState([]);
@@ -205,7 +205,7 @@ const Leaves = () => {
       <Heading heading={"LEAVES DATA"} />
       <Button
         variant="success"
-        style={{ marginLeft: "75%" }}
+        style={{ marginLeft: "75%", background:"#404040", color:"white" }}
         onClick={handleShow}
       >
         +
@@ -272,6 +272,7 @@ const Leaves = () => {
           </Row>
           <div className="leave-buttons">
             <Button
+            style={{background:"#404040", color:"white"}}
               variant="primary"
               onClick={() => {
                 setShow(true);

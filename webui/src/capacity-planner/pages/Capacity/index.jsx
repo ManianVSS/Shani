@@ -16,8 +16,8 @@ import { useAlert } from "react-alert";
 const Capacity = () => {
   const alert = useAlert();
   const [userData, setUserData] = useRecoilState(authState);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [orgData, setOrgData] = useState([]);
   const [org, setOrg] = useState("Choose...");

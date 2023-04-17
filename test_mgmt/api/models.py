@@ -75,32 +75,33 @@ class OrgModel(BaseModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group')
 
+    
     def can_read(self, user):
-        return self.org_group.is_owner(user) or self.org_group.is_member(user) or (
+        return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(user) or (
                 self.published and self.org_group.is_guest(user))
 
     def can_modify(self, user):
-        return self.org_group.is_owner(user) or self.org_group.is_member(user)
+        return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(user)
 
     def can_delete(self, user):
-        return self.org_group.is_owner(user)
+        return (self.org_group is None) or self.org_group.is_owner(user)
 
     def is_owner(self, user):
         if self.org_group is None:
             return False
-        is_owner = self.org_group.is_owner(user)
+        is_owner = (self.org_group is None) or self.org_group.is_owner(user)
         return is_owner
 
     def is_member(self, user):
         if self.org_group is None:
             return False
-        is_member = self.org_group.is_member(user)
+        is_member = (self.org_group is None) or self.org_group.is_member(user)
         return is_member
 
     def is_guest(self, user):
         if self.org_group is None:
             return False
-        is_guest = self.org_group.is_guest(user)
+        is_guest = (self.org_group is None) or self.org_group.is_guest(user)
         return is_guest
 
 

@@ -12,9 +12,9 @@ import { useAlert } from "react-alert";
 
 const EngineerAvailability = () => {
   const alert = useAlert();
-  const [startDate, setStartDate] = useState();
+  const [startDate, setStartDate] = useState(new Date());
   const [userData, setUserData] = useRecoilState(authState);
-  const [endDate, setEndDate] = useState();
+  const [endDate, setEndDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
   const [engineer, setEngineer] = useState("Choose...");

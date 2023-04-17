@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const colorScheme = atom({
   key: "colorScheme",
-  default: "dark",
+  default: "light",
 });
 
 export const sideBar = atom({
