@@ -58,7 +58,7 @@ const Leaves = () => {
           setShow(true);
         });
     } else {
-      alert.error("Please choose valid engineer");
+      alert.error("Please choose valid engineer to load the data");
     }
   };
   // const showAllLeaveDetails = () => {
@@ -92,6 +92,7 @@ const Leaves = () => {
         }
       )
       .then((response) => {
+        alert.succes("Leave Applied");
         showDetails();
       });
   };
@@ -186,11 +187,12 @@ const Leaves = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" style={{background:"#404040", color:"white"}} onClick={handleClose}>
             Cancel
           </Button>
           <Button
             variant="primary"
+            style={{background:"#404040", color:"white"}}
             onClick={() => {
               handleClose();
               applyLeave();
@@ -282,7 +284,7 @@ const Leaves = () => {
         </Form>
         {show ? (
           <>
-            <Table bordered style={{ marginTop: "40px" }}>
+            <Table bordered className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
               <thead>
                 <tr>
                   <th>Engineer Name</th>

@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { axiosClientForCapacity } from "../../capacityApi";
+import { axiosClientForCapacity, axiosClientForLogin } from "../../capacityApi";
 
 function Login() {
   const alert = useAlert();
@@ -22,7 +22,7 @@ function Login() {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
   const userLogin = (userName, password) => {
-    axiosClientForCapacity
+    axiosClientForLogin
       .post("/auth/jwt/login", {
         username: userName,
         password: password,
@@ -65,8 +65,8 @@ function Login() {
   }, [auth]);
 
   return (
-    <MDBContainer className="my-5">
-      <MDBCard>
+    <MDBContainer className="my-5" >
+      <MDBCard >
         <MDBRow className="g-0">
           <MDBCol md="6">
             <MDBCardImage
@@ -76,8 +76,8 @@ function Login() {
             />
           </MDBCol>
 
-          <MDBCol md="6">
-            <MDBCardBody className="d-flex flex-column">
+          <MDBCol md="6" style={{ background: "#404040" }}>
+            <MDBCardBody className="d-flex flex-column" >
               <div className="d-flex flex-row mt-2">
                 <MDBIcon
                   fas
@@ -114,13 +114,24 @@ function Login() {
                     {...register("password")}
                   />
                 </Form.Group>
-                <Button
-                  variant="primary"
-                  onClick={handleSubmit(handleRegistration)}
-                  type="submit"
-                >
-                  Submit
-                </Button>
+                <div style={{ justifyContent: "space-between", display: "flex" }}>
+                  <Button
+                    variant="primary"
+                    style={{background:"#404040", color:"white"}}
+                    onClick={handleSubmit(handleRegistration)}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    variant="success"
+                    style={{background:"#404040", color:"white"}}
+                    onClick={() => { navigate(`/`) }}
+                    type="submit"
+                  >
+                    Return to Main Dashboard
+                  </Button>
+                </div>
               </form>
 
               {/* <a className="small text-muted" href="#!">

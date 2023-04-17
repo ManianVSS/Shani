@@ -8,34 +8,42 @@ import Heading from "../../components/Heading";
 import { useRecoilState } from "recoil";
 import { authState } from "../../../state/authData";
 import { axiosClientForCapacity } from "../../capacityApi";
+import { useAlert } from "react-alert";
 
 const EngineerAvailability = () => {
+  const alert = useAlert();
   const [startDate, setStartDate] = useState();
   const [userData, setUserData] = useRecoilState(authState);
   const [endDate, setEndDate] = useState();
   const [show, setShow] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
-  const [engineer, setEngineer] = useState(null);
+  const [engineer, setEngineer] = useState("Choose...");
   const [engineerAvailabilityData, setEngineerAvailabilityData] = useState({});
   const showDetails = () => {
-    axiosClientForCapacity
-      .get(
-        "/engineer_capacity_view?engineer=" +
+    setShow(false);
+    if (engineer !== "Choose...") {
+      axiosClientForCapacity
+        .get(
+          "/engineer_capacity_view?engineer=" +
           engineer +
           "&from=" +
           formatDate(startDate) +
           "&to=" +
           formatDate(endDate),
-        {
-          headers: {
-            authorization:
-              "Bearer " + window.localStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        setEngineerAvailabilityData(response.data);
-      });
+          {
+            headers: {
+              authorization:
+                "Bearer " + window.localStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((response) => {
+          setEngineerAvailabilityData(response.data);
+          setShow(true);
+        });
+    } else {
+      alert.error("Please choose valid engineer");
+    }
   };
   function formatDate(date) {
     var d = new Date(date),
@@ -117,6 +125,7 @@ const EngineerAvailability = () => {
           </Row>
           <Button
             variant="primary"
+            style={{ background: "#404040", color: "white" }}
             onClick={() => {
               setShow(true);
               showDetails();
@@ -127,7 +136,7 @@ const EngineerAvailability = () => {
         </Form>
         {show ? (
           <>
-            <Table bordered style={{ marginTop: "40px" }}>
+            <Table bordered className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
               <thead>
                 <tr>
                   <th>Engineer Name</th>

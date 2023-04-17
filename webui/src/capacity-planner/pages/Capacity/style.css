@@ -15,3 +15,11 @@
   margin-right: 5px;
   border: 1px solid #bfbfbf;
 }
+
+.dark-table{
+  margin-top: 40px;
+  color: white !important;
+}
+.light-table{
+  margin-top: 40px;
+}

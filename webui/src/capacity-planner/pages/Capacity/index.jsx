@@ -10,35 +10,43 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { useRecoilState } from "recoil";
 import { authState } from "../../../state/authData";
-import { axiosClientForCapacity } from "../../capacityApi";
+import { axiosClientForCapacity, axiosClientForLogin } from "../../capacityApi";
+import { useAlert } from "react-alert";
 
 const Capacity = () => {
+  const alert = useAlert();
   const [userData, setUserData] = useRecoilState(authState);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [show, setShow] = useState(false);
   const [orgData, setOrgData] = useState([]);
-  const [org, setOrg] = useState(null);
+  const [org, setOrg] = useState("Choose...");
   const [capacityData, setCapacityData] = useState({});
   const showDetails = () => {
-    axiosClientForCapacity
-      .get(
-        "/capacity_view?org_group=" +
+    setShow(false);
+    if (org !== "Choose...") {
+      axiosClientForCapacity
+        .get(
+          "/capacity_view?org_group=" +
           org +
           "&from=" +
           formatDate(startDate) +
           "&to=" +
           formatDate(endDate),
-        {
-          headers: {
-            authorization:
-              "Bearer " + window.localStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        setCapacityData(response.data);
-      });
+          {
+            headers: {
+              authorization:
+                "Bearer " + window.localStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((response) => {
+          setCapacityData(response.data);
+          setShow(true);
+        });
+    } else {
+      alert.error("Please choose valid Org Group");
+    }
   };
   const rows = [];
   for (const key in capacityData["engineer_data"]) {
@@ -95,7 +103,7 @@ const Capacity = () => {
     );
   }
   useEffect(() => {
-    axiosClientForCapacity.get("/org_groups/").then((response) => {
+    axiosClientForLogin.get("/org_groups/").then((response) => {
       setOrgData(response.data.results);
     });
     setUserData({
@@ -175,14 +183,10 @@ const Capacity = () => {
             </Form.Group>
           </Row>
           <Button
-            variant="primary"
+            variant="info"
+            style={{ background: "#404040", color: "white" }}
             onClick={() => {
-              if (org !== "Choose...") {
-                setShow(true);
-                showDetails();
-              } else {
-                setShow(false);
-              }
+              showDetails();
             }}
           >
             Fetch Data
@@ -190,7 +194,7 @@ const Capacity = () => {
         </Form>
         {show ? (
           <>
-            <Table bordered size="sm" style={{ marginTop: "40px" }}>
+            <Table bordered size="sm" className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
               <tbody>
                 <tr>
                   <td>Total Work Days</td>
@@ -202,7 +206,7 @@ const Capacity = () => {
                 </tr>
               </tbody>
             </Table>
-            <Table bordered style={{ marginTop: "40px" }}>
+            <Table bordered className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
               <thead>
                 <tr>
                   <th>Engineer Name</th>

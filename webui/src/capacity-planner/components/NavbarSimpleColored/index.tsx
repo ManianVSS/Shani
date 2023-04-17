@@ -6,10 +6,12 @@ import {
   IconBook,
   IconUser,
   IconCalendar,
+  IconTruckReturn
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { authState } from "../../../state/authData";
 import { useRecoilState } from "recoil";
+import { Button } from "react-bootstrap";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -176,6 +178,15 @@ export function NavbarSimpleColored() {
           >
             <IconLogout className={classes.linkIcon} stroke={1.5} />
             <span>Logout</span>
+          </a>
+
+          <a
+            href="#"
+            className={classes.link}
+            onClick={() => { navigate(`/`) }}
+          >
+            <IconTruckReturn className={classes.linkIcon} stroke={1.5} />
+            <span>Return to Main Dashboard</span>
           </a>
         </Navbar.Section>
       </Navbar>

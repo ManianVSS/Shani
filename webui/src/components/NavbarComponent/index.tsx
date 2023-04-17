@@ -26,6 +26,7 @@ import {
   AddHomeOutlined,
   AdminPanelSettings,
   Settings,
+  ReduceCapacity
 } from "@mui/icons-material";
 import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
@@ -45,11 +46,9 @@ const useStyles = createStyles((theme) => ({
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    borderBottom: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
   },
-
   links: {
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
@@ -63,9 +62,8 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
-    borderTop: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderTop: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
   },
 }));
 
@@ -94,44 +92,6 @@ export function NavbarNested() {
 
   const navigate = useNavigate();
   const { classes } = useStyles();
-  // let mockdata = [
-  //   { label: "Home", icon: IconHome, links: [], link: "/" },
-  //   {
-  //     label: "Category 1",
-  //     icon: IconNotes,
-  //     initiallyOpened: false,
-  //     links: [
-  //       { label: "Sub Category 1", link: "/category2" },
-  //       { label: "Sub Category 2", link: "/" },
-  //       { label: "Sub Category 3", link: "/" },
-  //       { label: "Sub Category 4", link: "/" },
-  //     ],
-  //     link: "/",
-  //   },
-  //   {
-  //     label: "Category 3",
-  //     icon: IconCalendarStats,
-  //     links: [
-  //       { label: "Upcoming releases", link: "/" },
-  //       { label: "Previous releases", link: "/" },
-  //       { label: "Releases schedule", link: "/" },
-  //     ],
-  //     link: "/",
-  //   },
-  //   { label: "Reports", icon: IconPresentationAnalytics, link: "/dashboard" },
-  //   { label: "Documentation", icon: IconFileAnalytics, link: "/documentation" },
-  //   { label: "Settings", icon: IconAdjustments, link: "/" },
-  //   {
-  //     label: "Security",
-  //     icon: IconLock,
-  //     links: [
-  //       { label: "Enable 2FA", link: "/" },
-  //       //   { label: "Change password", link: "/" },
-  //       { label: "Recovery codes", link: "/" },
-  //     ],
-  //     link: "/",
-  //   },
-  // ];
   let data = catalogData ?? [{ label: "Home", icon: IconHome, link: "/" }];
   const links = data[0]?.categories?.map((item) => (
     <LinksGroup {...item} key={item.label} />
@@ -158,32 +118,12 @@ export function NavbarNested() {
         <Group position="apart">
           {/* <Logo width={120} /> */}
 
-          {/* <b>Dashboard</b> */}
-          {/* <Dropdown>
-            <Dropdown.Toggle
-              variant={isDarkMode ? "secondary" : "info"}
-              id="dropdown-basic"
-            >
-              {catalogMenu[0]?.name}
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu variant="dark">
-              {catalogMenu.map((item) => {
-                return (
-                  <Dropdown.Item href={item.link} value={item.id}>
-                    {item.name}
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown> */}
-
           <Form.Select
             aria-label=""
             onChange={onChange}
-            // onClick={() => {
-            //   navigate(0);
-            // }}
+          // onClick={() => {
+          //   navigate(0);
+          // }}
           >
             {catalogMenu.map((item) => {
               return (
@@ -228,6 +168,17 @@ export function NavbarNested() {
             <Popover id={`popover-positioned-${"top"}`}>
               <Popover.Body style={{ margin: 0, padding: 0 }}>
                 <Menu>
+                  <Menu.Group>
+                    <Menu.Item
+                      icon={ReduceCapacity}
+                      style={{ margin: 0 }}
+                      onClick={() => {
+                        navigate(`/capacity-planner/`)
+                      }}
+                    >
+                      Capacity Planner
+                    </Menu.Item>
+                  </Menu.Group>
                   <Menu.Group>
                     <Menu.Item
                       icon={AdminPanelSettings}
