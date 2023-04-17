@@ -5,16 +5,16 @@ from rest_framework.response import Response
 
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups, DjangoObjectPermissionsOrAnonReadOnly
+    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
     CategorySerializer
 
 
-class DisplayItemViewSet(viewsets.ModelViewSet):
+class DisplayItemViewSet(ShaniOrgGroupViewSet):
     queryset = DisplayItem.objects.all()
     serializer_class = DisplayItemSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['id', 'sort_order', 'name']
@@ -29,10 +29,10 @@ class DisplayItemViewSet(viewsets.ModelViewSet):
     }
 
 
-class PageViewSet(viewsets.ModelViewSet):
+class PageViewSet(ShaniOrgGroupViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']
@@ -47,10 +47,10 @@ class PageViewSet(viewsets.ModelViewSet):
     }
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(ShaniOrgGroupViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']
@@ -65,10 +65,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
     }
 
 
-class CatalogViewSet(viewsets.ModelViewSet):
+class CatalogViewSet(ShaniOrgGroupViewSet):
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']
@@ -83,10 +83,10 @@ class CatalogViewSet(viewsets.ModelViewSet):
     }
 
 
-class SiteSettingsViewSet(viewsets.ModelViewSet):
+class SiteSettingsViewSet(ShaniOrgGroupViewSet):
     queryset = SiteSettings.objects.all()
     serializer_class = SiteSettingsSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'sort_order', 'name', 'summary', 'email', 'org_group', 'published', ]
     ordering = ['sort_order', 'id', 'name']

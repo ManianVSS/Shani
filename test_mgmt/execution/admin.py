@@ -56,11 +56,13 @@ class RunAdmin(CustomModelAdmin):
 
 @admin.register(ExecutionRecord)
 class ExecutionRecordAdmin(CustomModelAdmin):
+    # readonly_fields = ('id', 'start_time', 'end_time',)
     list_filter = (
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'status',
-        'time',
+        'start_time',
+        'end_time',
         'acceptance_test',
         'automated',
         ('run', RelatedOnlyFieldListFilter),

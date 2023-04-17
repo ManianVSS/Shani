@@ -38,7 +38,7 @@ class ExecutionRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExecutionRecord
         fields = ['id', 'name', 'summary', 'description', 'status', 'acceptance_test', 'automated', 'defects', 'run',
-                  'time', 'org_group', 'published', ]
+                  'start_time', 'end_time', 'org_group', 'published', ]
 
 
 class ReliabilityRunSerializer(serializers.ModelSerializer):

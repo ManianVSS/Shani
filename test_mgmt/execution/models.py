@@ -52,9 +52,10 @@ class ExecutionRecordStatus(models.TextChoices):
 
 class ExecutionRecord(OrgModel):
     run = models.ForeignKey(Run, null=True, on_delete=models.SET_NULL, related_name='execution_records')
-    time = models.DateTimeField(auto_now_add=True)
-
     name = models.CharField(max_length=256)
+    start_time = models.DateTimeField(verbose_name='start time')
+    end_time = models.DateTimeField(verbose_name='end time')
+
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -80,8 +81,8 @@ class ReliabilityRun(OrgModel):
     build = models.CharField(max_length=256)
     name = models.CharField(max_length=256, null=True, blank=True)
 
-    start_time = models.DateTimeField(auto_now_add=True, verbose_name='start time')
-    modified_time = models.DateTimeField(auto_now=True, verbose_name='modified time')
+    start_time = models.DateTimeField(verbose_name='start time')
+    modified_time = models.DateTimeField(verbose_name='modified time')
 
     testName = models.CharField(max_length=200, verbose_name='test name')
     testEnvironmentType = models.CharField(max_length=200, verbose_name='test environment type')

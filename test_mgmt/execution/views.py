@@ -1,21 +1,21 @@
 from django.http.response import HttpResponse
-from rest_framework import viewsets, permissions, status
+from rest_framework import permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     datetime_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
-    DjangoObjectPermissionsOrAnonReadOnly
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from . import ipte_util
 from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
     ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer
 
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -27,10 +27,10 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     }
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -44,10 +44,10 @@ class TagViewSet(viewsets.ModelViewSet):
     }
 
 
-class ReleaseViewSet(viewsets.ModelViewSet):
+class ReleaseViewSet(ShaniOrgGroupViewSet):
     queryset = Release.objects.all()
     serializer_class = ReleaseSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -60,10 +60,10 @@ class ReleaseViewSet(viewsets.ModelViewSet):
     }
 
 
-class DefectViewSet(viewsets.ModelViewSet):
+class DefectViewSet(ShaniOrgGroupViewSet):
     queryset = Defect.objects.all()
     serializer_class = DefectSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', 'org_group', 'published', ]
     ordering = default_ordering
@@ -80,10 +80,10 @@ class DefectViewSet(viewsets.ModelViewSet):
     }
 
 
-class RunViewSet(viewsets.ModelViewSet):
+class RunViewSet(ShaniOrgGroupViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'time', 'org_group', 'published', ]
     ordering = default_ordering
@@ -97,12 +97,13 @@ class RunViewSet(viewsets.ModelViewSet):
     }
 
 
-class ExecutionRecordViewSet(viewsets.ModelViewSet):
+class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
     queryset = ExecutionRecord.objects.all()
     serializer_class = ExecutionRecordSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'time', 'org_group',
+    ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'start_time',
+                       'org_group',
                        'published', ]
     ordering = default_ordering
     filterset_fields = {
@@ -112,19 +113,20 @@ class ExecutionRecordViewSet(viewsets.ModelViewSet):
         'status': id_fields_filter_lookups,
         'acceptance_test': exact_fields_filter_lookups,
         'automated': exact_fields_filter_lookups,
-        # 'defects': id_fields_filter_lookups,
+        # 'defects': many_to_many_id_field_lookups,
         'run': id_fields_filter_lookups,
-        'time': datetime_fields_filter_lookups,
+        'start_time': datetime_fields_filter_lookups,
+        'end_time': datetime_fields_filter_lookups,
         # 'testcase': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
 
 
-class ReliabilityRunViewSet(viewsets.ModelViewSet):
+class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
     queryset = ReliabilityRun.objects.all()
     serializer_class = ReliabilityRunSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                        'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
@@ -147,7 +149,7 @@ class ReliabilityRunViewSet(viewsets.ModelViewSet):
     }
 
 
-class EnvironmentViewSet(viewsets.ModelViewSet):
+class EnvironmentViewSet(ShaniOrgGroupViewSet):
     queryset = Environment.objects.filter(published=True)
     serializer_class = EnvironmentSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
@@ -189,7 +191,7 @@ def get_ipte_for_iterations(request):
 
 
 @api_view(['GET'])
-# @permission_classes([DjangoObjectPermissionsOrAnonReadOnly])
+# @permission_classes([ShaniOrgGroupObjectLevelPermission])
 def get_iterations_for_ipte(request):
     if not request.method == 'GET':
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)

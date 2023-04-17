@@ -11,16 +11,26 @@ from .models import Attachment, OrgGroup
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     save_as = True
+    readonly_fields = ('id',)
+
+    # ordering = ('-id',)
 
     # search_fields = ['name', 'summary', 'description', ]
 
+    # noinspection PyProtectedMember
+    def get_list_display(self, request):
+        return [field.name for field in self.model._meta.get_fields() if not (field.many_to_many or field.one_to_many)]
+        # return [
+        #     f.name if f.model != self.model else None
+        #     for f in self.model._meta.get_fields()
+        #     if not f.is_relation
+        #        or f.one_to_one
+        #        or (f.many_to_one and f.related_model)
+        # ]
+
     def has_view_permission(self, request, obj=None):
-        if (request is None) or (request.user is None):
-            return False
-        if request.user.is_superuser:
-            return True
-        if obj is None:
-            return True
+        if (request is None) or (request.user is None) or request.user.is_superuser or (obj is None):
+            return super().has_view_permission(request, obj)
         if super().has_view_permission(request, obj):
             try:
                 return not hasattr(obj, 'can_read') or obj.can_read(request.user)
@@ -30,12 +40,8 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return False
 
     def has_change_permission(self, request, obj=None):
-        if (request is None) or (request.user is None):
-            return False
-        if request.user.is_superuser:
-            return True
-        if obj is None:
-            return True
+        if (request is None) or (request.user is None) or request.user.is_superuser or (obj is None):
+            return super().has_change_permission(request, obj)
         if super().has_change_permission(request, obj):
             try:
                 return not hasattr(obj, 'can_modify') or obj.can_modify(request.user)
@@ -45,12 +51,8 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return False
 
     def has_delete_permission(self, request, obj=None):
-        if (request is None) or (request.user is None):
-            return False
-        if request.user.is_superuser:
-            return True
-        if obj is None:
-            return True
+        if (request is None) or (request.user is None) or request.user.is_superuser or (obj is None):
+            return super().has_delete_permission(request, obj)
         if super().has_delete_permission(request, obj):
             try:
                 return not hasattr(obj, 'can_delete') or obj.can_delete(request.user)
@@ -64,19 +66,17 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
         if request.user is None:
             return self.model.objects.none()
         else:
-            return self.model.objects.all()
-
-        # if request.user.is_superuser or not hasattr(self.model, 'can_read'):
-        #     return self.model.objects.all()
-
-        # try:
-        #     can_view_filter = [obj.id for obj in self.model.objects.all() if obj.can_read(request.user)]
-        #     return self.model.objects.filter(id__in=can_view_filter)
-        # except FieldDoesNotExist:
-        #     return self.model.objects.all()
-        # except Exception as e:
-        #     print(str(e))
-        #     return self.model.objects.none()
+            user_id = request.user.id
+            if (request.method == 'GET') and not request.path.endswith('/change/') and hasattr(self.model,
+                                                                                               'get_list_query_set'):
+                return self.model.get_list_query_set(self.model, user_id)
+            else:
+                return self.model.objects.all()
+            # return self.model.objects.filter(Q(org_group__isnull=True)
+            #                                  | (Q(published=True) & Q(org_group__guests__pk=user_id))
+            #                                  | Q(org_group__members__pk=user_id)
+            #                                  | Q(org_group__leaders__pk=user_id)
+            #                                  ).distinct()
 
 
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):

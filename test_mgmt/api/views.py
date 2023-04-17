@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User, Group
+from django.core.exceptions import FieldDoesNotExist
 from rest_framework import permissions
 from rest_framework import viewsets
-from rest_framework.permissions import DjangoObjectPermissions
+from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions
 
 from .models import Attachment, OrgGroup
 from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer
 
 exact_fields_filter_lookups = ['exact', ]
+# many_to_many_id_field_lookups = ['contains']
 id_fields_filter_lookups = ['exact', 'in', ]
 string_fields_filter_lookups = ['exact', 'iexact', 'icontains', 'regex', ]
 # 'startswith', 'endswith', 'istartswith','iendswith', 'contains',
@@ -25,6 +27,53 @@ class DjangoObjectPermissionsOrAnonReadOnly(DjangoObjectPermissions):
     allowed read-only access.
     """
     authenticated_users_only = False
+
+
+class ShaniOrgGroupViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        user_id = self.request.user.id
+        model = self.queryset.model
+        if (self.action == 'list') and hasattr(model, 'get_list_query_set'):
+            return model.get_list_query_set(model, user_id)
+        else:
+            return super().get_queryset()
+
+
+class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
+    # authenticated_users_only = False
+
+    def has_object_permission(self, request, view, obj):
+        # if request.method in SAFE_METHODS:
+        #     return True
+
+        # if not super().has_object_permission(request, view, obj):
+        #     return False
+
+        queryset = self._queryset(view)
+        model_cls = queryset.model
+        user = request.user
+
+        match request.method:
+            case 'HEAD' | 'OPTIONS':
+                return super().has_object_permission(request, view, obj)
+            case 'GET':
+                try:
+                    return not hasattr(model_cls, 'can_read') or model_cls.can_read(obj, request.user)
+                except FieldDoesNotExist:
+                    return False
+            case 'POST':
+                return True
+            case 'PUT' | "PATCH":
+                try:
+                    return not hasattr(model_cls, 'can_modify') or model_cls.can_modify(obj, request.user)
+                except FieldDoesNotExist:
+                    return False
+            case _:
+                try:
+                    return not hasattr(model_cls, 'can_delete') or model_cls.can_delete(obj, request.user)
+                except FieldDoesNotExist:
+                    return False
+        return True
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -65,7 +114,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 class OrgGroupViewSet(viewsets.ModelViewSet):
     queryset = OrgGroup.objects.all()
     serializer_class = OrgGroupSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'published', ]
     ordering = default_ordering
@@ -80,10 +129,10 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
     }
 
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering

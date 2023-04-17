@@ -1,16 +1,16 @@
 from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups, DjangoObjectPermissionsOrAnonReadOnly
+    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import Attachment, Tag, FeatureCategory, Feature, Requirement, UseCase
 from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
     RequirementSerializer, UseCaseSerializer
 
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -22,10 +22,10 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     }
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -39,10 +39,10 @@ class TagViewSet(viewsets.ModelViewSet):
     }
 
 
-class FeatureCategoryViewSet(viewsets.ModelViewSet):
+class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
     queryset = FeatureCategory.objects.all()
     serializer_class = FeatureCategorySerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'parent', 'org_group', 'published', ]
     ordering = default_ordering
@@ -59,10 +59,10 @@ class FeatureCategoryViewSet(viewsets.ModelViewSet):
     }
 
 
-class FeatureViewSet(viewsets.ModelViewSet):
+class FeatureViewSet(ShaniOrgGroupViewSet):
     queryset = Feature.objects.all()
     serializer_class = FeatureSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'published', ]
     ordering = default_ordering
@@ -80,10 +80,10 @@ class FeatureViewSet(viewsets.ModelViewSet):
     }
 
 
-class UseCaseViewSet(viewsets.ModelViewSet):
+class UseCaseViewSet(ShaniOrgGroupViewSet):
     queryset = UseCase.objects.all()
     serializer_class = UseCaseSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'weight', 'consumer_score',
                        'serviceability_score', 'test_confidence', 'development_confidence', 'org_group', 'published', ]
@@ -106,10 +106,10 @@ class UseCaseViewSet(viewsets.ModelViewSet):
     }
 
 
-class RequirementViewSet(viewsets.ModelViewSet):
+class RequirementViewSet(ShaniOrgGroupViewSet):
     queryset = Requirement.objects.all()
     serializer_class = RequirementSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering

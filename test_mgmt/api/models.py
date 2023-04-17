@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from test_mgmt import settings
@@ -40,6 +41,9 @@ class BaseModel(models.Model):
     def can_delete(self, user):
         return self.is_owner(user)
 
+    def get_list_query_set(self, user_id):
+        return self.objects.all()
+
 
 # noinspection PyUnresolvedReferences
 class OrgGroup(BaseModel):
@@ -50,21 +54,24 @@ class OrgGroup(BaseModel):
     description = models.TextField(null=True, blank=True)
     org_group = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
                                   related_name="sub_org_groups", verbose_name='parent organization group')
-    leaders = models.ManyToManyField(User, blank=True, related_name="org_group_leaders")
-    members = models.ManyToManyField(User, blank=True, related_name="org_group_members")
-    guests = models.ManyToManyField(User, blank=True, related_name="org_group_guests")
+    leaders = models.ManyToManyField(User, blank=True, related_name="org_group_where_leader")
+    members = models.ManyToManyField(User, blank=True, related_name="org_group_where_member")
+    guests = models.ManyToManyField(User, blank=True, related_name="org_group_where_guest")
 
     def is_owner(self, user):
-        return ((self.leaders is not None) and (user in self.leaders.all())) or (
-                (self.org_group is not None) and self.org_group.is_owner(user))
+        return (self.leaders is not None) and (user in self.leaders.all())
 
     def is_member(self, user):
-        return ((self.members is not None) and (user in self.members.all())) or (
-                (self.org_group is not None) and self.org_group.is_member(user))
+        return (self.members is not None) and (user in self.members.all())
 
     def is_guest(self, user):
-        return ((self.guests is not None) and (user in self.guests.all())) or (
-                (self.org_group is not None) and self.org_group.is_guest(user))
+        return (self.guests is not None) and (user in self.guests.all())
+
+    def get_list_query_set(self, user_id):
+        return self.objects.filter((Q(published=True) & Q(guests__pk=user_id))
+                                   | Q(members__pk=user_id)
+                                   | Q(leaders__pk=user_id)
+                                   ).distinct()
 
 
 # noinspection PyUnresolvedReferences
@@ -93,6 +100,13 @@ class OrgModel(BaseModel):
 
     def is_guest(self, user):
         return (self.org_group is None) or self.org_group.is_guest(user)
+
+    def get_list_query_set(self, user_id):
+        return self.objects.filter(Q(org_group__isnull=True)
+                                   | (Q(published=True) & Q(org_group__guests__pk=user_id))
+                                   | Q(org_group__members__pk=user_id)
+                                   | Q(org_group__leaders__pk=user_id)
+                                   ).distinct()
 
 
 class ReviewStatus(models.TextChoices):

@@ -20,7 +20,8 @@ class Tag(OrgModel):
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-#TODO: Add Automation Feature and Scenario
+
+# TODO: Add Automation Feature and Scenario
 
 class Step(OrgModel):
     # The status of a step's test design
@@ -38,8 +39,8 @@ class Step(OrgModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name='steps', null=True, blank=True)
 
-    name = models.CharField(max_length=256, unique=True)
-    summary = models.CharField(max_length=256, null=True, blank=True)
+    name = models.CharField(max_length=1024, unique=True)
+    summary = models.CharField(max_length=1024, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     expected_results = models.TextField(null=True, blank=True, verbose_name="expected results")
     eta = models.FloatField(null=True, blank=True, verbose_name='estimated time to execute')
@@ -70,3 +71,23 @@ class Step(OrgModel):
     def is_member(self, user):
         return (user == self.automation_owner) or (
                 (self.feature is not None) and hasattr(self.feature, 'is_member') and self.feature.is_member(user))
+
+
+class StepInstance:
+    def __init__(self, step, data):
+        self.step = step if step else "<unnamed>"
+        self.data = data if data else {}
+
+    def __str__(self):
+        return str(step)
+
+
+class ScenarioInstance(OrgModel):
+
+    def __init__(self, step, data):
+        name = models.CharField(max_length=1024, unique=True)
+        summary = models.CharField(max_length=1024, null=True, blank=True)
+        data = models.JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return '[' + str(self.sort_order) + ']: ' + str(step)

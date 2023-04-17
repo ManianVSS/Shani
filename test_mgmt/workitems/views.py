@@ -2,16 +2,16 @@ from rest_framework import viewsets, permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, date_fields_filter_lookups, exact_fields_filter_lookups, \
-    DjangoObjectPermissionsOrAnonReadOnly
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feedback
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EpicSerializer, FeatureSerializer, \
     SprintSerializer, StorySerializer, FeedbackSerializer
 
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -23,10 +23,10 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     }
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -40,10 +40,10 @@ class TagViewSet(viewsets.ModelViewSet):
     }
 
 
-class ReleaseViewSet(viewsets.ModelViewSet):
+class ReleaseViewSet(ShaniOrgGroupViewSet):
     queryset = Release.objects.all()
     serializer_class = ReleaseSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
     ordering = default_ordering
@@ -56,10 +56,10 @@ class ReleaseViewSet(viewsets.ModelViewSet):
     }
 
 
-class EpicViewSet(viewsets.ModelViewSet):
+class EpicViewSet(ShaniOrgGroupViewSet):
     queryset = Epic.objects.all()
     serializer_class = EpicSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'release', 'org_group', 'published', ]
     ordering = default_ordering
@@ -75,10 +75,10 @@ class EpicViewSet(viewsets.ModelViewSet):
     }
 
 
-class FeatureViewSet(viewsets.ModelViewSet):
+class FeatureViewSet(ShaniOrgGroupViewSet):
     queryset = Feature.objects.all()
     serializer_class = FeatureSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'epic', 'org_group', 'published', ]
     ordering = default_ordering
@@ -94,10 +94,10 @@ class FeatureViewSet(viewsets.ModelViewSet):
     }
 
 
-class SprintViewSet(viewsets.ModelViewSet):
+class SprintViewSet(ShaniOrgGroupViewSet):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', 'published', ]
     ordering = default_ordering
@@ -113,10 +113,10 @@ class SprintViewSet(viewsets.ModelViewSet):
     }
 
 
-class StoryViewSet(viewsets.ModelViewSet):
+class StoryViewSet(ShaniOrgGroupViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'rank', 'sprint', 'feature', 'org_group', 'published', ]
     ordering = default_ordering
@@ -135,10 +135,10 @@ class StoryViewSet(viewsets.ModelViewSet):
     }
 
 
-class FeedbackViewSet(viewsets.ModelViewSet):
+class FeedbackViewSet(ShaniOrgGroupViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'description', 'release', ]
     ordering = default_ordering

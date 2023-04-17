@@ -1,9 +1,8 @@
 from rest_framework import permissions
-from rest_framework import viewsets
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     exact_fields_filter_lookups, compare_fields_filter_lookups, date_fields_filter_lookups, \
-    DjangoObjectPermissionsOrAnonReadOnly
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, \
     Attachment
@@ -13,10 +12,10 @@ from .serializers import EngineerSerializer, \
     EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, AttachmentSerializer
 
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -28,10 +27,10 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     }
 
 
-class SiteViewSet(viewsets.ModelViewSet):
+class SiteViewSet(ShaniOrgGroupViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'published', ]
     ordering = default_ordering
@@ -45,10 +44,10 @@ class SiteViewSet(viewsets.ModelViewSet):
     }
 
 
-class EngineerViewSet(viewsets.ModelViewSet):
+class EngineerViewSet(ShaniOrgGroupViewSet):
     queryset = Engineer.objects.all()
     serializer_class = EngineerSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', 'org_group', 'published', ]
     ordering = default_ordering
@@ -65,10 +64,10 @@ class EngineerViewSet(viewsets.ModelViewSet):
     }
 
 
-class EngineerOrgGroupParticipationViewSet(viewsets.ModelViewSet):
+class EngineerOrgGroupParticipationViewSet(ShaniOrgGroupViewSet):
     queryset = EngineerOrgGroupParticipation.objects.all()
     serializer_class = EngineerOrgGroupParticipationSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'engineer', 'org_group', 'published', 'role', 'capacity', ]
     ordering = default_ordering
@@ -82,10 +81,10 @@ class EngineerOrgGroupParticipationViewSet(viewsets.ModelViewSet):
     }
 
 
-class SiteHolidayViewSet(viewsets.ModelViewSet):
+class SiteHolidayViewSet(ShaniOrgGroupViewSet):
     queryset = SiteHoliday.objects.all()
     serializer_class = SiteHolidaySerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'date', 'site', ]
     ordering = default_ordering
@@ -98,7 +97,7 @@ class SiteHolidayViewSet(viewsets.ModelViewSet):
     }
 
 
-class LeaveViewSet(viewsets.ModelViewSet):
+class LeaveViewSet(ShaniOrgGroupViewSet):
     queryset = Leave.objects.filter(published=True)
     serializer_class = LeaveSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
@@ -115,7 +114,7 @@ class LeaveViewSet(viewsets.ModelViewSet):
     }
 
 
-class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
+class EngineerOrgGroupParticipationHistoryViewSet(ShaniOrgGroupViewSet):
     queryset = EngineerOrgGroupParticipationHistory.objects.filter(published=True)
     serializer_class = EngineerOrgGroupParticipationHistorySerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
@@ -133,10 +132,10 @@ class EngineerOrgGroupParticipationHistoryViewSet(viewsets.ModelViewSet):
     }
 
 
-class TopicViewSet(viewsets.ModelViewSet):
+class TopicViewSet(ShaniOrgGroupViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
-    permission_classes = [DjangoObjectPermissionsOrAnonReadOnly]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'description', 'parent_topic', 'org_group', 'published', ]
     ordering = default_ordering
@@ -151,7 +150,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     }
 
 
-class TopicEngineerAssignmentViewSet(viewsets.ModelViewSet):
+class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
     queryset = TopicEngineerAssignment.objects.filter(published=True)
     serializer_class = TopicEngineerAssignmentSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
