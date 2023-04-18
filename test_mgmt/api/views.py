@@ -31,10 +31,9 @@ class DjangoObjectPermissionsOrAnonReadOnly(DjangoObjectPermissions):
 
 class ShaniOrgGroupViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        user_id = self.request.user.id
         model = self.queryset.model
         if (self.action == 'list') and hasattr(model, 'get_list_query_set'):
-            return model.get_list_query_set(model, user_id)
+            return model.get_list_query_set(model, self.request.user)
         else:
             return super().get_queryset()
 

@@ -41,7 +41,7 @@ class BaseModel(models.Model):
     def can_delete(self, user):
         return self.is_owner(user)
 
-    def get_list_query_set(self, user_id):
+    def get_list_query_set(self, user):
         return self.objects.all()
 
 
@@ -67,7 +67,8 @@ class OrgGroup(BaseModel):
     def is_guest(self, user):
         return (self.guests is not None) and (user in self.guests.all())
 
-    def get_list_query_set(self, user_id):
+    def get_list_query_set(self, user):
+        user_id = user.id if user else None
         return self.objects.filter((Q(published=True) & Q(guests__pk=user_id))
                                    | Q(members__pk=user_id)
                                    | Q(leaders__pk=user_id)
@@ -101,7 +102,10 @@ class OrgModel(BaseModel):
     def is_guest(self, user):
         return (self.org_group is None) or self.org_group.is_guest(user)
 
-    def get_list_query_set(self, user_id):
+    def get_list_query_set(self, user):
+        if user.is_superuser:
+            return self.objects.all()
+        user_id = user.id if user else None
         return self.objects.filter(Q(org_group__isnull=True)
                                    | (Q(published=True) & Q(org_group__guests__pk=user_id))
                                    | Q(org_group__members__pk=user_id)

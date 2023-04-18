@@ -91,7 +91,8 @@ class RunViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'build': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'time': datetime_fields_filter_lookups,
+        'start_time': datetime_fields_filter_lookups,
+        'end_time': datetime_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }

@@ -19,7 +19,8 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
 
     # noinspection PyProtectedMember
     def get_list_display(self, request):
-        return [field.name for field in self.model._meta.get_fields() if not (field.many_to_many or field.one_to_many)]
+        return [f.name for f in self.model._meta.get_fields() if f.concrete and
+                not (f.is_relation or f.many_to_many or f.many_to_one or f.one_to_many)]
         # return [
         #     f.name if f.model != self.model else None
         #     for f in self.model._meta.get_fields()
@@ -66,10 +67,9 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
         if request.user is None:
             return self.model.objects.none()
         else:
-            user_id = request.user.id
             if (request.method == 'GET') and not request.path.endswith('/change/') and hasattr(self.model,
                                                                                                'get_list_query_set'):
-                return self.model.get_list_query_set(self.model, user_id)
+                return self.model.get_list_query_set(self.model, request.user)
             else:
                 return self.model.objects.all()
             # return self.model.objects.filter(Q(org_group__isnull=True)

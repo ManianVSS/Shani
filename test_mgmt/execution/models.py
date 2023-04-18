@@ -41,7 +41,8 @@ class Run(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
     build = models.CharField(max_length=256)
     name = models.CharField(max_length=256, unique=True)
-    time = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
+    end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
 
 
 class ExecutionRecordStatus(models.TextChoices):
@@ -53,8 +54,8 @@ class ExecutionRecordStatus(models.TextChoices):
 class ExecutionRecord(OrgModel):
     run = models.ForeignKey(Run, null=True, on_delete=models.SET_NULL, related_name='execution_records')
     name = models.CharField(max_length=256)
-    start_time = models.DateTimeField(verbose_name='start time')
-    end_time = models.DateTimeField(verbose_name='end time')
+    start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
+    end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
 
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -76,17 +77,18 @@ class ReliabilityRunStatus(models.TextChoices):
 
 # noinspection PyTypeChecker
 class ReliabilityRun(OrgModel):
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='reliability_runs')
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
+                                related_name='reliability_runs')
 
-    build = models.CharField(max_length=256)
+    build = models.CharField(max_length=256, null=True, blank=True)
     name = models.CharField(max_length=256, null=True, blank=True)
 
-    start_time = models.DateTimeField(verbose_name='start time')
-    modified_time = models.DateTimeField(verbose_name='modified time')
+    start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
+    modified_time = models.DateTimeField(verbose_name='modified time', null=True, blank=True)
 
-    testName = models.CharField(max_length=200, verbose_name='test name')
-    testEnvironmentType = models.CharField(max_length=200, verbose_name='test environment type')
-    testEnvironmentName = models.CharField(max_length=200, verbose_name='test environment name')
+    testName = models.CharField(max_length=200, null=True, blank=True, verbose_name='test name')
+    testEnvironmentType = models.CharField(max_length=200, null=True, blank=True, verbose_name='test environment type')
+    testEnvironmentName = models.CharField(max_length=200, null=True, blank=True, verbose_name='test environment name')
 
     status = models.CharField(max_length=11, choices=ReliabilityRunStatus.choices,
                               default=ReliabilityRunStatus.PENDING)

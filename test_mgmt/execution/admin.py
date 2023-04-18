@@ -49,7 +49,8 @@ class RunAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
         ('release', RelatedOnlyFieldListFilter),
         'build',
-        'time',
+        'start_time',
+        'end_time',
     )
     search_fields = ['name', 'build', ]
 
@@ -61,12 +62,12 @@ class ExecutionRecordAdmin(CustomModelAdmin):
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'status',
-        'start_time',
-        'end_time',
         'acceptance_test',
         'automated',
         ('run', RelatedOnlyFieldListFilter),
         ('defects', RelatedOnlyFieldListFilter),
+        'start_time',
+        'end_time',
     )
     search_fields = ['name', 'summary', 'description', ]
 
@@ -83,6 +84,8 @@ class ReliabilityRunAdmin(CustomModelAdmin):
         'testEnvironmentType',
         'testEnvironmentName',
         'incidents',
+        'start_time',
+        'modified_time',
     )
     search_fields = ['name', 'build', 'testName', 'testEnvironmentName', 'targetIPTE', 'ipte', ]
 

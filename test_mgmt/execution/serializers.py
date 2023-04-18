@@ -31,7 +31,7 @@ class DefectSerializer(serializers.ModelSerializer):
 class RunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Run
-        fields = ['id', 'build', 'name', 'time', 'release', 'org_group', 'published', ]
+        fields = ['id', 'build', 'name', 'start_time', 'end_time', 'release', 'org_group', 'published', ]
 
 
 class ExecutionRecordSerializer(serializers.ModelSerializer):
