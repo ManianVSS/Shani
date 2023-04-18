@@ -110,7 +110,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
 
-class OrgGroupViewSet(viewsets.ModelViewSet):
+class OrgGroupViewSet(ShaniOrgGroupViewSet):
     queryset = OrgGroup.objects.all()
     serializer_class = OrgGroupSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
@@ -124,6 +124,8 @@ class OrgGroupViewSet(viewsets.ModelViewSet):
         'auth_group': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'leaders': id_fields_filter_lookups,
+        'members': id_fields_filter_lookups,
+        'guests': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
 
