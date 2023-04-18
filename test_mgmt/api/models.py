@@ -69,6 +69,8 @@ class OrgGroup(BaseModel):
 
     def get_list_query_set(self, user):
         user_id = user.id if user else None
+        if user.is_superuser:
+            return self.objects.all()
         return self.objects.filter((Q(published=True) & Q(guests__pk=user_id))
                                    | Q(members__pk=user_id)
                                    | Q(leaders__pk=user_id)
