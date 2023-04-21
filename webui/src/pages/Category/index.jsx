@@ -29,7 +29,6 @@ const Category2 = () => {
   let categoryData = [];
   let pageData = [];
 
-
   if (catalogid) {
     catalogData = (siteData || [])[0]?.catalogs?.filter((catalog) => {
       return catalog.id === parseInt(catalogid);
@@ -70,7 +69,8 @@ const Category2 = () => {
   document.title = (siteData ?? [])[0]?.name;
   return (
     <>
-      {((result[0]?.iframe_link?.length === 0) || (result[0]?.iframe_link?.length === undefined)) ?
+      {result[0]?.iframe_link?.length === 0 ||
+      result[0]?.iframe_link?.length === undefined ? (
         <>
           <HeroComponent
             headline={result[0]?.name.toUpperCase()}
@@ -94,10 +94,13 @@ const Category2 = () => {
             </Row>
           </Container>
         </>
-        :
-        <IframeComponent link={result[0]?.iframe_link} width={sideBar === "open" ? pageSize.width * 0.8 : pageSize.width} height={pageSize.height * 0.95} />
-      }
-
+      ) : (
+        <IframeComponent
+          link={result[0]?.iframe_link}
+          width={sideBar === "open" ? pageSize.width * 0.8 : pageSize.width}
+          height={pageSize.height * 0.95}
+        />
+      )}
     </>
   );
 };
