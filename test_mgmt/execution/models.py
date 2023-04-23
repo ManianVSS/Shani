@@ -63,9 +63,6 @@ class ExecutionRecord(OrgModel):
     status = models.CharField(max_length=8, choices=ExecutionRecordStatus.choices,
                               default=ExecutionRecordStatus.PENDING)
 
-    acceptance_test = models.BooleanField(default=False, verbose_name='is acceptance test')
-    automated = models.BooleanField(default=False, verbose_name='is automated')
-
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
 
 

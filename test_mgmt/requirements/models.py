@@ -29,7 +29,6 @@ class FeatureCategory(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
 
     tags = models.ManyToManyField(Tag, related_name='feature_categories', blank=True)
     details_file = models.FileField(upload_to='requirements', blank=True, null=True, verbose_name='File with details')
@@ -65,17 +64,8 @@ class UseCase(OrgModel):
 
     status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
 
-    weight = models.FloatField(default=1)
-    consumer_score = models.FloatField(default=0, verbose_name='consumer score')
-    serviceability_score = models.FloatField(default=0, verbose_name='serviceability score')
-    test_confidence = models.FloatField(default=0, verbose_name='test confidence')
-    development_confidence = models.FloatField(default=0, verbose_name='development confidence')
     details_file = models.FileField(upload_to='requirements', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
-
-    def get_score(self):
-        return (self.consumer_score + self.serviceability_score + self.test_confidence + self.development_confidence) \
-            / 4
 
 
 class Requirement(OrgModel):

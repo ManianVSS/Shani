@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup, ReviewStatus
+from requirements.models import UseCase
 
 
 class Attachment(OrgModel):
@@ -69,6 +70,7 @@ class TestCase(OrgModel):
     external_id = models.CharField(max_length=256, blank=True, null=True)
 
     details_file = models.FileField(upload_to='test_design', blank=True, null=True, verbose_name='File with details')
+    use_cases = models.ManyToManyField(UseCase, related_name='test_cases', blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
 
     def __str__(self):

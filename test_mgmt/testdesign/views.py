@@ -72,6 +72,7 @@ class TestCaseViewSet(ShaniOrgGroupViewSet):
         'status': id_fields_filter_lookups,
         'type': id_fields_filter_lookups,
         'tags': id_fields_filter_lookups,
+        'use_cases': id_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,

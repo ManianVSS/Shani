@@ -103,17 +103,13 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
     serializer_class = ExecutionRecordSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'status', 'acceptance_test', 'automated', 'run', 'start_time',
-                       'org_group',
-                       'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'status', 'run', 'start_time', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         # 'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         # 'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
-        'acceptance_test': exact_fields_filter_lookups,
-        'automated': exact_fields_filter_lookups,
         # 'defects': many_to_many_id_field_lookups,
         'run': id_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,

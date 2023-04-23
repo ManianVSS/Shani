@@ -26,4 +26,4 @@ class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCase
         fields = ['id', 'name', 'summary', 'parent', 'description', 'status', 'type', 'tags', 'external_id',
-                  'details_file', 'attachments', 'org_group', 'published', ]
+                  'details_file', 'use_cases', 'attachments', 'org_group', 'published', ]

@@ -42,5 +42,6 @@ class TestCaseAdmin(CustomModelAdmin):
         ('parent', RelatedOnlyFieldListFilter),
         'status',
         ('tags', RelatedOnlyFieldListFilter),
+        ('use_cases', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['name', 'summary', 'description', 'status', 'tags', 'external_id']
+    search_fields = ['name', 'summary', 'description', 'status', 'tags', 'external_id', 'use_cases', ]

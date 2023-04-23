@@ -62,8 +62,6 @@ class ExecutionRecordAdmin(CustomModelAdmin):
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'status',
-        'acceptance_test',
-        'automated',
         ('run', RelatedOnlyFieldListFilter),
         ('defects', RelatedOnlyFieldListFilter),
         'start_time',

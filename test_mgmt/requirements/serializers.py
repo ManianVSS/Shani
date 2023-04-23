@@ -18,7 +18,7 @@ class TagSerializer(serializers.ModelSerializer):
 class FeatureCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FeatureCategory
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'parent', 'tags', 'details_file', 'attachments',
+        fields = ['id', 'name', 'summary', 'description', 'parent', 'tags', 'details_file', 'attachments',
                   'org_group', 'published', ]
 
 
@@ -32,8 +32,7 @@ class FeatureSerializer(serializers.ModelSerializer):
 class UseCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UseCase
-        fields = ['id', 'name', 'summary', 'description', 'status', 'weight', 'consumer_score', 'serviceability_score',
-                  'test_confidence', 'development_confidence', 'feature', 'requirements', 'attachments', 'org_group',
+        fields = ['id', 'name', 'summary', 'description', 'status', 'feature', 'requirements', 'attachments', 'org_group',
                   'published', ]
 
 

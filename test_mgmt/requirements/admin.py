@@ -29,7 +29,6 @@ class FeatureCategoryAdmin(CustomModelAdmin):
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
-        'weight',
         ('parent', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -53,7 +52,6 @@ class UseCaseAdmin(CustomModelAdmin):
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'status',
-        'weight',
         ('feature', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'status', ]

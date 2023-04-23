@@ -44,13 +44,12 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
     serializer_class = FeatureCategorySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'parent', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'parent', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'weight': compare_fields_filter_lookups,
         'parent': id_fields_filter_lookups,
         'tags': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
@@ -85,8 +84,7 @@ class UseCaseViewSet(ShaniOrgGroupViewSet):
     serializer_class = UseCaseSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'weight', 'consumer_score',
-                       'serviceability_score', 'test_confidence', 'development_confidence', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'org_group', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -96,11 +94,6 @@ class UseCaseViewSet(ShaniOrgGroupViewSet):
         'feature': id_fields_filter_lookups,
         'requirements': id_fields_filter_lookups,
 
-        'weight': compare_fields_filter_lookups,
-        'consumer_score': compare_fields_filter_lookups,
-        'serviceability_score': compare_fields_filter_lookups,
-        'test_confidence': compare_fields_filter_lookups,
-        'development_confidence': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
