@@ -1,26 +1,28 @@
 import React from "react";
 import "./style.css";
 
-const TimerComponent = () => {
+const TimerComponent = (props) => {
   return (
     <div>
       <div className="app">
         <div className="timer-container">
-          <h1 className="header">Time Remaining for LFI</h1>
-          <Timer />
+          <h1 className="header">{props.name}</h1>
+          <Timer time={props.time} />
         </div>
       </div>
     </div>
   );
 };
 
-const Timer = () => {
+const Timer = (props) => {
   const [days, setDays] = React.useState(0);
   const [hours, setHours] = React.useState(0);
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
 
-  const deadline = "April, 26, 2023";
+  // const deadline = "April, 26, 2023";
+
+  const deadline = props.time;
 
   const getTime = () => {
     const time = Date.parse(deadline) - Date.now();
@@ -33,7 +35,6 @@ const Timer = () => {
 
   React.useEffect(() => {
     const interval = setInterval(() => getTime(deadline), 1000);
-
     return () => clearInterval(interval);
   }, []);
 

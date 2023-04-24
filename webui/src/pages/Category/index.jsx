@@ -6,13 +6,13 @@ import { Route, Switch, useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { allPagesData } from "../../state/allPagesData";
 import { CardItem001 } from "../../components/CardItem001";
-import CardItem002 from "../../components/CardItem002";
 import HeroComponent from "../../components/HeroComponent";
 import CardItem003 from "../../components/CardItem003";
 import { baseURL } from "../../hooks/baseURL";
 import IframeComponent from "../../components/IframeComponent";
 import { useWindowSize } from "../../hooks/windowSize";
 import { sideBar } from "../../state/mode";
+import TimerComponent from "../../components/TimerComponent";
 
 const Category2 = () => {
   const navigate = useNavigate();
@@ -28,11 +28,13 @@ const Category2 = () => {
   let catalogData = [];
   let categoryData = [];
   let pageData = [];
+  let eventsData = [];
 
   if (catalogid) {
     catalogData = (siteData || [])[0]?.catalogs?.filter((catalog) => {
       return catalog.id === parseInt(catalogid);
     });
+    eventsData = (catalogData || [])[0]?.events;
     if (categoryid) {
       categoryData = (catalogData || [])[0]?.categories?.filter((category) => {
         return category.id === parseInt(categoryid);
@@ -72,6 +74,10 @@ const Category2 = () => {
       {result[0]?.iframe_link?.length === 0 ||
       result[0]?.iframe_link?.length === undefined ? (
         <>
+          <TimerComponent
+            name={(eventsData ?? [])[0]?.name}
+            time={(eventsData ?? [])[0]?.time}
+          />
           <HeroComponent
             headline={result[0]?.name.toUpperCase()}
             description={result[0]?.description.toUpperCase()}

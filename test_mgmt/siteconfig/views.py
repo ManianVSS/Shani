@@ -5,10 +5,11 @@ from rest_framework.response import Response
 
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
+    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
+    ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
-    CategorySerializer
+    CategorySerializer, EventSerializer
 
 
 class DisplayItemViewSet(ShaniOrgGroupViewSet):
@@ -24,6 +25,25 @@ class DisplayItemViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+    }
+
+
+class EventViewSet(ShaniOrgGroupViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'time', 'org_group', 'published', ]
+    ordering = ['id', 'sort_order', 'time', 'name']
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'sort_order': compare_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
+        'time': datetime_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
@@ -165,6 +185,7 @@ def get_catalog_as_dict(catalog):
         'description': catalog.description,
         'image': CatalogSerializer(catalog).data['image'],
         'display_items': get_entity_display_items(catalog),
+        'events': get_entity_events(catalog),
         'categories': get_category_details_for_catalog(catalog),
         "org_group": OrgGroupSerializer(catalog.org_group).data['id'] if catalog.org_group else None,
         "published": catalog.published,
@@ -240,4 +261,28 @@ def get_display_item_as_dict(display_item_info):
         "org_group": OrgGroupSerializer(display_item_info.org_group).data[
             'id'] if display_item_info.org_group else None,
         "published": display_item_info.published,
+    }
+
+
+def get_entity_events(entity):
+    events = []
+    if entity.events is not None:
+        for event_info in entity.events.filter(published=True).order_by('sort_order'):
+            events.append(get_event_as_dict(event_info))
+    return events
+
+
+def get_event_as_dict(event_info):
+    return {
+        "id": event_info.id,
+        "sort_order": event_info.sort_order,
+        "name": event_info.name,
+        "summary": event_info.summary,
+        "description": event_info.description,
+        "time": event_info.time,
+        "link": event_info.link,
+        'image': DisplayItemSerializer(event_info).data['image'],
+        "org_group": OrgGroupSerializer(event_info.org_group).data[
+            'id'] if event_info.org_group else None,
+        "published": event_info.published,
     }

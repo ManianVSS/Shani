@@ -15,6 +15,17 @@ class DisplayItem(OrgModel):
     image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
 
 
+class Event(OrgModel):
+
+    sort_order = models.IntegerField(default=0)
+    name = models.CharField(max_length=256)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    link = models.TextField(null=True, blank=True)
+    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    time = models.DateTimeField()
+
+
 class Page(OrgModel):
     sort_order = models.IntegerField(default=0)
     name = models.CharField(default='Home', max_length=256)
@@ -52,6 +63,7 @@ class Catalog(OrgModel):
     logo = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='logo image file')
     image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
     display_items = models.ManyToManyField(DisplayItem, related_name='catalogs', blank=True)
+    events = models.ManyToManyField(Event, related_name='catalogs', blank=True)
     categories = models.ManyToManyField(Category, related_name='catalogs', blank=True)
 
 

@@ -1,12 +1,19 @@
 from rest_framework import serializers
 
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, Event
 
 
 class DisplayItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisplayItem
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'link', 'image', 'org_group', 'published', ]
+
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ['id', 'sort_order', 'name', 'summary', 'description', 'time', 'link', 'image', 'org_group',
+                  'published', ]
 
 
 class PageSerializer(serializers.ModelSerializer):

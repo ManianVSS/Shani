@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 
 from api.admin import CustomModelAdmin
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event
 
 
 def reload_admin_site_name(site_name):
@@ -41,6 +41,16 @@ class DisplayItemAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'link']
+
+
+@admin.register(Event)
+class EventAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        'time',
+    )
+    search_fields = ['name', 'summary', 'description', 'link', 'time']
 
 
 @admin.register(Page)

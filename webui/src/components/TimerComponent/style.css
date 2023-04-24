@@ -1,7 +1,7 @@
 .timer {
     background-color: rgba(255, 255, 255, 0.1);
     display: inline-block;
-    margin-top: 25px;
+    /* margin-top: 25px; */
     padding: 10px;
     text-align: center;
     width: 400px;
@@ -22,7 +22,7 @@
   }
 
   .timer-box p {
-    font-size: calc(16px + 2vmin);
+    font-size: calc(10px + 2vmin);
     margin: 0;
   }
   .timer-col-4{
