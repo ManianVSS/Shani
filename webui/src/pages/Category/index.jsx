@@ -3,7 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import BootstrapCard from "../../components/BootstrapCard";
 
 import { Route, Switch, useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { allPagesData } from "../../state/allPagesData";
 import { CardItem001 } from "../../components/CardItem001";
 import HeroComponent from "../../components/HeroComponent";
@@ -13,11 +13,13 @@ import IframeComponent from "../../components/IframeComponent";
 import { useWindowSize } from "../../hooks/windowSize";
 import { sideBar } from "../../state/mode";
 import TimerComponent from "../../components/TimerComponent";
+import { timerState } from "../../state/timerData";
 
 const Category2 = () => {
   const navigate = useNavigate();
   const pageSize = useWindowSize();
   const sideBarState = useRecoilValue(sideBar);
+  const [timerData, setTimerData] = useRecoilState(timerState);
   const { siteid, catalogid, categoryid, pageid } = useParams();
   const allPages = useRecoilValue(allPagesData);
   let siteData = [];
@@ -69,15 +71,15 @@ const Category2 = () => {
   }
 
   document.title = (siteData ?? [])[0]?.name;
+  setTimerData((eventsData ?? [])[0]?.time);
+  console.log("From page" + eventsData);
+
   return (
     <>
       {result[0]?.iframe_link?.length === 0 ||
       result[0]?.iframe_link?.length === undefined ? (
         <>
-          <TimerComponent
-            name={(eventsData ?? [])[0]?.name}
-            time={(eventsData ?? [])[0]?.time}
-          />
+          <TimerComponent name={(eventsData ?? [])[0]?.name} />
           <HeroComponent
             headline={result[0]?.name.toUpperCase()}
             description={result[0]?.description.toUpperCase()}
