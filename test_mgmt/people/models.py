@@ -31,6 +31,9 @@ class Engineer(OrgModel):
     def __str__(self):
         return str(self.auth_user)
 
+    def is_guest(self, user):
+        return user == self.auth_user
+
 
 class EngineerOrgGroupParticipation(OrgModel):
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="org_group_participation")

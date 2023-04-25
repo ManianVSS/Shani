@@ -33,7 +33,7 @@ class BaseModel(models.Model):
         return user is not None
 
     def can_read(self, user):
-        return self.is_owner(user) or self.is_member(user) or (self.published and self.is_guest(user))
+        return self.is_owner(user) or self.is_member(user) or self.is_guest(user)
 
     def can_modify(self, user):
         return self.is_owner(user) or self.is_member(user)

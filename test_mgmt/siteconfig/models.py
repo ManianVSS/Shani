@@ -16,7 +16,6 @@ class DisplayItem(OrgModel):
 
 
 class Event(OrgModel):
-
     sort_order = models.IntegerField(default=0)
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
