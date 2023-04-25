@@ -79,7 +79,12 @@ const Category2 = () => {
       {result[0]?.iframe_link?.length === 0 ||
       result[0]?.iframe_link?.length === undefined ? (
         <>
-          <TimerComponent name={(eventsData ?? [])[0]?.name} />
+          {(eventsData ?? []).length === 0 ? (
+            <></>
+          ) : (
+            <TimerComponent name={(eventsData ?? [])[0]?.name} />
+          )}
+
           <HeroComponent
             headline={result[0]?.name.toUpperCase()}
             description={result[0]?.description.toUpperCase()}
