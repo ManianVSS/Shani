@@ -25,11 +25,11 @@ const EngineerAvailability = () => {
       axiosClientForCapacity
         .get(
           "/engineer_capacity_view?engineer=" +
-          engineer +
-          "&from=" +
-          formatDate(startDate) +
-          "&to=" +
-          formatDate(endDate),
+            engineer +
+            "&from=" +
+            formatDate(startDate) +
+            "&to=" +
+            formatDate(endDate),
           {
             headers: {
               authorization:
@@ -57,9 +57,15 @@ const EngineerAvailability = () => {
     return [year, month, day].join("-");
   }
   useEffect(() => {
-    axiosClientForCapacity.get("/engineers/").then((response) => {
-      setEngineerData(response.data.results);
-    });
+    axiosClientForCapacity
+      .get("/engineers/", {
+        headers: {
+          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setEngineerData(response.data.results);
+      });
     setUserData({
       accessToken: window.localStorage.getItem("accessToken"),
       authStatus: true,
@@ -136,7 +142,14 @@ const EngineerAvailability = () => {
         </Form>
         {show ? (
           <>
-            <Table bordered className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
+            <Table
+              bordered
+              className={
+                window.localStorage.getItem("testCenterTheme") === "dark"
+                  ? "dark-table"
+                  : "light-table"
+              }
+            >
               <thead>
                 <tr>
                   <th>Engineer Name</th>

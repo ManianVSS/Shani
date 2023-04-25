@@ -109,9 +109,15 @@ const Leaves = () => {
   }
 
   useEffect(() => {
-    axiosClientForCapacity.get("/engineers/").then((response) => {
-      setEngineerData(response.data.results);
-    });
+    axiosClientForCapacity
+      .get("/engineers/", {
+        headers: {
+          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setEngineerData(response.data.results);
+      });
     setUserData({
       accessToken: window.localStorage.getItem("accessToken"),
       authStatus: true,
@@ -187,12 +193,16 @@ const Leaves = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" style={{background:"#404040", color:"white"}} onClick={handleClose}>
+          <Button
+            variant="secondary"
+            style={{ background: "#404040", color: "white" }}
+            onClick={handleClose}
+          >
             Cancel
           </Button>
           <Button
             variant="primary"
-            style={{background:"#404040", color:"white"}}
+            style={{ background: "#404040", color: "white" }}
             onClick={() => {
               handleClose();
               applyLeave();
@@ -205,7 +215,7 @@ const Leaves = () => {
       <Heading heading={"LEAVES DATA"} />
       <Button
         variant="success"
-        style={{ marginLeft: "75%", background:"#404040", color:"white" }}
+        style={{ marginLeft: "75%", background: "#404040", color: "white" }}
         onClick={handleShow}
       >
         +
@@ -272,7 +282,7 @@ const Leaves = () => {
           </Row>
           <div className="leave-buttons">
             <Button
-            style={{background:"#404040", color:"white"}}
+              style={{ background: "#404040", color: "white" }}
               variant="primary"
               onClick={() => {
                 setShow(true);
@@ -285,7 +295,14 @@ const Leaves = () => {
         </Form>
         {show ? (
           <>
-            <Table bordered className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
+            <Table
+              bordered
+              className={
+                window.localStorage.getItem("testCenterTheme") === "dark"
+                  ? "dark-table"
+                  : "light-table"
+              }
+            >
               <thead>
                 <tr>
                   <th>Engineer Name</th>

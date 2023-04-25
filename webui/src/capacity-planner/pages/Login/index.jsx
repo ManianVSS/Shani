@@ -38,7 +38,12 @@ function Login() {
         window.localStorage.setItem("user", userName);
 
         axiosClientForCapacity
-          .get("/engineers/?auth_user__username=" + userName)
+          .get("/engineers/?auth_user__username=" + userName, {
+            headers: {
+              authorization:
+                "Bearer " + window.localStorage.getItem("accessToken"),
+            },
+          })
           .then((res) => {
             window.localStorage.setItem("userid", res.data.results[0].id);
           });
@@ -65,8 +70,8 @@ function Login() {
   }, [auth]);
 
   return (
-    <MDBContainer className="my-5" >
-      <MDBCard >
+    <MDBContainer className="my-5">
+      <MDBCard>
         <MDBRow className="g-0">
           <MDBCol md="6">
             <MDBCardImage
@@ -77,7 +82,7 @@ function Login() {
           </MDBCol>
 
           <MDBCol md="6" style={{ background: "#404040" }}>
-            <MDBCardBody className="d-flex flex-column" >
+            <MDBCardBody className="d-flex flex-column">
               <div className="d-flex flex-row mt-2">
                 <MDBIcon
                   fas
@@ -114,10 +119,12 @@ function Login() {
                     {...register("password")}
                   />
                 </Form.Group>
-                <div style={{ justifyContent: "space-between", display: "flex" }}>
+                <div
+                  style={{ justifyContent: "space-between", display: "flex" }}
+                >
                   <Button
                     variant="primary"
-                    style={{background:"#404040", color:"white"}}
+                    style={{ background: "#404040", color: "white" }}
                     onClick={handleSubmit(handleRegistration)}
                     type="submit"
                   >
@@ -125,8 +132,10 @@ function Login() {
                   </Button>
                   <Button
                     variant="success"
-                    style={{background:"#404040", color:"white"}}
-                    onClick={() => { navigate(`/`) }}
+                    style={{ background: "#404040", color: "white" }}
+                    onClick={() => {
+                      navigate(`/`);
+                    }}
                     type="submit"
                   >
                     Return to Main Dashboard

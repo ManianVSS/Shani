@@ -28,11 +28,11 @@ const Capacity = () => {
       axiosClientForCapacity
         .get(
           "/capacity_view?org_group=" +
-          org +
-          "&from=" +
-          formatDate(startDate) +
-          "&to=" +
-          formatDate(endDate),
+            org +
+            "&from=" +
+            formatDate(startDate) +
+            "&to=" +
+            formatDate(endDate),
           {
             headers: {
               authorization:
@@ -103,9 +103,15 @@ const Capacity = () => {
     );
   }
   useEffect(() => {
-    axiosClientForLogin.get("/org_groups/").then((response) => {
-      setOrgData(response.data.results);
-    });
+    axiosClientForLogin
+      .get("/org_groups/", {
+        headers: {
+          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setOrgData(response.data.results);
+      });
     setUserData({
       accessToken: window.localStorage.getItem("accessToken"),
       authStatus: true,
@@ -194,7 +200,15 @@ const Capacity = () => {
         </Form>
         {show ? (
           <>
-            <Table bordered size="sm" className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
+            <Table
+              bordered
+              size="sm"
+              className={
+                window.localStorage.getItem("testCenterTheme") === "dark"
+                  ? "dark-table"
+                  : "light-table"
+              }
+            >
               <tbody>
                 <tr>
                   <td>Total Work Days</td>
@@ -206,7 +220,14 @@ const Capacity = () => {
                 </tr>
               </tbody>
             </Table>
-            <Table bordered className={window.localStorage.getItem("testCenterTheme") === "dark" ? "dark-table" : "light-table"}>
+            <Table
+              bordered
+              className={
+                window.localStorage.getItem("testCenterTheme") === "dark"
+                  ? "dark-table"
+                  : "light-table"
+              }
+            >
               <thead>
                 <tr>
                   <th>Engineer Name</th>
