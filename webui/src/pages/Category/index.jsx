@@ -14,6 +14,7 @@ import { useWindowSize } from "../../hooks/windowSize";
 import { sideBar } from "../../state/mode";
 import TimerComponent from "../../components/TimerComponent";
 import { timerState } from "../../state/timerData";
+import ResponsiveCarousel from "../../components/Carousel";
 
 const Category2 = () => {
   const navigate = useNavigate();
@@ -72,7 +73,6 @@ const Category2 = () => {
 
   document.title = (siteData ?? [])[0]?.name;
   setTimerData((eventsData ?? [])[0]?.time);
-  console.log("From page" + eventsData);
 
   return (
     <>
@@ -82,7 +82,16 @@ const Category2 = () => {
           {(eventsData ?? []).length === 0 ? (
             <></>
           ) : (
-            <TimerComponent name={(eventsData ?? [])[0]?.name} />
+            // <TimerComponent name={(eventsData ?? [])[0]?.name} />
+            <ResponsiveCarousel
+              autoPlay={true}
+              infiniteLoop={true}
+              componentListData={eventsData ?? []}
+              showArrows={false}
+              showStatus={false}
+              showIndicators={false}
+              showThumbs={false}
+            />
           )}
 
           <HeroComponent

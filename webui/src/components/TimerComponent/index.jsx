@@ -4,12 +4,13 @@ import { useRecoilValue } from "recoil";
 import { timerState } from "../../state/timerData";
 
 const TimerComponent = (props) => {
+  // const timerData = useRecoilValue(timerState);
   return (
     <div>
       <div className="app">
         <div className="timer-container">
           <h1 className="header">{props.name}</h1>
-          <Timer />
+          <Timer time={props.time} />
         </div>
       </div>
     </div>
@@ -21,9 +22,9 @@ const Timer = (props) => {
   const [hours, setHours] = React.useState(0);
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
-  const timerData = useRecoilValue(timerState);
+  // const timerData = useRecoilValue(timerState);
 
-  const deadline = timerData;
+  const deadline = props.time;
   const getTime = () => {
     const time = Date.parse(deadline) - Date.now();
 
@@ -36,7 +37,7 @@ const Timer = (props) => {
   React.useEffect(() => {
     const interval = setInterval(() => getTime(deadline), 1000);
     return () => clearInterval(interval);
-  }, [timerData]);
+  }, [deadline]);
 
   return (
     <div className="timer" role="timer">
