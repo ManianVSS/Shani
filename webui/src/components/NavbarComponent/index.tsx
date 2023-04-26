@@ -26,7 +26,7 @@ import {
   AddHomeOutlined,
   AdminPanelSettings,
   Settings,
-  ReduceCapacity
+  ReduceCapacity,
 } from "@mui/icons-material";
 import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
@@ -46,8 +46,9 @@ const useStyles = createStyles((theme) => ({
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-      }`,
+    borderBottom: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
   },
   links: {
     marginLeft: -theme.spacing.md,
@@ -62,8 +63,9 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
-    borderTop: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-      }`,
+    borderTop: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
   },
 }));
 
@@ -97,9 +99,7 @@ export function NavbarNested() {
     <LinksGroup {...item} key={item.label} />
   ));
   const [mode, setMode] = useRecoilState(colorScheme);
-  const [isDarkMode, setIsDarkMode] = useState(
-    window.localStorage.getItem("testCenterTheme") === "dark"
-  );
+  const [isDarkMode, setIsDarkMode] = useState("light");
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
 
   const onChange = (event) => {
@@ -107,6 +107,16 @@ export function NavbarNested() {
     navigate(value);
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("testCenterTheme") === null) {
+      localStorage.setItem("testCenterTheme", "light");
+      setMode("light");
+      setIsDarkMode("light");
+    } else {
+      setMode(localStorage.getItem("testCenterTheme") ?? "");
+      setIsDarkMode(localStorage.getItem("testCenterTheme") ?? "");
+    }
+  }, [localStorage.getItem("testCenterTheme")]);
   return (
     <Navbar
       // height={800}
@@ -121,9 +131,9 @@ export function NavbarNested() {
           <Form.Select
             aria-label=""
             onChange={onChange}
-          // onClick={() => {
-          //   navigate(0);
-          // }}
+            // onClick={() => {
+            //   navigate(0);
+            // }}
           >
             {catalogMenu.map((item) => {
               return (
@@ -140,17 +150,21 @@ export function NavbarNested() {
           <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
           <DarkModeToggle
             onChange={() => {
-              setIsDarkMode((curr) => !curr);
-              if (mode === "light") {
-                setMode("dark");
-                window.localStorage.setItem("testCenterTheme", "dark");
-              } else {
-                setMode("light");
-                window.localStorage.setItem("testCenterTheme", "light");
-              }
+              setMode(isDarkMode === "dark" ? "light" : "dark");
+              localStorage.setItem(
+                "testCenterTheme",
+                isDarkMode === "dark" ? "light" : "dark"
+              );
+              setIsDarkMode(isDarkMode === "dark" ? "light" : "dark");
             }}
-            checked={isDarkMode}
+            checked={isDarkMode === "dark"}
             size={40}
+          />
+          <IconHome
+            className="homeIconStyle"
+            onClick={() => {
+              navigate("/site/" + siteid + "/catalog/" + catalogid);
+            }}
           />
         </Group>
       </Navbar.Section>
@@ -173,7 +187,7 @@ export function NavbarNested() {
                       icon={ReduceCapacity}
                       style={{ margin: 0 }}
                       onClick={() => {
-                        navigate(`/capacity-planner/`)
+                        navigate(`/capacity-planner/`);
                       }}
                     >
                       Capacity Planner

@@ -134,7 +134,7 @@ function Login() {
                     variant="success"
                     style={{ background: "#404040", color: "white" }}
                     onClick={() => {
-                      navigate(`/`);
+                      navigate(-2);
                     }}
                     type="submit"
                   >

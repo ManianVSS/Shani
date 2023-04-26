@@ -11,3 +11,14 @@
     color: "#404040";
     background: white;
 }
+
+.homeIconStyle{
+    border: 1px solid #404040;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.homeIconStyle:hover{
+    background-color: rgb(1, 100, 100);
+    color: white;
+}

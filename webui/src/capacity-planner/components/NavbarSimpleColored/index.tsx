@@ -6,7 +6,7 @@ import {
   IconBook,
   IconUser,
   IconCalendar,
-  IconTruckReturn
+  IconTruckReturn,
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { authState } from "../../../state/authData";
@@ -97,8 +97,16 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: "/capacity-planner/", label: "HOME", icon: IconHome },
-  { link: "/capacity-planner/capacity", label: "CAPACITY VIEW", icon: IconBook },
-  { link: "/capacity-planner/engineer-availability", label: "ENGINEER VIEW", icon: IconUser },
+  {
+    link: "/capacity-planner/capacity",
+    label: "CAPACITY VIEW",
+    icon: IconBook,
+  },
+  {
+    link: "/capacity-planner/engineer-availability",
+    label: "ENGINEER VIEW",
+    icon: IconUser,
+  },
   { link: "/capacity-planner/leaves", label: "LEAVES", icon: IconCalendar },
   // { link: "", label: "Databases", icon: IconDatabaseImport },
   // { link: "", label: "Authentication", icon: Icon2fa },
@@ -183,7 +191,9 @@ export function NavbarSimpleColored() {
           <a
             href="#"
             className={classes.link}
-            onClick={() => { navigate(`/`) }}
+            onClick={() => {
+              navigate(-3);
+            }}
           >
             <IconTruckReturn className={classes.linkIcon} stroke={1.5} />
             <span>Return to Main Dashboard</span>
