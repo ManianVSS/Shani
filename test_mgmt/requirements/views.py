@@ -51,7 +51,7 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'parent': id_fields_filter_lookups,
-        'tags': id_fields_filter_lookups,
+        'tags': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
 
@@ -71,7 +71,7 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'parent': id_fields_filter_lookups,
         'status': id_fields_filter_lookups,
-        'tags': id_fields_filter_lookups,
+        'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
@@ -110,7 +110,7 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'use_cases': id_fields_filter_lookups,
+        'use_cases': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }

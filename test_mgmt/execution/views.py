@@ -110,7 +110,7 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         # 'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
-        # 'defects': many_to_many_id_field_lookups,
+        'defects': exact_fields_filter_lookups,
         'run': id_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
         'end_time': datetime_fields_filter_lookups,
@@ -140,7 +140,7 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'testEnvironmentName': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'targetIPTE': compare_fields_filter_lookups,
-        'incidents': id_fields_filter_lookups,
+        'incidents': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }

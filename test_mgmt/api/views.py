@@ -123,9 +123,9 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'auth_group': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'leaders': id_fields_filter_lookups,
-        'members': id_fields_filter_lookups,
-        'guests': id_fields_filter_lookups,
+        'leaders': exact_fields_filter_lookups,
+        'members': exact_fields_filter_lookups,
+        'guests': exact_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
 
