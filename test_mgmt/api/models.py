@@ -86,8 +86,8 @@ class OrgModel(BaseModel):
                                   verbose_name='organization group')
 
     def can_read(self, user):
-        return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(user) or (
-                self.published and self.org_group.is_guest(user))
+        return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(
+            user) or self.org_group.is_guest(user)
 
     def can_modify(self, user):
         return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(user)

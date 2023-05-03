@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup
@@ -119,6 +120,16 @@ class Environment(OrgModel):
                                         related_name='environments',
                                         verbose_name='currently release')
     properties = models.JSONField(null=True, blank=True)
+
+    def get_list_query_set(self, user):
+        if user.is_superuser:
+            return self.objects.all()
+        user_id = user.id if user else None
+        return self.objects.filter(Q(org_group__isnull=True)
+                                   | (Q(published=True) & (Q(org_group__guests__pk=user_id)
+                                                           | Q(org_group__members__pk=user_id)
+                                                           | Q(org_group__leaders__pk=user_id))
+                                      )).distinct()
 
     def can_read(self, user):
         return self.is_owner(user) or self.is_member(user)
