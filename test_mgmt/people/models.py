@@ -179,16 +179,22 @@ class Credit(OrgModel):
     credits = models.FloatField(default=0)
     scale = models.ForeignKey(Scale, on_delete=models.CASCADE, related_name="credits")
     reason = models.ForeignKey(Reason, on_delete=models.CASCADE, related_name="credits")
+    description = models.TextField(default="<reason for credits>")
     creditor = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="credits_given")
 
+    def can_modify(self, user):
+        return self.is_owner(user)
+
     def is_owner(self, user):
-        return self.creditor == user
+        return (self.credited_user != user) and (
+                (self.creditor == user) or (hasattr(self.org_group, 'is_owner') and self.org_group.is_owner(user)))
 
     def is_member(self, user):
-        return self.creditor == user
+        return (self.credited_user != user) and ((self.creditor == user) or (
+                hasattr(self.org_group, 'is_member') and self.org_group.is_member(user)))
 
     def is_guest(self, user):
-        return self.credited_user == user
+        return self.credited_user == user or (hasattr(self.org_group, 'is_guest') and self.org_group.is_guest(user))
 
     # noinspection PyUnresolvedReferences
     def __str__(self):

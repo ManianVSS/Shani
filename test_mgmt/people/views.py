@@ -221,6 +221,7 @@ class CreditViewSet(ShaniOrgGroupViewSet):
         'credits': compare_fields_filter_lookups,
         'scale': id_fields_filter_lookups,
         'reason': id_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
         'creditor': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,

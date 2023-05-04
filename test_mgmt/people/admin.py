@@ -134,4 +134,4 @@ class CreditAdmin(CustomModelAdmin):
         ('reason', RelatedOnlyFieldListFilter),
         ('creditor', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['time', 'scale', 'reason']
+    search_fields = ['time', 'description', ]

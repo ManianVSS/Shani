@@ -73,4 +73,5 @@ class ReasonSerializer(serializers.ModelSerializer):
 class CreditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Credit
-        fields = ['id', 'time', 'credited_user', 'credits', 'scale', 'reason', 'creditor', 'org_group', 'published', ]
+        fields = ['id', 'time', 'credited_user', 'credits', 'scale', 'reason', 'description', 'creditor', 'org_group',
+                  'published', ]
