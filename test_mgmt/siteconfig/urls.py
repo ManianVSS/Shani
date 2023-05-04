@@ -2,10 +2,11 @@ from django.urls import include, path
 from rest_framework import routers
 
 from .views import SiteSettingsViewSet, DisplayItemViewSet, get_all_site_details_api, PageViewSet, \
-    get_default_site_details_api, CategoryViewSet, CatalogViewSet, EventViewSet
+    get_default_site_details_api, CategoryViewSet, CatalogViewSet, EventViewSet, ConfigurationViewSet
 
 router = routers.DefaultRouter()
 
+router.register(r'configuration', ConfigurationViewSet)
 router.register(r'display_items', DisplayItemViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'pages', PageViewSet)

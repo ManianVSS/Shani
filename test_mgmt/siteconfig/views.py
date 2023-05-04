@@ -1,15 +1,31 @@
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event, Configuration
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
-    CategorySerializer, EventSerializer
+    CategorySerializer, EventSerializer, ConfigurationSerializer
+
+
+class ConfigurationViewSet(ModelViewSet):
+    queryset = Configuration.objects.all()
+    serializer_class = ConfigurationSerializer
+    permission_classes = [IsAdminUser]
+    search_fields = ['name', 'value']
+    ordering_fields = ['id', 'name']
+    ordering = ['name']
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'value': string_fields_filter_lookups,
+    }
 
 
 class DisplayItemViewSet(ShaniOrgGroupViewSet):

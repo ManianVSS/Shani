@@ -3,6 +3,11 @@ from django.db import models
 from api.models import OrgModel, OrgGroup
 
 
+class Configuration(models.Model):
+    name = models.CharField(max_length=256, unique=True)
+    value = models.TextField(null=True, blank=True)
+
+
 class DisplayItem(OrgModel):
     class Meta:
         verbose_name_plural = "display items"

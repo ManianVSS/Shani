@@ -4,9 +4,17 @@ from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
+from import_export.admin import ImportExportModelAdmin
 
 from api.admin import CustomModelAdmin
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event, Configuration
+
+
+@admin.register(Configuration)
+class ConfigurationAdmin(ImportExportModelAdmin):
+    search_fields = ['name', 'value', ]
+    ordering = ('name',)
+    list_display = ['name', 'value', ]
 
 
 def reload_admin_site_name(site_name):
