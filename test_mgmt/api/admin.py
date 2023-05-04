@@ -1,20 +1,12 @@
 from django.contrib import admin
-from django.contrib.admin import AdminSite
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
-from django.views.decorators.cache import never_cache
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
 from .models import Attachment, OrgGroup
-
-
-class MyAdminSite(AdminSite):
-    @never_cache
-    def index(self, request):
-        pass
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):

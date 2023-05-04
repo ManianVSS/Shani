@@ -7,7 +7,8 @@ from django.dispatch.dispatcher import receiver
 from import_export.admin import ImportExportModelAdmin
 
 from api.admin import CustomModelAdmin
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event, Configuration
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, Event, Configuration, \
+    get_database_name
 
 
 @admin.register(Configuration)
@@ -17,13 +18,21 @@ class ConfigurationAdmin(ImportExportModelAdmin):
     list_display = ['name', 'value', ]
 
 
+# class MyAdminSite(AdminSite):
+#     @never_cache
+#     def index(self, request, extra_context=None):
+#         extra_context = extra_context or {}
+#         extra_context['appname'] = get_database_name()
+#         return self.index(request, extra_context)
+
+
 def reload_admin_site_name(site_name):
     if site_name is None:
-        site_name = "Shani"
+        site_name = "Shani Test Management"
 
         # noinspection PyBroadException
         try:
-            site_name = get_default_settings().name
+            site_name = get_database_name()
         except Exception as e:
             print("Defaulting site name Shani as no site_setting data found")
 
@@ -33,7 +42,7 @@ def reload_admin_site_name(site_name):
 
 
 # method for updating
-@receiver(post_save, sender=SiteSettings, dispatch_uid="update_admin_site_name")
+@receiver(post_save, sender=Configuration, dispatch_uid="update_admin_site_name")
 def update_admin_site_name(sender, instance, **kwargs):
     reload_admin_site_name(instance.name)
 
