@@ -5,11 +5,12 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, \
-    Attachment, Credit
+    Attachment, Credit, Scale, Reason
 from .serializers import EngineerSerializer, \
     SiteHolidaySerializer, \
     LeaveSerializer, EngineerOrgGroupParticipationSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
-    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, AttachmentSerializer, CreditSerializer
+    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, AttachmentSerializer, CreditSerializer, \
+    ScaleSerializer, ReasonSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -171,20 +172,55 @@ class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
     }
 
 
+class ScaleViewSet(ShaniOrgGroupViewSet):
+    queryset = Scale.objects.all()
+    serializer_class = ScaleSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+    }
+
+
+class ReasonViewSet(ShaniOrgGroupViewSet):
+    queryset = Reason.objects.all()
+    serializer_class = ReasonSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'org_group', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'description': string_fields_filter_lookups,
+        'weight': compare_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+    }
+
+
 class CreditViewSet(ShaniOrgGroupViewSet):
     queryset = Credit.objects.all()
     serializer_class = CreditSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
-    search_fields = ['time', 'scale', 'reason']
-    ordering_fields = ['id', 'time', 'credited_user', 'creditor', ]
+    search_fields = ['time', 'credited_user', 'scale', 'reason', 'creditor']
+    ordering_fields = ['id', 'time', 'credited_user', 'scale', 'reason', 'creditor', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'time': date_fields_filter_lookups,
         'credited_user': id_fields_filter_lookups,
         'credits': compare_fields_filter_lookups,
-        'scale': string_fields_filter_lookups,
-        'reason': string_fields_filter_lookups,
+        'scale': id_fields_filter_lookups,
+        'reason': id_fields_filter_lookups,
         'creditor': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,

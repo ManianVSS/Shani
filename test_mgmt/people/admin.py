@@ -2,8 +2,9 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
+from api.views import default_search_fields
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
-    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment, Credit
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment, Credit, Scale, Reason
 
 
 @admin.register(Attachment)
@@ -104,6 +105,24 @@ class TopicEngineerAssignmentAdmin(CustomModelAdmin):
     search_fields = ['status', 'start_date', 'end_date']
 
 
+@admin.register(Scale)
+class ScaleAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = default_search_fields
+
+
+@admin.register(Reason)
+class ReasonAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = default_search_fields
+
+
 @admin.register(Credit)
 class CreditAdmin(CustomModelAdmin):
     list_filter = (
@@ -111,6 +130,8 @@ class CreditAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
         'time',
         ('credited_user', RelatedOnlyFieldListFilter),
+        ('scale', RelatedOnlyFieldListFilter),
+        ('reason', RelatedOnlyFieldListFilter),
         ('creditor', RelatedOnlyFieldListFilter),
     )
     search_fields = ['time', 'scale', 'reason']

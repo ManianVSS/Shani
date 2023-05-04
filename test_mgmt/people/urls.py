@@ -4,7 +4,7 @@ from rest_framework import routers
 from .apiviews import get_org_capacity_for_time_range, get_engineer_capacity_for_time_range
 from .views import EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
     TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, SiteViewSet, \
-    AttachmentViewSet, CreditViewSet
+    AttachmentViewSet, CreditViewSet, ScaleViewSet, ReasonViewSet
 
 router = routers.DefaultRouter()
 router.register(r'attachments', AttachmentViewSet)
@@ -18,6 +18,8 @@ router.register(r'engineer_org_group_participation_history', EngineerOrgGroupPar
 router.register(r'topics', TopicViewSet)
 router.register(r'topic_engineer_assignments', TopicEngineerAssignmentViewSet)
 
+router.register(r'scales', ScaleViewSet)
+router.register(r'reasons', ReasonViewSet)
 router.register(r'credits', CreditViewSet)
 
 # Wire up our API using automatic URL routing.

@@ -159,14 +159,27 @@ class TopicEngineerAssignment(OrgModel):
         return self.is_owner(user) or (user == self.engineer.auth_user)
 
 
+class Scale(OrgModel):
+    name = models.CharField(max_length=256)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+
+class Reason(OrgModel):
+    name = models.CharField(max_length=256)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
+
+
 class Credit(OrgModel):
     time = models.DateTimeField(auto_now=True, verbose_name="last modification time")
     credited_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="credits_received",
                                       verbose_name="credited individual")
     credits = models.FloatField(default=0)
-    scale = models.CharField(max_length=256, null=True, blank=True)
-    reason = models.TextField()
-    creditor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="credits_given")
+    scale = models.ForeignKey(Scale, on_delete=models.CASCADE, related_name="credits")
+    reason = models.ForeignKey(Reason, on_delete=models.CASCADE, related_name="credits")
+    creditor = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="credits_given")
 
     def is_owner(self, user):
         return self.creditor == user
@@ -177,5 +190,6 @@ class Credit(OrgModel):
     def is_guest(self, user):
         return self.credited_user == user
 
+    # noinspection PyUnresolvedReferences
     def __str__(self):
         return str(self.credited_user.username) + ": " + str(self.credits)
