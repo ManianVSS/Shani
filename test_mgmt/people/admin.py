@@ -3,7 +3,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
-    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment, Credit
 
 
 @admin.register(Attachment)
@@ -102,3 +102,15 @@ class TopicEngineerAssignmentAdmin(CustomModelAdmin):
         'rating',
     )
     search_fields = ['status', 'start_date', 'end_date']
+
+
+@admin.register(Credit)
+class CreditAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        'time',
+        ('credited_user', RelatedOnlyFieldListFilter),
+        ('creditor', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['time', 'scale', 'reason']

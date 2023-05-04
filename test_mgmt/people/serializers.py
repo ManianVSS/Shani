@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
-    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment, Credit
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -56,3 +56,9 @@ class TopicEngineerAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicEngineerAssignment
         fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', 'org_group', 'published', ]
+
+
+class CreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Credit
+        fields = ['id', 'time', 'credited_user', 'credits', 'scale', 'reason', 'creditor', 'org_group', 'published', ]

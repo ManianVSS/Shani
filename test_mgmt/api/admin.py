@@ -20,7 +20,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     # noinspection PyProtectedMember
     def get_list_display(self, request):
         return [f.name for f in self.model._meta.get_fields() if f.concrete and
-                not (f.is_relation or f.many_to_many or f.many_to_one or f.one_to_many)]
+                not (f.many_to_many or f.one_to_many)]
         # return [
         #     f.name if f.model != self.model else None
         #     for f in self.model._meta.get_fields()

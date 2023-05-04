@@ -5,11 +5,11 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, \
-    Attachment
+    Attachment, Credit
 from .serializers import EngineerSerializer, \
     SiteHolidaySerializer, \
     LeaveSerializer, EngineerOrgGroupParticipationSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
-    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, AttachmentSerializer
+    EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, AttachmentSerializer, CreditSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -166,6 +166,26 @@ class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
         'rating': compare_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+    }
+
+
+class CreditViewSet(ShaniOrgGroupViewSet):
+    queryset = Credit.objects.all()
+    serializer_class = CreditSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = ['time', 'scale', 'reason']
+    ordering_fields = ['id', 'time', 'credited_user', 'creditor', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'time': date_fields_filter_lookups,
+        'credited_user': id_fields_filter_lookups,
+        'credits': compare_fields_filter_lookups,
+        'scale': string_fields_filter_lookups,
+        'reason': string_fields_filter_lookups,
+        'creditor': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
     }
