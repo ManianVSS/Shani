@@ -73,21 +73,21 @@ class Step(OrgModel):
                 (self.feature is not None) and hasattr(self.feature, 'is_member') and self.feature.is_member(user))
 
 
-class StepInstance:
-    def __init__(self, step, data):
-        self.step = step if step else "<unnamed>"
-        self.data = data if data else {}
-
-    def __str__(self):
-        return str(step)
-
-
-class ScenarioInstance(OrgModel):
-
-    def __init__(self, step, data):
-        name = models.CharField(max_length=1024, unique=True)
-        summary = models.CharField(max_length=1024, null=True, blank=True)
-        data = models.JSONField(null=True, blank=True)
-
-    def __str__(self):
-        return '[' + str(self.sort_order) + ']: ' + str(step)
+# class StepInstance:
+#     def __init__(self, step, data):
+#         self.step = step if step else "<unnamed>"
+#         self.data = data if data else {}
+#
+#     def __str__(self):
+#         return str(self.step)
+#
+#
+# class ScenarioInstance:
+#
+#     def __init__(self, step, data):
+#         self.name = models.CharField(max_length=1024, unique=True)
+#         self.summary = models.CharField(max_length=1024, null=True, blank=True)
+#         self.data = models.JSONField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return '[' + str(self.name) + ']: ' + str(self.summary)

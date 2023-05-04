@@ -126,10 +126,9 @@ class Environment(OrgModel):
             return self.objects.all()
         user_id = user.id if user else None
         return self.objects.filter(Q(org_group__isnull=True)
-                                   | (Q(published=True) & (Q(org_group__guests__pk=user_id)
-                                                           | Q(org_group__members__pk=user_id)
-                                                           | Q(org_group__leaders__pk=user_id))
-                                      )).distinct()
+                                   | Q(org_group__members__pk=user_id)
+                                   | Q(org_group__leaders__pk=user_id)
+                                   ).distinct()
 
     def can_read(self, user):
         return self.is_owner(user) or self.is_member(user)
