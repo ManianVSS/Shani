@@ -27,7 +27,7 @@ Admin console should be up on http://localhost:8000/admin
 ### **Production Setup**
 
 ##### **Installing python dependencies and postgres on Ubuntu**<br>
-
+Note: Create files referring to the .example files in root directory</br>
 ##### **Pre-Requisites**</br>
 Python 3, pip , postgres database and libpq-dev </br>
 > sudo apt install libpq-dev</br>
