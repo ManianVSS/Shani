@@ -71,7 +71,7 @@ class OrgGroup(BaseModel):
         user_id = user.id if user else None
         if user.is_superuser:
             return self.objects.all()
-        return self.objects.filter((Q(published=True) & Q(guests__pk=user_id))
+        return self.objects.filter(Q(guests__pk=user_id)
                                    | Q(members__pk=user_id)
                                    | Q(leaders__pk=user_id)
                                    ).distinct()
@@ -85,16 +85,6 @@ class OrgModel(BaseModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group')
 
-    def can_read(self, user):
-        return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(
-            user) or self.org_group.is_guest(user)
-
-    def can_modify(self, user):
-        return (self.org_group is None) or self.org_group.is_owner(user) or self.org_group.is_member(user)
-
-    def can_delete(self, user):
-        return (self.org_group is None) or self.org_group.is_owner(user)
-
     def is_owner(self, user):
         return (self.org_group is None) or self.org_group.is_owner(user)
 
@@ -104,12 +94,21 @@ class OrgModel(BaseModel):
     def is_guest(self, user):
         return (self.org_group is None) or self.org_group.is_guest(user)
 
+    def can_read(self, user):
+        return (self.org_group is None) or self.is_owner(user) or self.is_member(user) or self.is_guest(user)
+
+    def can_modify(self, user):
+        return (self.org_group is None) or self.is_owner(user) or self.is_member(user)
+
+    def can_delete(self, user):
+        return (self.org_group is None) or self.is_owner(user)
+
     def get_list_query_set(self, user):
         if user.is_superuser:
             return self.objects.all()
         user_id = user.id if user else None
         return self.objects.filter(Q(org_group__isnull=True)
-                                   | (Q(published=True) & Q(org_group__guests__pk=user_id))
+                                   | Q(org_group__guests__pk=user_id)
                                    | Q(org_group__members__pk=user_id)
                                    | Q(org_group__leaders__pk=user_id)
                                    ).distinct()

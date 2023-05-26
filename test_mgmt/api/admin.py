@@ -73,7 +73,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             else:
                 return self.model.objects.all()
             # return self.model.objects.filter(Q(org_group__isnull=True)
-            #                                  | (Q(published=True) & Q(org_group__guests__pk=user_id))
+            #                                  | Q(org_group__guests__pk=user_id)
             #                                  | Q(org_group__members__pk=user_id)
             #                                  | Q(org_group__leaders__pk=user_id)
             #                                  ).distinct()
