@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
-from rest_framework import permissions
 from rest_framework import viewsets
-from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions
+from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions, IsAdminUser
 
 from .models import Attachment, OrgGroup
 from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer
@@ -19,6 +18,11 @@ datetime_fields_filter_lookups = ['exact', 'lte', 'gte', 'range', ]
 # time, hour, minute, second
 default_search_fields = ['name', 'summary', 'description', ]
 default_ordering = ['id', ]
+
+
+class IsSuperUser(IsAdminUser):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_superuser)
 
 
 class DjangoObjectPermissionsOrAnonReadOnly(DjangoObjectPermissions):
@@ -78,7 +82,7 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsSuperUser]
     search_fields = ['id', 'username', 'first_name', 'last_name', 'email']
     ordering_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined', ]
     ordering = default_ordering
@@ -97,7 +101,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsSuperUser]
     search_fields = ['id', 'name', ]
     ordering_fields = ['id', 'name', ]
     ordering = default_ordering

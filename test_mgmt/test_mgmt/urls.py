@@ -28,6 +28,11 @@ urlpatterns = [
 
                   # Swagger
                   path('swagger/', schema_view, name='docs'),
+
+                  # Trap code access (?(py|sh|bat|htaccess))
+                  re_path('(^.*[.](py|sh|bat|htaccess)$)',
+                          TemplateView.as_view(template_name='errors/forbidden.html')),
+
                   re_path(
                       '(^(?!(data|admin|swagger|api|siteconfig|requirements|workitems|testdesign|automation|execution|people)).*$)',
                       TemplateView.as_view(template_name='index.html')),
