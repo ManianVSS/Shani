@@ -36,15 +36,15 @@ def reload_admin_site_name(site_name):
         except Exception as e:
             print("Defaulting site name Shani as no site_setting data found")
 
-    admin.site.site_header = site_name + " Website Administration"
-    admin.site.site_title = site_name + " Website Admin Portal"
-    admin.site.index_title = "Welcome to " + site_name + " Website Administration Portal"
+    admin.site.site_header = site_name + " Administration"
+    admin.site.site_title = site_name + " Admin Portal"
+    admin.site.index_title = "Welcome to " + site_name + " Administration Portal"
 
 
 # method for updating
 @receiver(post_save, sender=Configuration, dispatch_uid="update_admin_site_name")
 def update_admin_site_name(sender, instance, **kwargs):
-    reload_admin_site_name(instance.name)
+    reload_admin_site_name(None)
 
 
 if 'runserver' in sys.argv:
