@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
-    ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+    ShaniOrgGroupViewSet, datetime_fields_filter_lookups, IsSuperUser
 from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event, Configuration
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
     CategorySerializer, EventSerializer, ConfigurationSerializer
@@ -17,7 +17,7 @@ from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSeri
 class ConfigurationViewSet(ModelViewSet):
     queryset = Configuration.objects.all()
     serializer_class = ConfigurationSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsSuperUser]
     search_fields = ['name', 'value']
     ordering_fields = ['id', 'name']
     ordering = ['name']
