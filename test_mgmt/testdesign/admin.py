@@ -9,7 +9,7 @@ from .models import Attachment, Tag, TestCaseCategory, TestCase
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -17,7 +17,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -26,7 +26,7 @@ class TagAdmin(CustomModelAdmin):
 @admin.register(TestCaseCategory)
 class TestCaseCategoryAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('parent', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),

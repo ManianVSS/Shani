@@ -19,10 +19,11 @@ class GroupSerializer(serializers.ModelSerializer):
 class OrgGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrgGroup
-        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'org_group', 'leaders', 'published', ]
+        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'org_group', 'leaders', 'created_at',
+                  'updated_at', 'published', ]
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'published', ]
+        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', ]

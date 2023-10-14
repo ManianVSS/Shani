@@ -33,7 +33,7 @@ class DisplayItemViewSet(ShaniOrgGroupViewSet):
     serializer_class = DisplayItemSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'published', ]
+    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = ['id', 'sort_order', 'name']
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -42,7 +42,8 @@ class DisplayItemViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -61,7 +62,8 @@ class EventViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -79,7 +81,8 @@ class PageViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -97,7 +100,8 @@ class CategoryViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -115,7 +119,8 @@ class CatalogViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -134,7 +139,8 @@ class SiteSettingsViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'email': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 

@@ -6,7 +6,7 @@ from .models import Attachment, Tag, FeatureCategory, Feature, UseCase, Requirem
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'published', ]
+        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', ]
 
 
 class TagSerializer(serializers.ModelSerializer):

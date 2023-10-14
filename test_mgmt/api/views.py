@@ -119,7 +119,7 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
     serializer_class = OrgGroupSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'published', ]
+    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -130,7 +130,8 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
         'leaders': exact_fields_filter_lookups,
         'members': exact_fields_filter_lookups,
         'guests': exact_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -139,11 +140,12 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }

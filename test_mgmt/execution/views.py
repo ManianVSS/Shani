@@ -7,9 +7,9 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     datetime_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from . import ipte_util
-from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord
+from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord, Build
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
-    ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer
+    ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer, BuildSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -17,13 +17,14 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -32,7 +33,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
     serializer_class = TagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -40,7 +41,8 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -49,14 +51,35 @@ class ReleaseViewSet(ShaniOrgGroupViewSet):
     serializer_class = ReleaseSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class BuildViewSet(ShaniOrgGroupViewSet):
+    queryset = Build.objects.all()
+    serializer_class = BuildSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'release', 'name', 'build_time', 'summary', 'org_group', 'created_at', 'updated_at',
+                       'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'release': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'build_time': datetime_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -65,7 +88,8 @@ class DefectViewSet(ShaniOrgGroupViewSet):
     serializer_class = DefectSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', 'org_group', 'published', ]
+    ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', 'org_group', 'created_at',
+                       'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -74,9 +98,11 @@ class DefectViewSet(ShaniOrgGroupViewSet):
         'external_id': string_fields_filter_lookups,
 
         'release': id_fields_filter_lookups,
+        'build': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -85,16 +111,19 @@ class RunViewSet(ShaniOrgGroupViewSet):
     serializer_class = RunSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'build', 'name', 'time', 'org_group', 'published', ]
+    ordering_fields = ['id', 'build', 'name', 'time', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'build': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
         'end_time': datetime_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'release': id_fields_filter_lookups,
+        'build': id_fields_filter_lookups,
+        'release__name': string_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -103,7 +132,8 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
     serializer_class = ExecutionRecordSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'status', 'run', 'start_time', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'status', 'run', 'start_time', 'org_group', 'created_at', 'updated_at',
+                       'published', ]
     ordering = default_ordering
     filterset_fields = {
         # 'id': id_fields_filter_lookups,
@@ -116,7 +146,8 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
         'end_time': datetime_fields_filter_lookups,
         # 'testcase': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -127,11 +158,13 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                        'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
-                       'targetIPTE', 'ipte', 'org_group', 'published', ]
+                       'targetIPTE', 'ipte', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'build': string_fields_filter_lookups,
+        'release': id_fields_filter_lookups,
+        'build': id_fields_filter_lookups,
+        'release__name': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
         'modified_time': datetime_fields_filter_lookups,
@@ -142,7 +175,8 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'targetIPTE': compare_fields_filter_lookups,
         'incidents': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -151,7 +185,8 @@ class EnvironmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = EnvironmentSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', 'created_at',
+                       'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -160,8 +195,10 @@ class EnvironmentViewSet(ShaniOrgGroupViewSet):
         'type': string_fields_filter_lookups,
         'purpose': string_fields_filter_lookups,
         'current_release': id_fields_filter_lookups,
+        'current_build': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
+        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 

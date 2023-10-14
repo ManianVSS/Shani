@@ -9,7 +9,7 @@ from .models import Step, Attachment, Tag
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -17,7 +17,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -26,7 +26,7 @@ class TagAdmin(CustomModelAdmin):
 @admin.register(Step)
 class StepAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
         ('test_design_owner', RelatedOnlyFieldListFilter),

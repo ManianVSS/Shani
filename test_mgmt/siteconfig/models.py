@@ -6,6 +6,8 @@ from api.models import OrgModel, OrgGroup
 class Configuration(models.Model):
     name = models.CharField(max_length=256, unique=True)
     value = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.value)

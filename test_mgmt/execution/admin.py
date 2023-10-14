@@ -2,14 +2,14 @@ from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect
+from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect, Build
 
 
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -17,7 +17,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -26,7 +26,18 @@ class TagAdmin(CustomModelAdmin):
 @admin.register(Release)
 class ReleaseAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
+
+
+@admin.register(Build)
+class BuildAdmin(CustomModelAdmin):
+    list_filter = (
+        ('release', RelatedOnlyFieldListFilter),
+        'build_time',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -35,9 +46,10 @@ class ReleaseAdmin(CustomModelAdmin):
 @admin.register(Defect)
 class DefectAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('release', RelatedOnlyFieldListFilter),
+        ('build', RelatedOnlyFieldListFilter),
     )
     search_fields = ['summary', 'description', 'external_id', ]
 
@@ -45,9 +57,10 @@ class DefectAdmin(CustomModelAdmin):
 @admin.register(Run)
 class RunAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('release', RelatedOnlyFieldListFilter),
+        ('build', RelatedOnlyFieldListFilter),
         'build',
         'start_time',
         'end_time',
@@ -77,6 +90,7 @@ class ReliabilityRunAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
         'status',
         ('release', RelatedOnlyFieldListFilter),
+        ('build', RelatedOnlyFieldListFilter),
         'build',
         'testName',
         'testEnvironmentType',
@@ -94,6 +108,7 @@ class EnvironmentAdmin(CustomModelAdmin):
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('current_release', RelatedOnlyFieldListFilter),
+        ('current_build', RelatedOnlyFieldListFilter),
         'type',
         'purpose',
     )

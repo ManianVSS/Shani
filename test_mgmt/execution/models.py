@@ -29,8 +29,21 @@ class Release(OrgModel):
     description = models.TextField(null=True, blank=True)
 
 
+class Build(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='execution_builds')
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='builds')
+    name = models.CharField(max_length=256, unique=True)
+    build_time = models.DateTimeField(null=True, blank=True)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    properties = models.JSONField(null=True, blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='build_attachments', blank=True)
+
+
 class Defect(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='defects')
+    build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL, related_name='defects')
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True)
@@ -40,7 +53,7 @@ class Defect(OrgModel):
 
 class Run(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
-    build = models.CharField(max_length=256)
+    build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
     name = models.CharField(max_length=256, unique=True)
     start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
     end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
@@ -78,7 +91,7 @@ class ReliabilityRun(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
                                 related_name='reliability_runs')
 
-    build = models.CharField(max_length=256, null=True, blank=True)
+    build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL, related_name='reliability_runs')
     name = models.CharField(max_length=256, null=True, blank=True)
 
     start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
@@ -117,8 +130,9 @@ class Environment(OrgModel):
     details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
-                                        related_name='environments',
-                                        verbose_name='currently release')
+                                        related_name='environments', verbose_name='currently installed release')
+    current_build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL,
+                                      related_name='environments', verbose_name='currently installed build')
     properties = models.JSONField(null=True, blank=True)
 
     def get_list_query_set(self, user):

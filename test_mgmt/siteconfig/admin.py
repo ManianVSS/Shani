@@ -54,7 +54,7 @@ if 'runserver' in sys.argv:
 @admin.register(DisplayItem)
 class DisplayItemAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'link']
@@ -63,7 +63,7 @@ class DisplayItemAdmin(CustomModelAdmin):
 @admin.register(Event)
 class EventAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'time',
     )
@@ -73,7 +73,7 @@ class EventAdmin(CustomModelAdmin):
 @admin.register(Page)
 class PageAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'iframe_link']

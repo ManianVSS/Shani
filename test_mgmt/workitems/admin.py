@@ -9,7 +9,7 @@ from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feed
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', ' file', ]
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -17,7 +17,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -26,7 +26,7 @@ class TagAdmin(CustomModelAdmin):
 @admin.register(Release)
 class ReleaseAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -35,7 +35,7 @@ class ReleaseAdmin(CustomModelAdmin):
 @admin.register(Epic)
 class EpicAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'weight',
         ('release', RelatedOnlyFieldListFilter),
@@ -46,7 +46,7 @@ class EpicAdmin(CustomModelAdmin):
 @admin.register(Feature)
 class FeatureAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'weight',
         ('epic', RelatedOnlyFieldListFilter),
@@ -57,7 +57,7 @@ class FeatureAdmin(CustomModelAdmin):
 @admin.register(Sprint)
 class SprintAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'number',
         'start_date',
@@ -70,7 +70,7 @@ class SprintAdmin(CustomModelAdmin):
 @admin.register(Story)
 class StoryAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'weight',
         'rank',
@@ -83,7 +83,7 @@ class StoryAdmin(CustomModelAdmin):
 @admin.register(Feedback)
 class FeedbackAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         'time',
         ('release', RelatedOnlyFieldListFilter),

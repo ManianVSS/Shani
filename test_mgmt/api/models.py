@@ -11,6 +11,8 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False, verbose_name='is published content')
 
     def __str__(self):
