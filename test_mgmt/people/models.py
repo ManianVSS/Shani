@@ -202,6 +202,9 @@ class Credit(OrgModel):
 
 
 class EngineerSkills(OrgModel):
+    class Meta:
+        verbose_name_plural = "engineer skills"
+
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="skills")
     skill = models.CharField(max_length=256, null=True, blank=True, )
     experience = models.FloatField(default=0)
