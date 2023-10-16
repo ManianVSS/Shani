@@ -18,13 +18,14 @@ class TagSerializer(serializers.ModelSerializer):
 class ReleaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Release
-        fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'name', 'summary', 'description', 'properties', 'attachments', 'org_group', 'created_at',
+                  'updated_at', 'published', ]
 
 
 class BuildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Build
-        fields = ['id', 'release', 'name', 'build_time', 'summary', 'description', 'properties', 'attachments',
+        fields = ['id', 'release', 'name', 'type', 'build_time', 'summary', 'description', 'properties', 'attachments',
                   'org_group', 'created_at', 'updated_at', 'published', ]
 
 

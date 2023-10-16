@@ -32,13 +32,14 @@ class EngineerOrgGroupParticipationSerializer(serializers.ModelSerializer):
 class SiteHolidaySerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteHoliday
-        fields = ['id', 'name', 'date', 'summary', 'attachments', 'site', ]
+        fields = ['id', 'name', 'date', 'summary', 'attachments', 'site', 'created_at', 'updated_at', 'published', ]
 
 
 class LeaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Leave
-        fields = ['id', 'engineer', 'start_date', 'end_date', 'summary', 'attachments', 'status', ]
+        fields = ['id', 'engineer', 'start_date', 'end_date', 'summary', 'attachments', 'status', 'created_at',
+                  'updated_at', 'published', ]
 
 
 class EngineerOrgGroupParticipationHistorySerializer(serializers.ModelSerializer):

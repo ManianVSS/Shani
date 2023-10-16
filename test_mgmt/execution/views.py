@@ -23,7 +23,8 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -41,7 +42,8 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -58,7 +60,8 @@ class ReleaseViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -68,17 +71,19 @@ class BuildViewSet(ShaniOrgGroupViewSet):
     serializer_class = BuildSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'release', 'name', 'build_time', 'summary', 'org_group', 'created_at', 'updated_at',
-                       'published', ]
+    ordering_fields = ['id', 'release', 'name', 'type', 'build_time', 'summary', 'org_group', 'created_at',
+                       'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'release': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
+        'type': string_fields_filter_lookups,
         'build_time': datetime_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -101,7 +106,8 @@ class DefectViewSet(ShaniOrgGroupViewSet):
         'build': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -122,7 +128,8 @@ class RunViewSet(ShaniOrgGroupViewSet):
         'release': id_fields_filter_lookups,
         'build': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -146,7 +153,8 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
         'end_time': datetime_fields_filter_lookups,
         # 'testcase': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 

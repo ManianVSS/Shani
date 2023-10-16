@@ -16,6 +16,9 @@ class ConfigurationAdmin(ImportExportModelAdmin):
     search_fields = ['name', 'value', ]
     ordering = ('name',)
     list_display = ['name', 'value', ]
+    list_filter = (
+        'created_at', 'updated_at',
+    )
 
 
 # class MyAdminSite(AdminSite):

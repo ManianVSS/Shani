@@ -27,6 +27,8 @@ class Release(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    properties = models.JSONField(null=True, blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='release_attachments', blank=True)
 
 
 class Build(OrgModel):
@@ -34,6 +36,7 @@ class Build(OrgModel):
                                   verbose_name='organization group', related_name='execution_builds')
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='builds')
     name = models.CharField(max_length=256, unique=True)
+    type = models.CharField(max_length=256, null=True, blank=True)
     build_time = models.DateTimeField(null=True, blank=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)

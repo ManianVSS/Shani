@@ -1,7 +1,6 @@
 from django.http import HttpResponse
-from rest_framework import viewsets, permissions, status
+from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -19,12 +18,14 @@ class ConfigurationViewSet(ModelViewSet):
     serializer_class = ConfigurationSerializer
     permission_classes = [IsSuperUser]
     search_fields = ['name', 'value']
-    ordering_fields = ['id', 'name']
-    ordering = ['name']
+    ordering_fields = ['id', 'name', 'created_at', 'updated_at', ]
+    ordering = ['name', 'updated_at']
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'value': string_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 
@@ -42,7 +43,8 @@ class DisplayItemViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -62,7 +64,8 @@ class EventViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -81,7 +84,8 @@ class PageViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -100,7 +104,8 @@ class CategoryViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -119,7 +124,8 @@ class CatalogViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -139,7 +145,8 @@ class SiteSettingsViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'email': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -304,7 +311,6 @@ def get_event_as_dict(event_info):
         "time": event_info.time,
         "link": event_info.link,
         'image': DisplayItemSerializer(event_info).data['image'],
-        "org_group": OrgGroupSerializer(event_info.org_group).data[
-            'id'] if event_info.org_group else None,
+        "org_group": OrgGroupSerializer(event_info.org_group).data['id'] if event_info.org_group else None,
         "published": event_info.published,
     }

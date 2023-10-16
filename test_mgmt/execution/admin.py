@@ -29,18 +29,19 @@ class ReleaseAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['name', 'summary', 'description', ]
+    search_fields = ['name', 'summary', 'description', 'properties', ]
 
 
 @admin.register(Build)
 class BuildAdmin(CustomModelAdmin):
     list_filter = (
         ('release', RelatedOnlyFieldListFilter),
+        'type',
         'build_time',
         'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['name', 'summary', 'description', ]
+    search_fields = ['name', 'summary', 'description', 'properties', ]
 
 
 @admin.register(Defect)

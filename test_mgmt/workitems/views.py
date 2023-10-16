@@ -1,5 +1,3 @@
-from rest_framework import viewsets, permissions
-
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, date_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
@@ -19,7 +17,8 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -37,7 +36,8 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -54,7 +54,8 @@ class ReleaseViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -75,7 +76,8 @@ class EpicViewSet(ShaniOrgGroupViewSet):
         'release': id_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -96,7 +98,8 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'epic': id_fields_filter_lookups,
         'epic__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -116,7 +119,8 @@ class SprintViewSet(ShaniOrgGroupViewSet):
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -139,7 +143,8 @@ class StoryViewSet(ShaniOrgGroupViewSet):
         'feature': id_fields_filter_lookups,
         'feature__name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -158,6 +163,7 @@ class FeedbackViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'release': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }

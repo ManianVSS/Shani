@@ -1,7 +1,5 @@
-from rest_framework import viewsets, permissions
-
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
+    exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups
 from .models import Attachment, Tag, FeatureCategory, Feature, Requirement, UseCase
 from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
@@ -19,7 +17,8 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -37,7 +36,8 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -56,7 +56,8 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
         'parent': id_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
     }
@@ -78,7 +79,8 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
     }
@@ -100,7 +102,8 @@ class UseCaseViewSet(ShaniOrgGroupViewSet):
         'requirements': id_fields_filter_lookups,
 
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -118,6 +121,7 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'use_cases': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
