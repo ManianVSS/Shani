@@ -5,12 +5,12 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
 from .models import Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, \
-    Attachment, Credit, Scale, Reason
+    Attachment, Credit, Scale, Reason, EngineerSkills
 from .serializers import EngineerSerializer, \
     SiteHolidaySerializer, \
     LeaveSerializer, EngineerOrgGroupParticipationSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
     EngineerOrgGroupParticipationHistorySerializer, SiteSerializer, AttachmentSerializer, CreditSerializer, \
-    ScaleSerializer, ReasonSerializer
+    ScaleSerializer, ReasonSerializer, EngineerSkillsSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -54,7 +54,7 @@ class EngineerViewSet(ShaniOrgGroupViewSet):
     serializer_class = EngineerSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', 'org_group', 'created_at',
+    ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', 'points', 'org_group', 'created_at',
                        'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
@@ -64,6 +64,7 @@ class EngineerViewSet(ShaniOrgGroupViewSet):
         'auth_user': id_fields_filter_lookups,
         'role': exact_fields_filter_lookups,
         'site': id_fields_filter_lookups,
+        'points': compare_fields_filter_lookups,
         'auth_user__username': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
@@ -251,6 +252,25 @@ class CreditViewSet(ShaniOrgGroupViewSet):
         'reason': id_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'creditor': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class EngineerSkillsViewSet(ShaniOrgGroupViewSet):
+    queryset = EngineerSkills.objects.all()
+    serializer_class = EngineerSkillsSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'engineer', 'skill', 'experience', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'engineer': id_fields_filter_lookups,
+        'skill': string_fields_filter_lookups,
+        'experience': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

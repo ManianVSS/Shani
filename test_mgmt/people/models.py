@@ -26,6 +26,7 @@ class Engineer(OrgModel):
     role = models.CharField(max_length=256, null=True, blank=True, )
     site = models.ForeignKey(Site, null=True, blank=True, on_delete=models.SET_NULL,
                              related_name="engineers")
+    points = models.FloatField(default=0)
     attachments = models.ManyToManyField(Attachment, related_name='engineer_attachments', blank=True)
 
     def __str__(self):
@@ -115,8 +116,7 @@ class EngineerOrgGroupParticipationHistory(OrgModel):
 
     def __str__(self):
         return "On " + str(self.date) + ", " + str(self.engineer) + " participated in " + str(
-            self.org_group) + " with capacity " + str(
-            self.capacity)
+            self.org_group) + " with capacity " + str(self.capacity)
 
 
 class Topic(OrgModel):
@@ -199,3 +199,12 @@ class Credit(OrgModel):
     # noinspection PyUnresolvedReferences
     def __str__(self):
         return str(self.credited_user.username) + ": " + str(self.credits)
+
+
+class EngineerSkills(OrgModel):
+    engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, related_name="skills")
+    skill = models.CharField(max_length=256, null=True, blank=True, )
+    experience = models.FloatField(default=0)
+
+    # def __str__(self):
+    #     return str(self.engineer) + " has the skill " + str(self.skill) + " with experience " + str(self.capacity)
