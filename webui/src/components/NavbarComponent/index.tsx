@@ -1,22 +1,12 @@
 import { Navbar, Group, Code, ScrollArea, createStyles } from "@mantine/core";
-import {
-  IconNotes,
-  IconCalendarStats,
-  IconGauge,
-  IconPresentationAnalytics,
-  IconFileAnalytics,
-  IconAdjustments,
-  IconLock,
-  IconHome,
-  TablerIcon,
-} from "@tabler/icons";
+import { IconHome } from "@tabler/icons";
 
 import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
 import { UserButton } from "./UserButton";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
-import { Button, Dropdown, Form } from "react-bootstrap";
-import { Menu, PersonIcon, LogOutIcon, LogInIcon } from "evergreen-ui";
+import { Form } from "react-bootstrap";
+import { Menu, LogOutIcon, LogInIcon } from "evergreen-ui";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { colorScheme, sideBar } from "../../state/mode";
 import DarkModeToggle from "react-dark-mode-toggle";
@@ -27,12 +17,11 @@ import {
   AdminPanelSettings,
   Settings,
   ReduceCapacity,
-  Person2Rounded,
   Person2Outlined,
 } from "@mui/icons-material";
-import { axiosClient } from "../../hooks/api";
+// import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
-import { allPagesData } from "../../state/allPagesData";
+// import { allPagesData } from "../../state/allPagesData";
 import "./style.css";
 import { authState } from "../../state/authData";
 

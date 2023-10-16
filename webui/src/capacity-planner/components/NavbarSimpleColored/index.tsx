@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { createStyles, Navbar, Group, Code } from "@mantine/core";
 import {
-  IconLogout,
   IconHome,
   IconBook,
   IconUser,
@@ -10,8 +9,7 @@ import {
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { authState } from "../../../state/authData";
-import { useRecoilState } from "recoil";
-import { Button } from "react-bootstrap";
+import { useRecoilValue } from "recoil";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -117,24 +115,14 @@ export function NavbarSimpleColored() {
   const navigate = useNavigate();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState("Billing");
-  const [auth, setAuth] = useRecoilState(authState);
-  const logout = () => {
-    window.localStorage.setItem("accessToken", "");
-    window.localStorage.setItem("user", "");
-    navigate(`/login`);
-    setAuth({
-      accessToken: null,
-      authStatus: false,
-      errorMessage: "",
-      userName: "",
-    });
-  };
+  const auth = useRecoilValue(authState);
+
   const links = data.map((item) => (
     <a
       className={cx(classes.link, {
         [classes.linkActive]: item.label === active,
       })}
-      // href={item.link}
+      href={item.link}
       key={item.label}
       onClick={(event) => {
         event.preventDefault();

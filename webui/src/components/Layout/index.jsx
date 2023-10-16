@@ -1,18 +1,17 @@
 import { AppShell } from "@mantine/core";
 import React from "react";
-import { theme } from "../../theme";
 import { NavbarNested } from "../NavbarComponent";
 import { useRecoilState } from "recoil";
 import { sideBar } from "../../state/mode";
 import Draggable from "react-draggable";
-import { LogOutIcon, Menu, MenuIcon, Popover, Position } from "evergreen-ui";
+import { Menu, Popover, Position } from "evergreen-ui";
 import { Settings } from "@mui/icons-material";
 import FloatingButton from "../FloatingButton";
-import { authState } from "../../state/authData";
+// import { authState } from "../../state/authData";
 
 const Layout = (props) => {
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
-  const [auth, setAuth] = useRecoilState(authState);
+  // const [auth, setAuth] = useRecoilState(authState);
   return (
     <div>
       {sideBarState === "open" ? (

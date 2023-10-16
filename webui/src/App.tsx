@@ -1,26 +1,23 @@
 import { MantineProvider } from "@mantine/core";
-import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 // import { theme } from "./theme";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 
-import { MantineThemeOverride, ColorScheme } from "@mantine/core";
+import { MantineThemeOverride } from "@mantine/core";
 import { colorScheme } from "./state/mode";
 import Category from "./pages/Category";
 import "@tremor/react/dist/esm/tremor.css";
-import Dashboard from "./pages/Dashboard";
-import Documentation from "./pages/Documentation";
+
 import { globalNavData } from "./state/globalNavData";
 import { allPagesData } from "./state/allPagesData";
 import { axiosClient } from "./hooks/api";
-import { IconFileAnalytics, IconHome, TablerIcon } from "@tabler/icons";
+import { IconFileAnalytics, IconHome } from "@tabler/icons";
 import { useEffect } from "react";
 import NotFound from "./pages/NotFound";
-import CapacityApp from "./capacity-planner/CapacityApp";
 import AlertTemplate from "./capacity-planner/components/AlertTemplate";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
-import { PrivateRoute } from "./hooks/PrivateRoute";
 import CapacityLayout from "./capacity-planner/components/CapacityLayout";
 import Capacity from "./capacity-planner/pages/Capacity";
 import EngineerAvailability from "./capacity-planner/pages/EngineerAvailability";
