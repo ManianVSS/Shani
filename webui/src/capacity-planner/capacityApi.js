@@ -30,7 +30,7 @@ axiosClientForCapacity.interceptors.response.use(
       if (err.response.status === 401) {
         if (window.localStorage.getItem("accessToken")) {
           localStorage.clear();
-          window.location = window.location.origin + "/capacity-planner/login";
+          window.location = window.location.origin + "/login";
           return Promise.reject(err.response.data);
         }
       }
@@ -42,8 +42,6 @@ axiosClientForCapacity.interceptors.response.use(
   }
 );
 
-
-
 axiosClientForCapacity.interceptors.response.use(
   (res) => {
     return res;
@@ -54,7 +52,7 @@ axiosClientForCapacity.interceptors.response.use(
       if (err.response.status === 401) {
         if (window.localStorage.getItem("accessToken")) {
           localStorage.clear();
-          window.location = window.location.origin + "/capacity-planner/login";
+          window.location = window.location.origin + "/login";
           return Promise.reject(err.response.data);
         }
       }

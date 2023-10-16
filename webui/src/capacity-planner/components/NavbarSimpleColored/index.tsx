@@ -121,7 +121,7 @@ export function NavbarSimpleColored() {
   const logout = () => {
     window.localStorage.setItem("accessToken", "");
     window.localStorage.setItem("user", "");
-    navigate(`/capacity-planner/login`);
+    navigate(`/login`);
     setAuth({
       accessToken: null,
       authStatus: false,
@@ -176,7 +176,7 @@ export function NavbarSimpleColored() {
             <IconUser className={classes.linkIcon} stroke={1.5} />
             <span>{auth.userName.toUpperCase()}</span>
           </a>
-          <a
+          {/* <a
             href="#"
             className={classes.link}
             onClick={(event) => {
@@ -186,13 +186,13 @@ export function NavbarSimpleColored() {
           >
             <IconLogout className={classes.linkIcon} stroke={1.5} />
             <span>Logout</span>
-          </a>
+          </a> */}
 
           <a
             href="#"
             className={classes.link}
             onClick={() => {
-              navigate(-3);
+              navigate(`/`);
             }}
           >
             <IconTruckReturn className={classes.linkIcon} stroke={1.5} />

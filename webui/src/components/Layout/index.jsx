@@ -8,9 +8,11 @@ import Draggable from "react-draggable";
 import { LogOutIcon, Menu, MenuIcon, Popover, Position } from "evergreen-ui";
 import { Settings } from "@mui/icons-material";
 import FloatingButton from "../FloatingButton";
+import { authState } from "../../state/authData";
 
 const Layout = (props) => {
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
+  const [auth, setAuth] = useRecoilState(authState);
   return (
     <div>
       {sideBarState === "open" ? (
@@ -30,7 +32,7 @@ const Layout = (props) => {
         </AppShell>
       ) : (
         <div>
-          <Draggable >
+          <Draggable>
             <Popover
               position={Position.BOTTOM_RIGHT}
               content={
@@ -46,16 +48,11 @@ const Layout = (props) => {
                     </Menu.Item>
                   </Menu.Group>
                   <Menu.Divider />
-                  <Menu.Group>
-                    <Menu.Item icon={LogOutIcon} intent="danger">
-                      Logout
-                    </Menu.Item>
-                  </Menu.Group>
                 </Menu>
               }
             >
               <div>
-                <FloatingButton style={{zIndex:1}} />
+                <FloatingButton style={{ zIndex: 1 }} />
               </div>
             </Popover>
           </Draggable>

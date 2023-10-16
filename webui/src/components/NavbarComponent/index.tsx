@@ -16,7 +16,7 @@ import { UserButton } from "./UserButton";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { Button, Dropdown, Form } from "react-bootstrap";
-import { Menu, PersonIcon, LogOutIcon } from "evergreen-ui";
+import { Menu, PersonIcon, LogOutIcon, LogInIcon } from "evergreen-ui";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { colorScheme, sideBar } from "../../state/mode";
 import DarkModeToggle from "react-dark-mode-toggle";
@@ -27,11 +27,14 @@ import {
   AdminPanelSettings,
   Settings,
   ReduceCapacity,
+  Person2Rounded,
+  Person2Outlined,
 } from "@mui/icons-material";
 import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
 import { allPagesData } from "../../state/allPagesData";
 import "./style.css";
+import { authState } from "../../state/authData";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -101,11 +104,47 @@ export function NavbarNested() {
   const [mode, setMode] = useRecoilState(colorScheme);
   const [isDarkMode, setIsDarkMode] = useState("light");
   const [sideBarState, setSideBarState] = useRecoilState(sideBar);
+  const [auth, setAuth] = useRecoilState(authState);
+
+  const logout = () => {
+    window.localStorage.setItem("accessToken", "");
+    window.localStorage.setItem("user", "");
+    navigate(`/login`);
+    setAuth({
+      accessToken: null,
+      authStatus: false,
+      errorMessage: "",
+      userName: "",
+    });
+  };
+
+  const loadAuth = () => {
+    let token;
+    window.localStorage.getItem("accessToken") !== ""
+      ? (token = window.localStorage.getItem("accessToken"))
+      : (token = "");
+    let usr;
+    window.localStorage.getItem("user") !== ""
+      ? (usr = window.localStorage.getItem("user"))
+      : (usr = "");
+    if (token !== "") {
+      setAuth({
+        accessToken: token,
+        authStatus: true,
+        errorMessage: "",
+        userName: usr,
+      });
+    }
+  };
+  useEffect(() => {
+    loadAuth();
+  }, []);
 
   const onChange = (event) => {
     const value = event.target.value;
     navigate(value);
   };
+  console.log(auth.authStatus);
 
   useEffect(() => {
     if (localStorage.getItem("testCenterTheme") === null) {
@@ -182,45 +221,74 @@ export function NavbarNested() {
             <Popover id={`popover-positioned-${"top"}`}>
               <Popover.Body style={{ margin: 0, padding: 0 }}>
                 <Menu>
-                  <Menu.Group>
-                    <Menu.Item
-                      icon={ReduceCapacity}
-                      style={{ margin: 0 }}
-                      onClick={() => {
-                        navigate(`/capacity-planner/`);
-                      }}
-                    >
-                      Capacity Planner
-                    </Menu.Item>
-                  </Menu.Group>
-                  <Menu.Group>
-                    <Menu.Item
-                      icon={AdminPanelSettings}
-                      style={{ margin: 0 }}
-                      onClick={() => {
-                        window.open(
-                          "http://" + window.location.host + "/admin/",
-                          "_blank"
-                        );
-                      }}
-                    >
-                      Admin
-                    </Menu.Item>
-                  </Menu.Group>
-                  <Menu.Group>
-                    <Menu.Item
-                      icon={AddHomeOutlined}
-                      style={{ margin: 0 }}
-                      onClick={() => {
-                        window.open(
-                          "http://" + window.location.host + "/swagger/",
-                          "_blank"
-                        );
-                      }}
-                    >
-                      Swagger
-                    </Menu.Item>
-                  </Menu.Group>
+                  {auth.authStatus ? (
+                    <div>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={ReduceCapacity}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            navigate(`/capacity-planner/`);
+                          }}
+                        >
+                          Capacity Planner
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={AdminPanelSettings}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            window.open(
+                              "http://" + window.location.host + "/admin/",
+                              "_blank"
+                            );
+                          }}
+                        >
+                          Admin
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={AddHomeOutlined}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            window.open(
+                              "http://" + window.location.host + "/swagger/",
+                              "_blank"
+                            );
+                          }}
+                        >
+                          Swagger
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={Person2Outlined}
+                          style={{ margin: 0 }}
+                          onClick={() => {}}
+                        >
+                          Profile
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={LogOutIcon}
+                          intent="danger"
+                          style={{ margin: 0 }}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            logout();
+                          }}
+                        >
+                          Logout
+                        </Menu.Item>
+                      </Menu.Group>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+
                   <Menu.Group>
                     <Menu.Item
                       icon={Settings}
@@ -233,22 +301,38 @@ export function NavbarNested() {
                     </Menu.Item>
                   </Menu.Group>
                   <Menu.Divider />
-                  {/* <Menu.Group>
-                    <Menu.Item
-                      icon={LogOutIcon}
-                      intent="danger"
-                      style={{ margin: 0 }}
-                    >
-                      Logout
-                    </Menu.Item>
-                  </Menu.Group> */}
+
+                  {auth.authStatus ? (
+                    <></>
+                  ) : (
+                    <Menu.Group>
+                      <Menu.Item
+                        icon={LogInIcon}
+                        intent="blue"
+                        style={{ margin: 0 }}
+                        onClick={() => {
+                          navigate(`/login`);
+                        }}
+                      >
+                        Login
+                      </Menu.Item>
+                    </Menu.Group>
+                  )}
                 </Menu>
               </Popover.Body>
             </Popover>
           }
         >
           <div>
-            <UserButton image="" name="User Name" email="user@something.com" />
+            <UserButton
+              image=""
+              name={
+                auth.authStatus
+                  ? auth.userName?.toUpperCase()
+                  : "Anonymous User"
+              }
+              email="user@something.com"
+            />
           </div>
         </OverlayTrigger>
       </Navbar.Section>

@@ -9,12 +9,15 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import { useRecoilState } from "recoil";
-import { authState } from "../../../state/authData";
+import { authState } from "../../state/authData";
 import { useForm } from "react-hook-form";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { axiosClientForCapacity, axiosClientForLogin } from "../../capacityApi";
+import {
+  axiosClientForCapacity,
+  axiosClientForLogin,
+} from "../../capacity-planner/capacityApi";
 
 function Login() {
   const alert = useAlert();
@@ -45,7 +48,7 @@ function Login() {
             },
           })
           .then((res) => {
-            window.localStorage.setItem("userid", res.data.results[0].id);
+            // window.localStorage.setItem("userid", res.data.results[0].id);
           });
       })
       .catch((error) => {
@@ -64,7 +67,8 @@ function Login() {
   };
   useEffect(() => {
     if (auth.authStatus) {
-      navigate(`/capacity-planner`);
+      console.log("Authenticated");
+      navigate(`/`);
       // history.go(0);
     }
   }, [auth]);
@@ -75,7 +79,7 @@ function Login() {
         <MDBRow className="g-0">
           <MDBCol md="6">
             <MDBCardImage
-              src="/static/images/login.svg"
+              src="/static/images/testportal_login.svg"
               alt="login form"
               className="rounded-start w-100"
             />
@@ -89,19 +93,34 @@ function Login() {
                   icon="cubes fa-3x me-3"
                   style={{ color: "#ff6219" }}
                 />
-                <span className="h1 fw-bold mb-0">CAPACITY PLANNER</span>
+                <span
+                  className="h1 fw-bold mb-0"
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    marginLeft: "25%",
+                  }}
+                >
+                  TEST PORTAL
+                </span>
               </div>
 
               <h5
                 className="fw-normal my-2 pb-3"
-                style={{ letterSpacing: "1px" }}
+                style={{
+                  letterSpacing: "1px",
+                  color: "white",
+                  textAlign: "center",
+                }}
               >
                 Sign into your account
               </h5>
 
               <form onSubmit={handleSubmit(handleRegistration)}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label style={{ color: "white", textAlign: "center" }}>
+                    Username
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Enter Username"
@@ -111,7 +130,9 @@ function Login() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label style={{ color: "white", textAlign: "center" }}>
+                    Password
+                  </Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Password"
@@ -134,11 +155,11 @@ function Login() {
                     variant="success"
                     style={{ background: "#404040", color: "white" }}
                     onClick={() => {
-                      navigate(-2);
+                      navigate(`/`);
                     }}
                     type="submit"
                   >
-                    Return to Main Dashboard
+                    Return to home page
                   </Button>
                 </div>
               </form>

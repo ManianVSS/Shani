@@ -5,8 +5,7 @@ import CapacityHome from "./pages/CapacityHome";
 import Capacity from "./pages/Capacity";
 import EngineerAvailability from "./pages/EngineerAvailability";
 import Leaves from "./pages/Leaves";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "../pages/Login";
 import CapacityLayout from "./components/CapacityLayout";
 import { RecoilRoot } from "recoil";
 import { PrivateRoute } from "../hooks/PrivateRoute";
@@ -32,7 +31,9 @@ export default function CapacityApp() {
                 <Route path="/" element={<PrivateRoute />}>
                   <Route
                     path="/"
-                    element={<CapacityLayout page={<CapacityHome />} auth={true} />}
+                    element={
+                      <CapacityLayout page={<CapacityHome />} auth={true} />
+                    }
                   />
                 </Route>
                 <Route path="/capacity" element={<PrivateRoute />}>
@@ -45,7 +46,10 @@ export default function CapacityApp() {
                   <Route
                     path="/engineer-availability"
                     element={
-                      <CapacityLayout page={<EngineerAvailability />} auth={true} />
+                      <CapacityLayout
+                        page={<EngineerAvailability />}
+                        auth={true}
+                      />
                     }
                   />
                 </Route>
@@ -59,10 +63,6 @@ export default function CapacityApp() {
                   path="/login"
                   element={<CapacityLayout page={<Login />} auth={false} />}
                 />
-                {/* <Route
-                path="/register"
-                element={<Layout page={<Register />} auth={false} />}
-              /> */}
               </Routes>
             </Router>
           </RecoilRoot>

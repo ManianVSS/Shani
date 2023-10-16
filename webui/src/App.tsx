@@ -25,7 +25,7 @@ import CapacityLayout from "./capacity-planner/components/CapacityLayout";
 import Capacity from "./capacity-planner/pages/Capacity";
 import EngineerAvailability from "./capacity-planner/pages/EngineerAvailability";
 import Leaves from "./capacity-planner/pages/Leaves";
-import Login from "./capacity-planner/pages/Login";
+import Login from "./pages/Login";
 import { CapacityPrivateRoute } from "./capacity-planner/CapacityPrivateRoute";
 import CapacityHome from "./capacity-planner/pages/CapacityHome";
 
@@ -152,6 +152,10 @@ export default function App() {
               path={`/site/:siteid/catalog/:catalogid/category/:categoryid/page/:pageid`}
               element={<Layout page={<Category />} />}
             />
+            <Route
+              path="/login"
+              element={<CapacityLayout page={<Login />} auth={false} />}
+            />
 
             {/* <Route path="/dashboard" element={<Layout page={<Dashboard />} />} />
           <Route
@@ -165,13 +169,19 @@ export default function App() {
                 element={<CapacityLayout page={<CapacityHome />} auth={true} />}
               />
             </Route>
-            <Route path="/capacity-planner/capacity" element={<CapacityPrivateRoute />}>
+            <Route
+              path="/capacity-planner/capacity"
+              element={<CapacityPrivateRoute />}
+            >
               <Route
                 path="/capacity-planner/capacity"
                 element={<CapacityLayout page={<Capacity />} auth={true} />}
               />
             </Route>
-            <Route path="/capacity-planner/engineer-availability" element={<CapacityPrivateRoute />}>
+            <Route
+              path="/capacity-planner/engineer-availability"
+              element={<CapacityPrivateRoute />}
+            >
               <Route
                 path="/capacity-planner/engineer-availability"
                 element={
@@ -179,16 +189,19 @@ export default function App() {
                 }
               />
             </Route>
-            <Route path="/capacity-planner/leaves" element={<CapacityPrivateRoute />}>
+            <Route
+              path="/capacity-planner/leaves"
+              element={<CapacityPrivateRoute />}
+            >
               <Route
                 path="/capacity-planner/leaves"
                 element={<CapacityLayout page={<Leaves />} auth={true} />}
               />
             </Route>
-            <Route
+            {/* <Route
               path="/capacity-planner/login"
               element={<CapacityLayout page={<Login />} auth={false} />}
-            />
+            /> */}
             <Route path="*" element={<NotFound />} />
             <Route path="/notfound" element={<NotFound />} />
           </Routes>
