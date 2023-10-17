@@ -255,7 +255,9 @@ export function NavbarNested() {
                         <Menu.Item
                           icon={Person2Outlined}
                           style={{ margin: 0 }}
-                          onClick={() => {}}
+                          onClick={() => {
+                            navigate(`/site/profile`)
+                          }}
                         >
                           Profile
                         </Menu.Item>

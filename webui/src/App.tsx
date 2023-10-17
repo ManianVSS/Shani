@@ -25,6 +25,7 @@ import Leaves from "./capacity-planner/pages/Leaves";
 import Login from "./pages/Login";
 import { CapacityPrivateRoute } from "./capacity-planner/CapacityPrivateRoute";
 import CapacityHome from "./capacity-planner/pages/CapacityHome";
+import Profile from "./pages/Profile";
 
 interface customLinks {
   label: string;
@@ -148,6 +149,10 @@ export default function App() {
             <Route
               path={`/site/:siteid/catalog/:catalogid/category/:categoryid/page/:pageid`}
               element={<Layout page={<Category />} />}
+            />
+            <Route
+              path={`/site/profile`}
+              element={<Layout page={<Profile />} />}
             />
             <Route
               path="/login"
