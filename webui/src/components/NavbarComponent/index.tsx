@@ -191,7 +191,8 @@ export function NavbarNested() {
           <IconHome
             className="homeIconStyle"
             onClick={() => {
-              navigate("/site/" + siteid + "/catalog/" + catalogid);
+              // navigate("/site/" + siteid + "/catalog/" + catalogid);
+              navigate(`/`);
             }}
           />
         </Group>
@@ -256,7 +257,7 @@ export function NavbarNested() {
                           icon={Person2Outlined}
                           style={{ margin: 0 }}
                           onClick={() => {
-                            navigate(`/site/profile`)
+                            navigate(`/site/profile`);
                           }}
                         >
                           Profile

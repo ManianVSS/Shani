@@ -1,25 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import {
-    MDBCol,
-    MDBContainer,
-    MDBRow,
-    MDBCard,
-    MDBCardText,
-    MDBCardBody,
-    MDBCardImage,
-    MDBBtn,
-    MDBBreadcrumb,
-    MDBBreadcrumbItem,
-    MDBProgress,
-    MDBProgressBar,
-    MDBIcon,
-    MDBListGroup,
-    MDBListGroupItem,
-  } from "mdb-react-ui-kit";
-  import { GiAlliedStar } from "react-icons/gi";
-  import { Card, ListGroup } from "react-bootstrap";
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+  MDBCard,
+  MDBCardText,
+  MDBCardBody,
+  MDBCardImage,
+  MDBBtn,
+  MDBBreadcrumb,
+  MDBBreadcrumbItem,
+  MDBProgress,
+  MDBProgressBar,
+  MDBIcon,
+  MDBListGroup,
+  MDBListGroupItem,
+} from "mdb-react-ui-kit";
+import { GiAlliedStar } from "react-icons/gi";
+import { Card, ListGroup } from "react-bootstrap";
+import { axiosClientForCapacity } from "../../capacity-planner/capacityApi";
 
 const Profile = () => {
+  const [userDetails, setUserDetails] = useState({});
+  const getUserDetails = () => {
+    axiosClientForCapacity
+      .get("/engineers/1/", {
+        headers: {
+          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      })
+      .then((res) => {
+        setUserDetails(res.data);
+      });
+  };
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
@@ -50,7 +67,7 @@ const Profile = () => {
                   }}
                   fluid
                 />
-                <p className="text-muted mb-1">Full Stack Developer</p>
+                <p className="text-muted mb-1">{userDetails.role}</p>
                 <p className="text-muted mb-4">Address, Address, IN</p>
                 <div className="d-flex justify-content-center mb-2">
                   <MDBBtn>Follow</MDBBtn>
@@ -69,7 +86,7 @@ const Profile = () => {
                           className="grid-child-element"
                           style={{ color: "#e6b800", fontWeight: "bold" }}
                         >
-                          1000
+                          {userDetails.points}
                         </div>
                         <div className="grid-child-element">
                           <GiAlliedStar
@@ -135,7 +152,7 @@ const Profile = () => {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      Test Portal user
+                      {userDetails.name}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -282,7 +299,7 @@ const Profile = () => {
         </MDBRow>
       </MDBContainer>
     </section>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

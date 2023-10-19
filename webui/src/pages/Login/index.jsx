@@ -48,7 +48,13 @@ function Login() {
             },
           })
           .then((res) => {
-            // window.localStorage.setItem("userid", res.data.results[0].id);
+            window.localStorage.setItem("userid", res.data.results[0].id);
+            window.localStorage.setItem(
+              "employee_id",
+              res.data.results[0].employee_id
+            );
+            window.localStorage.setItem("name", res.data.results[0].name);
+            window.localStorage.setItem("role", res.data.results[0].role);
           });
       })
       .catch((error) => {
@@ -67,7 +73,6 @@ function Login() {
   };
   useEffect(() => {
     if (auth.authStatus) {
-      console.log("Authenticated");
       navigate(`/`);
       // history.go(0);
     }
