@@ -183,7 +183,8 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'targetIPTE': compare_fields_filter_lookups,
         'incidents': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 
@@ -205,7 +206,8 @@ class EnvironmentViewSet(ShaniOrgGroupViewSet):
         'current_release': id_fields_filter_lookups,
         'current_build': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
-        'published': exact_fields_filter_lookups, 'created_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
 

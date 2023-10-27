@@ -12,31 +12,32 @@ class AttachmentSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'name', 'summary', 'description', 'org_group', 'published', ]
+        fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published', ]
 
 
 class FeatureCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FeatureCategory
         fields = ['id', 'name', 'summary', 'description', 'parent', 'tags', 'details_file', 'attachments',
-                  'org_group', 'published', ]
+                  'org_group', 'created_at', 'updated_at', 'published', ]
 
 
 class FeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feature
         fields = ['id', 'name', 'summary', 'parent', 'description', 'status', 'tags', 'external_id', 'details_file',
-                  'attachments', 'org_group', 'published', ]
+                  'attachments', 'org_group', 'created_at', 'updated_at', 'published', ]
 
 
 class UseCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UseCase
-        fields = ['id', 'name', 'summary', 'description', 'status', 'feature', 'requirements', 'attachments', 'org_group',
-                  'published', ]
+        fields = ['id', 'name', 'summary', 'description', 'status', 'feature', 'requirements', 'attachments',
+                  'org_group', 'created_at', 'updated_at', 'published', ]
 
 
 class RequirementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requirement
-        fields = ['id', 'name', 'summary', 'description', 'use_cases', 'org_group', 'published', ]
+        fields = ['id', 'name', 'summary', 'description', 'use_cases', 'org_group', 'created_at', 'updated_at',
+                  'published', ]
