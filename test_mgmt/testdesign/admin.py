@@ -37,7 +37,7 @@ class TestCaseCategoryAdmin(CustomModelAdmin):
 @admin.register(TestCase)
 class TestCaseAdmin(CustomModelAdmin):
     list_filter = (
-        'published',
+        'created_at', 'updated_at', 'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('parent', RelatedOnlyFieldListFilter),
         'status',
