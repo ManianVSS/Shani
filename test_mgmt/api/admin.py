@@ -6,7 +6,7 @@ from django.core.exceptions import FieldDoesNotExist
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, OrgGroup
+from .models import Attachment, OrgGroup, Properties
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -95,15 +95,6 @@ admin.site.unregister(Group)
 admin.site.register(Group, CustomGroupAdmin)
 
 
-@admin.register(Attachment)
-class AttachmentAdmin(CustomModelAdmin):
-    search_fields = ['name', 'file', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
-
-
 @admin.register(OrgGroup)
 class OrgGroupAdmin(CustomModelAdmin):
     list_filter = (
@@ -114,3 +105,21 @@ class OrgGroupAdmin(CustomModelAdmin):
         ('guests', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
+
+
+@admin.register(Attachment)
+class AttachmentAdmin(CustomModelAdmin):
+    search_fields = ['name', 'file', ]
+    list_filter = (
+        'created_at', 'updated_at', 'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+
+
+@admin.register(Properties)
+class PropertiesAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'details', ]

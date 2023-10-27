@@ -1,6 +1,7 @@
 from django.db import models
 
 from api.models import OrgModel, OrgGroup
+from api.storage import CustomFileSystemStorage
 
 
 class Configuration(models.Model):
@@ -29,7 +30,8 @@ class DisplayItem(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     link = models.TextField(null=True, blank=True)
-    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    image = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                             verbose_name='image file')
 
 
 class Event(OrgModel):
@@ -38,7 +40,8 @@ class Event(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     link = models.TextField(null=True, blank=True)
-    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    image = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                             verbose_name='image file')
     time = models.DateTimeField()
 
 
@@ -47,7 +50,8 @@ class Page(OrgModel):
     name = models.CharField(default='Home', max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    image = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                             verbose_name='image file')
     display_items = models.ManyToManyField(DisplayItem, related_name='pages', blank=True)
     iframe_link = models.TextField(null=True, blank=True)
 
@@ -63,7 +67,8 @@ class Category(OrgModel):
     name = models.CharField(default='Home', max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    image = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                             verbose_name='image file')
     display_items = models.ManyToManyField(DisplayItem, related_name='categories', blank=True)
     pages = models.ManyToManyField(Page, related_name='categories', blank=True)
 
@@ -76,8 +81,10 @@ class Catalog(OrgModel):
     name = models.CharField(default='Home', max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    logo = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='logo image file')
-    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    logo = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                            verbose_name='logo image file')
+    image = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                             verbose_name='image file')
     display_items = models.ManyToManyField(DisplayItem, related_name='catalogs', blank=True)
     events = models.ManyToManyField(Event, related_name='catalogs', blank=True)
     categories = models.ManyToManyField(Category, related_name='catalogs', blank=True)
@@ -92,8 +99,10 @@ class SiteSettings(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     email = models.CharField(max_length=300, blank=True)
-    logo = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='logo image file')
-    image = models.FileField(upload_to='site_config', blank=True, null=True, verbose_name='image file')
+    logo = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                            verbose_name='logo image file')
+    image = models.FileField(storage=CustomFileSystemStorage, upload_to='site_config', blank=True, null=True,
+                             verbose_name='image file')
     catalogs = models.ManyToManyField(Catalog, related_name='site_settings', blank=True)
 
 

@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy
 
 from api.models import OrgModel, OrgGroup
+from api.storage import CustomFileSystemStorage
 from requirements.models import Feature
 
 
@@ -10,7 +11,7 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='automation_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='automation', blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to='automation', blank=False, null=False)
 
 
 class Tag(OrgModel):
@@ -60,7 +61,8 @@ class Step(OrgModel):
 
     automation_code_reference = models.TextField(null=True, blank=True)
 
-    details_file = models.FileField(upload_to='automation', blank=True, null=True, verbose_name='File with details')
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='automation', blank=True, null=True,
+                                    verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='step_attachments', blank=True)
 
     def is_owner(self, user):
@@ -71,7 +73,6 @@ class Step(OrgModel):
     def is_member(self, user):
         return (user == self.automation_owner) or (
                 (self.feature is not None) and hasattr(self.feature, 'is_member') and self.feature.is_member(user))
-
 
 # class StepInstance:
 #     def __init__(self, step, data):

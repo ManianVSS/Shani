@@ -3,13 +3,14 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup, BaseModel
+from api.storage import CustomFileSystemStorage
 
 
 class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='people_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='execution', blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=False, null=False)
 
 
 class Site(OrgModel):

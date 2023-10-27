@@ -3,8 +3,8 @@ from django.core.exceptions import FieldDoesNotExist
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions, IsAdminUser
 
-from .models import Attachment, OrgGroup
-from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer
+from .models import Attachment, OrgGroup, Properties
+from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer, PropertiesSerializer
 
 exact_fields_filter_lookups = ['exact', ]
 # many_to_many_id_field_lookups = ['contains']
@@ -139,6 +139,23 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class PropertiesViewSet(ShaniOrgGroupViewSet):
+    queryset = Properties.objects.all()
+    serializer_class = PropertiesSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]

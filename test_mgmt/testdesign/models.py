@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup, ReviewStatus
+from api.storage import CustomFileSystemStorage
 from requirements.models import UseCase
 
 
@@ -9,7 +10,7 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='test_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='test_design', blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to='test_design', blank=False, null=False)
 
     def __str__(self):
         return str(self.file.name)
@@ -41,7 +42,8 @@ class TestCaseCategory(OrgModel):
     weight = models.FloatField(null=True, blank=True)
 
     tags = models.ManyToManyField(Tag, related_name='test_categories', blank=True)
-    details_file = models.FileField(upload_to='test_design', blank=True, null=True, verbose_name='File with details')
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='test_design', blank=True, null=True,
+                                    verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='test_case_category_attachments', blank=True)
 
     def __str__(self):
@@ -69,7 +71,8 @@ class TestCase(OrgModel):
     tags = models.ManyToManyField(Tag, related_name='test_cases', blank=True)
     external_id = models.CharField(max_length=256, blank=True, null=True)
 
-    details_file = models.FileField(upload_to='test_design', blank=True, null=True, verbose_name='File with details')
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='test_design', blank=True, null=True,
+                                    verbose_name='File with details')
     use_cases = models.ManyToManyField(UseCase, related_name='test_cases', blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
 

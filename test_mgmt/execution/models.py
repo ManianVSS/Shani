@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from api.models import OrgModel, OrgGroup
+from api.storage import CustomFileSystemStorage
 from execution import ipte_util
 
 
@@ -10,7 +11,7 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to='execution', blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=False, null=False)
 
 
 class Tag(OrgModel):
@@ -50,7 +51,8 @@ class Defect(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True)
-    details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=True, null=True,
+                                    verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='defect_attachments', blank=True)
 
 
@@ -130,7 +132,8 @@ class Environment(OrgModel):
     type = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     purpose = models.CharField(max_length=1024, null=True, blank=True)
-    details_file = models.FileField(upload_to='execution', blank=True, null=True, verbose_name='File with details')
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=True, null=True,
+                                    verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='environment_attachments', blank=True)
     current_release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
                                         related_name='environments', verbose_name='currently installed release')

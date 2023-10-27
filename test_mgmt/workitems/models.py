@@ -1,6 +1,7 @@
 from django.db import models
 
 from api.models import OrgModel, OrgGroup
+from api.storage import CustomFileSystemStorage
 from test_mgmt import settings
 
 
@@ -8,7 +9,8 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='workitem_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to=settings.MEDIA_BASE_NAME, blank=False,
+                            null=False)
 
 
 class Tag(OrgModel):

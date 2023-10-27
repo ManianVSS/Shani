@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
+from api.storage import CustomFileSystemStorage
 from test_mgmt import settings
 
 
@@ -127,4 +128,15 @@ class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='api_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(upload_to=settings.MEDIA_BASE_NAME, blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to=settings.MEDIA_BASE_NAME, blank=False,
+                            null=False)
+
+
+class Properties(OrgModel):
+    class Meta:
+        verbose_name_plural = "properties"
+
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='api_properties')
+    name = models.CharField(max_length=256)
+    details = models.TextField(null=True, blank=True)
