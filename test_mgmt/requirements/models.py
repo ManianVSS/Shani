@@ -38,7 +38,6 @@ class FeatureCategory(OrgModel):
 
 
 class Feature(OrgModel):
-    # The status of a step's test design
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirement_features')
     parent = models.ForeignKey(FeatureCategory, on_delete=models.SET_NULL, null=True, blank=True,
@@ -72,11 +71,41 @@ class UseCase(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='use_case_attachments', blank=True)
 
 
-class Requirement(OrgModel):
-    use_cases = models.ManyToManyField(UseCase, related_name='requirements', blank=True)
+class RequirementCategory(OrgModel):
+    class Meta:
+        verbose_name_plural = "requirement categories"
 
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='requirement_categories')
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='sub_categories')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+
+    tags = models.ManyToManyField(Tag, related_name='sub_categories', blank=True)
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='requirements', blank=True, null=True,
+                                    verbose_name='File with details')
+    attachments = models.ManyToManyField(Attachment, related_name='requirement_category_attachments', blank=True)
+
+
+class Requirement(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='requirements')
+    parent = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='requirements', verbose_name='category')
+    name = models.CharField(max_length=256, unique=True)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+
+    description = models.TextField(null=True, blank=True)
+
+    status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
+
+    tags = models.ManyToManyField(Tag, related_name='requirements', blank=True)
+    external_id = models.CharField(max_length=256, blank=True, null=True)
+
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='requirements', blank=True, null=True,
+                                    verbose_name='File with details')
+    attachments = models.ManyToManyField(Attachment, related_name='requirement_attachments', blank=True)
 
 # TODO: Add user segment with use-case variations

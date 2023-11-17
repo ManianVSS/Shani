@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Attachment, Tag, FeatureCategory, Feature, Requirement, UseCase
+from .models import Attachment, Tag, FeatureCategory, Feature, UseCase, RequirementCategory, Requirement
 
 
 @admin.register(Attachment)
@@ -57,11 +57,24 @@ class UseCaseAdmin(CustomModelAdmin):
     search_fields = ['name', 'summary', 'description', 'status', ]
 
 
+@admin.register(RequirementCategory)
+class RequirementCategoryAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        ('parent', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
+
+
 @admin.register(Requirement)
 class RequirementAdmin(CustomModelAdmin):
     list_filter = (
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
-        ('use_cases', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        'status',
+        ('parent', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['name', 'summary', 'description', ]
+    search_fields = ['name', 'summary', 'description', 'status', 'external_id', ]

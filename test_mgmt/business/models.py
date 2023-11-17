@@ -38,7 +38,6 @@ class RequirementCategory(OrgModel):
 
 
 class Requirement(OrgModel):
-    # The status of a step's test design
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='business_requirements')
     parent = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
@@ -53,6 +52,6 @@ class Requirement(OrgModel):
     tags = models.ManyToManyField(Tag, related_name='requirements', blank=True)
     external_id = models.CharField(max_length=256, blank=True, null=True)
 
-    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='requirements', blank=True, null=True,
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='business', blank=True, null=True,
                                     verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='requirement_attachments', blank=True)
