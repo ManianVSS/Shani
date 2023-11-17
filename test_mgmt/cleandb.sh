@@ -2,6 +2,7 @@
 
 
 rm -rf api/migrations
+rm -rf business/migrations
 rm -rf siteconfig/migrations
 rm -rf requirements/migrations
 rm -rf workitems/migrations

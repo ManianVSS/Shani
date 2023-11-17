@@ -55,7 +55,7 @@ class Feature(OrgModel):
 
     details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='requirements', blank=True, null=True,
                                     verbose_name='File with details')
-    attachments = models.ManyToManyField(Attachment, related_name='test_case_attachments', blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
 
 
 class UseCase(OrgModel):
