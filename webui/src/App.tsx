@@ -26,6 +26,10 @@ import Login from "./pages/Login";
 import { CapacityPrivateRoute } from "./capacity-planner/CapacityPrivateRoute";
 import CapacityHome from "./capacity-planner/pages/CapacityHome";
 import Profile from "./pages/Profile";
+import Requirement from "./pages/Requirement";
+import RequirementLayout from "./components/RequirementLayout";
+import UseCases from "./pages/Requirement/UseCases";
+import IndividualReqComponent from "./pages/Requirement/IndividualReqComponent";
 
 interface customLinks {
   label: string;
@@ -149,6 +153,23 @@ export default function App() {
             <Route
               path={`/site/:siteid/catalog/:catalogid/category/:categoryid/page/:pageid`}
               element={<Layout page={<Category />} />}
+            />
+            <Route
+              path={`/requirements`}
+              element={<RequirementLayout page={<Requirement />} auth={true} />}
+            />
+            <Route
+              path={`/requirements/use-cases`}
+              element={<RequirementLayout page={<UseCases />} auth={true} />}
+            />
+            <Route
+              path={`/requirements/:requirementid`}
+              element={
+                <RequirementLayout
+                  page={<IndividualReqComponent />}
+                  auth={true}
+                />
+              }
             />
             <Route
               path={`/site/profile`}

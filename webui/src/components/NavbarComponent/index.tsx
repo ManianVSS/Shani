@@ -18,6 +18,7 @@ import {
   Settings,
   ReduceCapacity,
   Person2Outlined,
+  RecentActorsRounded,
 } from "@mui/icons-material";
 // import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
@@ -222,6 +223,17 @@ export function NavbarNested() {
                           }}
                         >
                           Capacity Planner
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={RecentActorsRounded}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            navigate(`/requirements`);
+                          }}
+                        >
+                          Requirement
                         </Menu.Item>
                       </Menu.Group>
                       <Menu.Group>

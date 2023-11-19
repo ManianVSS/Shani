@@ -18,7 +18,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     navbar: {
       backgroundColor: theme.fn.variant({
         variant: "filled",
-        color: theme.primaryColor,
+        // color: theme.primaryColor,
       }).background,
     },
 
@@ -95,24 +95,24 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "/capacity-planner/", label: "HOME", icon: IconHome },
+  { link: "/requirements/", label: "REQUIREMENTS", icon: IconHome },
   {
-    link: "/capacity-planner/capacity",
-    label: "CAPACITY VIEW",
+    link: "/requirements/use-cases",
+    label: "USE CASES",
     icon: IconBook,
   },
   {
-    link: "/capacity-planner/engineer-availability",
-    label: "ENGINEER VIEW",
+    link: "/requirements/another-item",
+    label: "ANOTHER ITEM",
     icon: IconUser,
   },
-  { link: "/capacity-planner/leaves", label: "LEAVES", icon: IconCalendar },
+  // { link: "/capacity-planner/leaves", label: "LEAVES", icon: IconCalendar },
   // { link: "", label: "Databases", icon: IconDatabaseImport },
   // { link: "", label: "Authentication", icon: Icon2fa },
   // { link: "", label: "Other Settings", icon: IconSettings },
 ];
 
-export function NavbarSimpleColored() {
+export function NavbarRequirementModule() {
   const navigate = useNavigate();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState("Billing");
@@ -143,13 +143,14 @@ export function NavbarSimpleColored() {
         width={{ sm: 300 }}
         p="md"
         className={classes.navbar}
+        style={{ backgroundColor: "#05447a" }}
       >
         <Navbar.Section grow>
           <Group className={classes.header} position="apart">
             {/* <MantineLogo size={28} inverted /> */}
 
             <h5 style={{ color: "white" }}>
-              <b>CAPACITY PLANNER</b>
+              <b>REQUIREMENT LIFE CYCLE MANAGER</b>
             </h5>
             {/* <Code className={classes.version}>v1.0</Code> */}
           </Group>
