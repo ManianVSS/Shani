@@ -55,3 +55,5 @@ class Requirement(OrgModel):
     details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='business', blank=True, null=True,
                                     verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='requirement_attachments', blank=True)
+
+    cost = models.FloatField(default=0)

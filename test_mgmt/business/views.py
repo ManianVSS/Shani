@@ -1,6 +1,6 @@
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
-    ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+    ShaniOrgGroupViewSet, datetime_fields_filter_lookups, compare_fields_filter_lookups
 from .models import Attachment, Tag, RequirementCategory, Requirement
 from .serializers import AttachmentSerializer, TagSerializer, RequirementCategorySerializer, RequirementSerializer
 
@@ -77,6 +77,7 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'status': id_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
+        'cost': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

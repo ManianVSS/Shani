@@ -1,5 +1,6 @@
 from django.db import models
 
+import business.models
 from api.models import OrgModel, OrgGroup, ReviewStatus
 from api.storage import CustomFileSystemStorage
 
@@ -107,5 +108,10 @@ class Requirement(OrgModel):
     details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='requirements', blank=True, null=True,
                                     verbose_name='File with details')
     attachments = models.ManyToManyField(Attachment, related_name='requirement_attachments', blank=True)
+
+    cost = models.FloatField(default=0)
+
+    business_requirements = models.ManyToManyField(business.models.Requirement, related_name='technical_requirements',
+                                                   blank=True)
 
 # TODO: Add user segment with use-case variations

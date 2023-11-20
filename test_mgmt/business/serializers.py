@@ -26,4 +26,4 @@ class RequirementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requirement
         fields = ['id', 'parent', 'name', 'summary', 'description', 'status', 'tags', 'external_id', 'details_file',
-                  'attachments', 'org_group', 'created_at', 'updated_at', 'published', ]
+                  'attachments', 'cost', 'org_group', 'created_at', 'updated_at', 'published', ]
