@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Attachment, Step, Tag
+from .models import Attachment, Step, Tag, MockAPI
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -22,3 +22,10 @@ class StepSerializer(serializers.ModelSerializer):
                   'test_design_owner', 'test_design_status', 'automation_owner', 'automation_status',
                   'automation_code_reference', 'details_file', 'attachments', 'org_group', 'created_at', 'updated_at',
                   'published', ]
+
+
+class MockAPISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MockAPI
+        fields = ['id', 'name', 'summary', 'status', 'content_type', 'body', 'http_method', 'org_group', 'created_at',
+                  'updated_at', 'published', ]

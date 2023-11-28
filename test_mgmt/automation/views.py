@@ -1,9 +1,12 @@
+from rest_framework import viewsets
+from rest_framework.response import Response
+
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups
-from .models import Step, Attachment, Tag
-from .serializers import StepSerializer, AttachmentSerializer, TagSerializer
-
+from .models import Step, Attachment, Tag, MockAPI
+from .serializers import StepSerializer, AttachmentSerializer, TagSerializer, MockAPISerializer
+from django.db.models import Q
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
@@ -69,3 +72,49 @@ class StepViewSet(ShaniOrgGroupViewSet):
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
+
+
+class MockAPIViewSet(ShaniOrgGroupViewSet):
+    queryset = MockAPI.objects.all()
+    serializer_class = MockAPISerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'name', 'http_method', 'status', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'http_method': exact_fields_filter_lookups,
+        'status': compare_fields_filter_lookups,
+        'content_type': string_fields_filter_lookups,
+    }
+
+
+# noinspection PyMethodMayBeStatic
+class MockAPIRoutingViewSet(viewsets.ViewSet):
+    """
+    A simple ViewSet for mocking api.
+    """
+
+    def list(self):
+        queryset = MockAPI.objects.all()
+        serializer = MockAPISerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, pk=None):
+        queryset = MockAPI.objects.filter(Q(name=pk) & Q())
+        serializer = MockAPISerializer(queryset, many=True)
+        pass
+
+    def retrieve(self, request, pk=None):
+        return Response(data={'pk': pk}, status=200)
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        pass

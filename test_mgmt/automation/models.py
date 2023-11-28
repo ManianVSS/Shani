@@ -74,6 +74,23 @@ class Step(OrgModel):
         return (user == self.automation_owner) or (
                 (self.feature is not None) and hasattr(self.feature, 'is_member') and self.feature.is_member(user))
 
+
+class MockAPI(OrgModel):
+    class HTTPMethod(models.TextChoices):
+        GET = 'GET', gettext_lazy('get'),
+        PUT = 'PUT', gettext_lazy('put'),
+        POST = 'POST', gettext_lazy('post'),
+        PATCH = 'PATCH', gettext_lazy('patch'),
+        DELETE = 'DELETE', gettext_lazy('delete'),
+        ALL = 'ALL', gettext_lazy('all'),
+
+    name = models.CharField(max_length=1024, unique=True)
+    summary = models.CharField(max_length=1024, null=True, blank=True)
+    status = models.IntegerField(default=200)
+    content_type = models.CharField(max_length=1024, null=True, blank=True)
+    body = models.TextField(null=True, blank=True)
+    http_method = models.CharField(max_length=11, choices=HTTPMethod.choices, default=HTTPMethod.ALL)
+
 # class StepInstance:
 #     def __init__(self, step, data):
 #         self.step = step if step else "<unnamed>"

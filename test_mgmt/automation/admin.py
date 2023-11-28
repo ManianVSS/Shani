@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Step, Attachment, Tag
+from .models import Step, Attachment, Tag, MockAPI
 
 
 @admin.register(Attachment)
@@ -41,6 +41,16 @@ class StepAdmin(CustomModelAdmin):
     #     form.base_fields['test_design_owner'].initial = request.user
     #     form.base_fields['automation_owner'].initial = request.user
     #     return form
+
+
+@admin.register(MockAPI)
+class MockAPIAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        'http_method',
+    )
+    search_fields = ['name', 'summary', ]
 
 # For django guardian ImportExportMixin, GuardedModelAdmin
 # For advanced filters AdminAdvancedFiltersMixin,
