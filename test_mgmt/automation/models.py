@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy
@@ -77,19 +79,27 @@ class Step(OrgModel):
 
 class MockAPI(OrgModel):
     class HTTPMethod(models.TextChoices):
-        GET = 'GET', gettext_lazy('get'),
-        PUT = 'PUT', gettext_lazy('put'),
-        POST = 'POST', gettext_lazy('post'),
-        PATCH = 'PATCH', gettext_lazy('patch'),
-        DELETE = 'DELETE', gettext_lazy('delete'),
-        ALL = 'ALL', gettext_lazy('all'),
+        GET = 'GET', gettext_lazy('GET'),
+        PUT = 'PUT', gettext_lazy('PUT'),
+        POST = 'POST', gettext_lazy('POST'),
+        PATCH = 'PATCH', gettext_lazy('PATCH'),
+        DELETE = 'DELETE', gettext_lazy('DELETE'),
+        ALL = 'ALL', gettext_lazy('All methods'),
+
+    class ContentType(models.TextChoices):
+        APPLICATION_JSON = 'application/json', gettext_lazy('JSON'),
+        APPLICATION_XML = 'application/xml', gettext_lazy('XML'),
+        APPLICATION_OCTET_STREAM = 'application/octet-stream', gettext_lazy('binary'),
+        TEXT_HTML = 'text/html', gettext_lazy('HTML'),
+        TEXT_PLAIN = 'text/plain', gettext_lazy('Text'),
 
     name = models.CharField(max_length=1024, unique=True)
     summary = models.CharField(max_length=1024, null=True, blank=True)
-    status = models.IntegerField(default=200)
-    content_type = models.CharField(max_length=1024, null=True, blank=True)
+    status = models.IntegerField(choices=[(s.value, s.name) for s in HTTPStatus].append((430, "CUSTOM_ERROR_CODE")),
+                                 default=200, max_length=32)
+    content_type = models.CharField(max_length=32, choices=ContentType.choices, default=ContentType.APPLICATION_JSON)
     body = models.TextField(null=True, blank=True)
-    http_method = models.CharField(max_length=11, choices=HTTPMethod.choices, default=HTTPMethod.ALL)
+    http_method = models.CharField(max_length=32, choices=HTTPMethod.choices, default=HTTPMethod.ALL)
 
 # class StepInstance:
 #     def __init__(self, step, data):

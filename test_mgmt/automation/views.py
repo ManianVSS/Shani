@@ -1,4 +1,7 @@
+import json
+
 from rest_framework import viewsets
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
@@ -7,6 +10,7 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
 from .models import Step, Attachment, Tag, MockAPI
 from .serializers import StepSerializer, AttachmentSerializer, TagSerializer, MockAPISerializer
 from django.db.models import Q
+
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
@@ -85,36 +89,53 @@ class MockAPIViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'http_method': exact_fields_filter_lookups,
-        'status': compare_fields_filter_lookups,
-        'content_type': string_fields_filter_lookups,
+        'http_method': id_fields_filter_lookups,
+        'status': id_fields_filter_lookups,
+        'content_type': id_fields_filter_lookups,
     }
 
 
 # noinspection PyMethodMayBeStatic
 class MockAPIRoutingViewSet(viewsets.ViewSet):
+    renderer_classes = (JSONRenderer,)
     """
     A simple ViewSet for mocking api.
     """
 
-    def list(self):
+    def use_mock_api_route(self, request, pk, http_method, default_status_code=200,
+                           default_content_type="application/json"):
+        queryset = MockAPI.objects.filter(
+            Q(name=pk) & Q(Q(http_method=http_method) | Q(http_method=MockAPI.HTTPMethod.ALL)))
+        if queryset.exists():
+            mock_api_impl = queryset.first()
+            body = mock_api_impl.body if mock_api_impl.body else "{}"
+            status = mock_api_impl.status if mock_api_impl.status else default_status_code
+            content_type = mock_api_impl.content_type if mock_api_impl.content_type else default_content_type
+
+            if content_type == "application/json":
+                body = json.loads(body)
+            return Response(data=body, status=status, content_type=content_type) \
+                if mock_api_impl.content_type \
+                else Response(data=body, status=status)
+        else:
+            return Response(status=404)
+
+    def list(self, request):
         queryset = MockAPI.objects.all()
         serializer = MockAPISerializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request, pk=None):
-        queryset = MockAPI.objects.filter(Q(name=pk) & Q())
-        serializer = MockAPISerializer(queryset, many=True)
-        pass
+        return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.POST, 201)
 
     def retrieve(self, request, pk=None):
-        return Response(data={'pk': pk}, status=200)
+        return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.GET)
 
     def update(self, request, pk=None):
-        pass
+        return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.PUT)
 
     def partial_update(self, request, pk=None):
-        pass
+        return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.PATCH)
 
     def destroy(self, request, pk=None):
-        pass
+        return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.DELETE)
