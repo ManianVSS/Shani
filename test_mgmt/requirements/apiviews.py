@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import OrgGroup, RequirementCategory, Requirement
-from .serializers import RequirementSerializer, TagSerializer, AttachmentSerializer, RequirementCategorySerializer
+from .serializers import RequirementSerializer, RequirementCategorySerializer
 
 WORK_DAYS_MASK = [1, 1, 1, 1, 1, 0, 0]
 
@@ -74,20 +74,18 @@ def browse_requirements_category(request):
     except RequirementCategory.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, content='Could not find requirement category passed')
 
-    catalog_data = {
-        'org_group': requirement_category.org_group if requirement_category else None,
-        'parent': requirement_category.parent if requirement_category else None,
-        'name': requirement_category.name if requirement_category else "/",
-        'summary': requirement_category.summary if requirement_category else "/",
-        'description': requirement_category.description if requirement_category else "/",
-        'tags': TagSerializer(requirement_category.tags, many=True).data if requirement_category else None,
-        'details_file': str(requirement_category.details_file.url) if requirement_category else None,
-        'attachments': AttachmentSerializer(requirement_category.attachments,
-                                            many=True).data if requirement_category else None,
-        'sub_categories': RequirementCategorySerializer(
-            get_requirement_category_sub_requirement_categories(org_group, requirement_category), many=True).data,
-        'requirements': RequirementSerializer(
-            get_requirement_category_requirements(org_group, requirement_category), many=True).data
+    catalog_data = RequirementCategorySerializer(requirement_category).data if requirement_category else {
+        'name': "/",
+        'summary': "Root Category",
+        'description': "Root Category",
     }
 
+    catalog_data['sub_categories'] = RequirementCategorySerializer(
+        get_requirement_category_sub_requirement_categories(org_group, requirement_category), many=True).data
+
+    catalog_data['requirements'] = RequirementSerializer(
+        get_requirement_category_requirements(org_group, requirement_category), many=True).data
+
+    # TODO: Need to expand tags and details file instead of Ids
+    
     return Response(catalog_data)
