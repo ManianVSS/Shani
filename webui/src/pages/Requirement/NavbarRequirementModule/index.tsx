@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { createStyles, Navbar, Group, Code } from "@mantine/core";
 import {
   IconHome,
@@ -8,9 +8,11 @@ import {
   IconTruckReturn,
   IconLogout,
 } from "@tabler/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { authState } from "../../../state/authData";
 import { useRecoilValue } from "recoil";
+import { Form } from "react-bootstrap";
+import { axiosClientBasic } from "../../../hooks/api";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -95,7 +97,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "/requirements/", label: "REQUIREMENTS", icon: IconHome },
+  { link: "/requirements/default", label: "REQUIREMENTS", icon: IconHome },
   {
     link: "/requirements/use-cases",
     label: "USE CASES",
@@ -113,10 +115,13 @@ const data = [
 ];
 
 export function NavbarRequirementModule() {
+  const { orggroup } = useParams();
   const navigate = useNavigate();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState("Billing");
   const auth = useRecoilValue(authState);
+  const [orgGroups, setOrgGroups] = React.useState<any[]>([]);
+  const [selectedOrgGrp, setSelectedOrgGrp] = React.useState("Default");
 
   const links = data.map((item) => (
     <a
@@ -136,6 +141,25 @@ export function NavbarRequirementModule() {
     </a>
   ));
 
+  const onChange = (event) => {
+    const value = event.target.value;
+    setSelectedOrgGrp(value);
+    // navigate(`/requirements/${value}`);
+    window.location.href = window.location.origin + `/requirements/${value}`;
+  };
+
+  React.useEffect(() => {
+    axiosClientBasic
+      .get("/api/org_groups/", {
+        headers: {
+          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setOrgGroups(response.data.results);
+      });
+  }, []);
+
   return (
     <>
       <Navbar
@@ -152,6 +176,24 @@ export function NavbarRequirementModule() {
             <h5 style={{ color: "white" }}>
               <b>REQUIREMENT LIFE CYCLE MANAGER</b>
             </h5>
+
+            <p style={{ color: "white" }}>Org Group</p>
+
+            <Form.Select
+              aria-label="Default select example"
+              onChange={onChange}
+            >
+              <option value="default" selected={"default" == orggroup}>
+                Default
+              </option>
+              {orgGroups.map((item) => {
+                return (
+                  <option value={item.id} selected={item.id == orggroup}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </Form.Select>
             {/* <Code className={classes.version}>v1.0</Code> */}
           </Group>
           {links}

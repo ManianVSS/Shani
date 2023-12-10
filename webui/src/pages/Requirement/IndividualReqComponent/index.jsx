@@ -4,41 +4,49 @@ import { Container, Col, Row, Table } from "react-bootstrap";
 import { axiosClientBasic } from "../../../hooks/api";
 
 const IndividualReqComponent = (props) => {
-  const { requirementid } = useParams();
+  const { requirementidparam } = useParams();
+  let requirementid = props.data?.id;
+  let baseapi =
+    props.data?.type == "category"
+      ? "/requirements/api/requirement_categories/"
+      : "/requirements/api/requirements/";
   const [reqDetails, setReqDetails] = React.useState({});
   const [attachmentids, setAttachmentids] = React.useState([]);
   const [attachmentDetailss, setAttachmentDetailss] = React.useState([]);
   React.useEffect(() => {
-    axiosClientBasic
-      .get("/requirements/api/requirements/" + requirementid + "/", {
-        headers: {
-          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-        },
-      })
-      .then((response) => {
-        setReqDetails(response.data);
-        setAttachmentids(response.data.attachments);
+    if (requirementid) {
+      axiosClientBasic
+        .get(baseapi + requirementid + "/", {
+          headers: {
+            authorization:
+              "Bearer " + window.localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          setReqDetails(response.data);
+          setAttachmentids(response.data.attachments);
 
-        response.data.attachments?.map((item) => {
-          axiosClientBasic
-            .get("/requirements/api/attachments/" + item + "/", {
-              headers: {
-                authorization:
-                  "Bearer " + window.localStorage.getItem("accessToken"),
-              },
-            })
-            .then((res) => {
-              setAttachmentDetailss((oldArray) => [
-                ...oldArray,
-                {
-                  name: res.data.name,
-                  file: res.data.file,
+          response.data.attachments?.map((item) => {
+            axiosClientBasic
+              .get("/requirements/api/attachments/" + item + "/", {
+                headers: {
+                  authorization:
+                    "Bearer " + window.localStorage.getItem("accessToken"),
                 },
-              ]);
-            });
+              })
+              .then((res) => {
+                setAttachmentDetailss((oldArray) => [
+                  ...oldArray,
+                  {
+                    name: res.data.name,
+                    file: res.data.file,
+                  },
+                ]);
+              });
+          });
         });
-      });
-  }, []);
+    }
+  }, [props.data]);
 
   return (
     <>
@@ -55,7 +63,7 @@ const IndividualReqComponent = (props) => {
                 }}
               >
                 <tr>
-                  <th>Requirement ID</th>
+                  <th>ID</th>
                 </tr>
               </thead>
               <tbody
@@ -80,7 +88,7 @@ const IndividualReqComponent = (props) => {
                 }}
               >
                 <tr>
-                  <th>Requirement Name</th>
+                  <th>Name</th>
                 </tr>
               </thead>
               <tbody
@@ -95,29 +103,33 @@ const IndividualReqComponent = (props) => {
             </Table>
           </Col>
           <Col sm>
-            <Table striped bordered hover>
-              <thead
-                style={{
-                  color: "white",
-                  background: "gray",
-                  fontWeight: "bold",
-                  border: "1px solid black",
-                }}
-              >
-                <tr>
-                  <th>Requirement Cost</th>
-                </tr>
-              </thead>
-              <tbody
-                style={{
-                  border: "1px solid black",
-                }}
-              >
-                <tr>
-                  <td>{reqDetails.cost}</td>
-                </tr>
-              </tbody>
-            </Table>
+            {props.data?.type == "category" ? (
+              <></>
+            ) : (
+              <Table striped bordered hover>
+                <thead
+                  style={{
+                    color: "white",
+                    background: "gray",
+                    fontWeight: "bold",
+                    border: "1px solid black",
+                  }}
+                >
+                  <tr>
+                    <th>Requirement Cost</th>
+                  </tr>
+                </thead>
+                <tbody
+                  style={{
+                    border: "1px solid black",
+                  }}
+                >
+                  <tr>
+                    <td>{reqDetails.cost}</td>
+                  </tr>
+                </tbody>
+              </Table>
+            )}
           </Col>
         </Row>
         <Row>

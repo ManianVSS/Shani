@@ -230,7 +230,7 @@ export function NavbarNested() {
                           icon={RecentActorsRounded}
                           style={{ margin: 0 }}
                           onClick={() => {
-                            navigate(`/requirements`);
+                            navigate(`/requirements/default`);
                           }}
                         >
                           Requirement

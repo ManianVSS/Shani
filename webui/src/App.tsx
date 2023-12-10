@@ -155,7 +155,11 @@ export default function App() {
               element={<Layout page={<Category />} />}
             />
             <Route
-              path={`/requirements`}
+              path={`/requirements/:orggroup`}
+              element={<RequirementLayout page={<Requirement />} auth={true} />}
+            />
+            <Route
+              path={`/requirements/:orggroup/:reqcatid`}
               element={<RequirementLayout page={<Requirement />} auth={true} />}
             />
             <Route
@@ -163,7 +167,7 @@ export default function App() {
               element={<RequirementLayout page={<UseCases />} auth={true} />}
             />
             <Route
-              path={`/requirements/:requirementid`}
+              path={`/requirement/:requirementidparam`}
               element={
                 <RequirementLayout
                   page={<IndividualReqComponent />}
