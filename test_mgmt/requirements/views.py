@@ -1,3 +1,8 @@
+import json
+
+from xml.etree import ElementTree as ET
+from ALM import ALM
+from api.model_creation import create_requirement_model
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups, compare_fields_filter_lookups
@@ -140,6 +145,7 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'parent': id_fields_filter_lookups,
+        'category': id_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
@@ -150,3 +156,37 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'updated_at': datetime_fields_filter_lookups,
         'business_requirements': exact_fields_filter_lookups,
     }
+
+def get_alm_requirements():
+
+    with open('alm_config.json', 'r') as f:
+        alm_data = json.load(f.read())
+    alm = ALM(alm_data['ALM_config'])
+    alm.login()
+    alm_response = alm.fetch_requirements()
+
+    if alm_response.status_code not in [200, 399]:
+        print("Error in Fetching requirements data from ALM\n", alm_response.status_code, alm_response.content)
+        return
+
+    root = ET.fromstring(alm_response.content)
+    requirement_obj_list = []
+
+    if root.find('Entity').attrib['Type'] != 'requirement':
+        print("Error in parsing the response from ALM as the requirement type in not found", str(root))
+        return
+
+    for item in root.findall('Entity'):
+        requirement_obj = create_requirement_model(item)
+        requirement_obj_list.append(requirement_obj)
+
+    print("Successfully Fetched the details from ALM")
+
+    for requirement_obj in requirement_obj_list:
+        if not requirement_obj.parent:
+            for parent_obj in requirement_obj_list:
+                if requirement_obj.id != parent_obj.id and requirement_obj.additional_data['parent-id'] == parent_obj.external_id:
+                    requirement_obj.parent = parent_obj
+                    requirement_obj.save(force_update=True)
+                    break
+    print("Successfully linked the Requirement to its Parent")
