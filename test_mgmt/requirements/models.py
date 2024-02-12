@@ -94,7 +94,7 @@ class Requirement(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirements')
     category = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
-                               related_name='requirements', verbose_name='category')
+                                 related_name='requirements', verbose_name='category')
     name = models.CharField(max_length=256, unique=True)
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='parent_requirement')

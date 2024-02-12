@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 
 router.register(r'attachments', AttachmentViewSet)
 router.register(r'tags', TagViewSet)
-router.register(r'featurecategories', FeatureCategoryViewSet)
+router.register(r'feature_categories', FeatureCategoryViewSet)
 router.register(r'features', FeatureViewSet)
 
 router.register(r'use_cases', UseCaseViewSet)

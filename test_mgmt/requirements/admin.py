@@ -75,7 +75,7 @@ class RequirementAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
         'status',
-        ('parent', RelatedOnlyFieldListFilter),
+        ('category', RelatedOnlyFieldListFilter),
         'cost',
     )
     search_fields = ['name', 'summary', 'description', 'status', 'external_id', ]

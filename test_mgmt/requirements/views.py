@@ -1,6 +1,6 @@
 import json
-
 from xml.etree import ElementTree as ET
+
 from ALM import ALM
 from api.model_creation import create_requirement_model
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
@@ -144,7 +144,6 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
         'category': id_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
@@ -157,8 +156,8 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'business_requirements': exact_fields_filter_lookups,
     }
 
-def get_alm_requirements():
 
+def get_alm_requirements():
     with open('alm_config.json', 'r') as f:
         alm_data = json.load(f.read())
     alm = ALM(alm_data['ALM_config'])
@@ -185,7 +184,8 @@ def get_alm_requirements():
     for requirement_obj in requirement_obj_list:
         if not requirement_obj.parent:
             for parent_obj in requirement_obj_list:
-                if requirement_obj.id != parent_obj.id and requirement_obj.additional_data['parent-id'] == parent_obj.external_id:
+                if requirement_obj.id != parent_obj.id and requirement_obj.additional_data[
+                    'parent-id'] == parent_obj.external_id:
                     requirement_obj.parent = parent_obj
                     requirement_obj.save(force_update=True)
                     break
