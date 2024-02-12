@@ -93,9 +93,12 @@ class RequirementCategory(OrgModel):
 class Requirement(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirements')
-    parent = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
+    category = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='requirements', verbose_name='category')
     name = models.CharField(max_length=256, unique=True)
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='parent_requirement')
+
     summary = models.CharField(max_length=256, null=True, blank=True)
 
     description = models.TextField(null=True, blank=True)
@@ -113,5 +116,7 @@ class Requirement(OrgModel):
 
     business_requirements = models.ManyToManyField(business.models.Requirement, related_name='technical_requirements',
                                                    blank=True)
+
+    additional_data = models.JSONField(null=True, blank=True)
 
 # TODO: Add user segment with use-case variations

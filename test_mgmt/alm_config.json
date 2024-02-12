@@ -1,0 +1,10 @@
+{
+  "ALM_config":
+  {
+    "base_url" : "",
+    "domain" : "",
+    "project" : "",
+    "clientId" : "",
+    "secret" : ""
+  }
+}
