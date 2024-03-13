@@ -22,6 +22,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,7 +36,7 @@ INSTALLED_APPS = [
 
     'django_filters',  # Added for filtering
 
-    #'corsheaders',
+    # 'corsheaders',
 
     'import_export',  # Import export
 
@@ -60,7 +61,7 @@ INSTALLED_APPS = [
     'business',
 ]
 
-#'corsheaders.middleware.CorsMiddleware',
+# 'corsheaders.middleware.CorsMiddleware',
 
 MIDDLEWARE = [
     'api.middlewares.CustomCorsMiddleware',

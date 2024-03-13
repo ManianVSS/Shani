@@ -1,21 +1,22 @@
-Django==4.2.1
-django-dbbackup==4.0.2
-django-cors-headers==4.0.0
+Django==5.0.3
+django-jazzmin==2.6.0
+django-dbbackup==4.1.0
+django-cors-headers==4.3.1
 django-env-overrides==0.1.0
-django-environ==0.10.0
-django-filter==23.2
+django-environ==0.11.2
+django-filter==23.3
 # django-advanced-filters==2.0.0
-django-import-export==3.2.0
+django-import-export==3.3.7
 # django-guardian==2.4.0
-django_mass_edit==3.4.1
+django_mass_edit==3.5.0
 django-jsonfield==1.4.1
 django-rest-swagger==2.2.0
 # django-sundial==1.1.1
 djangorestframework==3.14.0
-djangorestframework-simplejwt==5.2.2
+djangorestframework-simplejwt==5.3.1
 # django-audit-log==0.7.0
-numpy==1.24.3
+numpy==1.26.4
 openpyxl==3.1.2
-psycopg2==2.9.6
-scipy==1.10.1
+psycopg2==2.9.9
+scipy==1.12.0
 APScheduler==3.10.4
