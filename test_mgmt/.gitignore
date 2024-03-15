@@ -113,7 +113,8 @@ GitHub.sublime-settings
 !.vscode/extensions.json
 .history
 
-migrations/
+#Should not include migrations to .gitignore as this will cause losing migration data in production
+#migrations/
 
 # production
 /build

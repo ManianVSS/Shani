@@ -6,14 +6,14 @@ from api.storage import CustomFileSystemStorage
 
 class Attachment(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='business_attachments')
+                                  verbose_name='organization group', related_name='scheduler_attachments')
     name = models.CharField(max_length=256)
-    file = models.FileField(storage=CustomFileSystemStorage, upload_to='business', blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to='scheduler', blank=False, null=False)
 
 
 class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='business_tags')
+                                  verbose_name='organization group', related_name='scheduler_tags')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
