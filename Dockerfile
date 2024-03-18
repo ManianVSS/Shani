@@ -18,14 +18,14 @@ WORKDIR /test_mgmt
 RUN pip install -r requirements.txt
 RUN bash cleandb.sh
 
-ENV DATABASE__NAME=testmgmt
-ENV DATABASE__USER=testmgmtadmin
-ENV DATABASE__PASSWORD=testmgmtadmin@123
-ENV DATABASE__HOST=localhost
-ENV DATABASE__PORT=5432
+# ENV DATABASE__NAME=testmgmt
+# ENV DATABASE__USER=testmgmtadmin
+# ENV DATABASE__PASSWORD=testmgmtadmin@123
+# ENV DATABASE__HOST=localhost
+# ENV DATABASE__PORT=5432
 
-ENV mode=production
-ENV DJANGO__bool__DEBUG=False
+# ENV mode=production
+# ENV DJANGO__bool__DEBUG=False
 
 EXPOSE 8000
-ENTRYPOINT ["python3", "manage.py", "runserver","0.0.0.0:8000 --insecure"]
+ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:8000","--insecure"]
