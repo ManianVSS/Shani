@@ -11,7 +11,7 @@ RUN apt -y update \
 	&& rm -rf /var/cache/apt/*
 
 COPY test_mgmt /test_mgmt
-COPY webui/build /test_mgmt/build
+# COPY webui/build /test_mgmt/build
 COPY scripts/* /test_mgmt
 
 WORKDIR /test_mgmt

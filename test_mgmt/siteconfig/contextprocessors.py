@@ -1,4 +1,5 @@
 from siteconfig.models import Configuration, get_database_name
+from test_mgmt import settings
 
 
 def site_configuration(request):
@@ -9,4 +10,6 @@ def site_configuration(request):
 
     if not configuration_dict.get("config_name"):
         configuration_dict["config_name"] = get_database_name()
+    if not configuration_dict.get("base_url"):
+        configuration_dict["base_url"] = settings.FORCE_SCRIPT_NAME
     return configuration_dict

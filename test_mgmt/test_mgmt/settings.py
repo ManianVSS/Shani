@@ -19,6 +19,9 @@ ALLOWED_HOSTS = ["*"]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 # APPEND_SLASH = False
 
+USE_X_FORWARDED_HOST = True
+FORCE_SCRIPT_NAME = os.getenv('FORCE_SCRIPT_NAME', '')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -156,8 +159,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/data/'
+STATIC_SUFFIX = '/static/'
+STATIC_URL = FORCE_SCRIPT_NAME + STATIC_SUFFIX
+MEDIA_SUFFIX = '/data/'
+MEDIA_URL = FORCE_SCRIPT_NAME + MEDIA_SUFFIX
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'build'),
                     os.path.join(BASE_DIR, 'build/static'),
