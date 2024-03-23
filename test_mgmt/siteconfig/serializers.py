@@ -6,7 +6,7 @@ from .models import SiteSettings, DisplayItem, Page, Category, Catalog, Event, C
 class ConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Configuration
-        fields = ['id', 'name', 'value', 'created_at', 'updated_at', ]
+        fields = ['id', 'name', 'value', 'created_at', 'updated_at', 'published', ]
 
 
 class DisplayItemSerializer(serializers.ModelSerializer):

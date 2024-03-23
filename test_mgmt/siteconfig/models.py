@@ -1,14 +1,12 @@
 from django.db import models
 
-from api.models import OrgModel, OrgGroup
+from api.models import OrgModel, OrgGroup, BaseModel
 from api.storage import CustomFileSystemStorage
 
 
-class Configuration(models.Model):
+class Configuration(BaseModel):
     name = models.CharField(max_length=256, unique=True)
     value = models.TextField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.value)

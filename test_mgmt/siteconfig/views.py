@@ -18,7 +18,7 @@ class ConfigurationViewSet(ModelViewSet):
     serializer_class = ConfigurationSerializer
     permission_classes = [IsSuperUser]
     search_fields = ['name', 'value']
-    ordering_fields = ['id', 'name', 'created_at', 'updated_at', ]
+    ordering_fields = ['id', 'name', 'created_at', 'updated_at', 'published', ]
     ordering = ['name', 'updated_at']
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -26,6 +26,7 @@ class ConfigurationViewSet(ModelViewSet):
         'value': string_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
     }
 
 

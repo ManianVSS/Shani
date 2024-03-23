@@ -17,7 +17,7 @@ class ConfigurationAdmin(ImportExportModelAdmin):
     ordering = ('name',)
     list_display = ['name', 'value', ]
     list_filter = (
-        'created_at', 'updated_at',
+        'created_at', 'updated_at', 'published',
     )
 
 
