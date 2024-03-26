@@ -7,4 +7,5 @@ del /s /q testdesign\migrations
 del /s /q automation\migrations
 del /s /q execution\migrations
 del /s /q people\migrations
+del /s /q program\migrations
 

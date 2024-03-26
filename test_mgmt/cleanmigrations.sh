@@ -9,4 +9,5 @@ rm -rf testdesign/migrations
 rm -rf automation/migrations
 rm -rf execution/migrations
 rm -rf people/migrations
+rm -rf program/migrations
 

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'execution',
     'people',
     'business',
+    'program',
 ]
 
 # 'corsheaders.middleware.CorsMiddleware',
