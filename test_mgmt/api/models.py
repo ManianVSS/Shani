@@ -117,6 +117,17 @@ class OrgModel(BaseModel):
                                    ).distinct()
 
 
+class NotMutablePublishOrgModel(OrgModel):
+    class Meta:
+        abstract = True
+
+    def can_modify(self, user):
+        return (self.org_group is None) or (not self.published and (self.is_owner(user) or self.is_member(user)))
+
+    def can_delete(self, user):
+        return (self.org_group is None) or (not self.published and self.is_owner(user))
+
+
 class ReviewStatus(models.TextChoices):
     DRAFT = 'DRAFT', _('Draft'),
     IN_PROGRESS = 'IN_PROGRESS', _('In progress'),

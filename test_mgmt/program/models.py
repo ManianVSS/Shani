@@ -1,10 +1,10 @@
 from django.db import models
 
-from api.models import OrgModel, OrgGroup
+from api.models import OrgGroup, NotMutablePublishOrgModel
 from api.storage import CustomFileSystemStorage
 
 
-class ApplicationType(OrgModel):
+class ApplicationType(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_application_types')
     name = models.CharField(max_length=256, unique=True)
@@ -12,7 +12,7 @@ class ApplicationType(OrgModel):
     description = models.TextField(null=True, blank=True)
 
 
-class Application(OrgModel):
+class Application(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_applications')
     application_type = models.ForeignKey(ApplicationType, on_delete=models.SET_NULL, blank=True, null=True,
@@ -22,7 +22,7 @@ class Application(OrgModel):
     description = models.TextField(null=True, blank=True)
 
 
-class Release(OrgModel):
+class Release(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_releases')
     application = models.ForeignKey(Application, on_delete=models.SET_NULL, blank=True, null=True,
@@ -36,7 +36,7 @@ class Release(OrgModel):
                                      verbose_name='Release notes file')
 
 
-class ArtifactType(OrgModel):
+class ArtifactType(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_artifact_types')
     name = models.CharField(max_length=256, unique=True)
@@ -44,7 +44,7 @@ class ArtifactType(OrgModel):
     description = models.TextField(null=True, blank=True)
 
 
-class Artifact(OrgModel):
+class Artifact(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_artifacts')
     release = models.ForeignKey(Release, on_delete=models.SET_NULL, blank=True, null=True,
@@ -57,7 +57,7 @@ class Artifact(OrgModel):
     checksum = models.TextField(null=True, blank=True)
 
 
-class DocumentType(OrgModel):
+class DocumentType(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_document_types')
     name = models.CharField(max_length=256, unique=True)
@@ -65,7 +65,7 @@ class DocumentType(OrgModel):
     description = models.TextField(null=True, blank=True)
 
 
-class Document(OrgModel):
+class Document(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_documents')
     release = models.ForeignKey(Release, on_delete=models.SET_NULL, blank=True, null=True,
