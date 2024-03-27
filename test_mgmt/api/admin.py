@@ -103,6 +103,7 @@ class OrgGroupAdmin(CustomModelAdmin):
         ('leaders', RelatedOnlyFieldListFilter),
         ('members', RelatedOnlyFieldListFilter),
         ('guests', RelatedOnlyFieldListFilter),
+        ('consumers', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
 

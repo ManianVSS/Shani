@@ -130,6 +130,7 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
         'leaders': exact_fields_filter_lookups,
         'members': exact_fields_filter_lookups,
         'guests': exact_fields_filter_lookups,
+        'consumers': exact_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
