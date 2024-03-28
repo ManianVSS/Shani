@@ -2,9 +2,11 @@ from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions, IsAdminUser
+from rest_framework.viewsets import ModelViewSet
 
-from .models import Attachment, OrgGroup, Properties
-from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer, PropertiesSerializer
+from .models import Attachment, OrgGroup, Properties, Configuration
+from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer, \
+    PropertiesSerializer, ConfigurationSerializer
 
 exact_fields_filter_lookups = ['exact', ]
 # many_to_many_id_field_lookups = ['contains']
@@ -113,6 +115,23 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+
+class ConfigurationViewSet(ModelViewSet):
+    queryset = Configuration.objects.all()
+    serializer_class = ConfigurationSerializer
+    permission_classes = [IsSuperUser]
+    search_fields = ['name', 'value']
+    ordering_fields = ['id', 'name', 'created_at', 'updated_at', 'published', ]
+    ordering = ['name', 'updated_at']
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'value': string_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+    }
+
 
 class OrgGroupViewSet(ShaniOrgGroupViewSet):
     queryset = OrgGroup.objects.all()

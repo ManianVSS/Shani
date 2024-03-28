@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from api.models import OrgModel, OrgGroup, ReviewStatus
+from api.enumerations import ReviewStatus
+from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
 from requirements.models import UseCase
 

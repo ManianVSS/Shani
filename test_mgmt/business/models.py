@@ -1,6 +1,7 @@
 from django.db import models
 
-from api.models import OrgModel, OrgGroup, ReviewStatus
+from api.enumerations import ReviewStatus
+from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
 
 

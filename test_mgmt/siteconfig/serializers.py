@@ -1,12 +1,6 @@
 from rest_framework import serializers
 
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, Event, Configuration
-
-
-class ConfigurationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Configuration
-        fields = ['id', 'name', 'value', 'created_at', 'updated_at', 'published', ]
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, Event
 
 
 class DisplayItemSerializer(serializers.ModelSerializer):

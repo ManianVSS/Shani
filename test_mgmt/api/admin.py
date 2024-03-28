@@ -1,12 +1,16 @@
+import sys
+
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, OrgGroup, Properties
+from .models import Attachment, Configuration, OrgGroup, Properties, get_database_name
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -93,6 +97,49 @@ class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
 
 admin.site.unregister(Group)
 admin.site.register(Group, CustomGroupAdmin)
+
+
+@admin.register(Configuration)
+class ConfigurationAdmin(ImportExportModelAdmin):
+    search_fields = ['name', 'value', ]
+    ordering = ('name',)
+    list_display = ['name', 'value', ]
+    list_filter = (
+        'created_at', 'updated_at', 'published',
+    )
+
+
+# class MyAdminSite(AdminSite):
+#     @never_cache
+#     def index(self, request, extra_context=None):
+#         extra_context = extra_context or {}
+#         extra_context['appname'] = get_database_name()
+#         return self.index(request, extra_context)
+
+
+def reload_admin_site_name(database_name):
+    if database_name is None:
+        database_name = "Shani Test Management"
+
+        # noinspection PyBroadException
+        try:
+            database_name = get_database_name()
+        except Exception as e:
+            print("Defaulting site name Shani as no site_setting data found")
+
+    admin.site.site_header = database_name + " Administration"
+    admin.site.site_title = database_name + " Admin Portal"
+    admin.site.index_title = "Welcome to " + database_name + " Administration Portal"
+
+
+# method for updating
+@receiver(post_save, sender=Configuration, dispatch_uid="update_admin_site_name")
+def update_admin_site_name(sender, instance, **kwargs):
+    reload_admin_site_name(None)
+
+
+if 'runserver' in sys.argv:
+    reload_admin_site_name(None)
 
 
 @admin.register(OrgGroup)

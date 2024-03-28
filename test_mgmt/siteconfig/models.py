@@ -1,22 +1,7 @@
 from django.db import models
 
-from api.models import OrgModel, OrgGroup, BaseModel
+from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
-
-
-class Configuration(BaseModel):
-    name = models.CharField(max_length=256, unique=True)
-    value = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.name) + ": " + str(self.value)
-
-
-def get_database_name():
-    database_name_config = Configuration.objects.filter(name="name")
-    if database_name_config.count() > 0:
-        return database_name_config[0].value
-    return "Shani Test Management"
 
 
 class DisplayItem(OrgModel):

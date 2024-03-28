@@ -2,32 +2,14 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
-    ShaniOrgGroupViewSet, datetime_fields_filter_lookups, IsSuperUser
-from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event, Configuration
+    ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
-    CategorySerializer, EventSerializer, ConfigurationSerializer
-
-
-class ConfigurationViewSet(ModelViewSet):
-    queryset = Configuration.objects.all()
-    serializer_class = ConfigurationSerializer
-    permission_classes = [IsSuperUser]
-    search_fields = ['name', 'value']
-    ordering_fields = ['id', 'name', 'created_at', 'updated_at', 'published', ]
-    ordering = ['name', 'updated_at']
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'name': string_fields_filter_lookups,
-        'value': string_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-    }
+    CategorySerializer, EventSerializer
 
 
 class DisplayItemViewSet(ShaniOrgGroupViewSet):

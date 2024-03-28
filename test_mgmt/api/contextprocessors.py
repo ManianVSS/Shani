@@ -1,5 +1,5 @@
-from siteconfig.models import Configuration, get_database_name
 from test_mgmt import settings
+from .models import Configuration, get_database_name
 
 
 def site_configuration(request):

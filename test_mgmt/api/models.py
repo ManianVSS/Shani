@@ -1,7 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
 from django.db.models import Q
-from django.utils.translation import gettext_lazy as _
 
 from api.storage import CustomFileSystemStorage
 from test_mgmt import settings
@@ -39,7 +38,8 @@ class BaseModel(models.Model):
         return user is not None
 
     def can_read(self, user):
-        return self.is_owner(user) or self.is_member(user) or self.is_guest(user)
+        return self.is_owner(user) or self.is_member(user) or self.is_guest(user) or (
+                self.published and self.is_consumer(user))
 
     def can_modify(self, user):
         return self.is_owner(user) or self.is_member(user)
@@ -49,6 +49,27 @@ class BaseModel(models.Model):
 
     def get_list_query_set(self, user):
         return self.objects.all()
+
+
+class Configuration(BaseModel):
+    name = models.CharField(max_length=256, unique=True)
+    value = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.name) + ": " + str(self.value)
+
+
+def create_default_configuration():
+    database_name_config = Configuration.objects.filter(name="name")
+    if database_name_config.count() == 0:
+        Configuration(name='name', value='Shani Test Management').save()
+
+
+def get_database_name():
+    database_name_config = Configuration.objects.filter(name="name")
+    if database_name_config.count() > 0:
+        return database_name_config[0].value
+    return "Shani Test Management"
 
 
 # noinspection PyUnresolvedReferences
@@ -106,10 +127,11 @@ class OrgModel(BaseModel):
         return (self.org_group is None) or self.org_group.is_guest(user)
 
     def is_consumer(self, user):
-        return (self.org_group is None) or self.org_group.consumer(user)
+        return (self.org_group is None) or self.org_group.is_consumer(user)
 
     def can_read(self, user):
-        return (self.org_group is None) or self.is_owner(user) or self.is_member(user) or self.is_guest(user)
+        return (self.org_group is None) or self.is_owner(user) or self.is_member(user) or self.is_guest(user) or (
+                self.published and self.is_consumer(user))
 
     def can_modify(self, user):
         return (self.org_group is None) or self.is_owner(user) or self.is_member(user)
@@ -122,7 +144,7 @@ class OrgModel(BaseModel):
             return self.objects.all()
         user_id = user.id if user else None
         return self.objects.filter(Q(org_group__isnull=True)
-                                   | (Q(published='True') & Q(org_group__cconsumers__pk=user_id))
+                                   | (Q(published='True') & Q(org_group__consumers__pk=user_id))
                                    | Q(org_group__guests__pk=user_id)
                                    | Q(org_group__members__pk=user_id)
                                    | Q(org_group__leaders__pk=user_id)
@@ -138,13 +160,6 @@ class NotMutablePublishOrgModel(OrgModel):
 
     def can_delete(self, user):
         return (self.org_group is None) or (not self.published and self.is_owner(user))
-
-
-class ReviewStatus(models.TextChoices):
-    DRAFT = 'DRAFT', _('Draft'),
-    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
-    IN_REVIEW = 'IN_REVIEW', _('In Review'),
-    APPROVED = 'APPROVED', _('Approved'),
 
 
 class Attachment(OrgModel):

@@ -91,7 +91,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'siteconfig.contextprocessors.site_configuration',
+                'api.contextprocessors.site_configuration',
             ],
             # For swagger
             'libraries': {
