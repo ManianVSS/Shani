@@ -15,7 +15,12 @@ SECRET_KEY = 'django-insecure-9=(@6%n=2c^$4%b1-0!7-k+=vjeo8pub3r&$$ijw(0tchsaxn4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True  # bool(os.getenv("DEBUG", 'True'))
 
-ALLOWED_HOSTS = ["*"]
+FQDN = os.getenv('FQDN', "*")
+if os.getenv("mode", "staging") == "production":
+    ALLOWED_HOSTS = [FQDN]
+else:
+    ALLOWED_HOSTS = ["*"]
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 # APPEND_SLASH = False
 
@@ -39,7 +44,7 @@ INSTALLED_APPS = [
 
     'django_filters',  # Added for filtering
 
-    # 'corsheaders',
+    'corsheaders',
 
     'import_export',  # Import export
 
@@ -65,10 +70,10 @@ INSTALLED_APPS = [
     'program',
 ]
 
-# 'corsheaders.middleware.CorsMiddleware',
+# 'api.middlewares.CustomCorsMiddleware',
 
 MIDDLEWARE = [
-    'api.middlewares.CustomCorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -210,32 +215,37 @@ REST_FRAMEWORK = {
 
 }
 
-# CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOW_HEADERS = [
-#     "accept",
-#     "accept-encoding",
-#     "authorization",
-#     "content-type",
-#     "dnt",
-#     "origin",
-#     "user-agent",
-#     "x-csrftoken",
-#     "x-requested-with",
-#     "access-control-allow-origin",
-#     "access-control-allow-methods",
-# ]
-#
-# CORS_ALLOW_METHODS = [
-#     'DELETE',
-#     'GET',
-#     'OPTIONS',
-#     'PATCH',
-#     'POST',
-#     'PUT',
-# ]
-# CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', 'http://127.0.0.1:3000']
+if os.getenv("mode", "staging") != "production":
+    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = True
+    CORS_ALLOW_HEADERS = [
+        "accept",
+        "accept-encoding",
+        "authorization",
+        "content-type",
+        "dnt",
+        "origin",
+        "user-agent",
+        "x-csrftoken",
+        "x-requested-with",
+        "access-control-allow-origin",
+        "access-control-allow-methods",
+    ]
 
+    CORS_ALLOW_METHODS = [
+        'DELETE',
+        'GET',
+        'OPTIONS',
+        'PATCH',
+        'POST',
+        'PUT',
+    ]
+
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        # match localhost with any port
+        r"^http:\/\/localhost:*([0-9]+)?$",
+        r"^https:\/\/localhost:*([0-9]+)?$",
+    ]
 
 # ATTACHMENT_DIR = "./attachments"
 # os.makedirs(ATTACHMENT_DIR, exist_ok=True)
