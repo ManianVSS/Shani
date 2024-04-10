@@ -16,13 +16,14 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -33,7 +34,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
     serializer_class = TagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -42,6 +43,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -52,7 +54,8 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
     serializer_class = FeatureCategorySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'parent', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'parent', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -62,6 +65,7 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
         'tags': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
@@ -73,7 +77,8 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
     serializer_class = FeatureSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'created_at',
+                       'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -85,6 +90,7 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'external_id': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
@@ -96,7 +102,8 @@ class UseCaseViewSet(ShaniOrgGroupViewSet):
     serializer_class = UseCaseSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'feature', 'status', 'org_group', 'created_at', 'updated_at',
+                       'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -107,6 +114,7 @@ class UseCaseViewSet(ShaniOrgGroupViewSet):
 
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -117,7 +125,8 @@ class RequirementCategoryViewSet(ShaniOrgGroupViewSet):
     serializer_class = RequirementCategorySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'parent', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'parent', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -127,6 +136,7 @@ class RequirementCategoryViewSet(ShaniOrgGroupViewSet):
         'tags': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
@@ -138,7 +148,8 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
     serializer_class = RequirementSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'created_at',
+                       'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -151,6 +162,7 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'cost': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
         'business_requirements': exact_fields_filter_lookups,
@@ -184,8 +196,8 @@ def get_alm_requirements():
     for requirement_obj in requirement_obj_list:
         if not requirement_obj.parent:
             for parent_obj in requirement_obj_list:
-                if requirement_obj.id != parent_obj.id and requirement_obj.additional_data[
-                    'parent-id'] == parent_obj.external_id:
+                if ((requirement_obj.id != parent_obj.id)
+                        and requirement_obj.additional_data['parent-id'] == parent_obj.external_id):
                     requirement_obj.parent = parent_obj
                     requirement_obj.save(force_update=True)
                     break

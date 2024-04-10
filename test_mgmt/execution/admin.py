@@ -9,7 +9,7 @@ from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Execu
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -17,7 +17,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -26,7 +26,7 @@ class TagAdmin(CustomModelAdmin):
 @admin.register(Release)
 class ReleaseAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'properties', ]
@@ -38,7 +38,7 @@ class BuildAdmin(CustomModelAdmin):
         ('release', RelatedOnlyFieldListFilter),
         'type',
         'build_time',
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'properties', ]
@@ -47,7 +47,7 @@ class BuildAdmin(CustomModelAdmin):
 @admin.register(Defect)
 class DefectAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),
@@ -58,7 +58,7 @@ class DefectAdmin(CustomModelAdmin):
 @admin.register(Run)
 class RunAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),

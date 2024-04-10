@@ -18,13 +18,14 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -35,7 +36,7 @@ class SiteViewSet(ShaniOrgGroupViewSet):
     serializer_class = SiteSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -43,6 +44,7 @@ class SiteViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
@@ -68,6 +70,7 @@ class EngineerViewSet(ShaniOrgGroupViewSet):
         'auth_user__username': exact_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -78,7 +81,8 @@ class EngineerOrgGroupParticipationViewSet(ShaniOrgGroupViewSet):
     serializer_class = EngineerOrgGroupParticipationSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'engineer', 'org_group', 'role', 'capacity', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'engineer', 'org_group', 'role', 'capacity', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -87,6 +91,7 @@ class EngineerOrgGroupParticipationViewSet(ShaniOrgGroupViewSet):
         'role': string_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -97,7 +102,7 @@ class SiteHolidayViewSet(ShaniOrgGroupViewSet):
     serializer_class = SiteHolidaySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'date', 'site', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'date', 'site', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -106,6 +111,7 @@ class SiteHolidayViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'site': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -116,7 +122,8 @@ class LeaveViewSet(ShaniOrgGroupViewSet):
     serializer_class = LeaveSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'engineer', 'start_date', 'end_date', 'status', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'engineer', 'start_date', 'end_date', 'status', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -126,6 +133,7 @@ class LeaveViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -147,6 +155,7 @@ class EngineerOrgGroupParticipationHistoryViewSet(ShaniOrgGroupViewSet):
         'capacity': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
 
@@ -169,6 +178,7 @@ class TopicViewSet(ShaniOrgGroupViewSet):
         'parent_topic': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -180,7 +190,7 @@ class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
     ordering_fields = ['id', 'topic', 'engineer', 'status', 'rating', 'start_date', 'end_date', 'org_group',
-                       'created_at', 'updated_at', 'published', ]
+                       'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -192,6 +202,7 @@ class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
         'end_date': date_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -202,7 +213,7 @@ class ScaleViewSet(ShaniOrgGroupViewSet):
     serializer_class = ScaleSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -211,6 +222,7 @@ class ScaleViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -221,7 +233,8 @@ class ReasonViewSet(ShaniOrgGroupViewSet):
     serializer_class = ReasonSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'org_group', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -231,6 +244,7 @@ class ReasonViewSet(ShaniOrgGroupViewSet):
         'weight': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -254,6 +268,7 @@ class CreditViewSet(ShaniOrgGroupViewSet):
         'creditor': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -264,7 +279,8 @@ class EngineerSkillsViewSet(ShaniOrgGroupViewSet):
     serializer_class = EngineerSkillsSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'engineer', 'skill', 'experience', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'engineer', 'skill', 'experience', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -273,6 +289,7 @@ class EngineerSkillsViewSet(ShaniOrgGroupViewSet):
         'experience': compare_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }

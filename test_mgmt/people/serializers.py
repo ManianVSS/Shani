@@ -8,13 +8,14 @@ from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation,
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
-        fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'attachments', ]
+        fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public',
+                  'attachments', ]
 
 
 class EngineerSerializer(serializers.ModelSerializer):
@@ -27,13 +28,15 @@ class EngineerSerializer(serializers.ModelSerializer):
 class EngineerOrgGroupParticipationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EngineerOrgGroupParticipation
-        fields = ['id', 'engineer', 'org_group', 'created_at', 'updated_at', 'published', 'role', 'capacity', ]
+        fields = ['id', 'engineer', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', 'role',
+                  'capacity', ]
 
 
 class SiteHolidaySerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteHoliday
-        fields = ['id', 'name', 'date', 'summary', 'attachments', 'site', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'name', 'date', 'summary', 'attachments', 'site', 'created_at', 'updated_at', 'published',
+                  'is_public', ]
 
 
 class LeaveSerializer(serializers.ModelSerializer):
@@ -46,7 +49,8 @@ class LeaveSerializer(serializers.ModelSerializer):
 class EngineerOrgGroupParticipationHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = EngineerOrgGroupParticipationHistory
-        fields = ['id', 'date', 'engineer', 'org_group', 'created_at', 'updated_at', 'published', 'expected_capacity',
+        fields = ['id', 'date', 'engineer', 'org_group', 'created_at', 'updated_at', 'published', 'is_public',
+                  'expected_capacity',
                   'capacity', ]
 
 
@@ -80,10 +84,11 @@ class CreditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Credit
         fields = ['id', 'time', 'credited_user', 'credits', 'scale', 'reason', 'description', 'creditor', 'org_group',
-                  'created_at', 'updated_at', 'published', ]
+                  'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class EngineerSkillsSerializer(serializers.ModelSerializer):
     class Meta:
         model = EngineerSkills
-        fields = ['id', 'engineer', 'skill', 'experience', 'org_group', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'engineer', 'skill', 'experience', 'org_group', 'created_at', 'updated_at', 'published',
+                  'is_public', ]

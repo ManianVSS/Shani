@@ -19,23 +19,23 @@ class GroupSerializer(serializers.ModelSerializer):
 class ConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Configuration
-        fields = ['id', 'name', 'value', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'name', 'value', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class OrgGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrgGroup
         fields = ['id', 'name', 'summary', 'auth_group', 'description', 'org_group', 'leaders', 'members', 'guests',
-                  'consumers', 'created_at', 'updated_at', 'published', ]
+                  'consumers', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class PropertiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Properties
-        fields = ['id', 'name', 'details', 'org_group', 'created_at', 'updated_at', 'published', ]
+        fields = ['id', 'name', 'details', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]

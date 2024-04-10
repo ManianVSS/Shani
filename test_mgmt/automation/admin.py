@@ -9,7 +9,7 @@ from .models import Step, Attachment, Tag, MockAPI
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -17,7 +17,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -26,7 +26,7 @@ class TagAdmin(CustomModelAdmin):
 @admin.register(Step)
 class StepAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
         ('test_design_owner', RelatedOnlyFieldListFilter),
@@ -46,7 +46,7 @@ class StepAdmin(CustomModelAdmin):
 @admin.register(MockAPI)
 class MockAPIAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'http_method',
     )

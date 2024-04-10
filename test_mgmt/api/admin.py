@@ -34,8 +34,15 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
         # ]
 
     def has_view_permission(self, request, obj=None):
-        if (request is None) or (request.user is None) or request.user.is_superuser or (obj is None):
+        if (request is None) or (obj is None) or (request.user is None) or request.user.is_superuser:
             return super().has_view_permission(request, obj)
+
+        if request.user.is_anonymous:
+            try:
+                return hasattr(obj, 'can_read') and obj.can_read(request.user)
+            except FieldDoesNotExist:
+                return super().has_view_permission(request, obj)
+
         if super().has_view_permission(request, obj):
             try:
                 return not hasattr(obj, 'can_read') or obj.can_read(request.user)
@@ -45,7 +52,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return False
 
     def has_change_permission(self, request, obj=None):
-        if (request is None) or (request.user is None) or request.user.is_superuser or (obj is None):
+        if (request is None) or (obj is None) or (request.user is None) or request.user.is_superuser:
             return super().has_change_permission(request, obj)
         if super().has_change_permission(request, obj):
             try:
@@ -56,7 +63,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             return False
 
     def has_delete_permission(self, request, obj=None):
-        if (request is None) or (request.user is None) or request.user.is_superuser or (obj is None):
+        if (request is None) or (obj is None) or (request.user is None) or request.user.is_superuser:
             return super().has_delete_permission(request, obj)
         if super().has_delete_permission(request, obj):
             try:
@@ -68,19 +75,12 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
 
     # Allow only listing of entities that can be viewed by the user
     def get_queryset(self, request):
-        if request.user is None:
-            return self.model.objects.none()
+        if ((request.method == 'GET')
+                and not request.path.endswith('/change/')
+                and hasattr(self.model, 'get_list_query_set')):
+            return self.model.get_list_query_set(self.model, request.user)
         else:
-            if (request.method == 'GET') and not request.path.endswith('/change/') and hasattr(self.model,
-                                                                                               'get_list_query_set'):
-                return self.model.get_list_query_set(self.model, request.user)
-            else:
-                return self.model.objects.all()
-            # return self.model.objects.filter(Q(org_group__isnull=True)
-            #                                  | Q(org_group__guests__pk=user_id)
-            #                                  | Q(org_group__members__pk=user_id)
-            #                                  | Q(org_group__leaders__pk=user_id)
-            #                                  ).distinct()
+            return super().get_queryset(request)
 
 
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
@@ -105,7 +105,7 @@ class ConfigurationAdmin(ImportExportModelAdmin):
     ordering = ('name',)
     list_display = ['name', 'value', ]
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
     )
 
 
@@ -145,7 +145,7 @@ if 'runserver' in sys.argv:
 @admin.register(OrgGroup)
 class OrgGroupAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('leaders', RelatedOnlyFieldListFilter),
         ('members', RelatedOnlyFieldListFilter),
@@ -159,7 +159,7 @@ class OrgGroupAdmin(CustomModelAdmin):
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -167,7 +167,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Properties)
 class PropertiesAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'details', ]

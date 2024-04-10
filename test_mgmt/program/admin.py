@@ -8,7 +8,7 @@ from .models import ApplicationType, Application, Release, ArtifactType, Artifac
 @admin.register(ApplicationType)
 class ApplicationTypeAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -18,7 +18,7 @@ class ApplicationTypeAdmin(CustomModelAdmin):
 class ApplicationAdmin(CustomModelAdmin):
     list_filter = (
         ('application_type', RelatedOnlyFieldListFilter),
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -29,7 +29,7 @@ class ReleaseAdmin(CustomModelAdmin):
     list_filter = (
         ('application', RelatedOnlyFieldListFilter),
         'date',
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -38,7 +38,7 @@ class ReleaseAdmin(CustomModelAdmin):
 @admin.register(ArtifactType)
 class ArtifactTypeAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -49,7 +49,7 @@ class ArtifactAdmin(CustomModelAdmin):
     list_filter = (
         ('release', RelatedOnlyFieldListFilter),
         ('artifact_type', RelatedOnlyFieldListFilter),
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'link', 'file', ]
@@ -58,7 +58,7 @@ class ArtifactAdmin(CustomModelAdmin):
 @admin.register(DocumentType)
 class DocumentTypeAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
@@ -69,7 +69,7 @@ class DocumentAdmin(CustomModelAdmin):
     list_filter = (
         ('release', RelatedOnlyFieldListFilter),
         ('document_type', RelatedOnlyFieldListFilter),
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'link', 'file', ]

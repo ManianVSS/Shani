@@ -12,7 +12,7 @@ from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation,
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
 
@@ -20,7 +20,7 @@ class AttachmentAdmin(CustomModelAdmin):
 @admin.register(Site)
 class SiteAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', ]
@@ -29,7 +29,7 @@ class SiteAdmin(CustomModelAdmin):
 @admin.register(Engineer)
 class EngineerAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'role',
         ('site', RelatedOnlyFieldListFilter),
@@ -40,7 +40,7 @@ class EngineerAdmin(CustomModelAdmin):
 @admin.register(EngineerOrgGroupParticipation)
 class EngineerOrgGroupParticipationAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'role',
         ('engineer', RelatedOnlyFieldListFilter),
@@ -51,7 +51,7 @@ class EngineerOrgGroupParticipationAdmin(CustomModelAdmin):
 @admin.register(SiteHoliday)
 class SiteHolidayAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('site', RelatedOnlyFieldListFilter),
         'date',
     )
@@ -61,7 +61,7 @@ class SiteHolidayAdmin(CustomModelAdmin):
 @admin.register(Leave)
 class LeaveAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         'start_date',
         'end_date',
         'status',
@@ -73,7 +73,7 @@ class LeaveAdmin(CustomModelAdmin):
 @admin.register(EngineerOrgGroupParticipationHistory)
 class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'date',
         ('engineer', RelatedOnlyFieldListFilter),
@@ -84,7 +84,7 @@ class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
 @admin.register(Topic)
 class TopicAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('parent_topic', RelatedOnlyFieldListFilter),
     )
@@ -94,7 +94,7 @@ class TopicAdmin(CustomModelAdmin):
 @admin.register(TopicEngineerAssignment)
 class TopicEngineerAssignmentAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'status',
         'start_date',
@@ -109,7 +109,7 @@ class TopicEngineerAssignmentAdmin(CustomModelAdmin):
 @admin.register(Scale)
 class ScaleAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = default_search_fields
@@ -141,7 +141,7 @@ class CreditAdmin(CustomModelAdmin):
 @admin.register(EngineerSkills)
 class EngineerSkillsAdmin(CustomModelAdmin):
     list_filter = (
-        'created_at', 'updated_at', 'published',
+        'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'skill',
         ('engineer', RelatedOnlyFieldListFilter),

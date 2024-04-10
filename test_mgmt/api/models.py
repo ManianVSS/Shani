@@ -14,6 +14,7 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False, verbose_name='is published content')
+    is_public = models.BooleanField(default=False, verbose_name='is public content')
 
     def __str__(self):
         if hasattr(self, 'name'):
@@ -38,7 +39,7 @@ class BaseModel(models.Model):
         return user is not None
 
     def can_read(self, user):
-        return self.is_owner(user) or self.is_member(user) or self.is_guest(user) or (
+        return self.is_public or self.is_owner(user) or self.is_member(user) or self.is_guest(user) or (
                 self.published and self.is_consumer(user))
 
     def can_modify(self, user):
@@ -100,13 +101,20 @@ class OrgGroup(BaseModel):
 
     def get_list_query_set(self, user):
         user_id = user.id if user else None
-        if user.is_superuser:
-            return self.objects.all()
-        return self.objects.filter(Q(consumers__pk=user_id)
-                                   | Q(guests__pk=user_id)
-                                   | Q(members__pk=user_id)
-                                   | Q(leaders__pk=user_id)
-                                   ).distinct()
+
+        if user is not None:
+            if user.is_superuser:
+                return self.objects.all()
+            elif user.is_anonymous:
+                return self.objects.filter(Q(published='True') & Q(is_public='True')).distinct()
+            else:
+                return self.objects.filter(Q(consumers__pk=user_id)
+                                           | Q(guests__pk=user_id)
+                                           | Q(members__pk=user_id)
+                                           | Q(leaders__pk=user_id)
+                                           ).distinct()
+        else:
+            return self.objects.none()
 
 
 # noinspection PyUnresolvedReferences
@@ -130,8 +138,8 @@ class OrgModel(BaseModel):
         return (self.org_group is None) or self.org_group.is_consumer(user)
 
     def can_read(self, user):
-        return (self.org_group is None) or self.is_owner(user) or self.is_member(user) or self.is_guest(user) or (
-                self.published and self.is_consumer(user))
+        return self.is_public or (self.org_group is None) or self.is_owner(user) or self.is_member(
+            user) or self.is_guest(user) or (self.published and self.is_consumer(user))
 
     def can_modify(self, user):
         return (self.org_group is None) or self.is_owner(user) or self.is_member(user)
@@ -140,15 +148,22 @@ class OrgModel(BaseModel):
         return (self.org_group is None) or self.is_owner(user)
 
     def get_list_query_set(self, user):
-        if user.is_superuser:
-            return self.objects.all()
-        user_id = user.id if user else None
-        return self.objects.filter(Q(org_group__isnull=True)
-                                   | (Q(published='True') & Q(org_group__consumers__pk=user_id))
-                                   | Q(org_group__guests__pk=user_id)
-                                   | Q(org_group__members__pk=user_id)
-                                   | Q(org_group__leaders__pk=user_id)
-                                   ).distinct()
+        if user is not None:
+            if user.is_superuser:
+                return self.objects.all()
+            elif user.is_anonymous:
+                return self.objects.filter(
+                    Q(published='True') & (Q(is_public='True') | Q(org_group__isnull=True))).distinct()
+            else:
+                user_id = user.id if user else None
+                return self.objects.filter(Q(org_group__isnull=True)
+                                           | (Q(published='True') & Q(org_group__consumers__pk=user_id))
+                                           | Q(org_group__guests__pk=user_id)
+                                           | Q(org_group__members__pk=user_id)
+                                           | Q(org_group__leaders__pk=user_id)
+                                           ).distinct()
+        else:
+            return self.objects.none()
 
 
 class NotMutablePublishOrgModel(OrgModel):

@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -9,7 +10,6 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups
 from .models import Step, Attachment, Tag, MockAPI
 from .serializers import StepSerializer, AttachmentSerializer, TagSerializer, MockAPISerializer
-from django.db.models import Q
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -17,13 +17,14 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -34,7 +35,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
     serializer_class = TagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -43,6 +44,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'description': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -53,7 +55,7 @@ class StepViewSet(ShaniOrgGroupViewSet):
     serializer_class = StepSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'feature', 'org_group', 'created_at', 'updated_at', 'published', 'name',
+    ordering_fields = ['id', 'feature', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', 'name',
                        'expected_results', 'eta', 'tags', 'test_design_owner', 'test_design_status', 'automation_owner',
                        'automation_code_reference', 'automation_status', ]
     ordering = default_ordering
@@ -73,6 +75,7 @@ class StepViewSet(ShaniOrgGroupViewSet):
         'automation_status': id_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -83,7 +86,8 @@ class MockAPIViewSet(ShaniOrgGroupViewSet):
     serializer_class = MockAPISerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'http_method', 'status', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'http_method', 'status', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -92,6 +96,11 @@ class MockAPIViewSet(ShaniOrgGroupViewSet):
         'http_method': id_fields_filter_lookups,
         'status': id_fields_filter_lookups,
         'content_type': id_fields_filter_lookups,
+        'org_group': id_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
     }
 
 

@@ -37,7 +37,12 @@ class DjangoObjectPermissionsOrAnonReadOnly(DjangoObjectPermissions):
 
 class ShaniOrgGroupViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
+        user = self.request.user
+        if (user is None) or user.is_superuser:
+            return super().get_queryset()
+
         model = self.queryset.model
+
         if (self.action == 'list') and hasattr(model, 'get_list_query_set'):
             return model.get_list_query_set(model, self.request.user)
         else:
@@ -47,6 +52,19 @@ class ShaniOrgGroupViewSet(viewsets.ModelViewSet):
 class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
     # authenticated_users_only = False
 
+    def has_permission(self, request, view):
+
+        # Workaround to ensure DjangoModelPermissions are not applied
+        # to the root view when using DefaultRouter.
+        if getattr(view, '_ignore_model_permissions', False):
+            return True
+
+        if not request.user or request.user.is_anonymous:
+            queryset = self._queryset(view)
+            return hasattr(queryset.model, 'can_read')
+        else:
+            return super().has_permission(request, view)
+
     def has_object_permission(self, request, view, obj):
         # if request.method in SAFE_METHODS:
         #     return True
@@ -54,31 +72,29 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
         # if not super().has_object_permission(request, view, obj):
         #     return False
 
+        user = request.user
+        if (user is None) or user.is_superuser:
+            return super().has_object_permission(request, view, obj)
+
         queryset = self._queryset(view)
         model_cls = queryset.model
-        user = request.user
 
-        match request.method:
-            case 'HEAD' | 'OPTIONS':
-                return super().has_object_permission(request, view, obj)
-            case 'GET':
-                try:
+        try:
+            match request.method:
+                case 'HEAD' | 'OPTIONS':
+                    return super().has_object_permission(request, view, obj)
+                case 'POST':
+                    return True
+                case 'GET':
                     return not hasattr(model_cls, 'can_read') or model_cls.can_read(obj, request.user)
-                except FieldDoesNotExist:
-                    return False
-            case 'POST':
-                return True
-            case 'PUT' | "PATCH":
-                try:
+                case 'PUT' | "PATCH":
                     return not hasattr(model_cls, 'can_modify') or model_cls.can_modify(obj, request.user)
-                except FieldDoesNotExist:
-                    return False
-            case _:
-                try:
+                case 'DELETE':
                     return not hasattr(model_cls, 'can_delete') or model_cls.can_delete(obj, request.user)
-                except FieldDoesNotExist:
+                case _:
                     return False
-        return True
+        except FieldDoesNotExist:
+            return False
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -121,7 +137,7 @@ class ConfigurationViewSet(ModelViewSet):
     serializer_class = ConfigurationSerializer
     permission_classes = [IsSuperUser]
     search_fields = ['name', 'value']
-    ordering_fields = ['id', 'name', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = ['name', 'updated_at']
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -130,6 +146,7 @@ class ConfigurationViewSet(ModelViewSet):
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
     }
 
 
@@ -138,7 +155,8 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
     serializer_class = OrgGroupSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
@@ -151,6 +169,7 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
         'guests': exact_fields_filter_lookups,
         'consumers': exact_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -161,13 +180,14 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }
@@ -178,13 +198,14 @@ class PropertiesViewSet(ShaniOrgGroupViewSet):
     serializer_class = PropertiesSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'org_group': id_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
     }

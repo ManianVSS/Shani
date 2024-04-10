@@ -14,28 +14,28 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'time', 'link', 'image', 'org_group',
-                  'created_at', 'updated_at', 'published', ]
+                  'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'image', 'display_items', 'iframe_link',
-                  'org_group', 'created_at', 'updated_at', 'published', ]
+                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'image', 'display_items', 'pages',
-                  'org_group', 'created_at', 'updated_at', 'published', ]
+                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class CatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Catalog
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'image', 'display_items', 'categories',
-                  'org_group', 'created_at', 'updated_at', 'published', ]
+                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
