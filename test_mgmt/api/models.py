@@ -157,8 +157,7 @@ class OrgModel(BaseModel):
                     Q(published='True') & (Q(is_public='True') | Q(org_group__isnull=True))).distinct()
             else:
                 user_id = user.id if user else None
-                return self.objects.filter((Q(published='True') & Q(is_public='True'))
-                                           | Q(org_group__isnull=True)
+                return self.objects.filter((Q(published='True') & (Q(is_public='True') | Q(org_group__isnull=True)))
                                            | (Q(published='True') & Q(org_group__consumers__pk=user_id))
                                            | Q(org_group__guests__pk=user_id)
                                            | Q(org_group__members__pk=user_id)
