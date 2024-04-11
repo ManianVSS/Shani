@@ -39,8 +39,8 @@ class BaseModel(models.Model):
         return user is not None
 
     def can_read(self, user):
-        return self.is_public or self.is_owner(user) or self.is_member(user) or self.is_guest(user) or (
-                self.published and self.is_consumer(user))
+        return (self.published and self.is_public) or self.is_owner(user) or self.is_member(user) or self.is_guest(
+            user) or (self.published and self.is_consumer(user))
 
     def can_modify(self, user):
         return self.is_owner(user) or self.is_member(user)
@@ -108,7 +108,8 @@ class OrgGroup(BaseModel):
             elif user.is_anonymous:
                 return self.objects.filter(Q(published='True') & Q(is_public='True')).distinct()
             else:
-                return self.objects.filter(Q(consumers__pk=user_id)
+                return self.objects.filter((Q(published='True') & Q(is_public='True'))
+                                           | Q(consumers__pk=user_id)
                                            | Q(guests__pk=user_id)
                                            | Q(members__pk=user_id)
                                            | Q(leaders__pk=user_id)
@@ -138,7 +139,7 @@ class OrgModel(BaseModel):
         return (self.org_group is None) or self.org_group.is_consumer(user)
 
     def can_read(self, user):
-        return self.is_public or (self.org_group is None) or self.is_owner(user) or self.is_member(
+        return (self.published and self.is_public) or (self.org_group is None) or self.is_owner(user) or self.is_member(
             user) or self.is_guest(user) or (self.published and self.is_consumer(user))
 
     def can_modify(self, user):
@@ -156,7 +157,8 @@ class OrgModel(BaseModel):
                     Q(published='True') & (Q(is_public='True') | Q(org_group__isnull=True))).distinct()
             else:
                 user_id = user.id if user else None
-                return self.objects.filter(Q(org_group__isnull=True)
+                return self.objects.filter((Q(published='True') & Q(is_public='True'))
+                                           | Q(org_group__isnull=True)
                                            | (Q(published='True') & Q(org_group__consumers__pk=user_id))
                                            | Q(org_group__guests__pk=user_id)
                                            | Q(org_group__members__pk=user_id)

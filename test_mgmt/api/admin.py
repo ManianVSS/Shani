@@ -75,12 +75,15 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
 
     # Allow only listing of entities that can be viewed by the user
     def get_queryset(self, request):
-        if ((request.method == 'GET')
-                and not request.path.endswith('/change/')
-                and hasattr(self.model, 'get_list_query_set')):
-            return self.model.get_list_query_set(self.model, request.user)
-        else:
+        if request.user is None:
             return super().get_queryset(request)
+        else:
+            if ((request.method == 'GET')
+                    and not request.path.endswith('/change/')
+                    and hasattr(self.model, 'get_list_query_set')):
+                return self.model.get_list_query_set(self.model, request.user)
+            else:
+                return super().get_queryset(request)
 
 
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
