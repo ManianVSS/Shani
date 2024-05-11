@@ -113,6 +113,10 @@ class UserViewSet(viewsets.ModelViewSet):
         'is_staff': exact_fields_filter_lookups,
         'is_active': exact_fields_filter_lookups,
         'date_joined': date_fields_filter_lookups,
+        'last_login': date_fields_filter_lookups,
+        'is_superuser': exact_fields_filter_lookups,
+        'groups': id_fields_filter_lookups,
+        'user_permissions': id_fields_filter_lookups,
     }
 
 

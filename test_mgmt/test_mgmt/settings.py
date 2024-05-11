@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django_group_model',
 
     'rest_framework',  # Added for Django Rest Framework
     'rest_framework.authtoken',
@@ -58,7 +59,9 @@ INSTALLED_APPS = [
 
     'dbbackup',  # django-dbbackup
 
-    'api',  # Project modules
+    # Project modules
+    # 'auth_custom',
+    'api',
     'siteconfig',
     'requirements',
     'workitems',
@@ -121,7 +124,11 @@ if os.getenv("mode", "staging") == "production":
             'PASSWORD': os.getenv('DATABASE__PASSWORD', 'testmgmtadmin@123'),
             'HOST': os.getenv('DATABASE__HOST', 'localhost'),
             'PORT': os.getenv('DATABASE__PORT', '5432'),
-        }
+        },
+        'replica': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/data/replica.sqlite3',
+        },
     }
 else:
     os.makedirs(os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/data', exist_ok=True, )
@@ -129,9 +136,17 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/data/db.sqlite3',
-        }
+        },
+        'replica': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.getenv('DATA_MOUNT_DIR', str(BASE_DIR)) + '/data/replica.sqlite3',
+        },
     }
-print("Database object is :", str(DATABASES))
+# print("Database object is :", str(DATABASES))
+# DATABASE_ROUTERS = ['test_mgmt.database_routers.ReplicaRouter']
+
+# AUTH_GROUP_MODEL = 'auth_custom.Group'
+# AUTH_USER_MODEL = 'auth_custom.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

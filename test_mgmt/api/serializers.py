@@ -7,13 +7,14 @@ from .models import Attachment, OrgGroup, Properties, Configuration
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'url', 'username', 'email', 'groups']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined',
+                  'password', 'last_login', 'is_superuser', 'groups', 'user_permissions', ]
 
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'url', 'name']
+        fields = ['id', 'name', 'permissions']
 
 
 class ConfigurationSerializer(serializers.ModelSerializer):
