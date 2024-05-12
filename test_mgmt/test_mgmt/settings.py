@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'django_group_model',
+    "django_crontab",
 
     'rest_framework',  # Added for Django Rest Framework
     'rest_framework.authtoken',
@@ -261,6 +262,19 @@ if os.getenv("mode", "staging") != "production":
         r"^http:\/\/localhost:*([0-9]+)?$",
         r"^https:\/\/localhost:*([0-9]+)?$",
     ]
+
+# DBBACKUP_DATABASES = ['default']
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': os.getenv('HOME', '.') + '/backup/Shani/dbbackup'}
+# DBBACKUP_CLEANUP_KEEP = 30
+# DBBACKUP_CLEANUP_KEEP_MEDIA = 30
+# DBBACKUP_HOSTNAME = os.getenv('HOSTNAME', 'localhost')
+
+os.makedirs(os.getenv('HOME', ".") + '/backup/Shani/dbbackup', exist_ok=True, )
+
+CRONJOBS = [
+    ('0 */6 * * *', 'test_mgmt.db_backup_cronjob.backup')
+]
 
 # ATTACHMENT_DIR = "./attachments"
 # os.makedirs(ATTACHMENT_DIR, exist_ok=True)
