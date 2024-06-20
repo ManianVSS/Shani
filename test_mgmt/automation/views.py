@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
     compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups
-from .models import Step, Attachment, Tag, MockAPI
-from .serializers import StepSerializer, AttachmentSerializer, TagSerializer, MockAPISerializer
+from .models import Step, Attachment, Tag, MockAPI, AuthenticatorSecret
+from .serializers import StepSerializer, AttachmentSerializer, TagSerializer, MockAPISerializer, \
+    AuthenticatorSecretSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -148,3 +149,21 @@ class MockAPIRoutingViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.DELETE)
+
+
+class AuthenticatorSecretViewSet(ShaniOrgGroupViewSet):
+    queryset = AuthenticatorSecret.objects.all()
+    serializer_class = AuthenticatorSecretSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'issuer', 'user', 'initialized', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'user': string_fields_filter_lookups,
+        'secret': string_fields_filter_lookups,
+        'issuer': string_fields_filter_lookups,
+        'url': string_fields_filter_lookups,
+        'initialized': exact_fields_filter_lookups,
+    }

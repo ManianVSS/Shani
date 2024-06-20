@@ -1,7 +1,14 @@
+import io
 from http import HTTPStatus
 
+import cv2
+import pyotp
+import qrcode
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy
 
 from api.models import OrgModel, OrgGroup
@@ -100,6 +107,65 @@ class MockAPI(OrgModel):
     content_type = models.CharField(max_length=32, choices=ContentType.choices, default=ContentType.APPLICATION_JSON)
     body = models.TextField(null=True, blank=True)
     http_method = models.CharField(max_length=32, choices=HTTPMethod.choices, default=HTTPMethod.ALL)
+
+
+class AuthenticatorSecret(OrgModel):
+    user = models.CharField(max_length=256, null=True, blank=True)
+    secret = models.CharField(max_length=256, null=True, blank=True)
+    issuer = models.CharField(max_length=256, null=True, blank=True)
+    url = models.CharField(max_length=1024, null=True, blank=True)
+    qr_code = models.ImageField(storage=CustomFileSystemStorage, upload_to='automation', blank=True, null=True,
+                                verbose_name='QR-Code image file in PNG format')
+    initialized = models.BooleanField(default=False, verbose_name='is already initialized')
+
+
+@receiver(post_save, sender=AuthenticatorSecret, dispatch_uid="update_authenticator_secret")
+def update_admin_site_name(sender, instance, **kwargs):
+    if instance is not None:
+        if not instance.initialized:
+            if (instance.qr_code is not None) and (instance.qr_code.name is not None):
+                image = cv2.imread(instance.qr_code.path)
+                # initialize the cv2 QRCode detector
+                detector = cv2.QRCodeDetector()
+                data, bbox, straight_qrcode = detector.detectAndDecode(image)
+
+                if bbox is not None:
+                    instance.url = data
+                    instance.initialized = True
+                    instance.save()
+            elif instance.url is not None:
+                otp_object = pyotp.parse_uri(instance.url)
+                if instance.user is None:
+                    instance.user = otp_object.name
+                if instance.secret is None:
+                    instance.secret = otp_object.secret
+                if instance.issuer is None:
+                    instance.issuer = otp_object.issuer
+                image = qrcode.make(instance.url)
+                buf = io.BytesIO()
+                image.save(buf, "PNG")
+                contents = buf.getvalue()
+                content_file = ContentFile(contents, name="AuthenticationSecretQRCode-" + str(instance.id) + ".png")
+                instance.qr_code = content_file
+                instance.initialized = True
+                instance.save()
+            elif (instance.user is not None) and (instance.secret is not None) and (instance.issuer is not None):
+                otp_object = pyotp.totp.TOTP(instance.secret).provisioning_uri(name=instance.user,
+                                                                               issuer_name=instance.issuer)
+                instance.url = str(otp_object)
+                # instance.url = 'otpauth://totp/' + urllib.parse.quote_plus(
+                #     instance.user) + '?secret=' + urllib.parse.quote_plus(
+                #     instance.secret) + '&issuer=' + urllib.parse.quote_plus(
+                #     instance.issuer)
+                image = qrcode.make(instance.url)
+
+                buf = io.BytesIO()
+                image.save(buf, "PNG")
+                contents = buf.getvalue()
+                content_file = ContentFile(contents, name="AuthenticationSecretQRCode-" + str(instance.id) + ".png")
+                instance.qr_code = content_file
+                instance.initialized = True
+                instance.save()
 
 # class StepInstance:
 #     def __init__(self, step, data):

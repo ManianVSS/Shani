@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Attachment, Step, Tag, MockAPI
+from .models import Attachment, Step, Tag, MockAPI, AuthenticatorSecret
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -30,3 +30,10 @@ class MockAPISerializer(serializers.ModelSerializer):
         model = MockAPI
         fields = ['id', 'name', 'summary', 'status', 'content_type', 'body', 'http_method', 'org_group', 'created_at',
                   'updated_at', 'published', ]
+
+
+class AuthenticatorSecretSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthenticatorSecret
+        fields = ['id', 'user', 'secret', 'issuer', 'url', 'qr_code', 'initialized', 'org_group',
+                  'created_at', 'updated_at', 'published', ]

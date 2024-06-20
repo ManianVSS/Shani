@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Step, Attachment, Tag, MockAPI
+from .models import Step, Attachment, Tag, MockAPI, AuthenticatorSecret
 
 
 @admin.register(Attachment)
@@ -51,6 +51,19 @@ class MockAPIAdmin(CustomModelAdmin):
         'http_method',
     )
     search_fields = ['name', 'summary', ]
+
+
+@admin.register(AuthenticatorSecret)
+class AuthenticatorSecretAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published', 'is_public',
+        ('org_group', RelatedOnlyFieldListFilter),
+        'issuer',
+        'user',
+        'initialized',
+    )
+    search_fields = ['user', 'domain', ]
+    readonly_fields = ('initialized',)
 
 # For django guardian ImportExportMixin, GuardedModelAdmin
 # For advanced filters AdminAdvancedFiltersMixin,

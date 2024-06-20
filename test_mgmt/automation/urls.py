@@ -1,7 +1,9 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import StepViewSet, AttachmentViewSet, TagViewSet, MockAPIViewSet, MockAPIRoutingViewSet
+from .apiviews import generate_otp
+from .views import StepViewSet, AttachmentViewSet, TagViewSet, MockAPIViewSet, MockAPIRoutingViewSet, \
+    AuthenticatorSecretViewSet
 
 router = routers.DefaultRouter()
 
@@ -12,8 +14,11 @@ router.register(r'mockapi', MockAPIViewSet)
 
 router.register(r'mockapi_call', MockAPIRoutingViewSet, basename='mock api call', )
 
+router.register(r'authenticator_secrets', AuthenticatorSecretViewSet)
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/authenticator', generate_otp),
 ]
