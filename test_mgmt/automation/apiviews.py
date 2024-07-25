@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from automation.models import AuthenticatorSecret
-from automation.serializers import AuthenticatorSecretSerializer
+from .models import AuthenticatorSecret
+from .serializers import AuthenticatorSecretSerializer
 
 
 @api_view(['GET'])
