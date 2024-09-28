@@ -30,6 +30,7 @@ import Requirement from "./pages/Requirement";
 import RequirementLayout from "./components/RequirementLayout";
 import UseCases from "./pages/Requirement/UseCases";
 import IndividualReqComponent from "./pages/Requirement/IndividualReqComponent";
+import Invoker from "./pages/Invoker";
 
 interface customLinks {
   label: string;
@@ -174,6 +175,10 @@ export default function App() {
                   auth={true}
                 />
               }
+            />
+            <Route
+              path={`/invoker`}
+              element={<Layout page={<Invoker />} auth={true} />}
             />
             <Route
               path={`/site/profile`}

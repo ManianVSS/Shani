@@ -24,7 +24,7 @@ const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
   const getUserDetails = () => {
     axiosClientForCapacity
-      .get("/engineers/1/", {
+      .get("/people/api/engineers/1/", {
         headers: {
           authorization: "Bearer " + window.localStorage.getItem("accessToken"),
         },

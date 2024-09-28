@@ -38,10 +38,11 @@ function Login() {
           userName: userName,
         });
         window.localStorage.setItem("accessToken", response.data.access);
+        window.localStorage.setItem("refreshToken", response.data.refresh);
         window.localStorage.setItem("user", userName);
 
         axiosClientForCapacity
-          .get("/engineers/?auth_user__username=" + userName, {
+          .get("/people/api/engineers/?auth_user__username=" + userName, {
             headers: {
               authorization:
                 "Bearer " + window.localStorage.getItem("accessToken"),

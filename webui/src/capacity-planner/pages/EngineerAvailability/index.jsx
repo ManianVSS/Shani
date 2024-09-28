@@ -24,7 +24,7 @@ const EngineerAvailability = () => {
     if (engineer !== "Choose...") {
       axiosClientForCapacity
         .get(
-          "/engineer_capacity_view?engineer=" +
+          "/people/api/engineer_capacity_view?engineer=" +
             engineer +
             "&from=" +
             formatDate(startDate) +
@@ -58,7 +58,7 @@ const EngineerAvailability = () => {
   }
   useEffect(() => {
     axiosClientForCapacity
-      .get("/engineers/", {
+      .get("/people/api/engineers/", {
         headers: {
           authorization: "Bearer " + window.localStorage.getItem("accessToken"),
         },

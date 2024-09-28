@@ -19,6 +19,7 @@ import {
   ReduceCapacity,
   Person2Outlined,
   RecentActorsRounded,
+  TokenOutlined,
 } from "@mui/icons-material";
 // import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
@@ -134,7 +135,6 @@ export function NavbarNested() {
     const value = event.target.value;
     navigate(value);
   };
-  console.log(auth.authStatus);
 
   useEffect(() => {
     if (localStorage.getItem("testCenterTheme") === null) {
@@ -223,6 +223,17 @@ export function NavbarNested() {
                           }}
                         >
                           Capacity Planner
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={TokenOutlined}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            navigate(`/invoker`);
+                          }}
+                        >
+                          Invoker
                         </Menu.Item>
                       </Menu.Group>
                       <Menu.Group>

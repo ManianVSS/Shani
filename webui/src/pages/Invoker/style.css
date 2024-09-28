@@ -1,0 +1,14 @@
+.borderWithRadius {
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.textAlignCenter {
+  text-align: center;
+}
+
+.h2Style {
+  border: 1px solid black;
+  border-radius: 20px;
+  color: #404040;
+}

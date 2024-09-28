@@ -27,7 +27,7 @@ const Capacity = () => {
     if (org !== "Choose...") {
       axiosClientForCapacity
         .get(
-          "/capacity_view?org_group=" +
+          "/people/api/capacity_view?org_group=" +
             org +
             "&from=" +
             formatDate(startDate) +

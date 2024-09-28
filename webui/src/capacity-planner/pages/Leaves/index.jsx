@@ -40,7 +40,7 @@ const Leaves = () => {
     if (engineer !== "Choose...") {
       axiosClientForCapacity
         .get(
-          "/leaves/?engineer=" +
+          "/people/api/leaves/?engineer=" +
             engineer +
             "&from=" +
             formatDate(startDate) +
@@ -76,7 +76,7 @@ const Leaves = () => {
   const applyLeave = () => {
     axiosClientForCapacity
       .post(
-        "/leaves/",
+        "/people/api/leaves/",
         {
           engineer: window.localStorage.getItem("userid"),
           start_date: formatDate(startLeaveDate),
@@ -110,7 +110,7 @@ const Leaves = () => {
 
   useEffect(() => {
     axiosClientForCapacity
-      .get("/engineers/", {
+      .get("/people/api/engineers/", {
         headers: {
           authorization: "Bearer " + window.localStorage.getItem("accessToken"),
         },
