@@ -225,7 +225,7 @@ export function NavbarNested() {
                           Capacity Planner
                         </Menu.Item>
                       </Menu.Group>
-                      <Menu.Group>
+                      {/* <Menu.Group>
                         <Menu.Item
                           icon={TokenOutlined}
                           style={{ margin: 0 }}
@@ -235,8 +235,8 @@ export function NavbarNested() {
                         >
                           Invoker
                         </Menu.Item>
-                      </Menu.Group>
-                      <Menu.Group>
+                      </Menu.Group> */}
+                      {/* <Menu.Group>
                         <Menu.Item
                           icon={RecentActorsRounded}
                           style={{ margin: 0 }}
@@ -246,14 +246,14 @@ export function NavbarNested() {
                         >
                           Requirement
                         </Menu.Item>
-                      </Menu.Group>
+                      </Menu.Group> */}
                       <Menu.Group>
                         <Menu.Item
                           icon={AdminPanelSettings}
                           style={{ margin: 0 }}
                           onClick={() => {
                             window.open(
-                              "http://" + window.location.host + "/admin/",
+                              window.location.origin + "/admin/",
                               "_blank"
                             );
                           }}
@@ -267,7 +267,7 @@ export function NavbarNested() {
                           style={{ margin: 0 }}
                           onClick={() => {
                             window.open(
-                              "http://" + window.location.host + "/swagger/",
+                              window.location.origin + "/swagger/",
                               "_blank"
                             );
                           }}
@@ -275,7 +275,7 @@ export function NavbarNested() {
                           Swagger
                         </Menu.Item>
                       </Menu.Group>
-                      <Menu.Group>
+                      {/* <Menu.Group>
                         <Menu.Item
                           icon={Person2Outlined}
                           style={{ margin: 0 }}
@@ -285,7 +285,7 @@ export function NavbarNested() {
                         >
                           Profile
                         </Menu.Item>
-                      </Menu.Group>
+                      </Menu.Group> */}
                       <Menu.Group>
                         <Menu.Item
                           icon={LogOutIcon}
