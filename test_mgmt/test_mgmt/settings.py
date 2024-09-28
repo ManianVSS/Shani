@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'django_group_model',
-    "django_crontab",
+    'django_crontab',
+    'django_extensions',
 
     'rest_framework',  # Added for Django Rest Framework
     'rest_framework.authtoken',
