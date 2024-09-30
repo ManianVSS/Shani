@@ -47,7 +47,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
             try:
                 return not hasattr(obj, 'can_read') or obj.can_read(request.user)
             except FieldDoesNotExist:
-                return False
+                return True
         else:
             return False
 
