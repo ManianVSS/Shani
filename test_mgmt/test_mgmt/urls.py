@@ -1,11 +1,11 @@
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import include, path
 from django.urls import re_path
 from django.views.generic import TemplateView
 from rest_framework.schemas import get_schema_view
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 
+from api import admin
 from . import settings
 
 schema_view = get_schema_view(title='Test Management API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])

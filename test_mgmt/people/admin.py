@@ -4,7 +4,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from api.admin import CustomModelAdmin
 from api.views import default_search_fields
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
-    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment, Credit, Scale, Reason, \
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Attachment, Credit, Scale, Reason, \
     EngineerSkills
 
 
@@ -15,15 +15,6 @@ class AttachmentAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
-
-
-@admin.register(Site)
-class SiteAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
-    search_fields = ['name', 'summary', ]
 
 
 @admin.register(Engineer)

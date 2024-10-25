@@ -349,3 +349,9 @@ class Properties(OrgModel):
                                   verbose_name='organization group', related_name='api_properties')
     name = models.CharField(max_length=256)
     details = models.TextField(null=True, blank=True)
+
+
+class Site(OrgModel):
+    name = models.CharField(max_length=256)
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    attachments = models.ManyToManyField(Attachment, related_name='site_attachments', blank=True)

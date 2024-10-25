@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from api.models import OrgModel, OrgGroup, BaseModel
+from api.models import OrgModel, OrgGroup, BaseModel, Site
 from api.storage import CustomFileSystemStorage
 
 
@@ -11,12 +11,6 @@ class Attachment(OrgModel):
                                   verbose_name='organization group', related_name='people_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=False, null=False)
-
-
-class Site(OrgModel):
-    name = models.CharField(max_length=256)
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    attachments = models.ManyToManyField(Attachment, related_name='site_attachments', blank=True)
 
 
 class Engineer(OrgModel):

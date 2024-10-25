@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
-    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Site, Attachment, Credit, Scale, Reason, \
+    TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Attachment, Credit, Scale, Reason, \
     EngineerSkills
 
 
@@ -9,13 +9,6 @@ class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
-
-
-class SiteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Site
-        fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public',
-                  'attachments', ]
 
 
 class EngineerSerializer(serializers.ModelSerializer):
