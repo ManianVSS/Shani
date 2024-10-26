@@ -5,20 +5,20 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, Configuration, OrgGroup, Properties, get_database_name, Site
+from .models import Attachment, Configuration, OrgGroup, get_database_name, Site
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     save_as = True
     readonly_fields = ('id',)
-    display_order = 1
+    display_order = 999
 
     # ordering = ('-id',)
 
@@ -93,7 +93,7 @@ class CustomAdminSite(AdminSite):
     def __init__(self, name="admin"):
         super().__init__(name)
         self.model_ordering = {}
-        self.reload_admin_site_name()
+        # self.reload_admin_site_name()
 
     def register(self, model_or_iterable, admin_class=None, **options):
         super().register(model_or_iterable, admin_class, **options)
@@ -124,17 +124,17 @@ class CustomAdminSite(AdminSite):
         app_dict = self._build_app_dict(request)
 
         # Sort the apps alphabetically.
-        app_list = sorted(app_dict.values(), key=lambda x: x['order'])
+        app_list = sorted(app_dict.values(), key=lambda x: (x['order'], x['name']))
         # x['order'] if hasattr(x, 'order') else 'zzzzz')
         # x['name'].lower(), reverse=True)
 
         # Sort the models alphabetically within each app.
         for app in app_list:
-            app['models'].sort(key=lambda x: self.model_ordering[str(x['model'])])
+            app['models'].sort(key=lambda x: (self.model_ordering[str(x['model'])], x['name']))
 
         return app_list
 
-    def reload_admin_site_name(self, database_name=None):
+    def reload_settings(self, database_name=None):
         if database_name is None:
             database_name = "Shani Test Management"
 
@@ -150,8 +150,8 @@ class CustomAdminSite(AdminSite):
 
 
 # Create a custom admin site with custom ordering
-admin.site.unregister(User)
 admin.site.unregister(Group)
+admin.site.unregister(User)
 
 site = CustomAdminSite()
 admin.site = site
@@ -159,46 +159,31 @@ orig_register = admin.register
 admin.register = functools.partial(orig_register, site=site)
 
 
-@admin.register(User)
-class CustomUserAdmin(CustomModelAdmin, UserAdmin):
-    display_order = 'b'
-
-
 @admin.register(Group)
 class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
-    display_order = 'a'
+    # display_order = 'a'
+    pass
 
 
-@admin.register(Permission)
-class CustomGroupAdmin(CustomModelAdmin):
-    display_order = 'a'
+@admin.register(User)
+class CustomUserAdmin(CustomModelAdmin, UserAdmin):
+    # display_order = 'b'
+    pass
 
 
 @admin.register(Configuration)
-class ConfigurationAdmin(ImportExportModelAdmin):
-    search_fields = ['name', 'value', ]
+class ConfigurationAdmin(CustomModelAdmin):
+    search_fields = ['name', 'value', 'description', ]
     ordering = ('name',)
-    list_display = ['name', 'value', ]
+    list_display = ['name', 'value', 'description', ]
     list_filter = (
         'created_at', 'updated_at', 'published', 'is_public',
     )
 
 
-# method for updating
 @receiver(post_save, sender=Configuration, dispatch_uid="update_admin_site_name")
 def update_admin_site_name(sender, instance, **kwargs):
-    database_name = "Shani Test Management"
-
-    # noinspection PyBroadException
-    try:
-        database_name = get_database_name()
-    except Exception as e:
-        print("Defaulting site name Shani as no site_setting data found")
-    site.reload_admin_site_name(database_name)
-
-
-# if 'runserver' in sys.argv:
-#     update_admin_site_name()
+    site.reload_settings()
 
 
 @admin.register(OrgGroup)
@@ -221,15 +206,6 @@ class AttachmentAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
-
-
-@admin.register(Properties)
-class PropertiesAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
-    search_fields = ['name', 'details', ]
 
 
 @admin.register(Site)

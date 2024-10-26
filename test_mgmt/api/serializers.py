@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from .models import Attachment, OrgGroup, Properties, Configuration, Site
+from .models import Attachment, OrgGroup, Configuration, Site
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class ConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Configuration
-        fields = ['id', 'name', 'value', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = ['id', 'name', 'value', 'description', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class OrgGroupSerializer(serializers.ModelSerializer):
@@ -34,12 +34,6 @@ class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
-
-
-class PropertiesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Properties
-        fields = ['id', 'name', 'details', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class SiteSerializer(serializers.ModelSerializer):

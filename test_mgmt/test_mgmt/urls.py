@@ -25,7 +25,6 @@ urlpatterns = [
                   path('automation/', include('automation.urls')),
                   path('execution/', include('execution.urls')),
                   path('people/', include('people.urls')),
-                  path('business/', include('business.urls')),
                   path('program/', include('program.urls')),
 
                   # Swagger
@@ -36,7 +35,7 @@ urlpatterns = [
                           TemplateView.as_view(template_name='errors/forbidden.html')),
 
                   re_path(
-                      '(^(?!(data|admin|swagger|api|siteconfig|requirements|workitems|testdesign|automation|execution|people|business|program)).*$)',
+                      '(^(?!(data|admin|swagger|api|siteconfig|requirements|workitems|testdesign|automation|execution|people|program)).*$)',
                       TemplateView.as_view(template_name='index.html')),
               ] + static(settings.STATIC_URL,
                          document_root=settings.STATICFILES_DIRS) \

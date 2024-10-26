@@ -1,6 +1,5 @@
 from django.db import models
 
-import business.models
 from api.enumerations import ReviewStatus
 from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
@@ -114,9 +113,6 @@ class Requirement(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='requirement_attachments', blank=True)
 
     cost = models.FloatField(default=0)
-
-    business_requirements = models.ManyToManyField(business.models.Requirement, related_name='technical_requirements',
-                                                   blank=True)
 
     additional_data = models.JSONField(null=True, blank=True)
 

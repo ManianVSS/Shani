@@ -4,7 +4,6 @@ timestamp=$(date +%F-%H:%M)
 mkdir -p data/dbbackup/$timestamp/migrations
 
 mv api/migrations data/dbbackup/$timestamp/migrations/api
-mv business/migrations data/dbbackup/$timestamp/migrations/business
 mv siteconfig/migrations data/dbbackup/$timestamp/migrations/siteconfig
 mv requirements/migrations data/dbbackup/$timestamp/migrations/requirements
 mv workitems/migrations data/dbbackup/$timestamp/migrations/workitems

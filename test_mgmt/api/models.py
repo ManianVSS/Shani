@@ -77,19 +77,20 @@ class BaseModel(models.Model):
 class Configuration(BaseModel):
     name = models.CharField(max_length=256, unique=True)
     value = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.value)
 
 
 def create_default_configuration():
-    database_name_config = Configuration.objects.filter(name="name")
+    database_name_config = Configuration.objects.filter(name="site_name")
     if database_name_config.count() == 0:
-        Configuration(name='name', value='Shani Test Management').save()
+        Configuration(name='site_name', value='Shani Test Management').save()
 
 
 def get_database_name():
-    database_name_config = Configuration.objects.filter(name="name")
+    database_name_config = Configuration.objects.filter(name="site_name")
     if database_name_config.count() > 0:
         return database_name_config[0].value
     return "Shani Test Management"
@@ -339,16 +340,6 @@ class Attachment(OrgModel):
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to=settings.MEDIA_BASE_NAME, blank=False,
                             null=False)
-
-
-class Properties(OrgModel):
-    class Meta:
-        verbose_name_plural = "properties"
-
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='api_properties')
-    name = models.CharField(max_length=256)
-    details = models.TextField(null=True, blank=True)
 
 
 class Site(OrgModel):

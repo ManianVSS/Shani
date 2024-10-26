@@ -11,6 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from api import admin
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_mgmt.settings')
 
 application = get_wsgi_application()
+
+# Load site configuration
+admin.site.reload_settings()

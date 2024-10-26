@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Step, Attachment, Tag, MockAPI, AuthenticatorSecret
+from .models import Step, Attachment, Tag, Properties, MockAPI, AuthenticatorSecret
 
 
 @admin.register(Attachment)
@@ -29,18 +29,24 @@ class StepAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('tags', RelatedOnlyFieldListFilter),
-        ('test_design_owner', RelatedOnlyFieldListFilter),
-        'test_design_status',
-        ('automation_owner', RelatedOnlyFieldListFilter),
-        'automation_status',
+        'status',
     )
-    search_fields = ['name', 'summary', 'description', 'expected_results', 'automation_code_reference', ]
+    search_fields = ['name', 'summary', 'description', 'automation_code_reference', ]
 
     # def get_form(self, request, obj=None, **kwargs):
     #     form = super().get_form(request, obj, **kwargs)
     #     form.base_fields['test_design_owner'].initial = request.user
     #     form.base_fields['automation_owner'].initial = request.user
     #     return form
+
+
+@admin.register(Properties)
+class PropertiesAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published', 'is_public',
+        ('org_group', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'details', ]
 
 
 @admin.register(MockAPI)

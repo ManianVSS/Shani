@@ -165,7 +165,6 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
         'updated_at': datetime_fields_filter_lookups,
-        'business_requirements': exact_fields_filter_lookups,
     }
 
 

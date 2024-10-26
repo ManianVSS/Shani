@@ -1,7 +1,6 @@
 #!/bin/bash
 
 python3 manage.py makemigrations api
-python3 manage.py makemigrations business
 python3 manage.py makemigrations siteconfig
 python3 manage.py makemigrations requirements
 python3 manage.py makemigrations workitems

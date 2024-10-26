@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'automation',
     'execution',
     'people',
-    'business',
+    # 'business',
     'program',
 ]
 

@@ -2,8 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from rest_framework_simplejwt import views as jwt_views
 
-from .views import UserViewSet, GroupViewSet, AttachmentViewSet, OrgGroupViewSet, PropertiesViewSet, \
-    ConfigurationViewSet, SiteViewSet
+from .views import UserViewSet, GroupViewSet, AttachmentViewSet, OrgGroupViewSet, ConfigurationViewSet, SiteViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -13,7 +12,6 @@ router.register(r'configuration', ConfigurationViewSet)
 router.register(r'org_groups', OrgGroupViewSet)
 
 router.register(r'attachments', AttachmentViewSet)
-router.register(r'properties', PropertiesViewSet)
 router.register(r'sites', SiteViewSet)
 
 # Wire up our API using automatic URL routing.
