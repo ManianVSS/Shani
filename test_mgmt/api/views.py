@@ -11,6 +11,7 @@ from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, 
 exact_fields_filter_lookups = ['exact', ]
 # many_to_many_id_field_lookups = ['contains']
 id_fields_filter_lookups = ['exact', 'in', ]
+fk_fields_filter_lookups = ['exact', 'in', 'isnull']
 string_fields_filter_lookups = ['exact', 'iexact', 'icontains', 'regex', ]
 # 'startswith', 'endswith', 'istartswith','iendswith', 'contains',
 compare_fields_filter_lookups = ['exact', 'lte', 'lt', 'gt', 'gte', ]
@@ -115,8 +116,8 @@ class UserViewSet(viewsets.ModelViewSet):
         'date_joined': date_fields_filter_lookups,
         'last_login': date_fields_filter_lookups,
         'is_superuser': exact_fields_filter_lookups,
-        'groups': id_fields_filter_lookups,
-        'user_permissions': id_fields_filter_lookups,
+        'groups': fk_fields_filter_lookups,
+        'user_permissions': fk_fields_filter_lookups,
     }
 
 
@@ -130,7 +131,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'permissions': id_fields_filter_lookups,
+        'permissions': fk_fields_filter_lookups,
     }
 
 
@@ -166,8 +167,8 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'auth_group': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'auth_group': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'leaders': exact_fields_filter_lookups,
         'members': exact_fields_filter_lookups,
         'guests': exact_fields_filter_lookups,
@@ -189,7 +190,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -208,7 +209,7 @@ class SiteViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

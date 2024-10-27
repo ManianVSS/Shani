@@ -1,6 +1,6 @@
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
-    ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+    string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
 from .models import Attachment, Tag, TestCaseCategory, TestCase
 from .serializers import AttachmentSerializer, TagSerializer, TestCaseCategorySerializer, TestCaseSerializer
 
@@ -15,7 +15,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -35,7 +35,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -56,9 +56,9 @@ class TestCaseCategoryViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
+        'parent': fk_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -78,13 +78,13 @@ class TestCaseViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
-        'type': id_fields_filter_lookups,
+        'parent': fk_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
+        'type': fk_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'use_cases': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

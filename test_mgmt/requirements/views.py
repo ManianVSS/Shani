@@ -3,8 +3,8 @@ from xml.etree import ElementTree as ET
 
 from ALM import ALM
 from api.model_creation import create_requirement_model
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+    string_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups, compare_fields_filter_lookups
 from .models import Attachment, Tag, FeatureCategory, Feature, UseCase, RequirementCategory, Requirement
 from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
@@ -21,7 +21,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -41,7 +41,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -54,16 +54,16 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
     serializer_class = FeatureCategorySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'parent', 'org_group', 'created_at', 'updated_at', 'published',
+    ordering_fields = ['id', 'parent', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
                        'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
+        'parent': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -84,11 +84,11 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
+        'parent': fk_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -110,9 +110,9 @@ class UseCaseViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
 
-        'feature': id_fields_filter_lookups,
+        'feature': fk_fields_filter_lookups,
 
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -132,9 +132,9 @@ class RequirementCategoryViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'parent': id_fields_filter_lookups,
+        'parent': fk_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -155,12 +155,12 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'category': id_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
+        'category': fk_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
         'cost': compare_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

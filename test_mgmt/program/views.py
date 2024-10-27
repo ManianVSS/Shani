@@ -1,5 +1,5 @@
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    datetime_fields_filter_lookups, exact_fields_filter_lookups, \
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+    string_fields_filter_lookups, datetime_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import ApplicationType, Application, Release, ArtifactType, DocumentType, Artifact, Document
 from .serializers import ApplicationTypeSerializer, ApplicationSerializer, ReleaseSerializer, ArtifactTypeSerializer, \
@@ -17,7 +17,7 @@ class ApplicationTypeViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -34,10 +34,10 @@ class ApplicationViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'application_type': id_fields_filter_lookups,
+        'application_type': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -54,12 +54,12 @@ class ReleaseViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'application': id_fields_filter_lookups,
+        'application': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'version': string_fields_filter_lookups,
         'date': datetime_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -78,7 +78,7 @@ class ArtifactTypeViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -95,10 +95,10 @@ class ArtifactViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
-        'artifact_type': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
+        'artifact_type': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -117,7 +117,7 @@ class DocumentTypeViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -134,10 +134,10 @@ class DocumentViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
-        'document_type': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
+        'document_type': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

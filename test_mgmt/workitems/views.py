@@ -1,6 +1,7 @@
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, date_fields_filter_lookups, exact_fields_filter_lookups, \
-    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+    string_fields_filter_lookups, compare_fields_filter_lookups, date_fields_filter_lookups, \
+    exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, \
+    datetime_fields_filter_lookups
 from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feedback
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EpicSerializer, FeatureSerializer, \
     SprintSerializer, StorySerializer, FeedbackSerializer
@@ -16,7 +17,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -36,7 +37,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -55,7 +56,7 @@ class ReleaseViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -76,9 +77,9 @@ class EpicViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -99,9 +100,9 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'epic': id_fields_filter_lookups,
+        'epic': fk_fields_filter_lookups,
         'epic__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -120,11 +121,11 @@ class SprintViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'number': string_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -146,11 +147,11 @@ class StoryViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
         'rank': compare_fields_filter_lookups,
-        'sprint': id_fields_filter_lookups,
+        'sprint': fk_fields_filter_lookups,
         'sprint__number': compare_fields_filter_lookups,
-        'feature': id_fields_filter_lookups,
+        'feature': fk_fields_filter_lookups,
         'feature__name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -170,8 +171,8 @@ class FeedbackViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'release': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

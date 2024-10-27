@@ -5,9 +5,9 @@ from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    compare_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
-    ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+    string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
 from .models import Attachment, Tag, Step, Properties, MockAPI, AuthenticatorSecret
 from .serializers import AttachmentSerializer, TagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer, \
     AuthenticatorSecretSerializer
@@ -23,7 +23,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -43,7 +43,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -62,14 +62,14 @@ class StepViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'feature': id_fields_filter_lookups,
+        'feature': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'eta': compare_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -87,7 +87,7 @@ class PropertiesViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -107,10 +107,10 @@ class MockAPIViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'http_method': id_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
-        'content_type': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'http_method': fk_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
+        'content_type': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,

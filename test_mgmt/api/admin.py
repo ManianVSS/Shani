@@ -9,16 +9,24 @@ from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
+from django_ace import AceWidget
+from django_extensions.db.fields.json import JSONField
+from django_yaml_field import YAMLField
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, Configuration, OrgGroup, get_database_name, Site
+from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, MyGroup, MyUser
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     save_as = True
     readonly_fields = ('id',)
     display_order = 999
+    formfield_overrides = {
+        YAMLField: {"widget": AceWidget(mode="yaml", fontsize=24, tabsize=2)},
+        JSONField: {"widget": AceWidget(mode="json", fontsize=16)},
+
+    }
 
     # ordering = ('-id',)
 
@@ -159,16 +167,14 @@ orig_register = admin.register
 admin.register = functools.partial(orig_register, site=site)
 
 
-@admin.register(Group)
+@admin.register(MyGroup)
 class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
-    # display_order = 'a'
-    pass
+    display_order = 1
 
 
-@admin.register(User)
+@admin.register(MyUser)
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
-    # display_order = 'b'
-    pass
+    display_order = 2
 
 
 @admin.register(Configuration)
@@ -179,8 +185,10 @@ class ConfigurationAdmin(CustomModelAdmin):
     list_filter = (
         'created_at', 'updated_at', 'published', 'is_public',
     )
+    display_order = 3
 
 
+# noinspection PyUnusedLocal
 @receiver(post_save, sender=Configuration, dispatch_uid="update_admin_site_name")
 def update_admin_site_name(sender, instance, **kwargs):
     site.reload_settings()
@@ -197,6 +205,7 @@ class OrgGroupAdmin(CustomModelAdmin):
         ('consumers', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
+    display_order = 4
 
 
 @admin.register(Attachment)
@@ -206,6 +215,7 @@ class AttachmentAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
     )
+    display_order = 6
 
 
 @admin.register(Site)
@@ -215,3 +225,4 @@ class SiteAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', ]
+    display_order = 5

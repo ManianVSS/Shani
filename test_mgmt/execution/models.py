@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from django_yaml_field import YAMLField
 
 from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
@@ -28,7 +29,7 @@ class Release(OrgModel):
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    properties = models.JSONField(null=True, blank=True)
+    properties = YAMLField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='release_attachments', blank=True)
 
 
@@ -41,7 +42,7 @@ class Build(OrgModel):
     build_time = models.DateTimeField(null=True, blank=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    properties = models.JSONField(null=True, blank=True)
+    properties = YAMLField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='build_attachments', blank=True)
 
 
@@ -139,7 +140,7 @@ class Environment(OrgModel):
                                         related_name='environments', verbose_name='currently installed release')
     current_build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL,
                                       related_name='environments', verbose_name='currently installed build')
-    properties = models.JSONField(null=True, blank=True)
+    properties = YAMLField(null=True, blank=True)
 
     def get_list_query_set(self, user):
         if user.is_superuser:

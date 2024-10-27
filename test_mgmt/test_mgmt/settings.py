@@ -31,6 +31,7 @@ FORCE_SCRIPT_NAME = os.getenv('FORCE_SCRIPT_NAME', '')
 
 INSTALLED_APPS = [
     'jazzmin',
+    'django_ace',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

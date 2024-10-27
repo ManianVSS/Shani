@@ -2,8 +2,8 @@ from django.contrib.auth.models import Group, User
 from django.db import models
 from django.db.models import Q
 
-from api.storage import CustomFileSystemStorage
 from test_mgmt import settings
+from .storage import CustomFileSystemStorage
 
 
 # noinspection PyMethodMayBeStatic
@@ -11,7 +11,15 @@ class MultiDBModel(models.Model):
     class Meta:
         abstract = True
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(  # self, force_insert=False, force_update=False, using=None, update_fields=None):
+            self,
+            *args,
+            force_insert=False,
+            force_update=False,
+            using=None,
+            update_fields=None,
+
+    ):
         if using is None:
             super().save(force_insert=force_insert, force_update=force_update, using='replica',
                          update_fields=update_fields)
@@ -74,6 +82,18 @@ class BaseModel(models.Model):
         return self.objects.all()
 
 
+class MyGroup(Group):
+    class Meta:
+        proxy = True
+        verbose_name = 'Group'
+
+
+class MyUser(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'User'
+
+
 class Configuration(BaseModel):
     name = models.CharField(max_length=256, unique=True)
     value = models.TextField(null=True, blank=True)
@@ -86,7 +106,7 @@ class Configuration(BaseModel):
 def create_default_configuration():
     database_name_config = Configuration.objects.filter(name="site_name")
     if database_name_config.count() == 0:
-        Configuration(name='site_name', value='Shani Test Management').save()
+        Configuration(name='site_name', value='Shani Test Management', description='The name of the site.').save()
 
 
 def get_database_name():

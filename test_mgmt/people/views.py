@@ -1,8 +1,8 @@
 from rest_framework import permissions
 
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, string_fields_filter_lookups, \
-    exact_fields_filter_lookups, compare_fields_filter_lookups, date_fields_filter_lookups, \
-    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+    string_fields_filter_lookups, exact_fields_filter_lookups, compare_fields_filter_lookups, \
+    date_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
 from .models import Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Attachment, \
     Credit, Scale, Reason, EngineerSkills
@@ -23,7 +23,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -43,12 +43,12 @@ class EngineerViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'employee_id': exact_fields_filter_lookups,
         'name': exact_fields_filter_lookups,
-        'auth_user': id_fields_filter_lookups,
+        'auth_user': fk_fields_filter_lookups,
         'role': exact_fields_filter_lookups,
-        'site': id_fields_filter_lookups,
+        'site': fk_fields_filter_lookups,
         'points': compare_fields_filter_lookups,
         'auth_user__username': exact_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -66,8 +66,8 @@ class EngineerOrgGroupParticipationViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'engineer': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'engineer': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'role': string_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
@@ -89,7 +89,7 @@ class SiteHolidayViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'site': id_fields_filter_lookups,
+        'site': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -107,11 +107,11 @@ class LeaveViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'engineer': id_fields_filter_lookups,
+        'engineer': fk_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -130,10 +130,10 @@ class EngineerOrgGroupParticipationHistoryViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'date': date_fields_filter_lookups,
-        'engineer': id_fields_filter_lookups,
+        'engineer': fk_fields_filter_lookups,
         'expected_capacity': compare_fields_filter_lookups,
         'capacity': compare_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -155,8 +155,8 @@ class TopicViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'parent_topic': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'parent_topic': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -174,13 +174,13 @@ class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'topic': id_fields_filter_lookups,
-        'engineer': id_fields_filter_lookups,
-        'status': id_fields_filter_lookups,
+        'topic': fk_fields_filter_lookups,
+        'engineer': fk_fields_filter_lookups,
+        'status': fk_fields_filter_lookups,
         'rating': compare_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -200,7 +200,7 @@ class ScaleViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -222,7 +222,7 @@ class ReasonViewSet(ShaniOrgGroupViewSet):
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -240,13 +240,13 @@ class CreditViewSet(ShaniOrgGroupViewSet):
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'time': date_fields_filter_lookups,
-        'credited_user': id_fields_filter_lookups,
+        'credited_user': fk_fields_filter_lookups,
         'credits': compare_fields_filter_lookups,
-        'scale': id_fields_filter_lookups,
-        'reason': id_fields_filter_lookups,
+        'scale': fk_fields_filter_lookups,
+        'reason': fk_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'creditor': id_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'creditor': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -264,10 +264,10 @@ class EngineerSkillsViewSet(ShaniOrgGroupViewSet):
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'engineer': id_fields_filter_lookups,
+        'engineer': fk_fields_filter_lookups,
         'skill': string_fields_filter_lookups,
         'experience': compare_fields_filter_lookups,
-        'org_group': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
