@@ -4,5 +4,5 @@ from django.apps import AppConfig
 class ApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'api'
-    order = '1'
+    order = 1
     verbose_name = 'Settings'

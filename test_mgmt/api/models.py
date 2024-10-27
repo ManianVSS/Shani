@@ -82,18 +82,6 @@ class BaseModel(models.Model):
         return self.objects.all()
 
 
-class MyGroup(Group):
-    class Meta:
-        proxy = True
-        verbose_name = 'Group'
-
-
-class MyUser(User):
-    class Meta:
-        proxy = True
-        verbose_name = 'User'
-
-
 class Configuration(BaseModel):
     name = models.CharField(max_length=256, unique=True)
     value = models.TextField(null=True, blank=True)

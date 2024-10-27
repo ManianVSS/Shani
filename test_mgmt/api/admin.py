@@ -15,7 +15,7 @@ from django_yaml_field import YAMLField
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, MyGroup, MyUser
+from .models import Attachment, Configuration, OrgGroup, get_database_name, Site
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -106,7 +106,7 @@ class CustomAdminSite(AdminSite):
     def register(self, model_or_iterable, admin_class=None, **options):
         super().register(model_or_iterable, admin_class, **options)
 
-        display_order = 1
+        display_order = 999
         if hasattr(admin_class, 'display_order') and admin_class.display_order:
             display_order = admin_class.display_order
 
@@ -120,7 +120,8 @@ class CustomAdminSite(AdminSite):
 
         for app_label in app_dict.keys():
             app_config = apps.get_app_config(app_label)
-            app_dict[app_label]['order'] = app_config.order if hasattr(app_config, 'order') else 'zzzzzzzzzzzzzzzzzzzzz'
+            app_dict[app_label]['order'] = 0 if app_label == 'auth' else (
+                app_config.order if hasattr(app_config, 'order') else 999)
 
         return app_dict
 
@@ -129,12 +130,10 @@ class CustomAdminSite(AdminSite):
         Return a sorted list of all the installed apps that have been
         registered in this site.
         """
-        app_dict = self._build_app_dict(request)
+        app_dict = self._build_app_dict(request, app_label)
 
         # Sort the apps alphabetically.
         app_list = sorted(app_dict.values(), key=lambda x: (x['order'], x['name']))
-        # x['order'] if hasattr(x, 'order') else 'zzzzz')
-        # x['name'].lower(), reverse=True)
 
         # Sort the models alphabetically within each app.
         for app in app_list:
@@ -167,12 +166,12 @@ orig_register = admin.register
 admin.register = functools.partial(orig_register, site=site)
 
 
-@admin.register(MyGroup)
+@admin.register(Group)
 class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
     display_order = 1
 
 
-@admin.register(MyUser)
+@admin.register(User)
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
     display_order = 2
 
