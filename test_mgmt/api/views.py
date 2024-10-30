@@ -11,6 +11,7 @@ from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, 
 exact_fields_filter_lookups = ['exact', ]
 # many_to_many_id_field_lookups = ['contains']
 id_fields_filter_lookups = ['exact', 'in', ]
+enum_fields_filter_lookups = id_fields_filter_lookups
 fk_fields_filter_lookups = ['exact', 'in', 'isnull']
 string_fields_filter_lookups = ['exact', 'iexact', 'icontains', 'regex', ]
 # 'startswith', 'endswith', 'istartswith','iendswith', 'contains',

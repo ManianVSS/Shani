@@ -2,7 +2,8 @@ from rest_framework import permissions
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, exact_fields_filter_lookups, compare_fields_filter_lookups, \
-    date_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+    date_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, \
+    datetime_fields_filter_lookups, enum_fields_filter_lookups
 from .models import Engineer, SiteHoliday, Leave, \
     EngineerOrgGroupParticipation, Topic, TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Attachment, \
     Credit, Scale, Reason, EngineerSkills
@@ -111,7 +112,7 @@ class LeaveViewSet(ShaniOrgGroupViewSet):
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
         'created_at': datetime_fields_filter_lookups,
@@ -176,7 +177,7 @@ class TopicEngineerAssignmentViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'topic': fk_fields_filter_lookups,
         'engineer': fk_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
         'rating': compare_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,

@@ -1,6 +1,6 @@
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
-    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, enum_fields_filter_lookups
 from .models import Attachment, Tag, TestCaseCategory, TestCase
 from .serializers import AttachmentSerializer, TagSerializer, TestCaseCategorySerializer, TestCaseSerializer
 
@@ -79,8 +79,8 @@ class TestCaseViewSet(ShaniOrgGroupViewSet):
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'parent': fk_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
-        'type': fk_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
+        'type': enum_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'use_cases': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,

@@ -31,7 +31,7 @@ class StepAdmin(CustomModelAdmin):
         ('tags', RelatedOnlyFieldListFilter),
         'status',
     )
-    search_fields = ['name', 'summary', 'description', 'automation_code_reference', ]
+    search_fields = ['name', 'summary', 'description', ]
 
     # def get_form(self, request, obj=None, **kwargs):
     #     form = super().get_form(request, obj, **kwargs)

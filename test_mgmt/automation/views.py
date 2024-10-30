@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
-    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, enum_fields_filter_lookups
 from .models import Attachment, Tag, Step, Properties, MockAPI, AuthenticatorSecret
 from .serializers import AttachmentSerializer, TagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer, \
     AuthenticatorSecretSerializer
@@ -42,7 +42,6 @@ class TagViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'description': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
@@ -57,18 +56,16 @@ class StepViewSet(ShaniOrgGroupViewSet):
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'feature', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', 'name',
-                       'expected_results', 'eta', 'tags', 'test_design_owner', 'test_design_status', 'automation_owner',
-                       'automation_code_reference', 'automation_status', ]
+                       'expected_results', 'eta', 'tags', 'status', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'feature': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'description': string_fields_filter_lookups,
         'eta': compare_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
@@ -107,9 +104,9 @@ class MockAPIViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'http_method': fk_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
-        'content_type': fk_fields_filter_lookups,
+        'http_method': enum_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
+        'content_type': enum_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,

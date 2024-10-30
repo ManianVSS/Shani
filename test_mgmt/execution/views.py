@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, datetime_fields_filter_lookups, compare_fields_filter_lookups, \
-    exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
+    exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, enum_fields_filter_lookups
 from . import ipte_util
 from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord, Build
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
@@ -153,7 +153,7 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
         # 'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         # 'summary': string_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
         'defects': exact_fields_filter_lookups,
         'run': fk_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
@@ -187,7 +187,7 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'testName': string_fields_filter_lookups,
         'testEnvironmentType': string_fields_filter_lookups,
         'testEnvironmentName': string_fields_filter_lookups,
-        'status': fk_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
         'targetIPTE': compare_fields_filter_lookups,
         'incidents': exact_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
