@@ -147,3 +147,12 @@ def update_authenticator_secret(sender, instance, **kwargs):
                 instance.initialized = True
                 instance.save()
 
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Tag': Tag,
+    'Step': Step,
+    'Properties': Properties,
+    'MockAPI': MockAPI,
+    'AuthenticatorSecret': AuthenticatorSecret,
+}

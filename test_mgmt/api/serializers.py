@@ -41,3 +41,13 @@ class SiteSerializer(serializers.ModelSerializer):
         model = Site
         fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public',
                   'attachments', ]
+
+
+serializer_map = {
+    User: UserSerializer,
+    Group: GroupSerializer,
+    Configuration: ConfigurationSerializer,
+    OrgGroup: OrgGroupSerializer,
+    Attachment: AttachmentSerializer,
+    Site: SiteSerializer,
+}

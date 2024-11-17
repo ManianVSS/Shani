@@ -14,3 +14,9 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
+
+
+serializer_map = {
+    Attachment: AttachmentSerializer,
+    Tag: TagSerializer,
+}

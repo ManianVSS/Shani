@@ -50,3 +50,14 @@ class RequirementSerializer(serializers.ModelSerializer):
         fields = ['id', 'category', 'name', 'summary', 'description', 'status', 'tags', 'external_id', 'details_file',
                   'attachments', 'cost', 'org_group', 'created_at', 'updated_at',
                   'published', ]
+
+
+serializer_map = {
+    Attachment: AttachmentSerializer,
+    Tag: TagSerializer,
+    FeatureCategory: FeatureCategorySerializer,
+    Feature: FeatureSerializer,
+    UseCase: UseCaseSerializer,
+    RequirementCategory: RequirementCategorySerializer,
+    Requirement: RequirementSerializer,
+}

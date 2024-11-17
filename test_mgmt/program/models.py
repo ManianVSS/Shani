@@ -76,3 +76,14 @@ class Document(NotMutablePublishOrgModel):
     link = models.TextField(null=True, blank=True)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to='program', blank=True, null=True, )
     checksum = models.TextField(null=True, blank=True)
+
+
+model_name_map = {
+    'ApplicationType': ApplicationType,
+    'Application': Application,
+    'Release': Release,
+    'ArtifactType': ArtifactType,
+    'Artifact': Artifact,
+    'DocumentType': DocumentType,
+    'Document': Document,
+}

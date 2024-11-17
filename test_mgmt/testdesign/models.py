@@ -79,3 +79,11 @@ class TestCase(OrgModel):
 
     def __str__(self):
         return str(self.name) + ": " + str(self.summary)
+
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Tag': Tag,
+    'TestCaseCategory': TestCaseCategory,
+    'TestCase': TestCase,
+}

@@ -82,3 +82,15 @@ class Feedback(OrgModel):
     description = models.TextField(null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
     pi = models.ForeignKey(ProgramIncrement, null=True, on_delete=models.SET_NULL, related_name='feedbacks')
+
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Tag': Tag,
+    'ProgramIncrement': ProgramIncrement,
+    'Epic': Epic,
+    'Feature': Feature,
+    'Sprint': Sprint,
+    'Story': Story,
+    'Feedback': Feedback,
+}

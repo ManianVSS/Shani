@@ -43,3 +43,13 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
         model = SiteSettings
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'email', 'logo', 'image', 'catalogs',
                   'org_group', 'published', ]
+
+
+serializer_map = {
+    DisplayItem: DisplayItemSerializer,
+    Event: EventSerializer,
+    Page: PageSerializer,
+    Category: CategorySerializer,
+    Catalog: CatalogSerializer,
+    SiteSettings: SiteSettingsSerializer,
+}

@@ -117,3 +117,14 @@ class Requirement(OrgModel):
     additional_data = models.JSONField(null=True, blank=True)
 
 # TODO: Add user segment with use-case variations
+
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Tag': Tag,
+    'FeatureCategory': FeatureCategory,
+    'Feature': Feature,
+    'UseCase': UseCase,
+    'RequirementCategory': RequirementCategory,
+    'Requirement': Requirement,
+}

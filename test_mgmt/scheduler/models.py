@@ -56,3 +56,13 @@ class Resource(OrgModel):
     name = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='resource_attachments', blank=True)
+
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Tag': Tag,
+    'ResourceType': ResourceType,
+    'ResourceSet': ResourceSet,
+    'ResourceSetComponent': ResourceSetComponent,
+    'Resource': Resource,
+}

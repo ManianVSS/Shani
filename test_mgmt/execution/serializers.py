@@ -66,3 +66,16 @@ class EnvironmentSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'details_file', 'attachments',
                   'current_release', 'current_build', 'properties', 'org_group', 'created_at', 'updated_at',
                   'published', ]
+
+
+serializer_map = {
+    Attachment: AttachmentSerializer,
+    Tag: TagSerializer,
+    Release: ReleaseSerializer,
+    Build: BuildSerializer,
+    Defect: DefectSerializer,
+    Run: RunSerializer,
+    ExecutionRecord: ExecutionRecordSerializer,
+    ReliabilityRun: ReliabilityRunSerializer,
+    Environment: EnvironmentSerializer,
+}

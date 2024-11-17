@@ -153,3 +153,16 @@ class Environment(OrgModel):
 
     def can_read(self, user):
         return self.is_owner(user) or self.is_member(user)
+
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Tag': Tag,
+    'Release': Release,
+    'Build': Build,
+    'Defect': Defect,
+    'Run': Run,
+    'ExecutionRecord': ExecutionRecord,
+    'ReliabilityRun': ReliabilityRun,
+    'Environment': Environment,
+}

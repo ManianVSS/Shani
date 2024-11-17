@@ -50,3 +50,14 @@ class DocumentSerializer(serializers.ModelSerializer):
         model = Document
         fields = ['id', 'release', 'document_type', 'name', 'link', 'file', 'checksum',
                   'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+
+
+serializer_map = {
+    ApplicationType: ApplicationTypeSerializer,
+    Application: ApplicationSerializer,
+    Release: ReleaseSerializer,
+    ArtifactType: ApplicationTypeSerializer,
+    Artifact: ArtifactSerializer,
+    DocumentType: DocumentTypeSerializer,
+    Document: DocumentSerializer,
+}

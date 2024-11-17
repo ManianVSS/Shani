@@ -85,3 +85,19 @@ class EngineerSkillsSerializer(serializers.ModelSerializer):
         model = EngineerSkills
         fields = ['id', 'engineer', 'skill', 'experience', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
+
+
+serializer_map = {
+    Attachment: AttachmentSerializer,
+    Engineer: EngineerSerializer,
+    EngineerOrgGroupParticipation: EngineerOrgGroupParticipationSerializer,
+    SiteHoliday: SiteHolidaySerializer,
+    Leave: LeaveSerializer,
+    EngineerOrgGroupParticipationHistory: EngineerOrgGroupParticipationHistorySerializer,
+    Topic: TopicSerializer,
+    TopicEngineerAssignment: TopicEngineerAssignmentSerializer,
+    Scale: ScaleSerializer,
+    Reason: ReasonSerializer,
+    Credit: CreditSerializer,
+    EngineerSkills: EngineerSkillsSerializer,
+}

@@ -56,3 +56,15 @@ class FeedbackSerializer(serializers.ModelSerializer):
         model = Feedback
         fields = ['id', 'name', 'summary', 'description', 'time', 'pi', 'org_group', 'created_at', 'updated_at',
                   'published', ]
+
+
+serializer_map = {
+    Attachment: AttachmentSerializer,
+    Tag: TagSerializer,
+    ProgramIncrement: ProgramIncrementSerializer,
+    Epic: EpicSerializer,
+    Feature: FeatureSerializer,
+    Sprint: SprintSerializer,
+    Story: StorySerializer,
+    Feedback: FeedbackSerializer,
+}

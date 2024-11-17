@@ -41,3 +41,13 @@ class AuthenticatorSecretSerializer(serializers.ModelSerializer):
         model = AuthenticatorSecret
         fields = ['id', 'user', 'secret', 'issuer', 'url', 'qr_code', 'initialized', 'org_group',
                   'created_at', 'updated_at', 'published', ]
+
+
+serializer_map = {
+    Attachment: AttachmentSerializer,
+    Tag: TagSerializer,
+    Step: StepSerializer,
+    Properties: PropertiesSerializer,
+    MockAPI: MockAPISerializer,
+    AuthenticatorSecret: AuthenticatorSecretSerializer,
+}

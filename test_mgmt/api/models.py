@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q, TextField
 
 from test_mgmt import settings
+from .decorators import RegisterModel
 from .storage import CustomFileSystemStorage
 
 
@@ -358,3 +359,11 @@ class Site(OrgModel):
 
 class PythonCodeField(TextField):
     pass
+
+
+model_name_map = {
+    'Configuration': Configuration,
+    'OrgGroup': OrgGroup,
+    'Attachment': Attachment,
+    'Site': Site,
+}

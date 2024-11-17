@@ -94,3 +94,13 @@ def get_default_settings():
     if site_settings_count > 0:
         return SiteSettings.objects.filter(published=True).order_by('sort_order')[0]
     return None
+
+
+model_name_map = {
+    'DisplayItem': DisplayItem,
+    'Event': Event,
+    'Page': Page,
+    'Category': Category,
+    'Catalog': Catalog,
+    'SiteSettings': SiteSettings,
+}

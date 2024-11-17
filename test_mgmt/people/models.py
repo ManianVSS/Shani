@@ -206,3 +206,18 @@ class EngineerSkills(OrgModel):
 
     # def __str__(self):
     #     return str(self.engineer) + " has the skill " + str(self.skill) + " with experience " + str(self.capacity)
+
+
+model_name_map = {
+    'Attachment': Attachment,
+    'Engineer': Engineer,
+    'EngineerOrgGroupParticipation': EngineerOrgGroupParticipation,
+    'SiteHoliday': SiteHoliday,
+    'Leave': Leave,
+    'EngineerOrgGroupParticipationHistory': EngineerOrgGroupParticipationHistory,
+    'Topic': Topic,
+    'TopicEngineerAssignment': TopicEngineerAssignment,
+    'Scale': Scale,
+    'Credit': Credit,
+    'EngineerSkills': EngineerSkills,
+}
