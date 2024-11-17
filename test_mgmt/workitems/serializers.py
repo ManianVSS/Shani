@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Attachment, Tag, Release, Story, Sprint, Feature, Epic, Feedback
+from .models import Attachment, Tag, ProgramIncrement, Story, Sprint, Feature, Epic, Feedback
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -16,9 +16,9 @@ class TagSerializer(serializers.ModelSerializer):
                   'is_public', ]
 
 
-class ReleaseSerializer(serializers.ModelSerializer):
+class ProgramIncrementSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Release
+        model = ProgramIncrement
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
 
@@ -26,8 +26,8 @@ class ReleaseSerializer(serializers.ModelSerializer):
 class EpicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Epic
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'release', 'org_group',
-                  'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'pi', 'org_group', 'created_at',
+                  'updated_at', 'published', 'is_public', ]
 
 
 class FeatureSerializer(serializers.ModelSerializer):
@@ -40,7 +40,7 @@ class FeatureSerializer(serializers.ModelSerializer):
 class SprintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sprint
-        fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
+        fields = ['id', 'number', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
                   'published', ]
 
 
@@ -54,5 +54,5 @@ class StorySerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
-        fields = ['id', 'name', 'summary', 'description', 'time', 'release', 'org_group', 'created_at', 'updated_at',
+        fields = ['id', 'name', 'summary', 'description', 'time', 'pi', 'org_group', 'created_at', 'updated_at',
                   'published', ]

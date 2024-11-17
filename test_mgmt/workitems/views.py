@@ -2,8 +2,9 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     string_fields_filter_lookups, compare_fields_filter_lookups, date_fields_filter_lookups, \
     exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, \
     datetime_fields_filter_lookups
-from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feedback
-from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EpicSerializer, FeatureSerializer, \
+from .models import Attachment, Tag, ProgramIncrement, Epic, Feature, Sprint, Story, Feedback
+from .serializers import AttachmentSerializer, TagSerializer, ProgramIncrementSerializer, EpicSerializer, \
+    FeatureSerializer, \
     SprintSerializer, StorySerializer, FeedbackSerializer
 
 
@@ -45,9 +46,9 @@ class TagViewSet(ShaniOrgGroupViewSet):
     }
 
 
-class ReleaseViewSet(ShaniOrgGroupViewSet):
-    queryset = Release.objects.all()
-    serializer_class = ReleaseSerializer
+class ProgramIncrementViewSet(ShaniOrgGroupViewSet):
+    queryset = ProgramIncrement.objects.all()
+    serializer_class = ProgramIncrementSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -69,16 +70,15 @@ class EpicViewSet(ShaniOrgGroupViewSet):
     serializer_class = EpicSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'weight', 'release', 'org_group', 'created_at', 'updated_at',
-                       'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'weight', 'pi', 'org_group', 'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'weight': compare_fields_filter_lookups,
-        'release': fk_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
+        'pi': fk_fields_filter_lookups,
+        'pi__name': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
@@ -115,14 +115,14 @@ class SprintViewSet(ShaniOrgGroupViewSet):
     serializer_class = SprintSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'number', 'release', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
+    ordering_fields = ['id', 'number', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
                        'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'number': string_fields_filter_lookups,
-        'release': fk_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
+        'pi': fk_fields_filter_lookups,
+        'pi__name': string_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
         'end_date': date_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
@@ -164,14 +164,14 @@ class FeedbackViewSet(ShaniOrgGroupViewSet):
     serializer_class = FeedbackSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'description', 'release', ]
+    ordering_fields = ['id', 'name', 'summary', 'description', 'pi', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'release': fk_fields_filter_lookups,
+        'pi': fk_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,

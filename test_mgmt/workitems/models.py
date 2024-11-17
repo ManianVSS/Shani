@@ -21,9 +21,9 @@ class Tag(OrgModel):
     description = models.TextField(null=True, blank=True)
 
 
-class Release(OrgModel):
+class ProgramIncrement(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_releases')
+                                  verbose_name='organization group', related_name='work_item_program_increments')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -32,7 +32,7 @@ class Release(OrgModel):
 class Epic(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_epics')
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='epics')
+    pi = models.ForeignKey(ProgramIncrement, null=True, on_delete=models.SET_NULL, related_name='epics')
     name = models.CharField(max_length=256, unique=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -52,13 +52,14 @@ class Feature(OrgModel):
 
 
 class Sprint(OrgModel):
-    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='sprints')
+    pi = models.ForeignKey(ProgramIncrement, null=True, blank=True, on_delete=models.SET_NULL,
+                           related_name='sprints')
     number = models.IntegerField()
     start_date = models.DateField(verbose_name='start date')
     end_date = models.DateField(verbose_name='end date')
 
     def __str__(self):
-        return "Sprint-" + str(self.number) + " for release " + str(self.release.name if self.release else "<unset>")
+        return "Sprint-" + str(self.number) + " for release " + str(self.pi.name if self.pi else "<unset>")
 
 
 class Story(OrgModel):
@@ -80,4 +81,4 @@ class Feedback(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
-    release = models.ForeignKey(Release, null=True, on_delete=models.SET_NULL, related_name='feedbacks')
+    pi = models.ForeignKey(ProgramIncrement, null=True, on_delete=models.SET_NULL, related_name='feedbacks')

@@ -147,21 +147,3 @@ def update_authenticator_secret(sender, instance, **kwargs):
                 instance.initialized = True
                 instance.save()
 
-# class StepInstance:
-#     def __init__(self, step, data):
-#         self.step = step if step else "<unnamed>"
-#         self.data = data if data else {}
-#
-#     def __str__(self):
-#         return str(self.step)
-#
-#
-# class ScenarioInstance:
-#
-#     def __init__(self, step, data):
-#         self.name = models.CharField(max_length=1024, unique=True)
-#         self.summary = models.CharField(max_length=1024, null=True, blank=True)
-#         self.data = models.JSONField(null=True, blank=True)
-#
-#     def __str__(self):
-#         return '[' + str(self.name) + ']: ' + str(self.summary)

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, TextField
 
 from test_mgmt import settings
 from .storage import CustomFileSystemStorage
@@ -354,3 +354,7 @@ class Site(OrgModel):
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, related_name='site_attachments', blank=True)
+
+
+class PythonCodeField(TextField):
+    pass

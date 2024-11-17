@@ -15,7 +15,7 @@ from django_yaml_field import YAMLField
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, Configuration, OrgGroup, get_database_name, Site
+from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, PythonCodeField
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -23,9 +23,9 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     readonly_fields = ('id',)
     display_order = 999
     formfield_overrides = {
-        YAMLField: {"widget": AceWidget(mode="yaml", fontsize=24, tabsize=2)},
-        JSONField: {"widget": AceWidget(mode="json", fontsize=16)},
-
+        YAMLField: {"widget": AceWidget(mode="yaml")},
+        JSONField: {"widget": AceWidget(mode="json")},
+        PythonCodeField: {"widget": AceWidget(mode="python")},
     }
 
     # ordering = ('-id',)

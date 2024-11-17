@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Attachment, Tag, Release, Epic, Feature, Sprint, Story, Feedback
+from .models import Attachment, Tag, ProgramIncrement, Epic, Feature, Sprint, Story, Feedback
 
 
 @admin.register(Attachment)
@@ -23,8 +23,8 @@ class TagAdmin(CustomModelAdmin):
     search_fields = ['name', 'summary', 'description', ]
 
 
-@admin.register(Release)
-class ReleaseAdmin(CustomModelAdmin):
+@admin.register(ProgramIncrement)
+class ProgramIncrementAdmin(CustomModelAdmin):
     list_filter = (
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
@@ -38,7 +38,7 @@ class EpicAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'weight',
-        ('release', RelatedOnlyFieldListFilter),
+        ('pi', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
 
@@ -62,7 +62,7 @@ class SprintAdmin(CustomModelAdmin):
         'number',
         'start_date',
         'end_date',
-        ('release', RelatedOnlyFieldListFilter),
+        ('pi', RelatedOnlyFieldListFilter),
     )
     search_fields = ['number', 'start_date', 'end_date', ]
 
@@ -86,6 +86,6 @@ class FeedbackAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         'time',
-        ('release', RelatedOnlyFieldListFilter),
+        ('pi', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
