@@ -84,7 +84,8 @@ def get_org_capacity_for_time_range(request):
 
     capacity_data_for_org_groups = {org_group.name: get_capacity_data_for_org_group(org_group, from_date, to_date)}
 
-    for transitive_sub_group in org_group.get_transitive_sub_groups():
+    for transitive_sub_group_id in org_group.get_transitive_sub_groups():
+        transitive_sub_group = OrgGroup.objects.get(id=transitive_sub_group_id)
         capacity_data_for_org_groups[transitive_sub_group.name] = get_capacity_data_for_org_group(transitive_sub_group,
                                                                                                   from_date, to_date)
 
