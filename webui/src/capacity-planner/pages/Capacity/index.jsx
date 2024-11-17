@@ -20,7 +20,9 @@ const Capacity = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [orgData, setOrgData] = useState([]);
+  const [sprintData, setSprintData] = useState([]);
   const [org, setOrg] = useState("Choose...");
+  const [sprint, setSprint] = useState("Choose...");
   const [capacityData, setCapacityData] = useState({});
   const showDetails = () => {
     setShow(false);
@@ -102,6 +104,24 @@ const Capacity = () => {
       </tr>
     );
   }
+  const setDatesForSelectedSprint = (sprintID) => {
+    if (sprintID !== "Choose...") {
+      axiosClientForCapacity
+        .get(`/workitems/api/sprints/${sprintID}`, {
+          headers: {
+            authorization:
+              "Bearer " + window.localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          console.log(new Date(response.data.start_date));
+          console.log(new Date(response.data.end_date));
+          console.log(startDate + "-" + endDate);
+          setStartDate(new Date(response.data.start_date));
+          setEndDate(new Date(response.data.end_date));
+        });
+    }
+  };
   useEffect(() => {
     axiosClientForLogin
       .get("/org_groups/", {
@@ -111,6 +131,15 @@ const Capacity = () => {
       })
       .then((response) => {
         setOrgData(response.data.results);
+      });
+    axiosClientForCapacity
+      .get("/workitems/api/sprints/", {
+        headers: {
+          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setSprintData(response.data.results);
       });
     setUserData({
       accessToken: window.localStorage.getItem("accessToken"),
@@ -138,7 +167,7 @@ const Capacity = () => {
       <Container>
         <Form>
           <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Row} controlId="formGridState">
               <Form.Label>ORG GROUP</Form.Label>
               <Form.Select
                 defaultValue="Choose..."
@@ -186,6 +215,25 @@ const Capacity = () => {
                   </div>
                 )}
               </DateRangePicker>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>SPRINT</Form.Label>
+              <Form.Select
+                defaultValue="Choose..."
+                onChange={(event) => {
+                  // setSprint(event.target.value);
+                  setDatesForSelectedSprint(event.target.value);
+                }}
+              >
+                <option>Choose...</option>
+                {sprintData.map((item) => {
+                  return (
+                    <option value={item.id} key={item.id}>
+                      PI-{item.pi}-{item.number}
+                    </option>
+                  );
+                })}
+              </Form.Select>
             </Form.Group>
           </Row>
           <Button

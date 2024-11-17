@@ -187,14 +187,14 @@ export function NavbarSimpleColored() {
             <IconTruckReturn className={classes.linkIcon} stroke={1.5} />
             <span>Return to Main Dashboard</span>
           </a>
-          <a
+          {/* <a
             href="#"
             className={classes.link}
             onClick={(event) => event.preventDefault()}
           >
             <IconLogout className={classes.linkIcon} stroke={1.5} />
             <span>Logout</span>
-          </a>
+          </a> */}
         </Navbar.Section>
       </Navbar>
     </>

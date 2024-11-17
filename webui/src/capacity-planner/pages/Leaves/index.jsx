@@ -240,7 +240,7 @@ const Leaves = () => {
                       value={item.id + "_" + item.employee_id}
                       key={item.id}
                     >
-                      {item.employee_id}
+                      {item.name}
                     </option>
                   );
                 })}

@@ -89,7 +89,7 @@ const EngineerAvailability = () => {
                 {engineerData.map((item) => {
                   return (
                     <option value={item.id} key={item.id}>
-                      {item.employee_id}
+                      {item.name}
                     </option>
                   );
                 })}

@@ -30,7 +30,7 @@ axiosClient.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axiosClient.post("/auth/jwt/refresh", {
+        const response = await axiosClientBasic.post("/api/auth/jwt/refresh", {
           refresh: refreshToken,
         });
         const { access } = response.data;
@@ -74,7 +74,7 @@ axiosClientBasic.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axiosClientBasic.post("/auth/jwt/refresh", {
+        const response = await axiosClientBasic.post("/api/auth/jwt/refresh", {
           refresh: refreshToken,
         });
         const { access } = response.data;

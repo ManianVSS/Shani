@@ -32,12 +32,9 @@ axiosClientForLogin.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axiosClientForCapacity.post(
-          "/api/auth/jwt/refresh",
-          {
-            refresh: refreshToken,
-          }
-        );
+        const response = await axiosClientForLogin.post("/auth/jwt/refresh", {
+          refresh: refreshToken,
+        });
         const { access } = response.data;
 
         localStorage.setItem("accessToken", access);
@@ -66,12 +63,9 @@ axiosClientForCapacity.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axiosClientForCapacity.post(
-          "/auth/jwt/refresh",
-          {
-            refresh: refreshToken,
-          }
-        );
+        const response = await axiosClientForLogin.post("/auth/jwt/refresh", {
+          refresh: refreshToken,
+        });
         const { access } = response.data;
 
         localStorage.setItem("accessToken", access);
