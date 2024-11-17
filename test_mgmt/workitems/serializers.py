@@ -40,7 +40,7 @@ class FeatureSerializer(serializers.ModelSerializer):
 class SprintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sprint
-        fields = ['id', 'number', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
+        fields = ['id', 'name', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
                   'published', ]
 
 

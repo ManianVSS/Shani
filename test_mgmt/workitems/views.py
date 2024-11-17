@@ -115,12 +115,12 @@ class SprintViewSet(ShaniOrgGroupViewSet):
     serializer_class = SprintSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'number', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
+    ordering_fields = ['id', 'name', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
                        'published', 'is_public', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'number': string_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
         'pi': fk_fields_filter_lookups,
         'pi__name': string_fields_filter_lookups,
         'start_date': date_fields_filter_lookups,
@@ -148,7 +148,7 @@ class StoryViewSet(ShaniOrgGroupViewSet):
         'weight': compare_fields_filter_lookups,
         'rank': compare_fields_filter_lookups,
         'sprint': fk_fields_filter_lookups,
-        'sprint__number': compare_fields_filter_lookups,
+        'sprint__name': string_fields_filter_lookups,
         'feature': fk_fields_filter_lookups,
         'feature__name': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,

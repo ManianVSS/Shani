@@ -59,12 +59,11 @@ class SprintAdmin(CustomModelAdmin):
     list_filter = (
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
-        'number',
         'start_date',
         'end_date',
         ('pi', RelatedOnlyFieldListFilter),
     )
-    search_fields = ['number', 'start_date', 'end_date', ]
+    search_fields = ['name', 'start_date', 'end_date', ]
 
 
 @admin.register(Story)

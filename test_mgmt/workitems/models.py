@@ -24,7 +24,7 @@ class Tag(OrgModel):
 class ProgramIncrement(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_program_increments')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -33,7 +33,7 @@ class Epic(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_epics')
     pi = models.ForeignKey(ProgramIncrement, null=True, on_delete=models.SET_NULL, related_name='epics')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
@@ -44,7 +44,7 @@ class Feature(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='work_item_features')
     epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
@@ -54,12 +54,12 @@ class Feature(OrgModel):
 class Sprint(OrgModel):
     pi = models.ForeignKey(ProgramIncrement, null=True, blank=True, on_delete=models.SET_NULL,
                            related_name='sprints')
-    number = models.IntegerField()
+    name = models.CharField(max_length=256)
     start_date = models.DateField(verbose_name='start date')
     end_date = models.DateField(verbose_name='end date')
 
     def __str__(self):
-        return "Sprint-" + str(self.number) + " for release " + str(self.pi.name if self.pi else "<unset>")
+        return "Sprint-" + str(self.name) + " for release " + str(self.pi.name if self.pi else "<unset>")
 
 
 class Story(OrgModel):

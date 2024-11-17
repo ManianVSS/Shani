@@ -13,30 +13,13 @@ from .serializers import SiteHolidaySerializer, LeaveSerializer
 WORK_DAYS_MASK = [1, 1, 1, 1, 1, 0, 0]
 
 
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def get_org_capacity_for_time_range(request):
-    if not request.method == 'GET':
-        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    if not (('org_group' in request.GET) and ('from' in request.GET) and ('to' in request.GET)):
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST,
-                            content='One of the parameters (org_group/from/to) missing')
-
-    try:
-        org_group = OrgGroup.objects.get(pk=request.query_params.get('org_group'))
-    except OrgGroup.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND, content='Could not find org_group passed')
-
-    from_date = datetime.strptime(request.query_params.get('from'), '%Y-%m-%d').date()
-    to_date = datetime.strptime(request.query_params.get('to'), '%Y-%m-%d').date()
-
-    org_group_participation_qs = EngineerOrgGroupParticipation.objects.filter(org_group=org_group)
-
+def get_capacity_data_for_org_group(org_group, from_date, to_date):
     work_days = numpy.busday_count(from_date,
                                    to_date + timedelta(days=1),
                                    weekmask=WORK_DAYS_MASK
                                    )
+
+    org_group_participation_qs = EngineerOrgGroupParticipation.objects.filter(org_group=org_group)
 
     total_capacity = 0
     engineer_data = {}
@@ -78,7 +61,34 @@ def get_org_capacity_for_time_range(request):
         'engineer_data': engineer_data,
     }
 
-    return Response(capacity_data)
+    return capacity_data
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_org_capacity_for_time_range(request):
+    if not request.method == 'GET':
+        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    if not (('org_group' in request.GET) and ('from' in request.GET) and ('to' in request.GET)):
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST,
+                            content='One of the parameters (org_group/from/to) missing')
+
+    try:
+        org_group = OrgGroup.objects.get(pk=request.query_params.get('org_group'))
+    except OrgGroup.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, content='Could not find org_group passed')
+
+    from_date = datetime.strptime(request.query_params.get('from'), '%Y-%m-%d').date()
+    to_date = datetime.strptime(request.query_params.get('to'), '%Y-%m-%d').date()
+
+    capacity_data_for_org_groups = {org_group.name: get_capacity_data_for_org_group(org_group, from_date, to_date)}
+
+    for transitive_sub_group in org_group.get_transitive_sub_groups():
+        capacity_data_for_org_groups[transitive_sub_group.name] = get_capacity_data_for_org_group(transitive_sub_group,
+                                                                                                  from_date, to_date)
+
+    return Response(capacity_data_for_org_groups)
 
 
 @api_view(['GET'])
