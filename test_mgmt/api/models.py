@@ -3,7 +3,6 @@ from django.db import models
 from django.db.models import Q, TextField
 
 from test_mgmt import settings
-from .decorators import RegisterModel
 from .storage import CustomFileSystemStorage
 
 

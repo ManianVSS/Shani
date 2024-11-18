@@ -68,11 +68,11 @@ INSTALLED_APPS = [
     'siteconfig',
     'requirements',
     'workitems',
+    'scheduler',
     'testdesign',
     'automation',
     'execution',
     'people',
-    # 'business',
     'program',
 ]
 

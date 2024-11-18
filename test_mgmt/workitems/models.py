@@ -16,7 +16,7 @@ class Attachment(OrgModel):
 class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='workitem_tags')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -68,7 +68,7 @@ class Story(OrgModel):
 
     sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, null=True, blank=True)
     feature = models.ForeignKey(Feature, null=True, on_delete=models.SET_NULL, related_name='stories')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
@@ -77,7 +77,7 @@ class Story(OrgModel):
 
 
 class Feedback(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)

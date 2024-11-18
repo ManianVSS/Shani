@@ -20,7 +20,7 @@ class Attachment(OrgModel):
 class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='test_tags')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -37,7 +37,7 @@ class TestCaseCategory(OrgModel):
                                   verbose_name='organization group', related_name='test_testcase_categories')
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
@@ -62,7 +62,7 @@ class TestCase(OrgModel):
     parent = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='testcases', verbose_name='test case category')
 
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 

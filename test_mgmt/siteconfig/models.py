@@ -78,7 +78,7 @@ class SiteSettings(OrgModel):
         verbose_name_plural = "site settings"
 
     sort_order = models.IntegerField(default=0)
-    name = models.CharField(default='Home', max_length=256, unique=True)
+    name = models.CharField(default='Home', max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     email = models.CharField(max_length=300, blank=True)

@@ -18,7 +18,7 @@ class Attachment(OrgModel):
 class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_tags')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256,)
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -26,7 +26,7 @@ class Tag(OrgModel):
 class Release(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_releases')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256,)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     properties = YAMLField(null=True, blank=True)
@@ -37,7 +37,7 @@ class Build(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_builds')
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='builds')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256,)
     type = models.CharField(max_length=256, null=True, blank=True)
     build_time = models.DateTimeField(null=True, blank=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -60,7 +60,7 @@ class Defect(OrgModel):
 class Run(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
     build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
     end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
 
@@ -128,7 +128,7 @@ class ReliabilityRun(OrgModel):
 
 
 class Environment(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     type = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)

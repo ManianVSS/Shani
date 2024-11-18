@@ -14,7 +14,7 @@ class Attachment(OrgModel):
 
 
 class Engineer(OrgModel):
-    employee_id = models.CharField(max_length=20, null=True, unique=True, verbose_name='employee id')
+    employee_id = models.CharField(max_length=20, null=True, blank=True, verbose_name='employee id')
     name = models.CharField(max_length=256, default='<unnamed>')
     auth_user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="engineer",
                                      verbose_name='authorization user')
@@ -115,7 +115,7 @@ class EngineerOrgGroupParticipationHistory(OrgModel):
 
 
 class Topic(OrgModel):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     parent_topic = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,

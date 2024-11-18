@@ -15,6 +15,7 @@ move api\migrations data\dbbackup\%fullstamp%
 move siteconfig\migrations data\dbbackup\%fullstamp%
 move requirements\migrations data\dbbackup\%fullstamp%
 move workitems\migrations data\dbbackup\%fullstamp%
+move scheduler\migrations data\dbbackup\%fullstamp%
 move testdesign\migrations data\dbbackup\%fullstamp%
 move automation\migrations data\dbbackup\%fullstamp%
 move execution\migrations data\dbbackup\%fullstamp%

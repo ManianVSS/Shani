@@ -7,7 +7,7 @@ from api.storage import CustomFileSystemStorage
 class ApplicationType(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_application_types')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -17,7 +17,7 @@ class Application(NotMutablePublishOrgModel):
                                   verbose_name='organization group', related_name='program_applications')
     application_type = models.ForeignKey(ApplicationType, on_delete=models.SET_NULL, blank=True, null=True,
                                          related_name='applications')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -27,7 +27,7 @@ class Release(NotMutablePublishOrgModel):
                                   verbose_name='organization group', related_name='program_releases')
     application = models.ForeignKey(Application, on_delete=models.SET_NULL, blank=True, null=True,
                                     related_name='releases')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     version = models.CharField(max_length=256)
     date = models.DateTimeField()
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -39,7 +39,7 @@ class Release(NotMutablePublishOrgModel):
 class ArtifactType(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_artifact_types')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -60,7 +60,7 @@ class Artifact(NotMutablePublishOrgModel):
 class DocumentType(NotMutablePublishOrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='program_document_types')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 

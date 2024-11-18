@@ -15,7 +15,7 @@ class Attachment(OrgModel):
 class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='requirement_tags')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -28,7 +28,7 @@ class FeatureCategory(OrgModel):
                                   verbose_name='organization group', related_name='feature_categories')
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -43,7 +43,7 @@ class Feature(OrgModel):
                                   verbose_name='organization group', related_name='requirement_features')
     parent = models.ForeignKey(FeatureCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='features', verbose_name='feature category')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
 
     description = models.TextField(null=True, blank=True)
@@ -61,7 +61,7 @@ class Feature(OrgModel):
 class UseCase(OrgModel):
     feature = models.ForeignKey(Feature, on_delete=models.SET_NULL, null=True, blank=True, related_name="use_cases")
 
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -80,7 +80,7 @@ class RequirementCategory(OrgModel):
                                   verbose_name='organization group', related_name='requirement_categories')
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -95,7 +95,7 @@ class Requirement(OrgModel):
                                   verbose_name='organization group', related_name='requirements')
     category = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                  related_name='requirements', verbose_name='category')
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, )
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='parent_requirement')
 
