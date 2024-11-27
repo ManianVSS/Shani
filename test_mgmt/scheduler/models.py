@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_yaml_field import YAMLField
 
 from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
@@ -74,6 +75,7 @@ class Request(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='request_attachments', blank=True)
 
 
+
 class Resource(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='resources')
@@ -85,6 +87,7 @@ class Resource(OrgModel):
     assigned_to = models.ForeignKey(Request, on_delete=models.SET_NULL, blank=True, null=True,
                                     verbose_name='assigned for request', related_name='resources')
     attachments = models.ManyToManyField(Attachment, related_name='resource_attachments', blank=True)
+    properties = YAMLField(null=True, blank=True)
 
 
 model_name_map = {

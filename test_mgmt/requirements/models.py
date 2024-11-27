@@ -58,6 +58,24 @@ class Feature(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='feature_attachments', blank=True)
 
 
+class UseCaseCategory(OrgModel):
+    class Meta:
+        verbose_name_plural = "usecase categories"
+
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='usecase_categories')
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='sub_categories')
+    name = models.CharField(max_length=256, )
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    tags = models.ManyToManyField(Tag, related_name='usecase_categories', blank=True)
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='requirements', blank=True, null=True,
+                                    verbose_name='File with details')
+    attachments = models.ManyToManyField(Attachment, related_name='usecase_category_attachments', blank=True)
+
+
 class UseCase(OrgModel):
     feature = models.ForeignKey(Feature, on_delete=models.SET_NULL, null=True, blank=True, related_name="use_cases")
 
@@ -116,6 +134,7 @@ class Requirement(OrgModel):
 
     additional_data = models.JSONField(null=True, blank=True)
 
+
 # TODO: Add user segment with use-case variations
 
 
@@ -124,6 +143,7 @@ model_name_map = {
     'Tag': Tag,
     'FeatureCategory': FeatureCategory,
     'Feature': Feature,
+    'UseCaseCategory': UseCaseCategory,
     'UseCase': UseCase,
     'RequirementCategory': RequirementCategory,
     'Requirement': Requirement,

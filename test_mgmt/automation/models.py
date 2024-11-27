@@ -1,13 +1,6 @@
-import io
 from http import HTTPStatus
 
-import cv2
-import pyotp
-import qrcode
-from django.core.files.base import ContentFile
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy
 
 from api.models import OrgModel, OrgGroup

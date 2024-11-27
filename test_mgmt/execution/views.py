@@ -203,14 +203,15 @@ class EnvironmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = EnvironmentSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoObjectPermissions]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'type', 'purpose', 'current_release', 'org_group', 'created_at',
-                       'updated_at', 'published', ]
+    ordering_fields = ['id', 'name', 'summary', 'type', 'assigned_to', 'purpose', 'current_release', 'org_group',
+                       'created_at', 'updated_at', 'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'type': string_fields_filter_lookups,
+        'assigned_to': fk_fields_filter_lookups,
         'purpose': string_fields_filter_lookups,
         'current_release': fk_fields_filter_lookups,
         'current_build': fk_fields_filter_lookups,

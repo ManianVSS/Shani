@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import Attachment, Tag, FeatureCategory, Feature, UseCase, RequirementCategory, Requirement
+from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, UseCase, RequirementCategory, \
+    Requirement
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -30,6 +31,13 @@ class FeatureSerializer(serializers.ModelSerializer):
                   'attachments', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
+class UseCaseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UseCaseCategory
+        fields = ['id', 'name', 'summary', 'description', 'parent', 'tags', 'details_file', 'attachments',
+                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+
+
 class UseCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UseCase
@@ -57,6 +65,7 @@ serializer_map = {
     Tag: TagSerializer,
     FeatureCategory: FeatureCategorySerializer,
     Feature: FeatureSerializer,
+    UseCaseCategory: UseCaseCategorySerializer,
     UseCase: UseCaseSerializer,
     RequirementCategory: RequirementCategorySerializer,
     Requirement: RequirementSerializer,

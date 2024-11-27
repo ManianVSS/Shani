@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Attachment, Tag, FeatureCategory, Feature, UseCase, RequirementCategory, Requirement
+from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, UseCase, RequirementCategory, \
+    Requirement
 
 
 @admin.register(Attachment)
@@ -32,6 +33,7 @@ class FeatureCategoryAdmin(CustomModelAdmin):
         ('parent', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
+    display_order = 5
 
 
 @admin.register(Feature)
@@ -44,6 +46,19 @@ class FeatureAdmin(CustomModelAdmin):
         ('parent', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'status', 'external_id', ]
+    display_order = 6
+
+
+@admin.register(UseCaseCategory)
+class UseCaseCategoryAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('tags', RelatedOnlyFieldListFilter),
+        ('parent', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'summary', 'description', ]
+    display_order = 1
 
 
 @admin.register(UseCase)
@@ -55,6 +70,7 @@ class UseCaseAdmin(CustomModelAdmin):
         ('feature', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'status', ]
+    display_order = 2
 
 
 @admin.register(RequirementCategory)
@@ -66,6 +82,7 @@ class RequirementCategoryAdmin(CustomModelAdmin):
         ('parent', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', ]
+    display_order = 3
 
 
 @admin.register(Requirement)
@@ -79,3 +96,4 @@ class RequirementAdmin(CustomModelAdmin):
         'cost',
     )
     search_fields = ['name', 'summary', 'description', 'status', 'external_id', ]
+    display_order = 4

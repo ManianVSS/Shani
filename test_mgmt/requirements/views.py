@@ -6,9 +6,10 @@ from api.model_creation import create_requirement_model
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, \
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups, compare_fields_filter_lookups, enum_fields_filter_lookups
-from .models import Attachment, Tag, FeatureCategory, Feature, UseCase, RequirementCategory, Requirement
+from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, UseCase, RequirementCategory, \
+    Requirement
 from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
-    UseCaseSerializer, RequirementCategorySerializer, RequirementSerializer
+    UseCaseCategorySerializer, UseCaseSerializer, RequirementCategorySerializer, RequirementSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -88,6 +89,29 @@ class FeatureViewSet(ShaniOrgGroupViewSet):
         'status': enum_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'external_id': string_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+
+    }
+
+
+class UseCaseCategoryViewSet(ShaniOrgGroupViewSet):
+    queryset = UseCaseCategory.objects.all()
+    serializer_class = UseCaseCategorySerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'parent', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
+                       'is_public', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'parent': fk_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'tags': exact_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,

@@ -106,6 +106,7 @@ class ReliabilityRunAdmin(CustomModelAdmin):
 @admin.register(Environment)
 class EnvironmentAdmin(CustomModelAdmin):
     list_filter = (
+        ('assigned_to', RelatedOnlyFieldListFilter),
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('current_release', RelatedOnlyFieldListFilter),

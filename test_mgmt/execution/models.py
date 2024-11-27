@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -18,7 +19,7 @@ class Attachment(OrgModel):
 class Tag(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_tags')
-    name = models.CharField(max_length=256,)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -26,7 +27,7 @@ class Tag(OrgModel):
 class Release(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_releases')
-    name = models.CharField(max_length=256,)
+    name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     properties = YAMLField(null=True, blank=True)
@@ -37,7 +38,7 @@ class Build(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_builds')
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='builds')
-    name = models.CharField(max_length=256,)
+    name = models.CharField(max_length=256, )
     type = models.CharField(max_length=256, null=True, blank=True)
     build_time = models.DateTimeField(null=True, blank=True)
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -132,6 +133,8 @@ class Environment(OrgModel):
     summary = models.CharField(max_length=256, null=True, blank=True)
     type = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True,
+                                    verbose_name='assigned for user', related_name='environments')
     purpose = models.CharField(max_length=1024, null=True, blank=True)
     details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=True, null=True,
                                     verbose_name='File with details')

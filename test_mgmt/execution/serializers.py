@@ -63,8 +63,9 @@ class ReliabilityRunSerializer(serializers.ModelSerializer):
 class EnvironmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Environment
-        fields = ['id', 'name', 'summary', 'type', 'description', 'purpose', 'details_file', 'attachments',
-                  'current_release', 'current_build', 'properties', 'org_group', 'created_at', 'updated_at',
+        fields = ['id', 'name', 'summary', 'type', 'description', 'assigned_to', 'purpose', 'details_file',
+                  'attachments', 'current_release', 'current_build', 'properties', 'org_group', 'created_at',
+                  'updated_at',
                   'published', ]
 
 
