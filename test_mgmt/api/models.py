@@ -360,6 +360,18 @@ class PythonCodeField(TextField):
     pass
 
 
+class XMLField(TextField):
+    pass
+
+
+class GherkinField(TextField):
+    pass
+
+
+class LuaField(TextField):
+    pass
+
+
 model_name_map = {
     'Configuration': Configuration,
     'OrgGroup': OrgGroup,

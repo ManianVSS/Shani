@@ -82,10 +82,73 @@ class MockAPI(OrgModel):
     http_method = models.CharField(max_length=32, choices=HTTPMethod.choices, default=HTTPMethod.ALL)
 
 
+class ApplicationUnderTest(OrgModel):
+    class Meta:
+        verbose_name_plural = "applications under test"
+
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='api_applications_under_test')
+    name = models.CharField(max_length=256)
+    details = models.TextField(null=True, blank=True)
+    # start_page = models.ForeignKey("ApplicationPage", on_delete=models.SET_NULL, blank=True, null=True,
+    #                                verbose_name='organization group', related_name='application_where_start_page')
+    attachments = models.ManyToManyField(Attachment, related_name='application_attachments', blank=True)
+
+
+class ApplicationPage(OrgModel):
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='api_application_pages')
+    application = models.ForeignKey(ApplicationUnderTest, on_delete=models.SET_NULL, blank=True, null=True,
+                                    related_name='pages')
+    name = models.CharField(max_length=256)
+    details = models.TextField(null=True, blank=True)
+    # check_element = models.ForeignKey("Element", on_delete=models.SET_NULL, blank=True, null=True,
+    #                                   verbose_name='organization group', related_name='page_where_validity_check')
+    attachments = models.ManyToManyField(Attachment, related_name='page_attachments', blank=True)
+
+
+class Element(OrgModel):
+    class ElementType(models.TextChoices):
+        BUTTON = 'BUTTON', gettext_lazy('button'),
+        LABEL = 'LABEL', gettext_lazy('label'),
+        CHECK_BOX = 'CHECK_BOX', gettext_lazy('check box'),
+        TEXT_BOX = 'TEXT_BOX', gettext_lazy('text box'),
+        IFRAME = 'IFRAME', gettext_lazy('iframe'),
+        SHADOW_DOM = 'SHADOW_DOM', gettext_lazy('shadow dom'),
+        GENERIC = 'GENERIC', gettext_lazy('generic'),
+
+    class LocatorType(models.TextChoices):
+        ID = 'ID', gettext_lazy('id'),
+        NAME = 'NAME', gettext_lazy('name'),
+        CLASS_NAME = 'CLASS_NAME', gettext_lazy('class name'),
+        CSS = 'CSS', gettext_lazy('css'),
+        TAG_NAME = 'TAG_NAME', gettext_lazy('tag name'),
+        LINK_TEXT = 'LINK_TEXT', gettext_lazy('link text'),
+        PARTIAL_LINK_TEXT = 'PARTIAL_LINK_TEXT', gettext_lazy('partial link text'),
+        XPATH = 'XPATH', gettext_lazy('xpath'),
+        CUSTOM = 'CUSTOM', gettext_lazy('custom'),
+
+    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='organization group', related_name='api_elements')
+    page = models.ForeignKey(ApplicationPage, on_delete=models.SET_NULL, blank=True, null=True,
+                             related_name='elements')
+    name = models.CharField(max_length=256)
+    element_type = models.CharField(max_length=32, choices=ElementType.choices, default=ElementType.GENERIC)
+    details = models.TextField(null=True, blank=True)
+    locator_type = models.CharField(max_length=32, choices=LocatorType.choices, default=LocatorType.CSS)
+    locator_value = models.TextField(null=True, blank=True)
+    locator_file = models.FileField(storage=CustomFileSystemStorage, upload_to='automation', blank=True, null=True,
+                                    verbose_name='File with details')
+    attachments = models.ManyToManyField(Attachment, related_name='element_attachments', blank=True)
+
+
 model_name_map = {
     'Attachment': Attachment,
     'Tag': Tag,
     'Step': Step,
     'Properties': Properties,
     'MockAPI': MockAPI,
+    'Application': ApplicationUnderTest,
+    'Page': ApplicationPage,
+    'Element': Element,
 }

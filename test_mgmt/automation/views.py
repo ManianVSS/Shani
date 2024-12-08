@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, enum_fields_filter_lookups
-from .models import Attachment, Tag, Step, Properties, MockAPI
-from .serializers import AttachmentSerializer, TagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer
+from .models import Attachment, Tag, Step, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
+from .serializers import AttachmentSerializer, TagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer, \
+    ApplicationUnderTestSerializer, ApplicationPageSerializer, ElementSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -159,3 +160,63 @@ class MockAPIRoutingViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         return self.use_mock_api_route(request, pk, MockAPI.HTTPMethod.DELETE)
 
+
+class ApplicationUnderTestViewSet(ShaniOrgGroupViewSet):
+    queryset = ApplicationUnderTest.objects.all()
+    serializer_class = ApplicationUnderTestSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = ['name', 'details', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        # 'start_page': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class ApplicationPageViewSet(ShaniOrgGroupViewSet):
+    queryset = ApplicationPage.objects.all()
+    serializer_class = ApplicationPageSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = ['name', 'details', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'application': fk_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        # 'check_element': fk_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class ElementViewSet(ShaniOrgGroupViewSet):
+    queryset = Element.objects.all()
+    serializer_class = ElementSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = ['name', 'details', 'locator_value', ]
+    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'page': fk_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
+        'element_type': enum_fields_filter_lookups,
+        'locator_type': enum_fields_filter_lookups,
+        'locator_value': string_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }

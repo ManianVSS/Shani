@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Step, Attachment, Tag, Properties, MockAPI
+from .models import Step, Attachment, Tag, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
 
 
 @admin.register(Attachment)
@@ -32,6 +32,7 @@ class StepAdmin(CustomModelAdmin):
         'status',
     )
     search_fields = ['name', 'summary', 'description', ]
+    display_order = 1
 
     # def get_form(self, request, obj=None, **kwargs):
     #     form = super().get_form(request, obj, **kwargs)
@@ -47,6 +48,7 @@ class PropertiesAdmin(CustomModelAdmin):
         ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'details', ]
+    display_order = 2
 
 
 @admin.register(MockAPI)
@@ -57,4 +59,40 @@ class MockAPIAdmin(CustomModelAdmin):
         'http_method',
     )
     search_fields = ['name', 'summary', ]
+    display_order = 3
 
+
+@admin.register(ApplicationUnderTest)
+class ApplicationUnderTestAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published', 'is_public',
+        ('org_group', RelatedOnlyFieldListFilter),
+        # ('start_page', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'details', ]
+    display_order = 4
+
+
+@admin.register(ApplicationPage)
+class ApplicationPageAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published', 'is_public',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('application', RelatedOnlyFieldListFilter),
+        # ('check_element', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['name', 'details', ]
+    display_order = 5
+
+
+@admin.register(Element)
+class ElementAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published', 'is_public',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('page', RelatedOnlyFieldListFilter),
+        'element_type',
+        'locator_type',
+    )
+    search_fields = ['name', 'details', ]
+    display_order = 6

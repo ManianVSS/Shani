@@ -26,7 +26,7 @@ class TestCaseCategorySerializer(serializers.ModelSerializer):
 class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCase
-        fields = ['id', 'name', 'summary', 'parent', 'description', 'status', 'type', 'tags', 'external_id',
+        fields = ['id', 'name', 'summary', 'parent', 'status', 'type', 'tags', 'external_id', 'specification',
                   'details_file', 'use_cases', 'attachments', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
 

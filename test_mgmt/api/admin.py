@@ -7,6 +7,7 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
+from django.db.models import TextField
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django_ace import AceWidget
@@ -15,7 +16,8 @@ from django_yaml_field import YAMLField
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
 
-from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, PythonCodeField
+from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, PythonCodeField, XMLField, \
+    GherkinField, LuaField
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -26,6 +28,9 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
         YAMLField: {"widget": AceWidget(mode="yaml")},
         JSONField: {"widget": AceWidget(mode="json")},
         PythonCodeField: {"widget": AceWidget(mode="python")},
+        XMLField: {"widget": AceWidget(mode="python")},
+        GherkinField: {"widget": AceWidget(mode="python")},
+        LuaField: {"widget": AceWidget(mode="python")},
     }
 
     # ordering = ('-id',)
@@ -35,7 +40,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     # noinspection PyProtectedMember
     def get_list_display(self, request):
         return [f.name for f in self.model._meta.get_fields() if f.concrete and
-                not (f.many_to_many or f.one_to_many)]
+                not (f.many_to_many or f.one_to_many or isinstance(f, TextField))]
         # return [
         #     f.name if f.model != self.model else None
         #     for f in self.model._meta.get_fields()

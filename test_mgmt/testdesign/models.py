@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from api.enumerations import ReviewStatus
-from api.models import OrgModel, OrgGroup
+from api.models import OrgModel, OrgGroup, GherkinField
 from api.storage import CustomFileSystemStorage
 from requirements.models import UseCase
 
@@ -64,13 +64,14 @@ class TestCase(OrgModel):
 
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
 
     status = models.CharField(max_length=11, choices=ReviewStatus.choices, default=ReviewStatus.DRAFT)
     type = models.CharField(max_length=11, choices=TestType.choices, default=TestType.MANUAL)
 
     tags = models.ManyToManyField(Tag, related_name='test_cases', blank=True)
     external_id = models.CharField(max_length=256, blank=True, null=True)
+
+    specification = GherkinField(null=True, blank=True)
 
     details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='test_design', blank=True, null=True,
                                     verbose_name='File with details')
