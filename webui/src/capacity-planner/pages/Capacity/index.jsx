@@ -50,60 +50,133 @@ const Capacity = () => {
       alert.error("Please choose valid Org Group");
     }
   };
-  const rows = [];
-  for (const key in capacityData["engineer_data"]) {
-    rows.push(
-      <tr key={key}>
-        <td>{capacityData["engineer_data"][key]["name"]}</td>
-        <td>{capacityData["engineer_data"][key]["available_days"]}</td>
-        <td>{capacityData["engineer_data"][key]["capacity"].toFixed(2)}</td>
-        <td>{capacityData["engineer_data"][key]["employee_id"]}</td>
-        <td>
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 200, hide: 400 }}
-            overlay={
-              <Tooltip id="button-tooltip">
-                {capacityData["engineer_data"][key]["leave_plans"].map(
-                  (item) => {
-                    return (
-                      <p key={item.start_date}>
-                        Start-{item.start_date} to End-{item.end_date}
-                      </p>
-                    );
-                  }
-                )}
-              </Tooltip>
-            }
-          >
-            <p>{capacityData["engineer_data"][key]["leave_count"]}</p>
-          </OverlayTrigger>
-        </td>
-        <td>{capacityData["engineer_data"][key]["participation_capacity"]}</td>
-        <td>
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 200, hide: 400 }}
-            overlay={
-              <Tooltip id="button-tooltip">
-                {capacityData["engineer_data"][key]["site_holidays"].map(
-                  (item) => {
-                    return (
-                      <p key={item.name}>
-                        {item.name} : {item.date}
-                      </p>
-                    );
-                  }
-                )}
-              </Tooltip>
-            }
-          >
-            <p>{capacityData["engineer_data"][key]["site_holiday_count"]}</p>
-          </OverlayTrigger>
-        </td>
-      </tr>
-    );
+  const orgs = [];
+
+  for (const orgkey in capacityData) {
+    orgs.push({ name: orgkey, data: capacityData[orgkey] });
   }
+
+  const getRowData = (capacityData) => {
+    const rowsData = [];
+    for (const key in capacityData["engineer_data"]) {
+      rowsData.push(
+        <tr key={key}>
+          <td>{capacityData["engineer_data"][key]["name"]}</td>
+          <td>{capacityData["engineer_data"][key]["available_days"]}</td>
+          <td>{capacityData["engineer_data"][key]["capacity"].toFixed(2)}</td>
+          <td>{capacityData["engineer_data"][key]["employee_id"]}</td>
+          <td>
+            <OverlayTrigger
+              placement="top"
+              delay={{ show: 200, hide: 400 }}
+              overlay={
+                <Tooltip id="button-tooltip">
+                  {capacityData["engineer_data"][key]["leave_plans"].map(
+                    (item) => {
+                      return (
+                        <p key={item.start_date}>
+                          Start-{item.start_date} to End-{item.end_date}
+                        </p>
+                      );
+                    }
+                  )}
+                </Tooltip>
+              }
+            >
+              <p>{capacityData["engineer_data"][key]["leave_count"]}</p>
+            </OverlayTrigger>
+          </td>
+          <td>
+            {capacityData["engineer_data"][key]["participation_capacity"]}
+          </td>
+          <td>
+            <OverlayTrigger
+              placement="top"
+              delay={{ show: 200, hide: 400 }}
+              overlay={
+                <Tooltip id="button-tooltip">
+                  {capacityData["engineer_data"][key]["site_holidays"].map(
+                    (item) => {
+                      return (
+                        <p key={item.name}>
+                          {item.name} : {item.date}
+                        </p>
+                      );
+                    }
+                  )}
+                </Tooltip>
+              }
+            >
+              <p>{capacityData["engineer_data"][key]["site_holiday_count"]}</p>
+            </OverlayTrigger>
+          </td>
+        </tr>
+      );
+    }
+    return rowsData;
+  };
+
+  const allData = orgs.map((item) => {
+    return (
+      <div>
+        <div
+          style={{
+            backgroundColor: "#404040",
+            color: "#fff",
+            borderRadius: "15px",
+            fontSize: "19px",
+            fontWeight: "bold",
+            textAlign: "center",
+            marginBottom: "10px",
+          }}
+        >
+          {item.name}
+        </div>
+        <Table
+          bordered
+          size="sm"
+          className={
+            window.localStorage.getItem("testCenterTheme") === "dark"
+              ? "dark-table"
+              : "light-table"
+          }
+        >
+          <tbody>
+            <tr>
+              <td>Total Work Days</td>
+              <td>{item.data.work_days}</td>
+            </tr>
+            <tr>
+              <td>Total Org Group Capacity(in Person days)</td>
+              <td>{item.data.total_capacity?.toFixed(2)}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <Table
+          bordered
+          className={
+            window.localStorage.getItem("testCenterTheme") === "dark"
+              ? "dark-table"
+              : "light-table"
+          }
+        >
+          <thead>
+            <tr>
+              <th>Engineer Name</th>
+              <th>Available Days</th>
+              <th>Capacity</th>
+              <th>Employee ID</th>
+              <th>Leave Count</th>
+              <th>Participation Capacity</th>
+              <th>Site Holiday Count</th>
+            </tr>
+          </thead>
+          <tbody>{getRowData(item.data)}</tbody>
+        </Table>
+      </div>
+    );
+  });
+
   const setDatesForSelectedSprint = (sprintID) => {
     if (sprintID !== "Choose...") {
       axiosClientForCapacity
@@ -114,9 +187,6 @@ const Capacity = () => {
           },
         })
         .then((response) => {
-          console.log(new Date(response.data.start_date));
-          console.log(new Date(response.data.end_date));
-          console.log(startDate + "-" + endDate);
           setStartDate(new Date(response.data.start_date));
           setEndDate(new Date(response.data.end_date));
         });
@@ -229,7 +299,7 @@ const Capacity = () => {
                 {sprintData.map((item) => {
                   return (
                     <option value={item.id} key={item.id}>
-                      PI-{item.pi}-{item.number}
+                      PI-{item.pi}-{item.name}
                     </option>
                   );
                 })}
@@ -248,47 +318,7 @@ const Capacity = () => {
         </Form>
         {show ? (
           <>
-            <Table
-              bordered
-              size="sm"
-              className={
-                window.localStorage.getItem("testCenterTheme") === "dark"
-                  ? "dark-table"
-                  : "light-table"
-              }
-            >
-              <tbody>
-                <tr>
-                  <td>Total Work Days</td>
-                  <td>{capacityData.work_days}</td>
-                </tr>
-                <tr>
-                  <td>Total Org Group Capacity(in Person days)</td>
-                  <td>{capacityData.total_capacity?.toFixed(2)}</td>
-                </tr>
-              </tbody>
-            </Table>
-            <Table
-              bordered
-              className={
-                window.localStorage.getItem("testCenterTheme") === "dark"
-                  ? "dark-table"
-                  : "light-table"
-              }
-            >
-              <thead>
-                <tr>
-                  <th>Engineer Name</th>
-                  <th>Available Days</th>
-                  <th>Capacity</th>
-                  <th>Employee ID</th>
-                  <th>Leave Count</th>
-                  <th>Participation Capacity</th>
-                  <th>Site Holiday Count</th>
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </Table>
+            <div style={{ marginTop: "10px" }}>{allData}</div>
           </>
         ) : (
           <></>
