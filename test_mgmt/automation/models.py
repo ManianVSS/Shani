@@ -133,6 +133,8 @@ class Element(OrgModel):
     page = models.ForeignKey(ApplicationPage, on_delete=models.SET_NULL, blank=True, null=True,
                              related_name='elements')
     name = models.CharField(max_length=256)
+    containing_element = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL,
+                                           related_name="contained_elements", verbose_name='containing element')
     element_type = models.CharField(max_length=32, choices=ElementType.choices, default=ElementType.GENERIC)
     details = models.TextField(null=True, blank=True)
     locator_type = models.CharField(max_length=32, choices=LocatorType.choices, default=LocatorType.CSS)

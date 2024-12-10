@@ -53,8 +53,9 @@ class ApplicationPageSerializer(serializers.ModelSerializer):
 class ElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Element
-        fields = ['id', 'page', 'name', 'element_type', 'details', 'locator_type', 'locator_value', 'locator_file',
-                  'attachments', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = ['id', 'page', 'name', 'containing_element', 'element_type', 'details', 'locator_type',
+                  'locator_value', 'locator_file', 'attachments', 'org_group', 'created_at', 'updated_at', 'published',
+                  'is_public', ]
 
 
 serializer_map = {

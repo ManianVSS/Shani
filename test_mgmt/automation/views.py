@@ -211,6 +211,7 @@ class ElementViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'page': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
+        'containing_element': fk_fields_filter_lookups,
         'element_type': enum_fields_filter_lookups,
         'locator_type': enum_fields_filter_lookups,
         'locator_value': string_fields_filter_lookups,

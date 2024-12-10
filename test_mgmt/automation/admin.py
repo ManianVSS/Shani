@@ -91,6 +91,7 @@ class ElementAdmin(CustomModelAdmin):
         'created_at', 'updated_at', 'published', 'is_public',
         ('org_group', RelatedOnlyFieldListFilter),
         ('page', RelatedOnlyFieldListFilter),
+        ('containing_element', RelatedOnlyFieldListFilter),
         'element_type',
         'locator_type',
     )

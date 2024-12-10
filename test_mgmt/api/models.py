@@ -373,6 +373,7 @@ class LuaField(TextField):
 
 
 model_name_map = {
+    # User and Group modeles are directly mapped in the data_loader
     'Configuration': Configuration,
     'OrgGroup': OrgGroup,
     'Attachment': Attachment,
