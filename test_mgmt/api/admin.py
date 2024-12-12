@@ -25,12 +25,12 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
     readonly_fields = ('id',)
     display_order = 999
     formfield_overrides = {
-        YAMLField: {"widget": AceWidget(mode="yaml")},
-        JSONField: {"widget": AceWidget(mode="json")},
-        PythonCodeField: {"widget": AceWidget(mode="python")},
-        XMLField: {"widget": AceWidget(mode="python")},
-        GherkinField: {"widget": AceWidget(mode="python")},
-        LuaField: {"widget": AceWidget(mode="python")},
+        YAMLField: {"widget": AceWidget(mode="yaml", width="100%", height="500px")},
+        JSONField: {"widget": AceWidget(mode="json", width="100%", height="500px")},
+        PythonCodeField: {"widget": AceWidget(mode="python", width="100%", height="500px")},
+        XMLField: {"widget": AceWidget(mode="xml", width="100%", height="500px")},
+        GherkinField: {"widget": AceWidget(mode="gherkin", width="100%", height="500px")},
+        LuaField: {"widget": AceWidget(mode="lua", width="100%", height="500px")},
     }
 
     # ordering = ('-id',)
