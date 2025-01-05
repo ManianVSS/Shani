@@ -7,9 +7,11 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     string_fields_filter_lookups, datetime_fields_filter_lookups, compare_fields_filter_lookups, \
     exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, enum_fields_filter_lookups
 from . import ipte_util
-from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord, Build
+from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord, Build, \
+    ReliabilityIteration
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
-    ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer, BuildSerializer
+    ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer, BuildSerializer, \
+    ReliabilityIterationSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -172,7 +174,7 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
     serializer_class = ReliabilityRunSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
+    ordering_fields = ['id', 'build', 'name', 'type', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                        'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
                        'targetIPTE', 'ipte', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
@@ -182,6 +184,7 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'build': fk_fields_filter_lookups,
         'release__name': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
+        'type': enum_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
         'modified_time': datetime_fields_filter_lookups,
         'testName': string_fields_filter_lookups,
@@ -189,6 +192,30 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'testEnvironmentName': string_fields_filter_lookups,
         'status': enum_fields_filter_lookups,
         'targetIPTE': compare_fields_filter_lookups,
+        'incidents': exact_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class ReliabilityIterationViewSet(ShaniOrgGroupViewSet):
+    queryset = ReliabilityIteration.objects.all()
+    serializer_class = ReliabilityIterationSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'run', 'index', 'status', 'start_time', 'end_time', 'org_group', 'created_at',
+                       'updated_at', 'published', 'is_public', ]
+    ordering = ['run', 'index']
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'run': fk_fields_filter_lookups,
+        'index': compare_fields_filter_lookups,
+        'status': enum_fields_filter_lookups,
+        'start_time': datetime_fields_filter_lookups,
+        'end_time': datetime_fields_filter_lookups,
         'incidents': exact_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,

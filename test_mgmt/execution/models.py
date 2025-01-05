@@ -87,19 +87,26 @@ class ExecutionRecord(OrgModel):
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
 
 
+class ReliabilityRunType(models.TextChoices):
+    GROWTH = 'GROWTH', _('Growth'),
+    LONGEVITY = 'LONGEVITY', _('Longevity'),
+    CHAOS = 'CHAOS', _('Choas'),
+    DEMONSTRATION = 'DEMONSTRATION', _('Demonstration'),
+
+
 class ReliabilityRunStatus(models.TextChoices):
     PENDING = 'PENDING', _('Pending execution'),
     IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
     COMPLETED = 'COMPLETED', _('Completed'),
 
 
-# noinspection PyTypeChecker
 class ReliabilityRun(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
                                 related_name='reliability_runs')
 
     build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL, related_name='reliability_runs')
     name = models.CharField(max_length=256, null=True, blank=True)
+    type = models.CharField(max_length=13, choices=ReliabilityRunType.choices, default=ReliabilityRunType.GROWTH)
 
     start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
     modified_time = models.DateTimeField(verbose_name='modified time', null=True, blank=True)
@@ -108,8 +115,7 @@ class ReliabilityRun(OrgModel):
     testEnvironmentType = models.CharField(max_length=200, null=True, blank=True, verbose_name='test environment type')
     testEnvironmentName = models.CharField(max_length=200, null=True, blank=True, verbose_name='test environment name')
 
-    status = models.CharField(max_length=11, choices=ReliabilityRunStatus.choices,
-                              default=ReliabilityRunStatus.PENDING)
+    status = models.CharField(max_length=11, choices=ReliabilityRunStatus.choices, default=ReliabilityRunStatus.PENDING)
 
     totalIterationCount = models.IntegerField(null=True, blank=True, verbose_name='total iteration count')
     passedIterationCount = models.IntegerField(null=True, blank=True, verbose_name='passed iteration count')
@@ -119,13 +125,34 @@ class ReliabilityRun(OrgModel):
     incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
 
     def __str__(self):
-        return str(self.name) + ": " + str(self.testName) + ": " + str(self.release.name) + ": " + str(self.build)
+        return str(self.name) + ": " + str(self.testName) + ": " + str(
+            self.release.name if self.release else "<unknown release>") + ": " + str(self.build)
 
+    # noinspection PyTypeChecker
     def recalculate_ipte(self):
         self.ipte = -1.0
         if self.incidentCount and self.totalIterationCount:
             if self.totalIterationCount > 0:
                 self.ipte = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
+
+
+class ReliabilityIterationStatus(models.TextChoices):
+    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
+    PASSED = 'PASSED', _('Passed'),
+    FAILED = 'FAILED', _('Failed'),
+    ERROR = 'ERROR', _('Error'),
+
+
+class ReliabilityIteration(OrgModel):
+    run = models.ForeignKey(ReliabilityRun, null=True, blank=True, on_delete=models.SET_NULL,
+                            related_name='reliability_iterations')
+    index = models.IntegerField(null=True, blank=True)
+    status = models.CharField(max_length=11, choices=ReliabilityIterationStatus.choices,
+                              default=ReliabilityIterationStatus.IN_PROGRESS)
+    start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
+    end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
+    results = models.JSONField(null=True, blank=True)
+    incidents = models.ManyToManyField(Defect, related_name='reliability_iterations', blank=True)
 
 
 class Environment(OrgModel):
@@ -167,5 +194,6 @@ model_name_map = {
     'Run': Run,
     'ExecutionRecord': ExecutionRecord,
     'ReliabilityRun': ReliabilityRun,
+    'ReliabilityIteration': ReliabilityIteration,
     'Environment': Environment,
 }

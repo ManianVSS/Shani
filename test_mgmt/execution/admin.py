@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 from api.admin import CustomModelAdmin
-from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect, Build
+from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect, Build, \
+    ReliabilityIteration
 
 
 @admin.register(Attachment)
@@ -92,15 +93,29 @@ class ReliabilityRunAdmin(CustomModelAdmin):
         'status',
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),
-        'build',
+        'type',
         'testName',
         'testEnvironmentType',
         'testEnvironmentName',
-        'incidents',
+        ('incidents', RelatedOnlyFieldListFilter),
         'start_time',
         'modified_time',
     )
     search_fields = ['name', 'build', 'testName', 'testEnvironmentName', 'targetIPTE', 'ipte', ]
+
+
+@admin.register(ReliabilityIteration)
+class ReliabilityIterationAdmin(CustomModelAdmin):
+    list_filter = (
+        'published',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('run', RelatedOnlyFieldListFilter),
+        'status',
+        'start_time',
+        'end_time',
+        ('incidents', RelatedOnlyFieldListFilter),
+    )
+    search_fields = ['results', ]
 
 
 @admin.register(Environment)

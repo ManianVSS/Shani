@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect, Build
+from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect, Build, \
+    ReliabilityIteration
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -54,10 +55,17 @@ class ExecutionRecordSerializer(serializers.ModelSerializer):
 class ReliabilityRunSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReliabilityRun
-        fields = ['id', 'build', 'name', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
+        fields = ['id', 'build', 'name', 'type', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                   'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
                   'targetIPTE', 'ipte', 'incidents', 'release', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
+
+
+class ReliabilityIterationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReliabilityIteration
+        fields = ['id', 'run', 'index', 'status', 'start_time', 'end_time', 'results', 'incidents', 'org_group',
+                  'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class EnvironmentSerializer(serializers.ModelSerializer):
@@ -78,5 +86,6 @@ serializer_map = {
     Run: RunSerializer,
     ExecutionRecord: ExecutionRecordSerializer,
     ReliabilityRun: ReliabilityRunSerializer,
+    ReliabilityIteration: ReliabilityIterationSerializer,
     Environment: EnvironmentSerializer,
 }
