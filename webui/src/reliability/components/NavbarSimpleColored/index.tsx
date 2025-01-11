@@ -7,8 +7,6 @@ import {
   IconCalendar,
   IconTruckReturn,
   IconLogout,
-  IconDatabaseImport,
-  IconAlarm,
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { authState } from "../../../state/authData";
@@ -20,7 +18,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     navbar: {
       backgroundColor: theme.fn.variant({
         variant: "filled",
-        color: theme.primaryColor,
+        color: "cyan",
       }).background,
     },
 
@@ -67,8 +65,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
       "&:hover": {
         backgroundColor: theme.fn.lighten(
-          theme.fn.variant({ variant: "filled", color: theme.primaryColor })
-            .background!,
+          theme.fn.variant({ variant: "filled", color: "cyan" }).background!,
           0.1
         ),
       },
@@ -84,8 +81,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     linkActive: {
       "&, &:hover": {
         backgroundColor: theme.fn.lighten(
-          theme.fn.variant({ variant: "filled", color: theme.primaryColor })
-            .background!,
+          theme.fn.variant({ variant: "filled", color: "cyan" }).background!,
           0.15
         ),
         [`& .${icon}`]: {
@@ -97,19 +93,20 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "/capacity-planner/", label: "HOME", icon: IconHome },
-  {
-    link: "/capacity-planner/capacity",
-    label: "CAPACITY VIEW",
-    icon: IconBook,
-  },
-  {
-    link: "/capacity-planner/engineer-availability",
-    label: "ENGINEER VIEW",
-    icon: IconUser,
-  },
-  { link: "/capacity-planner/leaves", label: "LEAVES", icon: IconAlarm },
-  { link: "/capacity-planner/holidays", label: "HOLIDAYS", icon: IconCalendar },
+  { link: "/reliability", label: "HOME", icon: IconHome },
+  { link: "/reliability/monitoring", label: "MONITORING", icon: IconBook },
+  // {
+  //   link: "/capacity-planner/capacity",
+  //   label: "CAPACITY VIEW",
+  //   icon: IconBook,
+  // },
+  // {
+  //   link: "/capacity-planner/engineer-availability",
+  //   label: "ENGINEER VIEW",
+  //   icon: IconUser,
+  // },
+  // { link: "/capacity-planner/leaves", label: "LEAVES", icon: IconCalendar },
+  // { link: "", label: "Databases", icon: IconDatabaseImport },
   // { link: "", label: "Authentication", icon: Icon2fa },
   // { link: "", label: "Other Settings", icon: IconSettings },
 ];
@@ -151,7 +148,7 @@ export function NavbarSimpleColored() {
             {/* <MantineLogo size={28} inverted /> */}
 
             <h5 style={{ color: "white" }}>
-              <b>CAPACITY PLANNER</b>
+              <b>RELIABILITY DASHBOARD</b>
             </h5>
             {/* <Code className={classes.version}>v1.0</Code> */}
           </Group>

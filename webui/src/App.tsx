@@ -31,6 +31,12 @@ import RequirementLayout from "./components/RequirementLayout";
 import UseCases from "./pages/Requirement/UseCases";
 import IndividualReqComponent from "./pages/Requirement/IndividualReqComponent";
 import Invoker from "./pages/Invoker";
+import { ReliabilityPrivateRoute } from "./reliability/ReliabilityPrivateRoute";
+import ReliabilityLayout from "./reliability/components/ReliabilityLayout";
+import ReliabilityHome from "./reliability/pages/ReliabilityHome";
+import MonitoringDashboard from "./reliability/pages/MonitoringDasboard";
+import ReliRun from "./reliability/pages/ReliRun";
+import Holidays from "./capacity-planner/pages/Holidays";
 
 interface customLinks {
   label: string;
@@ -47,7 +53,6 @@ const options = {
 
 export default function App() {
   const mode = useRecoilValue(colorScheme);
-
   const [nav, setNav] = useRecoilState(globalNavData);
   const [allPages, setAllPages] = useRecoilState(allPagesData);
   function getItemsFromArray(
@@ -228,6 +233,46 @@ export default function App() {
               <Route
                 path="/capacity-planner/leaves"
                 element={<CapacityLayout page={<Leaves />} auth={true} />}
+              />
+            </Route>
+            <Route
+              path="/capacity-planner/holidays"
+              element={<CapacityPrivateRoute />}
+            >
+              <Route
+                path="/capacity-planner/holidays"
+                element={<CapacityLayout page={<Holidays />} auth={true} />}
+              />
+            </Route>
+            <Route path="/reliability" element={<ReliabilityPrivateRoute />}>
+              <Route
+                path="/reliability"
+                element={
+                  <ReliabilityLayout page={<ReliabilityHome />} auth={true} />
+                }
+              />
+            </Route>
+            <Route
+              path="/reliability/monitoring"
+              element={<ReliabilityPrivateRoute />}
+            >
+              <Route
+                path="/reliability/monitoring"
+                element={
+                  <ReliabilityLayout
+                    page={<MonitoringDashboard />}
+                    auth={true}
+                  />
+                }
+              />
+            </Route>
+            <Route
+              path="/reliability/monitoring/:relirunID"
+              element={<ReliabilityPrivateRoute />}
+            >
+              <Route
+                path="/reliability/monitoring/:relirunID"
+                element={<ReliabilityLayout page={<ReliRun />} auth={true} />}
               />
             </Route>
             {/* <Route

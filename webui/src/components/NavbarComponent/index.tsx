@@ -249,6 +249,17 @@ export function NavbarNested() {
                       </Menu.Group> */}
                       <Menu.Group>
                         <Menu.Item
+                          icon={RecentActorsRounded}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            navigate(`/reliability`);
+                          }}
+                        >
+                          Reliability
+                        </Menu.Item>
+                      </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
                           icon={AdminPanelSettings}
                           style={{ margin: 0 }}
                           onClick={() => {
