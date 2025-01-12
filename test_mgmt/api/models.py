@@ -37,6 +37,10 @@ class MultiDBModel(models.Model):
             return super().delete(using=using, keep_parents=keep_parents)
 
 
+User.add_to_class('to_relation_representation', lambda self: {'id': self.id, 'name': self.username})
+Group.add_to_class('to_relation_representation', lambda self: {'id': self.id, 'name': self.name})
+
+
 class BaseModel(models.Model):
     class Meta:
         abstract = True
@@ -55,6 +59,14 @@ class BaseModel(models.Model):
         else:
             string_value = str(self.id)
         return string_value
+
+    def to_relation_representation(self):
+        representation = {'id': self.id}
+        if hasattr(self, 'name'):
+            representation['name'] = self.name
+        if hasattr(self, 'summary') and self.summary:
+            representation['summary'] = self.summary
+        return representation
 
     def is_consumer(self, user):
         return user is not None

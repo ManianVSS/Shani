@@ -1,4 +1,4 @@
-APScheduler==4.0.0a5
+apscheduler==3.11.0
 asgiref==3.8.1
 certifi==2024.8.30
 cffi==1.17.1
@@ -26,7 +26,7 @@ django-yaml-field==0.1.0
 django-mass-edit==3.5.0
 django-rest-swagger==2.2.0
 djangorestframework==3.15.2
-djangorestframework-simplejwt==5.3.1
+djangorestframework-simplejwt==5.4.0
 et-xmlfile==2.0.0
 idna==3.10
 itypes==1.2.0

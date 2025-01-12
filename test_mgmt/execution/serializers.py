@@ -1,74 +1,80 @@
-from rest_framework import serializers
+from api.serializers import ShaniModelSerializer
+from .models import Attachment, Tag, Release, Build, Defect, Run, ReliabilityIncident, ReliabilityRun, ExecutionRecord, \
+    ReliabilityIteration, Environment
 
-from .models import Attachment, Tag, Release, Environment, ReliabilityRun, ExecutionRecord, Run, Defect, Build, \
-    ReliabilityIteration
 
-
-class AttachmentSerializer(serializers.ModelSerializer):
+class AttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
 
 
-class ReleaseSerializer(serializers.ModelSerializer):
+class ReleaseSerializer(ShaniModelSerializer):
     class Meta:
         model = Release
         fields = ['id', 'name', 'summary', 'description', 'properties', 'attachments', 'org_group', 'created_at',
                   'updated_at', 'published', ]
 
 
-class BuildSerializer(serializers.ModelSerializer):
+class BuildSerializer(ShaniModelSerializer):
     class Meta:
         model = Build
         fields = ['id', 'release', 'name', 'type', 'build_time', 'summary', 'description', 'properties', 'attachments',
                   'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class DefectSerializer(serializers.ModelSerializer):
+class DefectSerializer(ShaniModelSerializer):
     class Meta:
         model = Defect
-        fields = ['id', 'summary', 'description', 'external_id', 'release', 'build', 'details_file', 'attachments',
+        fields = ['id', 'release', 'build', 'summary', 'description', 'external_id', 'details_file', 'attachments',
                   'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class RunSerializer(serializers.ModelSerializer):
+class RunSerializer(ShaniModelSerializer):
     class Meta:
         model = Run
-        fields = ['id', 'build', 'name', 'start_time', 'end_time', 'release', 'org_group', 'created_at', 'updated_at',
+        fields = ['id', 'release', 'build', 'name', 'start_time', 'end_time', 'org_group', 'created_at', 'updated_at',
                   'published', ]
 
 
-class ExecutionRecordSerializer(serializers.ModelSerializer):
+class ExecutionRecordSerializer(ShaniModelSerializer):
     class Meta:
         model = ExecutionRecord
         fields = ['id', 'name', 'summary', 'description', 'status', 'defects', 'run', 'start_time', 'end_time',
                   'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class ReliabilityRunSerializer(serializers.ModelSerializer):
+class ReliabilityIncidentSerializer(ShaniModelSerializer):
+    class Meta:
+        model = ReliabilityIncident
+        fields = ['id', 'release', 'build', 'defect', 'summary', 'description', 'triaged', 'details_file',
+                  'attachments', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+
+
+class ReliabilityRunSerializer(ShaniModelSerializer):
     class Meta:
         model = ReliabilityRun
-        fields = ['id', 'build', 'name', 'type', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
-                  'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
-                  'targetIPTE', 'ipte', 'incidents', 'release', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = ['id', 'release', 'build', 'name', 'type', 'start_time', 'modified_time', 'testName',
+                  'testEnvironmentType', 'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount',
+                  'incidentCount', 'targetIPTE', 'ipte', 'incidents', 'org_group', 'created_at', 'updated_at',
+                  'published', 'is_public', ]
 
 
-class ReliabilityIterationSerializer(serializers.ModelSerializer):
+class ReliabilityIterationSerializer(ShaniModelSerializer):
     class Meta:
         model = ReliabilityIteration
         fields = ['id', 'run', 'index', 'status', 'start_time', 'end_time', 'results', 'incidents', 'org_group',
                   'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class EnvironmentSerializer(serializers.ModelSerializer):
+class EnvironmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Environment
         fields = ['id', 'name', 'summary', 'type', 'description', 'assigned_to', 'purpose', 'details_file',
@@ -85,6 +91,7 @@ serializer_map = {
     Defect: DefectSerializer,
     Run: RunSerializer,
     ExecutionRecord: ExecutionRecordSerializer,
+    ReliabilityIncident: ReliabilityIncidentSerializer,
     ReliabilityRun: ReliabilityRunSerializer,
     ReliabilityIteration: ReliabilityIterationSerializer,
     Environment: EnvironmentSerializer,

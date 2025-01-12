@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from .views import AttachmentViewSet, TagViewSet, ReleaseViewSet, DefectViewSet, RunViewSet, ExecutionRecordViewSet, \
     ReliabilityRunViewSet, EnvironmentViewSet, get_ipte_for_iterations, get_iterations_for_ipte, BuildViewSet, \
-    ReliabilityIterationViewSet
+    ReliabilityIterationViewSet, ReliabilityIncidentViewSet
 
 router = routers.DefaultRouter()
 
@@ -15,6 +15,7 @@ router.register(r'builds', BuildViewSet)
 router.register(r'defects', DefectViewSet)
 router.register(r'runs', RunViewSet)
 router.register(r'execution_records', ExecutionRecordViewSet)
+router.register(r'reliability_incidents', ReliabilityIncidentViewSet)
 router.register(r'reliability_runs', ReliabilityRunViewSet)
 router.register(r'reliability_iterations', ReliabilityIterationViewSet)
 router.register(r'environments', EnvironmentViewSet)

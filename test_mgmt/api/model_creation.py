@@ -14,6 +14,7 @@ def create_requirement_model(item):
     requirements_data['external_id'] = requirements_data.pop('id')
     requirements_data['external_updated_at'] = requirements_data.pop('last-modified')
 
+    requirement_obj=None
     try:
         requirement_obj = Requirement.objects.get(name=requirements_data['name'])
     except Requirement.DoesNotExist:

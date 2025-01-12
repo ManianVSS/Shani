@@ -3,12 +3,8 @@ from datetime import timedelta
 from itertools import cycle
 
 from django.contrib.auth.models import User, Group, Permission
-from django.test import TestCase
-from rest_framework.utils import json
 
 from api.models import OrgGroup, Site
-from api.serializers import UserSerializer, OrgGroupSerializer
-from people.apiviews import get_capacity_data_for_org_group
 from people.models import Engineer, EngineerOrgGroupParticipation, SiteHoliday, Leave
 
 

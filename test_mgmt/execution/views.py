@@ -8,10 +8,10 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, enum_fields_filter_lookups
 from . import ipte_util
 from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord, Build, \
-    ReliabilityIteration
+    ReliabilityIteration, ReliabilityIncident
 from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
     ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer, BuildSerializer, \
-    ReliabilityIterationSerializer
+    ReliabilityIterationSerializer, ReliabilityIncidentSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -99,17 +99,16 @@ class DefectViewSet(ShaniOrgGroupViewSet):
     serializer_class = DefectSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'summary', 'description', 'external_id', 'release', 'org_group', 'created_at',
-                       'updated_at', 'published', ]
+    ordering_fields = ['id', 'release', 'build', 'summary', 'external_id', 'org_group', 'created_at', 'updated_at',
+                       'published', ]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'description': string_fields_filter_lookups,
-        'external_id': string_fields_filter_lookups,
-
         'release': fk_fields_filter_lookups,
         'build': fk_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'external_id': string_fields_filter_lookups,
+
         'release__name': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
@@ -161,6 +160,31 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
         'start_time': datetime_fields_filter_lookups,
         'end_time': datetime_fields_filter_lookups,
         # 'testcase': id_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class ReliabilityIncidentViewSet(ShaniOrgGroupViewSet):
+    queryset = ReliabilityIncident.objects.all()
+    serializer_class = ReliabilityIncidentSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'release', 'build', 'defect', 'summary', 'triaged', 'org_group',
+                       'created_at', 'updated_at', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
+        'build': fk_fields_filter_lookups,
+        'defect': fk_fields_filter_lookups,
+        'reliability_runs': fk_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'triaged': exact_fields_filter_lookups,
+        'release__name': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,

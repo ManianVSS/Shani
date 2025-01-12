@@ -76,7 +76,7 @@ class MockAPI(OrgModel):
     name = models.CharField(max_length=1024, unique=True)
     summary = models.CharField(max_length=1024, null=True, blank=True)
     status = models.IntegerField(choices=[(s.value, s.name) for s in HTTPStatus].append((430, "CUSTOM_ERROR_CODE")),
-                                 default=200, max_length=32)
+                                 default=200)
     content_type = models.CharField(max_length=32, choices=ContentType.choices, default=ContentType.APPLICATION_JSON)
     body = models.TextField(null=True, blank=True)
     http_method = models.CharField(max_length=32, choices=HTTPMethod.choices, default=HTTPMethod.ALL)

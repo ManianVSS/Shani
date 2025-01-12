@@ -100,6 +100,21 @@ class ReliabilityRunStatus(models.TextChoices):
     COMPLETED = 'COMPLETED', _('Completed'),
 
 
+class ReliabilityIncident(OrgModel):
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
+                                related_name='reliability_incidents')
+    build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL,
+                              related_name='reliability_incidents')
+    defect = models.ForeignKey(Defect, null=True, blank=True, on_delete=models.SET_NULL,
+                               related_name='reliability_incidents')
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    triaged = models.BooleanField(default=False)
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=True, null=True,
+                                    verbose_name='File with details')
+    attachments = models.ManyToManyField(Attachment, related_name='reliability_incidents', blank=True)
+
+
 class ReliabilityRun(OrgModel):
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
                                 related_name='reliability_runs')
@@ -122,7 +137,7 @@ class ReliabilityRun(OrgModel):
     incidentCount = models.IntegerField(null=True, blank=True, verbose_name='incident count')
     targetIPTE = models.FloatField(null=True, blank=True, verbose_name='target IPTE')
     ipte = models.FloatField(null=True, blank=True, verbose_name='IPTE')
-    incidents = models.ManyToManyField(Defect, related_name='reliability_runs', blank=True)
+    incidents = models.ManyToManyField(ReliabilityIncident, related_name='reliability_runs', blank=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.testName) + ": " + str(
@@ -152,7 +167,7 @@ class ReliabilityIteration(OrgModel):
     start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
     end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
     results = models.JSONField(null=True, blank=True)
-    incidents = models.ManyToManyField(Defect, related_name='reliability_iterations', blank=True)
+    incidents = models.ManyToManyField(ReliabilityIncident, related_name='reliability_iterations', blank=True)
 
 
 class Environment(OrgModel):
@@ -193,6 +208,7 @@ model_name_map = {
     'Defect': Defect,
     'Run': Run,
     'ExecutionRecord': ExecutionRecord,
+    'ReliabilityIncident': ReliabilityIncident,
     'ReliabilityRun': ReliabilityRun,
     'ReliabilityIteration': ReliabilityIteration,
     'Environment': Environment,

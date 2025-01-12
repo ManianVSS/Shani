@@ -75,7 +75,6 @@ class Request(OrgModel):
     attachments = models.ManyToManyField(Attachment, related_name='request_attachments', blank=True)
 
 
-
 class Resource(OrgModel):
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='resources')

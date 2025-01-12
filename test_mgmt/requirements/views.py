@@ -194,7 +194,7 @@ class RequirementViewSet(ShaniOrgGroupViewSet):
 
 def get_alm_requirements():
     with open('alm_config.json', 'r') as f:
-        alm_data = json.load(f.read())
+        alm_data = json.loads(f.read())
     alm = ALM(alm_data['ALM_config'])
     alm.login()
     alm_response = alm.fetch_requirements()

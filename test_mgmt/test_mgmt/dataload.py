@@ -98,7 +98,7 @@ def load_data_from_folder(data_folder: str):
                                     if model_record_data[key] and (
                                             'ForwardOneToOne' in field_cls.__name__ or 'ForwardManyToOne' in field_cls.__name__):
                                         model_record_data[key] = model_class.__dict__[
-                                            key].field.related_model.objects.get(id=model_record_data[key])
+                                            key].field.related_model.objects.get(id=model_record_data[key]['id'])
 
                                 # for foreign_key in foreign_keys.keys():
                                 #     del model_record_data[foreign_key]
@@ -115,4 +115,4 @@ def load_data_from_folder(data_folder: str):
                                     print("Ignoring existing data " + str(model_records_data) + str(e))
 
                                 for to_many_key, value in m2m_fkeys.items():
-                                    model_record.__getattribute__(to_many_key).set(value)
+                                    model_record.__getattribute__(to_many_key).set([int(item['id']) for item in value])
