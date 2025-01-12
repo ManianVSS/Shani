@@ -299,7 +299,7 @@ const Capacity = () => {
                 {sprintData.map((item) => {
                   return (
                     <option value={item.id} key={item.id}>
-                      PI-{item.pi}-{item.name}
+                      {item.pi.name}-{item.name}
                     </option>
                   );
                 })}

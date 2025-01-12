@@ -22,7 +22,7 @@ const MonitoringDashboard = () => {
     { headerName: "ID", field: "id" },
     {
       headerName: "BUILD",
-      field: "build",
+      field: "build.name",
     },
     { headerName: "RUN NAME", field: "name" },
     { headerName: "TYPE", field: "type" },

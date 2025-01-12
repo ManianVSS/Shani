@@ -27,11 +27,11 @@ const ReliRun = () => {
             <tbody>
               <tr>
                 <th>Build name</th>
-                <td>{relirunData.build}</td>
+                <td>{relirunData?.build?.name}</td>
               </tr>
               <tr>
                 <th>Release name</th>
-                <td>{relirunData.release}</td>
+                <td>{relirunData?.release?.name}</td>
               </tr>
               <tr>
                 <th>Test name</th>
