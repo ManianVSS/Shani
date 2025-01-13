@@ -74,6 +74,11 @@ const Category2 = () => {
   document.title = (siteData ?? [])[0]?.name;
   setTimerData((eventsData ?? [])[0]?.time);
 
+  useEffect(() => {
+    window.localStorage.setItem("siteid", siteid);
+    window.localStorage.setItem("catalogid", catalogid);
+  }, [siteid, catalogid]);
+
   return (
     <>
       {result[0]?.iframe_link?.length === 0 ||

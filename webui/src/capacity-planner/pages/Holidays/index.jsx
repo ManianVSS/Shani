@@ -38,9 +38,9 @@ const Holidays = () => {
   React.useEffect(() => {
     axiosClientForLogin
       .get("/sites/", {
-        headers: {
-          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-        },
+        // headers: {
+        //   authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        // },
       })
       .then((response) => {
         setOrgData(response.data.results);
@@ -52,9 +52,9 @@ const Holidays = () => {
   const getHolidayData = (siteID) => {
     axiosClientForCapacity
       .get("/people/api/site_holidays/?site=" + siteID, {
-        headers: {
-          authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-        },
+        // headers: {
+        //   authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        // },
       })
       .then((response) => {
         setHolidays(response.data.results);

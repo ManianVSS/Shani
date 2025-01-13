@@ -235,15 +235,9 @@ export default function App() {
                 element={<CapacityLayout page={<Leaves />} auth={true} />}
               />
             </Route>
-            <Route
-              path="/capacity-planner/holidays"
-              element={<CapacityPrivateRoute />}
-            >
-              <Route
-                path="/capacity-planner/holidays"
-                element={<CapacityLayout page={<Holidays />} auth={true} />}
-              />
-            </Route>
+
+            <Route path="/holidays" element={<Layout page={<Holidays />} />} />
+
             <Route path="/reliability" element={<ReliabilityPrivateRoute />}>
               <Route
                 path="/reliability"

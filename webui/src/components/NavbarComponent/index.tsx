@@ -20,6 +20,7 @@ import {
   Person2Outlined,
   RecentActorsRounded,
   TokenOutlined,
+  Bookmark,
 } from "@mui/icons-material";
 // import { axiosClient } from "../../hooks/api";
 import { globalNavData } from "../../state/globalNavData";
@@ -100,6 +101,8 @@ export function NavbarNested() {
   const logout = () => {
     window.localStorage.setItem("accessToken", "");
     window.localStorage.setItem("user", "");
+    window.localStorage.setItem("siteid", "");
+    window.localStorage.setItem("catalogid", "");
     navigate(`/login`);
     setAuth({
       accessToken: null,
@@ -192,8 +195,13 @@ export function NavbarNested() {
           <IconHome
             className="homeIconStyle"
             onClick={() => {
-              // navigate("/site/" + siteid + "/catalog/" + catalogid);
-              navigate(`/`);
+              navigate(
+                "/site/" +
+                  window.localStorage.getItem("siteid") +
+                  "/catalog/" +
+                  window.localStorage.getItem("catalogid")
+              );
+              // navigate(`/`);
             }}
           />
         </Group>
@@ -247,7 +255,7 @@ export function NavbarNested() {
                           Requirement
                         </Menu.Item>
                       </Menu.Group> */}
-                      <Menu.Group>
+                      {/* <Menu.Group>
                         <Menu.Item
                           icon={RecentActorsRounded}
                           style={{ margin: 0 }}
@@ -257,7 +265,8 @@ export function NavbarNested() {
                         >
                           Reliability
                         </Menu.Item>
-                      </Menu.Group>
+                      </Menu.Group> */}
+
                       <Menu.Group>
                         <Menu.Item
                           icon={AdminPanelSettings}
@@ -317,6 +326,18 @@ export function NavbarNested() {
 
                   <Menu.Group>
                     <Menu.Item
+                      icon={Bookmark}
+                      style={{ margin: 0 }}
+                      onClick={() => {
+                        navigate(`/holidays`);
+                      }}
+                    >
+                      Holiday List
+                    </Menu.Item>
+                  </Menu.Group>
+
+                  <Menu.Group>
+                    <Menu.Item
                       icon={Settings}
                       style={{ margin: 0 }}
                       onClick={() => {
@@ -326,6 +347,7 @@ export function NavbarNested() {
                       Hide Sidebar
                     </Menu.Item>
                   </Menu.Group>
+
                   <Menu.Divider />
 
                   {auth.authStatus ? (
