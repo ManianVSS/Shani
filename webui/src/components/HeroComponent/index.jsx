@@ -8,7 +8,8 @@ const HeroComponent = (props) => {
         parallaxOffset={100}
         imageSrc={props.images}
         opacity={0.4}
-        minHeight="20vh"
+        // minHeight="20vh"
+        minHeight={props.height * 0.9 + "px"}
         style={{ maxWidth: "100%" }}
       >
         <h1>{props.headline}</h1>

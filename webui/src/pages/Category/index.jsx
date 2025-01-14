@@ -103,6 +103,7 @@ const Category2 = () => {
             headline={result[0]?.name.toUpperCase()}
             description={result[0]?.description.toUpperCase()}
             images={baseURL + result[0]?.image}
+            height={pageSize.height}
           />
           <Container style={{ marginTop: "35px" }}>
             <Row className="justify-content-md-center">
@@ -124,8 +125,8 @@ const Category2 = () => {
       ) : (
         <IframeComponent
           link={result[0]?.iframe_link}
-          width={sideBar === "open" ? pageSize.width * 0.8 : pageSize.width}
-          height={pageSize.height * 0.95}
+          width={pageSize.width * 0.75}
+          height={pageSize.height * 0.87}
         />
       )}
     </>
