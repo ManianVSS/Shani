@@ -37,6 +37,7 @@ import ReliabilityHome from "./reliability/pages/ReliabilityHome";
 import MonitoringDashboard from "./reliability/pages/MonitoringDasboard";
 import ReliRun from "./reliability/pages/ReliRun";
 import Holidays from "./capacity-planner/pages/Holidays";
+import ReliTarget from "./reliability/pages/ReliTarget";
 
 interface customLinks {
   label: string;
@@ -257,6 +258,17 @@ export default function App() {
                     page={<MonitoringDashboard />}
                     auth={true}
                   />
+                }
+              />
+            </Route>
+            <Route
+              path="/reliability/target"
+              element={<ReliabilityPrivateRoute />}
+            >
+              <Route
+                path="/reliability/target"
+                element={
+                  <ReliabilityLayout page={<ReliTarget />} auth={true} />
                 }
               />
             </Route>
