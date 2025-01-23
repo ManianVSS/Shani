@@ -8,9 +8,12 @@ Test Management - Test management tool with database and dashboard.
 
 ##### **Pre-Requisites**</br>
 Python 3, pip and libpq-dev </br>
-> sudo apt install libpq-dev</br>
+> sudo apt install libpq-dev pandoc screen</br>
 > cd test_mgmt</br>
+> python -m venv .venv</br>
+> source .venv/bin/activate</br>
 > pip install -r requirements.txt</br>
+> pip install setuptools</br>
 
 ##### **Creating and Migrating DB Schema**</br>
 
@@ -30,9 +33,12 @@ Admin console should be up on http://localhost:8000/admin
 Note: Create files referring to the .example files in root directory</br>
 ##### **Pre-Requisites**</br>
 Python 3, pip , postgres database and libpq-dev </br>
-> sudo apt install libpq-dev</br>
+> sudo apt install libpq-dev pandoc screen</br>
 > cd test_mgmt</br>
+> python -m venv .venv</br>
+> source .venv/bin/activate</br>
 > pip install -r requirements.txt</br>
+> pip install setuptools</br>
 
 ##### **Creating Postgres production DB and schema one time**</br>
 
