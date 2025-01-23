@@ -251,15 +251,18 @@ def get_page_details_for_category(category):
 
 
 def get_page_as_dict(page):
+    serialized_page_data = PageSerializer(page).data
     return {
         "id": page.id,
         'sort_order': page.sort_order,
         'name': page.name,
         'summary': page.summary,
         'description': page.description,
-        'image': PageSerializer(page).data['image'],
+        'image': serialized_page_data['image'],
         'display_items': get_entity_display_items(page),
         'iframe_link': page.iframe_link,
+        'document_file': serialized_page_data['document_file'],
+        'html_file': serialized_page_data['html_file'],
         "org_group": OrgGroupSerializer(page.org_group).data['id'] if page.org_group else None,
         "published": page.published,
     }
