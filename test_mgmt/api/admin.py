@@ -106,7 +106,10 @@ class CustomAdminSite(AdminSite):
     def __init__(self, name="admin"):
         super().__init__(name)
         self.model_ordering = {}
-        # self.reload_admin_site_name()
+        database_name = "Shani Test Management"
+        self.site_header = database_name + " Administration"
+        self.site_title = database_name + " Admin Portal"
+        self.index_title = database_name + " Administration Portal"
 
     def register(self, model_or_iterable, admin_class=None, **options):
         super().register(model_or_iterable, admin_class, **options)

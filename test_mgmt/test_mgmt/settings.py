@@ -282,3 +282,9 @@ CRONJOBS = [
 # ATTACHMENT_DIR = "./attachments"
 # os.makedirs(ATTACHMENT_DIR, exist_ok=True)
 django_env_overrides.apply_to(globals())
+
+JAZZMIN_SETTINGS = {
+    "show_ui_builder": True,
+    "site_logo": "raven.png",
+    "login_logo": "raven.png",
+}
