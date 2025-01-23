@@ -20,7 +20,7 @@ class PageSerializer(ShaniModelSerializer):
     class Meta:
         model = Page
         fields = ['id', 'sort_order', 'name', 'summary', 'description', 'image', 'display_items', 'iframe_link',
-                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+                  'document_file', 'html_file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
 class CategorySerializer(ShaniModelSerializer):

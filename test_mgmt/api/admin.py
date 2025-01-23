@@ -158,7 +158,7 @@ class CustomAdminSite(AdminSite):
 
         self.site_header = database_name + " Administration"
         self.site_title = database_name + " Admin Portal"
-        self.index_title = "Welcome to " + database_name + " Administration Portal"
+        self.index_title = database_name + " Administration Portal"
 
 
 # Create a custom admin site with custom ordering
