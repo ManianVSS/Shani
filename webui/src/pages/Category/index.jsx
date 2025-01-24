@@ -82,7 +82,7 @@ const Category2 = () => {
   return (
     <>
       {result[0]?.iframe_link?.length === 0 ||
-      result[0]?.iframe_link?.length === undefined ? (
+        result[0]?.iframe_link?.length === undefined ? (
         <>
           {(eventsData ?? []).length === 0 ? (
             <></>
@@ -122,13 +122,23 @@ const Category2 = () => {
             </Row>
           </Container>
         </>
-      ) : (
-        <IframeComponent
-          link={result[0]?.iframe_link}
-          width={pageSize.width * 0.75}
-          height={pageSize.height * 0.87}
-        />
-      )}
+      ) :
+
+        (
+          <>
+            {result[0]?.html_file?.length === 0 ||
+              result[0]?.html_file?.length === undefined ?
+              <IframeComponent
+                link={result[0]?.iframe_link}
+                width={pageSize.width * 0.75}
+                height={pageSize.height * 0.87}
+              /> : <IframeComponent
+                link={baseURL + result[0]?.html_file}
+                width={pageSize.width * 0.75}
+                height={pageSize.height * 0.87}
+              />}
+          </>
+        )}
     </>
   );
 };
