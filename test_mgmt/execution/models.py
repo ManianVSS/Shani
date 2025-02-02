@@ -25,6 +25,11 @@ class Tag(OrgModel):
 
 
 class Release(OrgModel):
+    class Meta:
+        permissions = (
+            ("dashboard_user", "Dashboard users can work with execution module"),
+        )
+
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='organization group', related_name='execution_releases')
     name = models.CharField(max_length=256, )

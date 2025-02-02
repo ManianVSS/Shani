@@ -15,6 +15,8 @@ from django_extensions.db.fields.json import JSONField
 from django_yaml_field import YAMLField
 from import_export.admin import ImportExportModelAdmin
 from massadmin.massadmin import MassEditMixin
+from rest_framework.authtoken.admin import TokenAdmin
+from rest_framework.authtoken.models import TokenProxy
 
 from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, PythonCodeField, XMLField, \
     GherkinField, LuaField
@@ -128,7 +130,7 @@ class CustomAdminSite(AdminSite):
 
         for app_label in app_dict.keys():
             app_config = apps.get_app_config(app_label)
-            app_dict[app_label]['order'] = 0 if app_label == 'auth' else (
+            app_dict[app_label]['order'] = 0 if app_label.startswith('auth') else (
                 app_config.order if hasattr(app_config, 'order') else 999)
 
         return app_dict
@@ -167,6 +169,7 @@ class CustomAdminSite(AdminSite):
 # Create a custom admin site with custom ordering
 admin.site.unregister(Group)
 admin.site.unregister(User)
+# admin.site.unregister(TokenProxy)
 
 site = CustomAdminSite()
 admin.site = site
@@ -182,6 +185,12 @@ class CustomGroupAdmin(CustomModelAdmin, GroupAdmin):
 @admin.register(User)
 class CustomUserAdmin(CustomModelAdmin, UserAdmin):
     display_order = 2
+
+
+@admin.register(TokenProxy)
+class CustomTokenAdmin(CustomModelAdmin, TokenAdmin):
+    readonly_fields = []
+    display_order = 3
 
 
 @admin.register(Configuration)

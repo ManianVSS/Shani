@@ -64,14 +64,16 @@ def update_site_page_document_file(sender, instance: Page, **kwargs):
                     with tempfile.TemporaryDirectory() as tmp:
                         input_file_path = instance.document_file.path
                         output_file_path = str(Path(tmp, Path(input_file_path).stem)) + ".html"
-                        os.system(
+                        exit_code = os.system(
                             'pandoc -s -c \"{}\" \"{}\" -o \"{}\" --embed-resources'.format(
                                 "resources/custom_pandoc_conversion.css",
                                 input_file_path,
                                 output_file_path))
-                        final_html_file_name = str(Path(input_file_path).stem) + ".html"
-                        with open(output_file_path, 'rb') as pandoc_temp_file:
-                            instance.html_file.save(final_html_file_name, pandoc_temp_file, save=True)
+                        if exit_code == 0:
+                            final_html_file_name = str(Path(input_file_path).stem) + ".html"
+                            with open(output_file_path, 'rb') as pandoc_temp_file:
+                                instance.html_file.save(final_html_file_name, pandoc_temp_file, save=True)
+
                 elif extention != '.html':
                     # Unknown file format error needed
                     pass

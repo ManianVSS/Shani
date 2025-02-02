@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Attachment, OrgGroup, Configuration, Site
+from .models import Attachment, OrgGroup, Configuration, Site, BaseModel
 from .serializers import UserSerializer, GroupSerializer, AttachmentSerializer, OrgGroupSerializer, \
     ConfigurationSerializer, SiteSerializer
 
@@ -63,20 +63,18 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
 
         if not request.user or request.user.is_anonymous:
             queryset = self._queryset(view)
-            return hasattr(queryset.model, 'can_read')
+            return issubclass(queryset.model, BaseModel) or super().has_permission(request, view)
         else:
             return super().has_permission(request, view)
 
     def has_object_permission(self, request, view, obj):
-        # if request.method in SAFE_METHODS:
-        #     return True
-
-        # if not super().has_object_permission(request, view, obj):
-        #     return False
-
         user = request.user
         if (user is None) or user.is_superuser:
             return super().has_object_permission(request, view, obj)
+
+        # User needs to have base permission if not super-user
+        if not (super().has_permission(request, view) and super().has_object_permission(request, view, obj)):
+            return False
 
         queryset = self._queryset(view)
         model_cls = queryset.model
@@ -84,7 +82,7 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
         try:
             match request.method:
                 case 'HEAD' | 'OPTIONS':
-                    return super().has_object_permission(request, view, obj)
+                    return True
                 case 'POST':
                     return True
                 case 'GET':
