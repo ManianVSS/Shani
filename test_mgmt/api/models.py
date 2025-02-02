@@ -95,6 +95,16 @@ class BaseModel(models.Model):
 
 
 class Configuration(BaseModel):
+    class Meta:
+        permissions = (
+            ("tool_integration_read",
+             "Integration Read permission to integrate CI/CT tool typically used with an Auth Token."),
+            ("tool_integration_write",
+             "Integration Write permission to integrate CI/CT tool typically used with an Auth Token."),
+            ("tool_integration_delete",
+             "Integration Delete permission to integrate CI/CT tool typically used with an Auth Token."),
+        )
+
     name = models.CharField(max_length=256, unique=True)
     value = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)

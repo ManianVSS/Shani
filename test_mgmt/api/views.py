@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
 from rest_framework import viewsets
-from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions, IsAdminUser
+from rest_framework.permissions import DjangoObjectPermissions, DjangoModelPermissions, IsAdminUser, BasePermission
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Attachment, OrgGroup, Configuration, Site, BaseModel
@@ -54,6 +54,16 @@ class ShaniOrgGroupViewSet(viewsets.ModelViewSet):
 class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
     # authenticated_users_only = False
 
+    perms_map = {
+        'GET': ['%(app_label)s.view_%(model_name)s'],
+        'OPTIONS': [],
+        'HEAD': [],
+        'POST': ['%(app_label)s.add_%(model_name)s'],
+        'PUT': ['%(app_label)s.change_%(model_name)s'],
+        'PATCH': ['%(app_label)s.change_%(model_name)s'],
+        'DELETE': ['%(app_label)s.delete_%(model_name)s'],
+    }
+
     def has_permission(self, request, view):
 
         # Workaround to ensure DjangoModelPermissions are not applied
@@ -61,11 +71,17 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
         if getattr(view, '_ignore_model_permissions', False):
             return True
 
-        if not request.user or request.user.is_anonymous:
-            queryset = self._queryset(view)
-            return issubclass(queryset.model, BaseModel) or super().has_permission(request, view)
-        else:
-            return super().has_permission(request, view)
+        base_permission = super().has_permission(request, view)
+
+        match request.method:
+            case 'HEAD' | 'OPTIONS' | 'GET':
+                return request.user.has_perm('api.tool_integration_read') or base_permission
+            case 'POST' | 'PUT' | "PATCH":
+                return request.user.has_perm('api.tool_integration_write') or base_permission
+            case 'DELETE':
+                return request.user.has_perm('api.tool_integration_delete') or base_permission
+            case _:
+                return False
 
     def has_object_permission(self, request, view, obj):
         user = request.user
@@ -73,8 +89,7 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
             return super().has_object_permission(request, view, obj)
 
         # User needs to have base permission if not super-user
-        if not (super().has_permission(request, view) and super().has_object_permission(request, view, obj)):
-            return False
+        base_permission = super().has_permission(request, view) and super().has_object_permission(request, view, obj)
 
         queryset = self._queryset(view)
         model_cls = queryset.model
@@ -82,19 +97,43 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
         try:
             match request.method:
                 case 'HEAD' | 'OPTIONS':
-                    return True
+                    return request.user.has_perm('api.tool_integration_read') or base_permission
                 case 'POST':
-                    return True
+                    return request.user.has_perm('api.tool_integration_write') or base_permission
                 case 'GET':
-                    return not hasattr(model_cls, 'can_read') or model_cls.can_read(obj, request.user)
+                    return request.user.has_perm('api.tool_integration_read') or (base_permission and (
+                            not hasattr(model_cls, 'can_read') or model_cls.can_read(obj, request.user)))
                 case 'PUT' | "PATCH":
-                    return not hasattr(model_cls, 'can_modify') or model_cls.can_modify(obj, request.user)
+                    return request.user.has_perm('api.tool_integration_write') or (base_permission and (
+                            not hasattr(model_cls, 'can_modify') or model_cls.can_read(obj, request.user)))
                 case 'DELETE':
-                    return not hasattr(model_cls, 'can_delete') or model_cls.can_delete(obj, request.user)
+                    return request.user.has_perm('api.tool_integration_delete') or (base_permission and (
+                            not hasattr(model_cls, 'can_delete') or model_cls.can_delete(obj, request.user)))
                 case _:
                     return False
         except FieldDoesNotExist:
             return False
+
+
+class ToolIntegrationReadPermission(BasePermission):
+    def has_permission(self, request, view):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return request.user.is_superuser or request.user.has_perm('api.tool_integration_read')
+
+
+class ToolIntegrationWritePermission(BasePermission):
+    def has_permission(self, request, view):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return request.user.is_superuser or request.user.has_perm('api.tool_integration_write')
+
+
+class ToolIntegrationDeletePermission(BasePermission):
+    def has_permission(self, request, view):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return request.user.is_superuser or request.user.has_perm('api.tool_integration_delete')
 
 
 class UserViewSet(viewsets.ModelViewSet):

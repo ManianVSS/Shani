@@ -4,9 +4,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
+from api.views import ToolIntegrationWritePermission, ToolIntegrationDeletePermission
 from execution.models import Release, Build, Run, ReliabilityRun
 from execution.serializers import RunSerializer, ReliabilityRunSerializer
-from execution.views import DashboardPermission
 
 
 def create_release_if_missing(name):
@@ -49,7 +49,7 @@ def create_run_if_missing(name, build_name, release_name):
 
 
 @api_view(['GET'])
-@permission_classes([DashboardPermission])
+@permission_classes([ToolIntegrationDeletePermission | ToolIntegrationWritePermission])
 def start_run(request):
     if not request.method == 'GET':
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -66,7 +66,7 @@ def start_run(request):
 
 
 @api_view(['GET'])
-@permission_classes([DashboardPermission])
+@permission_classes([ToolIntegrationDeletePermission | ToolIntegrationWritePermission])
 def stop_run(request):
     current_time = datetime.now()
     if not request.method == 'GET':
@@ -129,7 +129,7 @@ def create_reliability_run_if_missing(name, build_name, release_name):
 
 
 @api_view(['GET'])
-@permission_classes([DashboardPermission])
+@permission_classes([ToolIntegrationDeletePermission | ToolIntegrationWritePermission])
 def start_reliability_run(request):
     if not request.method == 'GET':
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -146,7 +146,7 @@ def start_reliability_run(request):
 
 
 @api_view(['GET'])
-@permission_classes([DashboardPermission])
+@permission_classes([ToolIntegrationDeletePermission | ToolIntegrationWritePermission])
 def stop_reliability_run(request):
     current_time = datetime.now()
     if not request.method == 'GET':

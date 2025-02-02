@@ -1,7 +1,6 @@
 from django.http.response import HttpResponse
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view
-from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
@@ -15,17 +14,10 @@ from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer,
     ReliabilityIterationSerializer, ReliabilityIncidentSerializer
 
 
-class DashboardPermission(BasePermission):
-    def has_permission(self, request, view):
-        if not request.user or not request.user.is_authenticated:
-            return False
-        return request.user.is_superuser or request.user.has_perm('execution.dashboard_user')
-
-
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
@@ -43,7 +35,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
 class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
@@ -63,7 +55,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
 class ReleaseViewSet(ShaniOrgGroupViewSet):
     queryset = Release.objects.all()
     serializer_class = ReleaseSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
     ordering = default_ordering
@@ -82,7 +74,7 @@ class ReleaseViewSet(ShaniOrgGroupViewSet):
 class BuildViewSet(ShaniOrgGroupViewSet):
     queryset = Build.objects.all()
     serializer_class = BuildSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'release', 'name', 'type', 'build_time', 'summary', 'org_group', 'created_at',
                        'updated_at', 'published', ]
@@ -105,7 +97,7 @@ class BuildViewSet(ShaniOrgGroupViewSet):
 class DefectViewSet(ShaniOrgGroupViewSet):
     queryset = Defect.objects.all()
     serializer_class = DefectSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'release', 'build', 'summary', 'external_id', 'org_group', 'created_at', 'updated_at',
                        'published', ]
@@ -129,7 +121,7 @@ class DefectViewSet(ShaniOrgGroupViewSet):
 class RunViewSet(ShaniOrgGroupViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'time', 'org_group', 'created_at', 'updated_at', 'published',
                        'is_public', ]
@@ -153,7 +145,7 @@ class RunViewSet(ShaniOrgGroupViewSet):
 class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
     queryset = ExecutionRecord.objects.all()
     serializer_class = ExecutionRecordSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'status', 'run', 'start_time', 'org_group', 'created_at', 'updated_at',
                        'published', ]
@@ -179,7 +171,7 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
 class ReliabilityIncidentViewSet(ShaniOrgGroupViewSet):
     queryset = ReliabilityIncident.objects.all()
     serializer_class = ReliabilityIncidentSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'release', 'build', 'defect', 'summary', 'triaged', 'org_group',
                        'created_at', 'updated_at', 'published', ]
@@ -204,7 +196,7 @@ class ReliabilityIncidentViewSet(ShaniOrgGroupViewSet):
 class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
     queryset = ReliabilityRun.objects.all()
     serializer_class = ReliabilityRunSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'build', 'name', 'type', 'start_time', 'modified_time', 'testName', 'testEnvironmentType',
                        'testEnvironmentName', 'status', 'totalIterationCount', 'passedIterationCount', 'incidentCount',
@@ -236,7 +228,7 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
 class ReliabilityIterationViewSet(ShaniOrgGroupViewSet):
     queryset = ReliabilityIteration.objects.all()
     serializer_class = ReliabilityIterationSerializer
-    permission_classes = [DashboardPermission | ShaniOrgGroupObjectLevelPermission]
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'run', 'index', 'status', 'start_time', 'end_time', 'org_group', 'created_at',
                        'updated_at', 'published', 'is_public', ]
