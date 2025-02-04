@@ -109,7 +109,7 @@ const data = [
     icon: IconUser,
   },
   { link: "/capacity-planner/leaves", label: "LEAVES", icon: IconAlarm },
-  { link: "/capacity-planner/holidays", label: "HOLIDAYS", icon: IconCalendar },
+  // { link: "/capacity-planner/holidays", label: "HOLIDAYS", icon: IconCalendar },
   // { link: "", label: "Authentication", icon: Icon2fa },
   // { link: "", label: "Other Settings", icon: IconSettings },
 ];
