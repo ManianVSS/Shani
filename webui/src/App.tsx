@@ -38,6 +38,7 @@ import MonitoringDashboard from "./reliability/pages/MonitoringDasboard";
 import ReliRun from "./reliability/pages/ReliRun";
 import Holidays from "./capacity-planner/pages/Holidays";
 import ReliTarget from "./reliability/pages/ReliTarget";
+import GrowthTarget from "./reliability/pages/GrowthTarget";
 
 interface customLinks {
   label: string;
@@ -262,13 +263,24 @@ export default function App() {
               />
             </Route>
             <Route
-              path="/reliability/target"
+              path="/reliability/target/demonstration"
               element={<ReliabilityPrivateRoute />}
             >
               <Route
-                path="/reliability/target"
+                path="/reliability/target/demonstration"
                 element={
                   <ReliabilityLayout page={<ReliTarget />} auth={true} />
+                }
+              />
+            </Route>
+            <Route
+              path="/reliability/target/growth"
+              element={<ReliabilityPrivateRoute />}
+            >
+              <Route
+                path="/reliability/target/growth"
+                element={
+                  <ReliabilityLayout page={<GrowthTarget />} auth={true} />
                 }
               />
             </Route>

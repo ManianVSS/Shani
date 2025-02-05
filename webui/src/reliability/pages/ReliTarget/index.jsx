@@ -90,7 +90,7 @@ const ReliTarget = () => {
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4">
-            <Form.Label>Number of Reviews/Iterations/Exams per hour</Form.Label>
+            <Form.Label>Number of Reviews per hour</Form.Label>
             <Form.Control
               required
               type="number"
@@ -135,55 +135,32 @@ const ReliTarget = () => {
             <tbody>
               <tr>
                 <th>MTBF(Mean time between failures)</th>
-                <td>{allData.mtbf}</td>
+                <td>{allData.mtbf.toFixed(5)}</td>
               </tr>
               <tr>
                 <th>Number of reviews for given MTBF</th>
-                <td>{allData.numberOfReviewsForGivenMTBF}</td>
+                <td>{allData.numberOfReviewsForGivenMTBF.toFixed(5)}</td>
               </tr>
               <tr>
                 <th>Failure rate(Incidents per 1000 reviews)</th>
                 <td>
-                  <b>{allData.failureRate}</b>
+                  <b>{allData.failureRate.toFixed(5)}</b>
                 </td>
               </tr>
               <tr>
                 <th>Chi Square value</th>
-                <td>{allData.chiSquareValue}</td>
+                <td>{allData.chiSquareValue.toFixed(5)}</td>
               </tr>
               <tr>
-                <th>Number of exams/reviews to complete without failure</th>
+                <th>Number of reviews to complete without failure</th>
                 <td>
-                  <b>{allData.numberOfReviewToCompleteWithoutFailure}</b>
+                  <b>
+                    {allData.numberOfReviewToCompleteWithoutFailure.toFixed(0)}
+                  </b>
                 </td>
               </tr>
             </tbody>
           </Table>
-          <Heading heading="Achieved target calculator" />
-          <Row className="mb-3">
-            <Form.Group as={Col} md="4">
-              <Form.Label>Number of reviews/exams completed</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                placeholder="Reviews completed"
-                defaultValue="0"
-                onChange={(event) => setCompletedExams(event.target.value)}
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group as={Col} md="4">
-              <Form.Label>Achieved target</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                value={(allData.chiSquareValue * 1000) / (completedExams * 2)}
-                disabled
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
         </>
       ) : (
         <></>
