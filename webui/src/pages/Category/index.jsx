@@ -82,63 +82,75 @@ const Category2 = () => {
   return (
     <>
       {result[0]?.iframe_link?.length === 0 ||
-        result[0]?.iframe_link?.length === undefined ? (
+      result[0]?.iframe_link?.length === undefined ? (
         <>
-          {(eventsData ?? []).length === 0 ? (
-            <></>
+          {result[0]?.html_file?.length === 0 ||
+          result[0]?.html_file?.length === undefined ? (
+            <>
+              {(eventsData ?? []).length === 0 ? (
+                <></>
+              ) : (
+                // <TimerComponent name={(eventsData ?? [])[0]?.name} />
+                <ResponsiveCarousel
+                  autoPlay={true}
+                  infiniteLoop={true}
+                  componentListData={eventsData ?? []}
+                  showArrows={false}
+                  showStatus={false}
+                  showIndicators={false}
+                  showThumbs={false}
+                />
+              )}
+
+              <HeroComponent
+                headline={result[0]?.name.toUpperCase()}
+                description={result[0]?.description.toUpperCase()}
+                images={baseURL + result[0]?.image}
+                height={pageSize.height}
+              />
+              <Container style={{ marginTop: "35px" }}>
+                <Row className="justify-content-md-center">
+                  {result[0]?.display_items.map((item) => {
+                    return (
+                      <Col md="auto" key={item.name}>
+                        <CardItem003
+                          name={item.name}
+                          description={item.summary}
+                          image={baseURL + item.image}
+                          link={item.link}
+                        />
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </Container>
+            </>
           ) : (
-            // <TimerComponent name={(eventsData ?? [])[0]?.name} />
-            <ResponsiveCarousel
-              autoPlay={true}
-              infiniteLoop={true}
-              componentListData={eventsData ?? []}
-              showArrows={false}
-              showStatus={false}
-              showIndicators={false}
-              showThumbs={false}
+            <IframeComponent
+              link={baseURL + result[0]?.html_file}
+              width={pageSize.width * 0.75}
+              height={pageSize.height * 0.87}
             />
           )}
-
-          <HeroComponent
-            headline={result[0]?.name.toUpperCase()}
-            description={result[0]?.description.toUpperCase()}
-            images={baseURL + result[0]?.image}
-            height={pageSize.height}
-          />
-          <Container style={{ marginTop: "35px" }}>
-            <Row className="justify-content-md-center">
-              {result[0]?.display_items.map((item) => {
-                return (
-                  <Col md="auto" key={item.name}>
-                    <CardItem003
-                      name={item.name}
-                      description={item.summary}
-                      image={baseURL + item.image}
-                      link={item.link}
-                    />
-                  </Col>
-                );
-              })}
-            </Row>
-          </Container>
         </>
-      ) :
-
-        (
-          <>
-            {result[0]?.html_file?.length === 0 ||
-              result[0]?.html_file?.length === undefined ?
-              <IframeComponent
-                link={result[0]?.iframe_link}
-                width={pageSize.width * 0.75}
-                height={pageSize.height * 0.87}
-              /> : <IframeComponent
-                link={baseURL + result[0]?.html_file}
-                width={pageSize.width * 0.75}
-                height={pageSize.height * 0.87}
-              />}
-          </>
-        )}
+      ) : (
+        <>
+          {result[0]?.html_file?.length === 0 ||
+          result[0]?.html_file?.length === undefined ? (
+            <IframeComponent
+              link={result[0]?.iframe_link}
+              width={pageSize.width * 0.75}
+              height={pageSize.height * 0.87}
+            />
+          ) : (
+            <IframeComponent
+              link={baseURL + result[0]?.html_file}
+              width={pageSize.width * 0.75}
+              height={pageSize.height * 0.87}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };
