@@ -168,31 +168,6 @@ class ExecutionRecordViewSet(ShaniOrgGroupViewSet):
     }
 
 
-class ReliabilityIncidentViewSet(ShaniOrgGroupViewSet):
-    queryset = ReliabilityIncident.objects.all()
-    serializer_class = ReliabilityIncidentSerializer
-    permission_classes = [ShaniOrgGroupObjectLevelPermission]
-    search_fields = default_search_fields
-    ordering_fields = ['id', 'release', 'build', 'defect', 'summary', 'triaged', 'org_group',
-                       'created_at', 'updated_at', 'published', ]
-    ordering = default_ordering
-    filterset_fields = {
-        'id': id_fields_filter_lookups,
-        'release': fk_fields_filter_lookups,
-        'build': fk_fields_filter_lookups,
-        'defect': fk_fields_filter_lookups,
-        'reliability_runs': fk_fields_filter_lookups,
-        'summary': string_fields_filter_lookups,
-        'triaged': exact_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
-
-
 class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
     queryset = ReliabilityRun.objects.all()
     serializer_class = ReliabilityRunSerializer
@@ -206,7 +181,6 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'id': id_fields_filter_lookups,
         'release': fk_fields_filter_lookups,
         'build': fk_fields_filter_lookups,
-        'release__name': string_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'type': enum_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
@@ -216,7 +190,8 @@ class ReliabilityRunViewSet(ShaniOrgGroupViewSet):
         'testEnvironmentName': string_fields_filter_lookups,
         'status': enum_fields_filter_lookups,
         'targetIPTE': compare_fields_filter_lookups,
-        'incidents': exact_fields_filter_lookups,
+        'release__name': string_fields_filter_lookups,
+        'build__name': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,
@@ -230,17 +205,47 @@ class ReliabilityIterationViewSet(ShaniOrgGroupViewSet):
     serializer_class = ReliabilityIterationSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'run', 'index', 'status', 'start_time', 'end_time', 'org_group', 'created_at',
+    ordering_fields = ['id', 'run', 'name', 'index', 'status', 'start_time', 'end_time', 'org_group', 'created_at',
                        'updated_at', 'published', 'is_public', ]
     ordering = ['run', 'index']
     filterset_fields = {
         'id': id_fields_filter_lookups,
         'run': fk_fields_filter_lookups,
+        'name': string_fields_filter_lookups,
         'index': compare_fields_filter_lookups,
         'status': enum_fields_filter_lookups,
         'start_time': datetime_fields_filter_lookups,
         'end_time': datetime_fields_filter_lookups,
-        'incidents': exact_fields_filter_lookups,
+        'run__name': string_fields_filter_lookups,
+        'org_group': fk_fields_filter_lookups,
+        'published': exact_fields_filter_lookups,
+        'is_public': exact_fields_filter_lookups,
+        'created_at': datetime_fields_filter_lookups,
+        'updated_at': datetime_fields_filter_lookups,
+    }
+
+
+class ReliabilityIncidentViewSet(ShaniOrgGroupViewSet):
+    queryset = ReliabilityIncident.objects.all()
+    serializer_class = ReliabilityIncidentSerializer
+    permission_classes = [ShaniOrgGroupObjectLevelPermission]
+    search_fields = default_search_fields
+    ordering_fields = ['id', 'release', 'build', 'defect', 'summary', 'triaged', 'org_group',
+                       'created_at', 'updated_at', 'published', ]
+    ordering = default_ordering
+    filterset_fields = {
+        'id': id_fields_filter_lookups,
+        'release': fk_fields_filter_lookups,
+        'build': fk_fields_filter_lookups,
+        'run': fk_fields_filter_lookups,
+        'iteration': fk_fields_filter_lookups,
+        'defect': fk_fields_filter_lookups,
+        'summary': string_fields_filter_lookups,
+        'triaged': exact_fields_filter_lookups,
+        'release__name': string_fields_filter_lookups,
+        'build__name': string_fields_filter_lookups,
+        'run__name': string_fields_filter_lookups,
+        'iteration__name': string_fields_filter_lookups,
         'org_group': fk_fields_filter_lookups,
         'published': exact_fields_filter_lookups,
         'is_public': exact_fields_filter_lookups,

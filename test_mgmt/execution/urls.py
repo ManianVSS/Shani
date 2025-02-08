@@ -16,9 +16,9 @@ router.register(r'builds', BuildViewSet)
 router.register(r'defects', DefectViewSet)
 router.register(r'runs', RunViewSet)
 router.register(r'execution_records', ExecutionRecordViewSet)
-router.register(r'reliability_incidents', ReliabilityIncidentViewSet)
 router.register(r'reliability_runs', ReliabilityRunViewSet)
 router.register(r'reliability_iterations', ReliabilityIterationViewSet)
+router.register(r'reliability_incidents', ReliabilityIncidentViewSet)
 router.register(r'environments', EnvironmentViewSet)
 
 # Wire up our API using automatic URL routing.

@@ -84,20 +84,6 @@ class ExecutionRecordAdmin(CustomModelAdmin):
     search_fields = ['name', 'summary', 'description', ]
 
 
-@admin.register(ReliabilityIncident)
-class ReliabilityIncidentAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-        ('release', RelatedOnlyFieldListFilter),
-        ('build', RelatedOnlyFieldListFilter),
-        ('defect', RelatedOnlyFieldListFilter),
-        ('reliability_runs', RelatedOnlyFieldListFilter),
-        'triaged',
-    )
-    search_fields = ['summary', 'description', 'external_id', ]
-
-
 @admin.register(ReliabilityRun)
 class ReliabilityRunAdmin(CustomModelAdmin):
     list_filter = (
@@ -110,7 +96,6 @@ class ReliabilityRunAdmin(CustomModelAdmin):
         'testName',
         'testEnvironmentType',
         'testEnvironmentName',
-        ('incidents', RelatedOnlyFieldListFilter),
         'start_time',
         'modified_time',
     )
@@ -123,12 +108,28 @@ class ReliabilityIterationAdmin(CustomModelAdmin):
         'published',
         ('org_group', RelatedOnlyFieldListFilter),
         ('run', RelatedOnlyFieldListFilter),
+        'name',
+        'index',
         'status',
         'start_time',
         'end_time',
-        ('incidents', RelatedOnlyFieldListFilter),
     )
     search_fields = ['results', ]
+
+
+@admin.register(ReliabilityIncident)
+class ReliabilityIncidentAdmin(CustomModelAdmin):
+    list_filter = (
+        'created_at', 'updated_at', 'published', 'is_public',
+        ('org_group', RelatedOnlyFieldListFilter),
+        ('release', RelatedOnlyFieldListFilter),
+        ('build', RelatedOnlyFieldListFilter),
+        ('run', RelatedOnlyFieldListFilter),
+        ('iteration', RelatedOnlyFieldListFilter),
+        ('defect', RelatedOnlyFieldListFilter),
+        'triaged',
+    )
+    search_fields = ['summary', 'description', 'external_id', ]
 
 
 @admin.register(Environment)

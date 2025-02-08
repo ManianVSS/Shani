@@ -93,7 +93,7 @@ def stop_run(request):
 #
 #
 # @api_view(['GET'])
-# @permission_classes([DashboardPermission])
+# @permission_classes([ToolIntegrationDeletePermission | ToolIntegrationWritePermission])
 # def start_execution_record(request):
 #     if not request.method == 'GET':
 #         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_yaml_field import YAMLField
 
-from api.models import OrgModel, OrgGroup
+from api.models import OrgModel, OrgGroup, GherkinField
 from api.storage import CustomFileSystemStorage
 from execution import ipte_util
 
@@ -79,7 +79,7 @@ class ExecutionRecord(OrgModel):
     end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
 
     summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = GherkinField(null=True, blank=True)
 
     status = models.CharField(max_length=8, choices=ExecutionRecordStatus.choices,
                               default=ExecutionRecordStatus.PENDING)
@@ -87,35 +87,18 @@ class ExecutionRecord(OrgModel):
     defects = models.ManyToManyField(Defect, related_name='execution_records', blank=True)
 
 
-class ReliabilityRunType(models.TextChoices):
-    GROWTH = 'GROWTH', _('Growth'),
-    LONGEVITY = 'LONGEVITY', _('Longevity'),
-    CHAOS = 'CHAOS', _('Choas'),
-    DEMONSTRATION = 'DEMONSTRATION', _('Demonstration'),
-
-
-class ReliabilityRunStatus(models.TextChoices):
-    PENDING = 'PENDING', _('Pending execution'),
-    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
-    COMPLETED = 'COMPLETED', _('Completed'),
-
-
-class ReliabilityIncident(OrgModel):
-    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
-                                related_name='reliability_incidents')
-    build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL,
-                              related_name='reliability_incidents')
-    defect = models.ForeignKey(Defect, null=True, blank=True, on_delete=models.SET_NULL,
-                               related_name='reliability_incidents')
-    summary = models.CharField(max_length=256, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    triaged = models.BooleanField(default=False)
-    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=True, null=True,
-                                    verbose_name='File with details')
-    attachments = models.ManyToManyField(Attachment, related_name='reliability_incidents', blank=True)
-
-
 class ReliabilityRun(OrgModel):
+    class ReliabilityRunType(models.TextChoices):
+        GROWTH = 'GROWTH', _('Growth'),
+        LONGEVITY = 'LONGEVITY', _('Longevity'),
+        CHAOS = 'CHAOS', _('Choas'),
+        DEMONSTRATION = 'DEMONSTRATION', _('Demonstration'),
+
+    class ReliabilityRunStatus(models.TextChoices):
+        PENDING = 'PENDING', _('Pending execution'),
+        IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
+        COMPLETED = 'COMPLETED', _('Completed'),
+
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
                                 related_name='reliability_runs')
 
@@ -137,7 +120,6 @@ class ReliabilityRun(OrgModel):
     incidentCount = models.IntegerField(null=True, blank=True, verbose_name='incident count')
     targetIPTE = models.FloatField(null=True, blank=True, verbose_name='target IPTE')
     ipte = models.FloatField(null=True, blank=True, verbose_name='IPTE')
-    incidents = models.ManyToManyField(ReliabilityIncident, related_name='reliability_runs', blank=True)
 
     def __str__(self):
         return str(self.name) + ": " + str(self.testName) + ": " + str(
@@ -151,23 +133,44 @@ class ReliabilityRun(OrgModel):
                 self.ipte = ipte_util.calculate_ipte(self.totalIterationCount, self.incidentCount)
 
 
-class ReliabilityIterationStatus(models.TextChoices):
-    IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
-    PASSED = 'PASSED', _('Passed'),
-    FAILED = 'FAILED', _('Failed'),
-    ERROR = 'ERROR', _('Error'),
-
-
 class ReliabilityIteration(OrgModel):
+    class ReliabilityIterationStatus(models.TextChoices):
+        IN_PROGRESS = 'IN_PROGRESS', _('In progress'),
+        PASSED = 'PASSED', _('Passed'),
+        FAILED = 'FAILED', _('Failed'),
+        ERROR = 'ERROR', _('Error'),
+
     run = models.ForeignKey(ReliabilityRun, null=True, blank=True, on_delete=models.SET_NULL,
                             related_name='reliability_iterations')
+    name = models.CharField(max_length=256, )
     index = models.IntegerField(null=True, blank=True)
     status = models.CharField(max_length=11, choices=ReliabilityIterationStatus.choices,
                               default=ReliabilityIterationStatus.IN_PROGRESS)
     start_time = models.DateTimeField(verbose_name='start time', null=True, blank=True)
     end_time = models.DateTimeField(verbose_name='end time', null=True, blank=True)
     results = models.JSONField(null=True, blank=True)
-    incidents = models.ManyToManyField(ReliabilityIncident, related_name='reliability_iterations', blank=True)
+
+    def __str__(self):
+        return (self.run.name if self.run else "") + ":" + str(self.name) + ":" + str(self.index)
+
+
+class ReliabilityIncident(OrgModel):
+    release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL,
+                                related_name='reliability_incidents')
+    build = models.ForeignKey(Build, null=True, blank=True, on_delete=models.SET_NULL,
+                              related_name='reliability_incidents')
+    run = models.ForeignKey(ReliabilityRun, null=True, blank=True, on_delete=models.SET_NULL,
+                            related_name='reliability_incidents')
+    iteration = models.ForeignKey(ReliabilityIteration, null=True, blank=True, on_delete=models.SET_NULL,
+                                  related_name='reliability_incidents')
+    defect = models.ForeignKey(Defect, null=True, blank=True, on_delete=models.SET_NULL,
+                               related_name='reliability_incidents')
+    summary = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    triaged = models.BooleanField(default=False)
+    details_file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=True, null=True,
+                                    verbose_name='File with details')
+    attachments = models.ManyToManyField(Attachment, related_name='reliability_incidents', blank=True)
 
 
 class Environment(OrgModel):
