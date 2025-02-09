@@ -7,7 +7,6 @@ import {
   IconCalendar,
   IconTruckReturn,
   IconLogout,
-  IconTarget,
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { authState } from "../../../state/authData";
@@ -19,7 +18,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     navbar: {
       backgroundColor: theme.fn.variant({
         variant: "filled",
-        color: "cyan",
+        color: "teal",
       }).background,
     },
 
@@ -66,7 +65,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
       "&:hover": {
         backgroundColor: theme.fn.lighten(
-          theme.fn.variant({ variant: "filled", color: "q" }).background!,
+          theme.fn.variant({ variant: "filled", color: "cyan" }).background!,
           0.1
         ),
       },
@@ -94,18 +93,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "/reliability", label: "HOME", icon: IconHome },
-  { link: "/reliability/monitoring", label: "MONITORING", icon: IconBook },
-  {
-    link: "/reliability/target/growth",
-    label: "GROWTH TARGET",
-    icon: IconTarget,
-  },
-  {
-    link: "/reliability/target/demonstration",
-    label: "DEMONSTRATION TARGET",
-    icon: IconTarget,
-  },
+  { link: "/defects", label: "HOME", icon: IconHome },
+  { link: "/defects/all-defects", label: "ALL DEFECTS", icon: IconBook },
   // {
   //   link: "/capacity-planner/capacity",
   //   label: "CAPACITY VIEW",
@@ -159,7 +148,7 @@ export function NavbarSimpleColored() {
             {/* <MantineLogo size={28} inverted /> */}
 
             <h5 style={{ color: "white" }}>
-              <b>RELIABILITY DASHBOARD</b>
+              <b>DEFECTS DASHBOARD</b>
             </h5>
             {/* <Code className={classes.version}>v1.0</Code> */}
           </Group>

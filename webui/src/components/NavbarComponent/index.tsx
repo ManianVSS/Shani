@@ -233,6 +233,17 @@ export function NavbarNested() {
                           Capacity Planner
                         </Menu.Item>
                       </Menu.Group>
+                      <Menu.Group>
+                        <Menu.Item
+                          icon={ReduceCapacity}
+                          style={{ margin: 0 }}
+                          onClick={() => {
+                            navigate(`/defects/`);
+                          }}
+                        >
+                          Defects Zone
+                        </Menu.Item>
+                      </Menu.Group>
                       {/* <Menu.Group>
                         <Menu.Item
                           icon={TokenOutlined}
@@ -255,7 +266,7 @@ export function NavbarNested() {
                           Requirement
                         </Menu.Item>
                       </Menu.Group> */}
-                      {/* <Menu.Group>
+                      <Menu.Group>
                         <Menu.Item
                           icon={RecentActorsRounded}
                           style={{ margin: 0 }}
@@ -265,7 +276,7 @@ export function NavbarNested() {
                         >
                           Reliability
                         </Menu.Item>
-                      </Menu.Group> */}
+                      </Menu.Group>
 
                       <Menu.Group>
                         <Menu.Item

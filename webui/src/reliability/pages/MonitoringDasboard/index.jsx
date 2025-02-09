@@ -42,8 +42,8 @@ const MonitoringDashboard = () => {
       <AgGridReact
         rowData={reliruns}
         defaultColDef={defaultColDef}
+        rowSelection="single"
         columnDefs={columnDefs}
-        onRowClicked
         onRowDoubleClicked={(data) => {
           navigate("/reliability/monitoring/" + data.data.id);
         }}

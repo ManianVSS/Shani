@@ -39,6 +39,11 @@ import ReliRun from "./reliability/pages/ReliRun";
 import Holidays from "./capacity-planner/pages/Holidays";
 import ReliTarget from "./reliability/pages/ReliTarget";
 import GrowthTarget from "./reliability/pages/GrowthTarget";
+import { DefectsPrivateRoute } from "./defects/DefectsPrivateRoute";
+import DefectsHome from "./defects/pages/DefectsHome";
+import AllDefects from "./defects/pages/AllDefects";
+import DefectsLayout from "./defects/components/DefectsLayout";
+import IndividualDefect from "./defects/pages/IndividualDefect";
 
 interface customLinks {
   label: string;
@@ -291,6 +296,29 @@ export default function App() {
               <Route
                 path="/reliability/monitoring/:relirunID"
                 element={<ReliabilityLayout page={<ReliRun />} auth={true} />}
+              />
+            </Route>
+            <Route path="/defects" element={<DefectsPrivateRoute />}>
+              <Route
+                path="/defects"
+                element={<DefectsLayout page={<DefectsHome />} auth={true} />}
+              />
+            </Route>
+            <Route
+              path="/defects/all-defects"
+              element={<DefectsPrivateRoute />}
+            >
+              <Route
+                path="/defects/all-defects"
+                element={<DefectsLayout page={<AllDefects />} auth={true} />}
+              />
+            </Route>
+            <Route path="/defects/:defectID" element={<DefectsPrivateRoute />}>
+              <Route
+                path="/defects/:defectID"
+                element={
+                  <DefectsLayout page={<IndividualDefect />} auth={true} />
+                }
               />
             </Route>
             {/* <Route
