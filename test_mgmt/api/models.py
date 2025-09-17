@@ -6,35 +6,35 @@ from test_mgmt import settings
 from .storage import CustomFileSystemStorage
 
 
-# noinspection PyMethodMayBeStatic
-class MultiDBModel(models.Model):
-    class Meta:
-        abstract = True
-
-    def save(  # self, force_insert=False, force_update=False, using=None, update_fields=None):
-            self,
-            *args,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None,
-
-    ):
-        if using is None:
-            super().save(force_insert=force_insert, force_update=force_update, using='replica',
-                         update_fields=update_fields)
-            return super().save(force_insert=force_insert, force_update=force_update, using='default',
-                                update_fields=update_fields)
-        else:
-            return super().save(force_insert=force_insert, force_update=force_update, using=using,
-                                update_fields=update_fields)
-
-    def delete(self, using=None, keep_parents=False):
-        if using is None:
-            super().delete(using='replica', keep_parents=keep_parents)
-            return super().delete(using='default', keep_parents=keep_parents)
-        else:
-            return super().delete(using=using, keep_parents=keep_parents)
+# # noinspection PyMethodMayBeStatic
+# class MultiDBModel(models.Model):
+#     class Meta:
+#         abstract = True
+#
+#     def save(  # self, force_insert=False, force_update=False, using=None, update_fields=None):
+#             self,
+#             *args,
+#             force_insert=False,
+#             force_update=False,
+#             using=None,
+#             update_fields=None,
+#
+#     ):
+#         if using is None:
+#             super().save(force_insert=force_insert, force_update=force_update, using='replica',
+#                          update_fields=update_fields)
+#             return super().save(force_insert=force_insert, force_update=force_update, using='default',
+#                                 update_fields=update_fields)
+#         else:
+#             return super().save(force_insert=force_insert, force_update=force_update, using=using,
+#                                 update_fields=update_fields)
+#
+#     def delete(self, using=None, keep_parents=False):
+#         if using is None:
+#             super().delete(using='replica', keep_parents=keep_parents)
+#             return super().delete(using='default', keep_parents=keep_parents)
+#         else:
+#             return super().delete(using=using, keep_parents=keep_parents)
 
 
 User.add_to_class('to_relation_representation', lambda self: {'id': self.id, 'name': self.username})

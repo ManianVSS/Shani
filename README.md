@@ -18,6 +18,7 @@ Python 3, pip and libpq-dev </br>
 ##### **Creating and Migrating DB Schema**</br>
 
 > cd test_mgmt</br>
+> cp dev-config.yaml.example config.yaml
 > ./migrate.sh</br>
 
 ##### **Running server**
@@ -41,15 +42,16 @@ Python 3, pip , postgres database and libpq-dev </br>
 > pip install setuptools</br>
 
 ##### **Creating Postgres production DB and schema one time**</br>
-
+> cd test_mgmt</br>
 > ./createdb.sh
 
 ##### **Migrating DB Schema for changes**</br>
-
+> cd test_mgmt</br>
+> cp config.yaml.example config.yaml
 > ./migrate.sh
 
 ##### **Running server**</br>
-
+> cd test_mgmt</br>
 > ./runserver.sh
 
 Admin console should be up on http://localhost:8000/admin

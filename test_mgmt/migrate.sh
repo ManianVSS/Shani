@@ -11,4 +11,4 @@ python3 manage.py makemigrations execution
 python3 manage.py makemigrations people
 python3 manage.py makemigrations program
 python3 manage.py migrate
-python3 manage.py migrate --database=replica
+#python3 manage.py migrate --database=replica
