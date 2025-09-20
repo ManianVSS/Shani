@@ -9,15 +9,11 @@ from requirements.models import Feature
 
 
 class Attachment(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='automation_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to='automation', blank=False, null=False)
 
 
 class Tag(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='automation_tags')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -51,8 +47,6 @@ class Properties(OrgModel):
     class Meta:
         verbose_name_plural = "properties"
 
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='api_properties')
     name = models.CharField(max_length=256)
     details = models.TextField(null=True, blank=True)
 
@@ -86,8 +80,6 @@ class ApplicationUnderTest(OrgModel):
     class Meta:
         verbose_name_plural = "applications under test"
 
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='api_applications_under_test')
     name = models.CharField(max_length=256)
     details = models.TextField(null=True, blank=True)
     # start_page = models.ForeignKey("ApplicationPage", on_delete=models.SET_NULL, blank=True, null=True,
@@ -96,8 +88,6 @@ class ApplicationUnderTest(OrgModel):
 
 
 class ApplicationPage(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='api_application_pages')
     application = models.ForeignKey(ApplicationUnderTest, on_delete=models.SET_NULL, blank=True, null=True,
                                     related_name='pages')
     name = models.CharField(max_length=256)
@@ -128,8 +118,6 @@ class Element(OrgModel):
         XPATH = 'XPATH', gettext_lazy('xpath'),
         CUSTOM = 'CUSTOM', gettext_lazy('custom'),
 
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='api_elements')
     page = models.ForeignKey(ApplicationPage, on_delete=models.SET_NULL, blank=True, null=True,
                              related_name='elements')
     name = models.CharField(max_length=256)

@@ -23,7 +23,6 @@ move people\migrations data\dbbackup\%fullstamp%
 move program\migrations data\dbbackup\%fullstamp%
 
 move data\db.sqlite3 data\dbbackup\%fullstamp%
-@REM move data\replica.sqlite3 data\dbbackup\%fullstamp%
 
 call migrate.bat
 python manage.py shell -c "from create_super_user import create_super_user; create_super_user()"

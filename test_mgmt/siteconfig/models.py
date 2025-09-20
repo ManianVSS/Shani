@@ -83,9 +83,6 @@ class Category(OrgModel):
     class Meta:
         verbose_name_plural = "categories"
 
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='siteconfig_categories')
-
     sort_order = models.IntegerField(default=0)
     name = models.CharField(default='Home', max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -97,9 +94,6 @@ class Category(OrgModel):
 
 
 class Catalog(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='siteconfig_catalogs')
-
     sort_order = models.IntegerField(default=0)
     name = models.CharField(default='Main Catalog', max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)

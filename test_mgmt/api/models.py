@@ -5,7 +5,6 @@ from django.db.models import Q, TextField
 from test_mgmt import settings
 from .storage import CustomFileSystemStorage
 
-
 # # noinspection PyMethodMayBeStatic
 # class MultiDBModel(models.Model):
 #     class Meta:
@@ -92,6 +91,43 @@ class BaseModel(models.Model):
 
     def get_list_query_set(self, user):
         return self.objects.all()
+
+
+class UserMode(BaseModel):
+    class Meta:
+        abstract = True
+
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="%(class)ss")
+
+    def is_owner(self, user):
+        return (self.user is None) or (self.user == user)
+
+    def is_member(self, user):
+        return (self.user is None) or (self.user == user)
+
+    def is_guest(self, user):
+        return (self.user is None) or (self.user == user)
+
+    def is_consumer(self, user):
+        return (self.user is None) or (self.user == user)
+
+    def can_read(self, user):
+        return (self.user is None) or (self.user == user) or (self.published and self.is_public)
+
+    def can_modify(self, user):
+        return (self.user is None) or (self.user == user)
+
+    def can_delete(self, user):
+        return (self.user is None) or (self.user == user)
+
+    def get_list_query_set(self, user):
+        if user is not None:
+            if user.is_superuser:
+                return self.objects.all()
+            else:
+                return self.objects.filter(Q(user=user) | Q(user_isnull=True)).distinct()
+        else:
+            return self.objects.none()
 
 
 class Configuration(BaseModel):
@@ -241,8 +277,8 @@ class OrgGroup(BaseModel):
                 org_groups_where_read_privilege = user.get_orgs_with_view_privileges()
                 org_groups_where_consumer_privilege = user.get_orgs_with_consumer_privileges()
 
-                return self.objects.filter(Q(org_group__isnull=True)
-                                           | (
+                # Q(org_group__isnull=True)|
+                return self.objects.filter((
                                                    Q(published='True') &
                                                    Q(is_public='True')
                                            )
@@ -270,7 +306,7 @@ class OrgModel(BaseModel):
         abstract = True
 
     org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group')
+                                  verbose_name='organization group', related_name='%(app_label)s_%(class)s')
 
     def is_owner(self, user):
         return (
@@ -365,8 +401,6 @@ class NotMutablePublishOrgModel(OrgModel):
 
 
 class Attachment(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='api_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to=settings.MEDIA_BASE_NAME, blank=False,
                             null=False)
@@ -387,6 +421,10 @@ class XMLField(TextField):
 
 
 class GherkinField(TextField):
+    pass
+
+
+class HTMLField(TextField):
     pass
 
 

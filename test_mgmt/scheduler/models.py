@@ -8,31 +8,23 @@ from api.storage import CustomFileSystemStorage
 
 
 class Attachment(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='scheduler_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to='scheduler', blank=False, null=False)
 
 
 class Tag(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='scheduler_tags')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
 
 class ResourceType(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='resource_types')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
 
 class ResourceSet(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='resource_sets')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -40,8 +32,6 @@ class ResourceSet(OrgModel):
 
 
 class ResourceSetComponent(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='resource_set_components')
     resource_set = models.ForeignKey(ResourceSet, on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='components')
     type = models.ForeignKey(ResourceType, on_delete=models.SET_NULL, null=True, blank=True,
@@ -58,8 +48,6 @@ class RequestStatus(models.TextChoices):
 
 
 class Request(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='scheduler_requests')
     requester = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL,
                                   related_name="scheduler_requests")
     name = models.CharField(max_length=256)
@@ -76,8 +64,6 @@ class Request(OrgModel):
 
 
 class Resource(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='resources')
     type = models.ForeignKey(ResourceType, on_delete=models.SET_NULL, null=True, blank=True,
                              related_name='resources')
     name = models.CharField(max_length=256, null=True, blank=True)

@@ -8,6 +8,7 @@ from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import TextField
+from django.db.models.fields import NOT_PROVIDED
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django_ace import AceWidget
@@ -19,7 +20,7 @@ from rest_framework.authtoken.admin import TokenAdmin
 from rest_framework.authtoken.models import TokenProxy
 
 from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, PythonCodeField, XMLField, \
-    GherkinField, LuaField
+    GherkinField, HTMLField, LuaField
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -32,6 +33,7 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
         PythonCodeField: {"widget": AceWidget(mode="python", width="100%", height="500px")},
         XMLField: {"widget": AceWidget(mode="xml", width="100%", height="500px")},
         GherkinField: {"widget": AceWidget(mode="gherkin", width="100%", height="500px")},
+        HTMLField: {"widget": AceWidget(mode="html", width="100%", height="500px")},
         LuaField: {"widget": AceWidget(mode="lua", width="100%", height="500px")},
     }
 
@@ -102,6 +104,33 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
                 return self.model.get_list_query_set(self.model, request.user)
             else:
                 return super().get_queryset(request)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if request.user is None or request.user.is_superuser:
+            return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        else:
+            if db_field.remote_field and db_field.remote_field.model and hasattr(db_field.remote_field.model,
+                                                                                 'get_list_query_set'):
+                kwargs["queryset"] = db_field.remote_field.model.get_list_query_set(db_field.remote_field.model,
+                                                                                    request.user)
+            return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    # noinspection PyProtectedMember
+    def get_changeform_initial_data(self, request):
+        # If one of the fields is user, set it to current user
+        initial = super().get_changeform_initial_data(request)
+        if request.user and not request.user.is_anonymous:
+            for field in self.model._meta.get_fields():
+                if field.concrete and not (field.many_to_many or field.one_to_many):
+                    if field.name in initial:
+                        continue
+                    if field.default is not None and field.default != NOT_PROVIDED:
+                        continue
+                    if field.auto_created:
+                        continue
+                    if hasattr(field, 'related_model') and field.related_model == User:
+                        initial[field.name] = request.user.id
+        return initial
 
 
 class CustomAdminSite(AdminSite):

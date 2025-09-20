@@ -8,8 +8,6 @@ from requirements.models import UseCase
 
 
 class Attachment(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='test_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to='test_design', blank=False, null=False)
 
@@ -18,8 +16,6 @@ class Attachment(OrgModel):
 
 
 class Tag(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='test_tags')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -33,8 +29,6 @@ class TestCaseCategory(OrgModel):
     class Meta:
         verbose_name_plural = "test case categories"
 
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='test_testcase_categories')
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='sub_categories')
     name = models.CharField(max_length=256, )
@@ -57,8 +51,6 @@ class TestCase(OrgModel):
         AUTOMATABLE = 'AUTOMATABLE', _('Automatable'),
         AUTOMATED = 'AUTOMATED', _('Automated'),
 
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='test_testcases')
     parent = models.ForeignKey(TestCaseCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='testcases', verbose_name='test case category')
 

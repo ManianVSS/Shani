@@ -15,7 +15,6 @@ mv people/migrations data/dbbackup/$timestamp/migrations/people
 mv program/migrations data/dbbackup/$timestamp/migrations/program
 
 mv data/db.sqlite3 data/dbbackup/$timestamp
-#mv data/replica.sqlite3 data/dbbackup/$timestamp
 
 bash migrate.sh
 python manage.py shell -c "from create_super_user import create_super_user; create_super_user()"

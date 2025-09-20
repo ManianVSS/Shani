@@ -10,23 +10,17 @@ from execution import ipte_util
 
 
 class Attachment(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='execution_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=False, null=False)
 
 
 class Tag(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='execution_tags')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
 
 class Release(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='execution_releases')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -35,8 +29,6 @@ class Release(OrgModel):
 
 
 class Build(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='execution_builds')
     release = models.ForeignKey(Release, null=True, blank=True, on_delete=models.SET_NULL, related_name='builds')
     name = models.CharField(max_length=256, )
     type = models.CharField(max_length=256, null=True, blank=True)

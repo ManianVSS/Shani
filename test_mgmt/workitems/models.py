@@ -6,32 +6,24 @@ from test_mgmt import settings
 
 
 class Attachment(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='workitem_attachments')
     name = models.CharField(max_length=256)
     file = models.FileField(storage=CustomFileSystemStorage, upload_to=settings.MEDIA_BASE_NAME, blank=False,
                             null=False)
 
 
 class Tag(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='workitem_tags')
     name = models.CharField(max_length=256, )
     summary = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
 
 class ProgramIncrement(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_program_increments')
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
 
 class Epic(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_epics')
     pi = models.ForeignKey(ProgramIncrement, null=True, on_delete=models.SET_NULL, related_name='epics')
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
@@ -41,8 +33,6 @@ class Epic(OrgModel):
 
 
 class Feature(OrgModel):
-    org_group = models.ForeignKey(OrgGroup, on_delete=models.SET_NULL, blank=True, null=True,
-                                  verbose_name='organization group', related_name='work_item_features')
     epic = models.ForeignKey(Epic, null=True, on_delete=models.SET_NULL, related_name='features')
     name = models.CharField(max_length=256)
     summary = models.CharField(max_length=256, null=True, blank=True)
