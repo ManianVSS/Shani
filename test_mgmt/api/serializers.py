@@ -6,29 +6,34 @@ from .models import Attachment, OrgGroup, Configuration, Site
 
 
 class ShaniModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        self.expand_relation_as_object = kwargs.pop('expand_relation_as_object', True)
+        super().__init__(*args, **kwargs)
+
     def to_representation(self, instance):
         super_representation = super().to_representation(instance)
 
-        ret = {}
-        fields = self._readable_fields
+        if self.expand_relation_as_object:
+            fields = self._readable_fields
 
-        for field in fields:
-            attribute = field.get_attribute(instance)
-            instance_field = getattr(instance, field.field_name)
-            if instance_field:
-                if isinstance(field, PrimaryKeyRelatedField):
-                    if hasattr(instance_field, 'to_relation_representation'):
-                        super_representation[field.field_name] = instance_field.to_relation_representation()
-                    else:
-                        super_representation[field.field_name] = {'id': instance_field.id, }
-                elif isinstance(field, ManyRelatedField):
-                    super_representation[field.field_name] = []
-                    for related_item in instance_field.all():
-                        if hasattr(related_item, 'to_relation_representation'):
-                            repr_item_to_add = related_item.to_relation_representation()
+            for field in fields:
+                attribute = field.get_attribute(instance)
+                instance_field = getattr(instance, field.field_name)
+                if instance_field:
+                    if isinstance(field, PrimaryKeyRelatedField):
+                        if hasattr(instance_field, 'to_relation_representation'):
+                            super_representation[field.field_name] = instance_field.to_relation_representation()
                         else:
-                            repr_item_to_add = {'id': related_item.id, }
-                        super_representation[field.field_name].append(repr_item_to_add)
+                            super_representation[field.field_name] = {'id': instance_field.id, }
+                    elif isinstance(field, ManyRelatedField):
+                        super_representation[field.field_name] = []
+                        for related_item in instance_field.all():
+                            if hasattr(related_item, 'to_relation_representation'):
+                                repr_item_to_add = related_item.to_relation_representation()
+                            else:
+                                repr_item_to_add = {'id': related_item.id, }
+                            super_representation[field.field_name].append(repr_item_to_add)
 
         return super_representation
 

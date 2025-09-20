@@ -1,34 +1,29 @@
 import os
 from pathlib import Path
 
+import pandas as pd
 import yaml
 from django.contrib.auth.models import Group, User
 from django.db import IntegrityError
 
 from api.models import model_name_map as api_model_name_map
-
-from siteconfig.models import model_name_map as siteconfig_model_name_map
-from people.models import model_name_map as people_model_name_map
-
-from program.models import model_name_map as program_model_name_map
-from workitems.models import model_name_map as workitems_model_name_map
-
-from requirements.models import model_name_map as requirements_model_name_map
-from testdesign.models import model_name_map as testdesign_model_name_map
-from automation.models import model_name_map as automation_model_name_map
-from execution.models import model_name_map as execution_model_name_map
-
 from api.serializers import serializer_map as api_serializer_map
-from siteconfig.serializers import serializer_map as siteconfig_serializer_map
-from people.serializers import serializer_map as people_serializer_map
-
-from program.serializers import serializer_map as program_serializer_map
-from workitems.serializers import serializer_map as workitems_serializer_map
-
-from requirements.serializers import serializer_map as requirements_serializer_map
-from testdesign.serializers import serializer_map as testdesign_serializer_map
+from automation.models import model_name_map as automation_model_name_map
 from automation.serializers import serializer_map as automation_serializer_map
+from execution.models import model_name_map as execution_model_name_map
 from execution.serializers import serializer_map as execution_serializer_map
+from people.models import model_name_map as people_model_name_map
+from people.serializers import serializer_map as people_serializer_map
+from program.models import model_name_map as program_model_name_map
+from program.serializers import serializer_map as program_serializer_map
+from requirements.models import model_name_map as requirements_model_name_map
+from requirements.serializers import serializer_map as requirements_serializer_map
+from siteconfig.models import model_name_map as siteconfig_model_name_map
+from siteconfig.serializers import serializer_map as siteconfig_serializer_map
+from testdesign.models import model_name_map as testdesign_model_name_map
+from testdesign.serializers import serializer_map as testdesign_serializer_map
+from workitems.models import model_name_map as workitems_model_name_map
+from workitems.serializers import serializer_map as workitems_serializer_map
 
 model_name_map = {
     'auth': {'Group': Group, 'User': User},
@@ -116,3 +111,18 @@ def load_data_from_folder(data_folder: str):
 
                                 for to_many_key, value in m2m_fkeys.items():
                                     model_record.__getattribute__(to_many_key).set([int(item['id']) for item in value])
+
+
+def save_data_to_excel(file_path: str):
+    with pd.ExcelWriter(file_path) as writer:
+        for app_to_save in model_name_map.keys():
+            print("Going to write " + app_to_save)
+            for model_to_save in model_name_map[app_to_save].keys():
+                print("Going to write " + model_to_save)
+                model_class = model_name_map[app_to_save][model_to_save]
+                model_records = model_class.objects.all()
+                serializer_cls = serializer_map[model_class]
+                if len(model_records) > 0:
+                    df = pd.DataFrame(serializer_cls(model_records, many=True).data)
+                    df.to_excel(writer, sheet_name=app_to_save + "_" + model_to_save, index=False)
+    print("Wrote data to " + file_path)
