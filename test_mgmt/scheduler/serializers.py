@@ -2,13 +2,13 @@ from api.serializers import ShaniModelSerializer
 from .models import Attachment, Tag, ResourceType, ResourceSet, ResourceSetComponent, Request, Resource
 
 
-class AttachmentSerializer(ShaniModelSerializer):
+class SchedulerAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class TagSerializer(ShaniModelSerializer):
+class SchedulerTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
@@ -51,8 +51,8 @@ class ResourceSerializer(ShaniModelSerializer):
 
 
 serializer_map = {
-    Attachment: AttachmentSerializer,
-    Tag: TagSerializer,
+    Attachment: SchedulerAttachmentSerializer,
+    Tag: SchedulerTagSerializer,
     ResourceType: ResourceTypeSerializer,
     ResourceSet: ResourceSetSerializer,
     ResourceSetComponent: ResourceSetComponentSerializer,

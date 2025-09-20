@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -50,6 +52,21 @@ def get_org_group(org_group_id):
     return OrgGroup.objects.get(pk=org_group_id) if org_group_id else None
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Browse requirements and requirement categories based on org group and category",
+    manual_parameters=[
+        openapi.Parameter('org_group', openapi.IN_QUERY, description="Org Group ID", type=openapi.TYPE_INTEGER,
+                          required=False),
+        openapi.Parameter('requirement_category_id', openapi.IN_QUERY, description="Requirement Category ID",
+                          type=openapi.TYPE_INTEGER, required=False),
+    ],
+    responses={
+        200: openapi.Response('Success', RequirementCategorySerializer),
+        404: 'Not Found',
+        405: 'Method Not Allowed',
+    }
+)
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def browse_requirements_category(request):
@@ -87,5 +104,5 @@ def browse_requirements_category(request):
         get_requirement_category_requirements(org_group, requirement_category), many=True).data
 
     # TODO: Need to expand tags and details file instead of Ids
-    
+
     return Response(catalog_data)

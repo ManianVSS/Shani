@@ -2,13 +2,13 @@ from api.serializers import ShaniModelSerializer
 from .models import Attachment, Tag, ProgramIncrement, Story, Sprint, Feature, Epic, Feedback
 
 
-class AttachmentSerializer(ShaniModelSerializer):
+class WorkitemsAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class TagSerializer(ShaniModelSerializer):
+class WorkitemsTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
@@ -29,7 +29,7 @@ class EpicSerializer(ShaniModelSerializer):
                   'updated_at', 'published', 'is_public', ]
 
 
-class FeatureSerializer(ShaniModelSerializer):
+class WorkitemsFeatureSerializer(ShaniModelSerializer):
     class Meta:
         model = Feature
         fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'epic', 'org_group', 'created_at',
@@ -58,11 +58,11 @@ class FeedbackSerializer(ShaniModelSerializer):
 
 
 serializer_map = {
-    Attachment: AttachmentSerializer,
-    Tag: TagSerializer,
+    Attachment: WorkitemsAttachmentSerializer,
+    Tag: WorkitemsTagSerializer,
     ProgramIncrement: ProgramIncrementSerializer,
     Epic: EpicSerializer,
-    Feature: FeatureSerializer,
+    Feature: WorkitemsFeatureSerializer,
     Sprint: SprintSerializer,
     Story: StorySerializer,
     Feedback: FeedbackSerializer,

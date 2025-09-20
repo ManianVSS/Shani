@@ -3,20 +3,20 @@ from .models import Attachment, Tag, Release, Build, Defect, Run, ReliabilityInc
     ReliabilityIteration, Environment
 
 
-class AttachmentSerializer(ShaniModelSerializer):
+class ExecutionAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class TagSerializer(ShaniModelSerializer):
+class ExecutionTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
 
 
-class ReleaseSerializer(ShaniModelSerializer):
+class ExecutionReleaseSerializer(ShaniModelSerializer):
     class Meta:
         model = Release
         fields = ['id', 'name', 'summary', 'description', 'properties', 'attachments', 'org_group', 'created_at',
@@ -84,9 +84,9 @@ class EnvironmentSerializer(ShaniModelSerializer):
 
 
 serializer_map = {
-    Attachment: AttachmentSerializer,
-    Tag: TagSerializer,
-    Release: ReleaseSerializer,
+    Attachment: ExecutionAttachmentSerializer,
+    Tag: ExecutionTagSerializer,
+    Release: ExecutionReleaseSerializer,
     Build: BuildSerializer,
     Defect: DefectSerializer,
     Run: RunSerializer,

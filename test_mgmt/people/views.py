@@ -10,13 +10,13 @@ from .models import Engineer, SiteHoliday, Leave, \
 from .serializers import EngineerSerializer, \
     SiteHolidaySerializer, \
     LeaveSerializer, EngineerOrgGroupParticipationSerializer, TopicSerializer, TopicEngineerAssignmentSerializer, \
-    EngineerOrgGroupParticipationHistorySerializer, AttachmentSerializer, CreditSerializer, \
+    EngineerOrgGroupParticipationHistorySerializer, PeopleAttachmentSerializer, CreditSerializer, \
     ScaleSerializer, ReasonSerializer, EngineerSkillsSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+    serializer_class = PeopleAttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]

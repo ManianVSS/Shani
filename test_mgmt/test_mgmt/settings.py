@@ -3,8 +3,6 @@ from pathlib import Path
 
 import django_env_overrides
 import yaml
-from django.conf.global_settings import FORCE_SCRIPT_NAME
-from tutorial.settings import ALLOWED_HOSTS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -138,13 +136,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # 'django_group_model',
     'django_crontab',
     'django_extensions',
 
     'rest_framework',  # Added for Django Rest Framework
     'rest_framework.authtoken',
-    'rest_framework_swagger',
+
+    'drf_yasg',
+    # 'rest_framework_swagger',
 
     'django_filters',  # Added for filtering
 

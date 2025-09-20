@@ -4,7 +4,7 @@ from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation,
     EngineerSkills
 
 
-class AttachmentSerializer(ShaniModelSerializer):
+class PeopleAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -87,7 +87,7 @@ class EngineerSkillsSerializer(ShaniModelSerializer):
 
 
 serializer_map = {
-    Attachment: AttachmentSerializer,
+    Attachment: PeopleAttachmentSerializer,
     Engineer: EngineerSerializer,
     EngineerOrgGroupParticipation: EngineerOrgGroupParticipationSerializer,
     SiteHoliday: SiteHolidaySerializer,

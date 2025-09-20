@@ -2,13 +2,13 @@ from api.serializers import ShaniModelSerializer
 from .models import TestCase, Attachment, TestCaseCategory, Tag
 
 
-class AttachmentSerializer(ShaniModelSerializer):
+class TestDesignAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class TagSerializer(ShaniModelSerializer):
+class TestDesignTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
@@ -31,8 +31,8 @@ class TestCaseSerializer(ShaniModelSerializer):
 
 
 serializer_map = {
-    Attachment: AttachmentSerializer,
-    Tag: TagSerializer,
+    Attachment: TestDesignAttachmentSerializer,
+    Tag: TestDesignTagSerializer,
     TestCaseCategory: TestCaseCategorySerializer,
     TestCase: TestCaseSerializer,
 }

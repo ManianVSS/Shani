@@ -8,13 +8,13 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     ShaniOrgGroupViewSet, datetime_fields_filter_lookups, compare_fields_filter_lookups, enum_fields_filter_lookups
 from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, UseCase, RequirementCategory, \
     Requirement
-from .serializers import AttachmentSerializer, TagSerializer, FeatureCategorySerializer, FeatureSerializer, \
+from .serializers import RequirementsAttachmentSerializer, RequirementsTagSerializer, RequirementsFeatureCategorySerializer, RequirementsFeatureSerializer, \
     UseCaseCategorySerializer, UseCaseSerializer, RequirementCategorySerializer, RequirementSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+    serializer_class = RequirementsAttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -32,7 +32,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
 
 class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+    serializer_class = RequirementsTagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -52,7 +52,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
 
 class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
     queryset = FeatureCategory.objects.all()
-    serializer_class = FeatureCategorySerializer
+    serializer_class = RequirementsFeatureCategorySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'parent', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
@@ -75,7 +75,7 @@ class FeatureCategoryViewSet(ShaniOrgGroupViewSet):
 
 class FeatureViewSet(ShaniOrgGroupViewSet):
     queryset = Feature.objects.all()
-    serializer_class = FeatureSerializer
+    serializer_class = RequirementsFeatureSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'parent', 'status', 'external_id', 'org_group', 'created_at',

@@ -3,27 +3,27 @@ from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, 
     Requirement
 
 
-class AttachmentSerializer(ShaniModelSerializer):
+class RequirementsAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
         fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class TagSerializer(ShaniModelSerializer):
+class RequirementsTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
                   'is_public', ]
 
 
-class FeatureCategorySerializer(ShaniModelSerializer):
+class RequirementsFeatureCategorySerializer(ShaniModelSerializer):
     class Meta:
         model = FeatureCategory
         fields = ['id', 'name', 'summary', 'description', 'parent', 'tags', 'details_file', 'attachments',
                   'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
 
 
-class FeatureSerializer(ShaniModelSerializer):
+class RequirementsFeatureSerializer(ShaniModelSerializer):
     class Meta:
         model = Feature
         fields = ['id', 'name', 'summary', 'parent', 'description', 'status', 'tags', 'external_id', 'details_file',
@@ -60,10 +60,10 @@ class RequirementSerializer(ShaniModelSerializer):
 
 
 serializer_map = {
-    Attachment: AttachmentSerializer,
-    Tag: TagSerializer,
-    FeatureCategory: FeatureCategorySerializer,
-    Feature: FeatureSerializer,
+    Attachment: RequirementsAttachmentSerializer,
+    Tag: RequirementsTagSerializer,
+    FeatureCategory: RequirementsFeatureCategorySerializer,
+    Feature: RequirementsFeatureSerializer,
     UseCaseCategory: UseCaseCategorySerializer,
     UseCase: UseCaseSerializer,
     RequirementCategory: RequirementCategorySerializer,

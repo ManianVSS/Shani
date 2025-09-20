@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 
 import numpy
 from django.http import HttpResponse
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -64,6 +66,24 @@ def get_capacity_data_for_org_group(org_group, from_date, to_date):
     return capacity_data
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Get capacity data for an org group and its transitive sub-groups for a time range",
+    manual_parameters=[
+        openapi.Parameter('org_group', openapi.IN_QUERY, description="Org group ID", type=openapi.TYPE_INTEGER,
+                          required=True),
+        openapi.Parameter('from', openapi.IN_QUERY, description="From date (yyyy-mm-dd)", type=openapi.TYPE_STRING,
+                          required=True),
+        openapi.Parameter('to', openapi.IN_QUERY, description="To date (yyyy-mm-dd)", type=openapi.TYPE_STRING,
+                          required=True),
+    ],
+    responses={
+        200: 'Capacity data returned',
+        400: 'One of the parameters (org_group/from/to) missing',
+        404: 'Could not find org_group passed',
+        405: 'Method not allowed'
+    }
+)
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_org_capacity_for_time_range(request):
@@ -92,6 +112,24 @@ def get_org_capacity_for_time_range(request):
     return Response(capacity_data_for_org_groups)
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Get capacity data for an engineer for a time range",
+    manual_parameters=[
+        openapi.Parameter('engineer', openapi.IN_QUERY, description="Engineer ID", type=openapi.TYPE_INTEGER,
+                          required=True),
+        openapi.Parameter('from', openapi.IN_QUERY, description="From date (yyyy-mm-dd)", type=openapi.TYPE_STRING,
+                          required=True),
+        openapi.Parameter('to', openapi.IN_QUERY, description="To date (yyyy-mm-dd)", type=openapi.TYPE_STRING,
+                          required=True),
+    ],
+    responses={
+        200: 'Capacity data returned',
+        400: 'One of the parameters (engineer/from/to) missing',
+        404: 'Could not find engineer passed',
+        405: 'Method not allowed'
+    }
+)
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_engineer_capacity_for_time_range(request):

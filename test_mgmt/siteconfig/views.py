@@ -2,7 +2,12 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
@@ -146,6 +151,14 @@ class SiteSettingsViewSet(ShaniOrgGroupViewSet):
     }
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Get all published site details with catalogs, categories, pages, display items and events",
+    responses={
+        200: openapi.Response('Success', SiteSettingsSerializer),
+        405: 'Method Not Allowed',
+    }
+)
 @api_view(['GET'])
 def get_all_site_details_api(request):
     if not request.method == 'GET':
@@ -155,6 +168,14 @@ def get_all_site_details_api(request):
     return Response(all_sites_details)
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Get default site details with catalogs, categories, pages, display items and events",
+    responses={
+        200: openapi.Response('Success', SiteSettingsSerializer),
+        405: 'Method Not Allowed',
+    }
+)
 @api_view(['GET'])
 def get_default_site_details_api(request):
     if not request.method == 'GET':

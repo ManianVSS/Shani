@@ -2,7 +2,7 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     string_fields_filter_lookups, datetime_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet
 from .models import ApplicationType, Application, Release, ArtifactType, DocumentType, Artifact, Document
-from .serializers import ApplicationTypeSerializer, ApplicationSerializer, ReleaseSerializer, ArtifactTypeSerializer, \
+from .serializers import ApplicationTypeSerializer, ApplicationSerializer, ProgramReleaseSerializer, ArtifactTypeSerializer, \
     DocumentTypeSerializer, ArtifactSerializer, DocumentSerializer
 
 
@@ -47,7 +47,7 @@ class ApplicationViewSet(ShaniOrgGroupViewSet):
 
 class ReleaseViewSet(ShaniOrgGroupViewSet):
     queryset = Release.objects.all()
-    serializer_class = ReleaseSerializer
+    serializer_class = ProgramReleaseSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]

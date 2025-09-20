@@ -9,14 +9,14 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
 from . import ipte_util
 from .models import Attachment, Tag, Release, Environment, ReliabilityRun, Defect, Run, ExecutionRecord, Build, \
     ReliabilityIteration, ReliabilityIncident
-from .serializers import AttachmentSerializer, TagSerializer, ReleaseSerializer, EnvironmentSerializer, \
+from .serializers import ExecutionAttachmentSerializer, ExecutionTagSerializer, ExecutionReleaseSerializer, EnvironmentSerializer, \
     ReliabilityRunSerializer, DefectSerializer, RunSerializer, ExecutionRecordSerializer, BuildSerializer, \
     ReliabilityIterationSerializer, ReliabilityIncidentSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+    serializer_class = ExecutionAttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -34,7 +34,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
 
 class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+    serializer_class = ExecutionTagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -54,7 +54,7 @@ class TagViewSet(ShaniOrgGroupViewSet):
 
 class ReleaseViewSet(ShaniOrgGroupViewSet):
     queryset = Release.objects.all()
-    serializer_class = ReleaseSerializer
+    serializer_class = ExecutionReleaseSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]

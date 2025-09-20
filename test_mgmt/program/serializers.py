@@ -16,7 +16,7 @@ class ApplicationSerializer(ShaniModelSerializer):
                   'published', ]
 
 
-class ReleaseSerializer(ShaniModelSerializer):
+class ProgramReleaseSerializer(ShaniModelSerializer):
     class Meta:
         model = Release
         fields = ['id', 'application', 'name', 'version', 'date', 'summary', 'description', 'release_notes',
@@ -54,7 +54,7 @@ class DocumentSerializer(ShaniModelSerializer):
 serializer_map = {
     ApplicationType: ApplicationTypeSerializer,
     Application: ApplicationSerializer,
-    Release: ReleaseSerializer,
+    Release: ProgramReleaseSerializer,
     ArtifactType: ApplicationTypeSerializer,
     Artifact: ArtifactSerializer,
     DocumentType: DocumentTypeSerializer,

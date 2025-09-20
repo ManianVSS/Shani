@@ -3,14 +3,14 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     exact_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, \
     datetime_fields_filter_lookups
 from .models import Attachment, Tag, ProgramIncrement, Epic, Feature, Sprint, Story, Feedback
-from .serializers import AttachmentSerializer, TagSerializer, ProgramIncrementSerializer, EpicSerializer, \
-    FeatureSerializer, \
+from .serializers import WorkitemsAttachmentSerializer, WorkitemsTagSerializer, ProgramIncrementSerializer, EpicSerializer, \
+    WorkitemsFeatureSerializer, \
     SprintSerializer, StorySerializer, FeedbackSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+    serializer_class = WorkitemsAttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -28,7 +28,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
 
 class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+    serializer_class = WorkitemsTagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -89,7 +89,7 @@ class EpicViewSet(ShaniOrgGroupViewSet):
 
 class FeatureViewSet(ShaniOrgGroupViewSet):
     queryset = Feature.objects.all()
-    serializer_class = FeatureSerializer
+    serializer_class = WorkitemsFeatureSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'weight', 'epic', 'org_group', 'created_at', 'updated_at',

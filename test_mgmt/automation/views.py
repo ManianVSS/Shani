@@ -9,13 +9,13 @@ from api.views import default_search_fields, default_ordering, id_fields_filter_
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, enum_fields_filter_lookups
 from .models import Attachment, Tag, Step, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
-from .serializers import AttachmentSerializer, TagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer, \
+from .serializers import AutomationAttachmentSerializer, AutomationTagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer, \
     ApplicationUnderTestSerializer, ApplicationPageSerializer, ElementSerializer
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+    serializer_class = AutomationAttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
@@ -33,7 +33,7 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
 
 class TagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+    serializer_class = AutomationTagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
