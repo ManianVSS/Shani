@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField, ManyRelatedField
 
-from .models import Attachment, OrgGroup, Configuration, Site
+from .models import Attachment, OrgGroup, Configuration, Site, base_model_base_fields, org_model_base_fields
 
 
 class ShaniModelSerializer(serializers.ModelSerializer):
@@ -54,27 +54,26 @@ class GroupSerializer(ShaniModelSerializer):
 class ConfigurationSerializer(ShaniModelSerializer):
     class Meta:
         model = Configuration
-        fields = ['id', 'name', 'value', 'description', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = base_model_base_fields + ['name', 'value', 'description', ]
 
 
 class OrgGroupSerializer(ShaniModelSerializer):
     class Meta:
         model = OrgGroup
-        fields = ['id', 'name', 'summary', 'auth_group', 'description', 'org_group', 'leaders', 'members', 'guests',
-                  'consumers', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = base_model_base_fields + ['name', 'summary', 'auth_group', 'description', 'org_group',
+                                           'leaders', 'members', 'guests', 'consumers', ]
 
 
 class AttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'file', ]
 
 
 class SiteSerializer(ShaniModelSerializer):
     class Meta:
         model = Site
-        fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public',
-                  'attachments', ]
+        fields = org_model_base_fields + ['name', 'summary', 'attachments', ]
 
 
 serializer_map = {

@@ -1,3 +1,4 @@
+from api.models import base_model_base_fields, org_model_base_fields
 from api.serializers import ShaniModelSerializer
 from .models import Attachment, Tag, Step, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
 
@@ -5,56 +6,51 @@ from .models import Attachment, Tag, Step, Properties, MockAPI, ApplicationUnder
 class AutomationAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'file', ]
 
 
 class AutomationTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', ]
 
 
 class StepSerializer(ShaniModelSerializer):
     class Meta:
         model = Step
-        fields = ['id', 'feature', 'name', 'summary', 'description', 'eta', 'tags', 'status', 'details_file',
-                  'attachments', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['feature', 'name', 'summary', 'description', 'eta', 'tags', 'status',
+                                          'details_file', 'attachments', ]
 
 
 class PropertiesSerializer(ShaniModelSerializer):
     class Meta:
         model = Properties
-        fields = ['id', 'name', 'details', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'details', ]
 
 
 class MockAPISerializer(ShaniModelSerializer):
     class Meta:
         model = MockAPI
-        fields = ['id', 'name', 'summary', 'status', 'content_type', 'body', 'http_method', 'org_group', 'created_at',
-                  'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'status', 'content_type', 'body', 'http_method', ]
 
 
 class ApplicationUnderTestSerializer(ShaniModelSerializer):
     class Meta:
         model = ApplicationUnderTest
-        fields = ['id', 'name', 'details', 'attachments', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['name', 'details', 'attachments', ]
 
 
 class ApplicationPageSerializer(ShaniModelSerializer):
     class Meta:
         model = ApplicationPage
-        fields = ['id', 'application', 'name', 'details', 'attachments', 'org_group', 'created_at', 'updated_at',
-                  'published', 'is_public', ]
+        fields = org_model_base_fields + ['application', 'name', 'details', 'attachments', ]
 
 
 class ElementSerializer(ShaniModelSerializer):
     class Meta:
         model = Element
-        fields = ['id', 'page', 'name', 'containing_element', 'element_type', 'details', 'locator_type',
-                  'locator_value', 'locator_file', 'attachments', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['page', 'name', 'containing_element', 'element_type', 'details',
+                                          'locator_type', 'locator_value', 'locator_file', 'attachments', ]
 
 
 serializer_map = {

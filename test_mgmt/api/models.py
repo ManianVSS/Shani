@@ -93,6 +93,9 @@ class BaseModel(models.Model):
         return self.objects.all()
 
 
+base_model_base_fields = ['id', 'created_at', 'updated_at', 'published', 'is_public', ]
+
+
 class UserMode(BaseModel):
     class Meta:
         abstract = True
@@ -387,6 +390,9 @@ class OrgModel(BaseModel):
                 #                            ).distinct()
         else:
             return self.objects.none()
+
+
+org_model_base_fields = base_model_base_fields + ['org_group', ]
 
 
 class NotMutablePublishOrgModel(OrgModel):

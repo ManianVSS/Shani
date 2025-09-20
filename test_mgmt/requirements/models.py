@@ -99,9 +99,9 @@ class RequirementCategory(OrgModel):
 class Requirement(OrgModel):
     category = models.ForeignKey(RequirementCategory, on_delete=models.SET_NULL, null=True, blank=True,
                                  related_name='requirements', verbose_name='category')
-    name = models.CharField(max_length=256, )
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True,
-                               related_name='parent_requirement')
+                               related_name='requirements')
+    name = models.CharField(max_length=256, )
 
     summary = models.CharField(max_length=256, null=True, blank=True)
 

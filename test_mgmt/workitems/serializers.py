@@ -1,3 +1,4 @@
+from api.models import org_model_base_fields
 from api.serializers import ShaniModelSerializer
 from .models import Attachment, Tag, ProgramIncrement, Story, Sprint, Feature, Epic, Feedback
 
@@ -5,56 +6,50 @@ from .models import Attachment, Tag, ProgramIncrement, Story, Sprint, Feature, E
 class WorkitemsAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'file', ]
 
 
 class WorkitemsTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', ]
 
 
 class ProgramIncrementSerializer(ShaniModelSerializer):
     class Meta:
         model = ProgramIncrement
-        fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', ]
 
 
 class EpicSerializer(ShaniModelSerializer):
     class Meta:
         model = Epic
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'pi', 'org_group', 'created_at',
-                  'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', 'weight', 'attachments', 'pi', ]
 
 
 class WorkitemsFeatureSerializer(ShaniModelSerializer):
     class Meta:
         model = Feature
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'epic', 'org_group', 'created_at',
-                  'updated_at', 'published', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', 'weight', 'attachments', 'epic', ]
 
 
 class SprintSerializer(ShaniModelSerializer):
     class Meta:
         model = Sprint
-        fields = ['id', 'name', 'pi', 'start_date', 'end_date', 'org_group', 'created_at', 'updated_at',
-                  'published', ]
+        fields = org_model_base_fields + ['name', 'pi', 'start_date', 'end_date', ]
 
 
 class StorySerializer(ShaniModelSerializer):
     class Meta:
         model = Story
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'attachments', 'rank', 'sprint', 'feature',
-                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', 'weight', 'attachments', 'rank', 'sprint',
+                                          'feature', ]
 
 
 class FeedbackSerializer(ShaniModelSerializer):
     class Meta:
         model = Feedback
-        fields = ['id', 'name', 'summary', 'description', 'time', 'pi', 'org_group', 'created_at', 'updated_at',
-                  'published', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', 'time', 'pi', ]
 
 
 serializer_map = {

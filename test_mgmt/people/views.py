@@ -38,7 +38,7 @@ class EngineerViewSet(ShaniOrgGroupViewSet):
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
     ordering_fields = ['id', 'employee_id', 'name', 'auth_user', 'role', 'site', 'points', 'org_group', 'created_at',
-                       'updated_at', 'published', ]
+                       'updated_at', 'published', 'is_public',]
     ordering = default_ordering
     filterset_fields = {
         'id': id_fields_filter_lookups,

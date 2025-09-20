@@ -1,3 +1,4 @@
+from api.models import org_model_base_fields
 from api.serializers import ShaniModelSerializer
 from .models import TestCase, Attachment, TestCaseCategory, Tag
 
@@ -5,29 +6,27 @@ from .models import TestCase, Attachment, TestCaseCategory, Tag
 class TestDesignAttachmentSerializer(ShaniModelSerializer):
     class Meta:
         model = Attachment
-        fields = ['id', 'name', 'file', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'file', ]
 
 
 class TestDesignTagSerializer(ShaniModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'name', 'summary', 'description', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', ]
 
 
 class TestCaseCategorySerializer(ShaniModelSerializer):
     class Meta:
         model = TestCaseCategory
-        fields = ['id', 'name', 'summary', 'description', 'weight', 'parent', 'tags', 'details_file', 'attachments',
-                  'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'description', 'weight', 'parent', 'tags', 'details_file',
+                                          'attachments', ]
 
 
 class TestCaseSerializer(ShaniModelSerializer):
     class Meta:
         model = TestCase
-        fields = ['id', 'name', 'summary', 'parent', 'status', 'type', 'tags', 'external_id', 'specification',
-                  'details_file', 'use_cases', 'attachments', 'org_group', 'created_at', 'updated_at', 'published',
-                  'is_public', ]
+        fields = org_model_base_fields + ['name', 'summary', 'parent', 'status', 'type', 'tags', 'external_id',
+                                          'specification', 'details_file', 'use_cases', 'attachments', ]
 
 
 serializer_map = {
