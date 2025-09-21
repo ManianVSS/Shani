@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin
+from api.admin import CustomModelAdmin, org_model_list_filter_base
 from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, UseCase, RequirementCategory, \
     Requirement
 
@@ -9,26 +9,18 @@ from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, 
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
 
 
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
 
 
 @admin.register(FeatureCategory)
 class FeatureCategoryAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('tags', RelatedOnlyFieldListFilter),
         ('parent', RelatedOnlyFieldListFilter),
     )
@@ -38,9 +30,7 @@ class FeatureCategoryAdmin(CustomModelAdmin):
 
 @admin.register(Feature)
 class FeatureAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('tags', RelatedOnlyFieldListFilter),
         'status',
         ('parent', RelatedOnlyFieldListFilter),
@@ -51,9 +41,7 @@ class FeatureAdmin(CustomModelAdmin):
 
 @admin.register(UseCaseCategory)
 class UseCaseCategoryAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('tags', RelatedOnlyFieldListFilter),
         ('parent', RelatedOnlyFieldListFilter),
     )
@@ -63,9 +51,7 @@ class UseCaseCategoryAdmin(CustomModelAdmin):
 
 @admin.register(UseCase)
 class UseCaseAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'status',
         ('feature', RelatedOnlyFieldListFilter),
     )
@@ -75,9 +61,7 @@ class UseCaseAdmin(CustomModelAdmin):
 
 @admin.register(RequirementCategory)
 class RequirementCategoryAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('tags', RelatedOnlyFieldListFilter),
         ('parent', RelatedOnlyFieldListFilter),
     )
@@ -87,9 +71,7 @@ class RequirementCategoryAdmin(CustomModelAdmin):
 
 @admin.register(Requirement)
 class RequirementAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('tags', RelatedOnlyFieldListFilter),
         'status',
         ('category', RelatedOnlyFieldListFilter),

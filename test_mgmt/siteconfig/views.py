@@ -1,17 +1,15 @@
 from django.http import HttpResponse
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 from api.serializers import OrgGroupSerializer
 from api.views import default_search_fields, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
-    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, \
+    org_model_view_set_filterset_fields, org_model_ordering_fields
 from .models import SiteSettings, DisplayItem, Page, Category, Catalog, get_default_settings, Event
 from .serializers import SiteSettingsSerializer, DisplayItemSerializer, PageSerializer, CatalogSerializer, \
     CategorySerializer, EventSerializer
@@ -22,21 +20,14 @@ class DisplayItemViewSet(ShaniOrgGroupViewSet):
     serializer_class = DisplayItemSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
-                       'is_public', ]
+    ordering_fields = ['sort_order', 'name', 'summary', ] + org_model_ordering_fields
     ordering = ['id', 'sort_order', 'name']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'sort_order': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class EventViewSet(ShaniOrgGroupViewSet):
@@ -44,88 +35,60 @@ class EventViewSet(ShaniOrgGroupViewSet):
     serializer_class = EventSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'time', 'org_group', 'created_at', 'updated_at',
-                       'published', 'is_public', ]
+    ordering_fields = ['sort_order', 'name', 'summary', 'time', ] + org_model_ordering_fields
     ordering = ['id', 'sort_order', 'time', 'name']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'sort_order': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'time': datetime_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
-class PageViewSet(ShaniOrgGroupViewSet):
+class SiteConfigPageViewSet(ShaniOrgGroupViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
-                       'is_public', ]
+    ordering_fields = ['sort_order', 'name', 'summary', ] + org_model_ordering_fields
     ordering = ['sort_order', 'id', 'name']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'sort_order': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
-class CategoryViewSet(ShaniOrgGroupViewSet):
+class SiteConfigCategoryViewSet(ShaniOrgGroupViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
-                       'is_public', ]
+    ordering_fields = ['sort_order', 'name', 'summary', ] + org_model_ordering_fields
     ordering = ['sort_order', 'id', 'name']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'sort_order': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
-class CatalogViewSet(ShaniOrgGroupViewSet):
+class SiteConfigCatalogViewSet(ShaniOrgGroupViewSet):
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published',
-                       'is_public', ]
+    ordering_fields = ['sort_order', 'name', 'summary', ] + org_model_ordering_fields
     ordering = ['sort_order', 'id', 'name']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'sort_order': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class SiteSettingsViewSet(ShaniOrgGroupViewSet):
@@ -133,22 +96,15 @@ class SiteSettingsViewSet(ShaniOrgGroupViewSet):
     serializer_class = SiteSettingsSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'sort_order', 'name', 'summary', 'email', 'org_group', 'created_at', 'updated_at',
-                       'published', 'is_public', ]
+    ordering_fields = ['sort_order', 'name', 'summary', 'email', ] + org_model_ordering_fields
     ordering = ['sort_order', 'id', 'name']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'sort_order': compare_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'description': string_fields_filter_lookups,
         'email': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 @swagger_auto_schema(

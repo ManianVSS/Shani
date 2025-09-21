@@ -1,33 +1,25 @@
 from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin
+from api.admin import CustomModelAdmin, org_model_list_filter_base
 from .models import Step, Attachment, Tag, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
 
 
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
 
 
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
 
 
 @admin.register(Step)
 class StepAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + ( 
         ('tags', RelatedOnlyFieldListFilter),
         'status',
     )
@@ -43,19 +35,14 @@ class StepAdmin(CustomModelAdmin):
 
 @admin.register(Properties)
 class PropertiesAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'details', ]
     display_order = 2
 
 
 @admin.register(MockAPI)
 class MockAPIAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + ( 
         'http_method',
     )
     search_fields = ['name', 'summary', ]
@@ -64,9 +51,7 @@ class MockAPIAdmin(CustomModelAdmin):
 
 @admin.register(ApplicationUnderTest)
 class ApplicationUnderTestAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + ( 
         # ('start_page', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'details', ]
@@ -75,9 +60,7 @@ class ApplicationUnderTestAdmin(CustomModelAdmin):
 
 @admin.register(ApplicationPage)
 class ApplicationPageAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + ( 
         ('application', RelatedOnlyFieldListFilter),
         # ('check_element', RelatedOnlyFieldListFilter),
     )
@@ -87,9 +70,7 @@ class ApplicationPageAdmin(CustomModelAdmin):
 
 @admin.register(Element)
 class ElementAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + ( 
         ('page', RelatedOnlyFieldListFilter),
         ('containing_element', RelatedOnlyFieldListFilter),
         'element_type',

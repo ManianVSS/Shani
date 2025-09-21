@@ -2,24 +2,24 @@ from django.urls import include, path
 from rest_framework import routers
 
 from .apiviews import start_run, stop_run, start_reliability_run, stop_reliability_run
-from .views import AttachmentViewSet, TagViewSet, ReleaseViewSet, DefectViewSet, RunViewSet, ExecutionRecordViewSet, \
-    ReliabilityRunViewSet, EnvironmentViewSet, get_ipte_for_iterations, get_iterations_for_ipte, BuildViewSet, \
+from .views import ExecutionAttachmentViewSet, ExecutionTagViewSet, ExecutionReleaseViewSet, ExecutionDefectViewSet, ExecutionRunViewSet, ExecutionRecordViewSet, \
+    ReliabilityRunViewSet, ExecutionEnvironmentViewSet, get_ipte_for_iterations, get_iterations_for_ipte, ExecutionBuildViewSet, \
     ReliabilityIterationViewSet, ReliabilityIncidentViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'attachments', AttachmentViewSet)
-router.register(r'tags', TagViewSet)
+router.register(r'attachments', ExecutionAttachmentViewSet)
+router.register(r'tags', ExecutionTagViewSet)
 
-router.register(r'releases', ReleaseViewSet)
-router.register(r'builds', BuildViewSet)
-router.register(r'defects', DefectViewSet)
-router.register(r'runs', RunViewSet)
+router.register(r'releases', ExecutionReleaseViewSet)
+router.register(r'builds', ExecutionBuildViewSet)
+router.register(r'defects', ExecutionDefectViewSet)
+router.register(r'runs', ExecutionRunViewSet)
 router.register(r'execution_records', ExecutionRecordViewSet)
 router.register(r'reliability_runs', ReliabilityRunViewSet)
 router.register(r'reliability_iterations', ReliabilityIterationViewSet)
 router.register(r'reliability_incidents', ReliabilityIncidentViewSet)
-router.register(r'environments', EnvironmentViewSet)
+router.register(r'environments', ExecutionEnvironmentViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

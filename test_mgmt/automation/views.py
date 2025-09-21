@@ -7,47 +7,37 @@ from rest_framework.response import Response
 
 from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
-    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, enum_fields_filter_lookups
+    ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, \
+    enum_fields_filter_lookups, org_model_view_set_filterset_fields, org_model_ordering_fields
 from .models import Attachment, Tag, Step, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
-from .serializers import AutomationAttachmentSerializer, AutomationTagSerializer, StepSerializer, PropertiesSerializer, MockAPISerializer, \
+from .serializers import AutomationAttachmentSerializer, AutomationTagSerializer, StepSerializer, PropertiesSerializer, \
+    MockAPISerializer, \
     ApplicationUnderTestSerializer, ApplicationPageSerializer, ElementSerializer
 
 
-class AttachmentViewSet(ShaniOrgGroupViewSet):
+class AutomationAttachmentViewSet(ShaniOrgGroupViewSet):
     queryset = Attachment.objects.all()
     serializer_class = AutomationAttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
-class TagViewSet(ShaniOrgGroupViewSet):
+class AutomationTagViewSet(ShaniOrgGroupViewSet):
     queryset = Tag.objects.all()
     serializer_class = AutomationTagSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'summary', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', 'summary', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class StepViewSet(ShaniOrgGroupViewSet):
@@ -55,41 +45,28 @@ class StepViewSet(ShaniOrgGroupViewSet):
     serializer_class = StepSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'feature', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', 'name',
-                       'expected_results', 'eta', 'tags', 'status', ]
+    ordering_fields = ['feature', 'name', 'expected_results', 'eta', 'tags', 'status', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'feature': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'eta': compare_fields_filter_lookups,
         'tags': exact_fields_filter_lookups,
         'status': enum_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
-class PropertiesViewSet(ShaniOrgGroupViewSet):
+class AutomationPropertiesViewSet(ShaniOrgGroupViewSet):
     queryset = Properties.objects.all()
     serializer_class = PropertiesSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class MockAPIViewSet(ShaniOrgGroupViewSet):
@@ -97,22 +74,15 @@ class MockAPIViewSet(ShaniOrgGroupViewSet):
     serializer_class = MockAPISerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'http_method', 'status', 'org_group', 'created_at', 'updated_at', 'published',
-                       'is_public', ]
+    ordering_fields = ['name', 'http_method', 'status', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'http_method': enum_fields_filter_lookups,
         'status': enum_fields_filter_lookups,
         'content_type': enum_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 # noinspection PyMethodMayBeStatic
@@ -166,18 +136,12 @@ class ApplicationUnderTestViewSet(ShaniOrgGroupViewSet):
     serializer_class = ApplicationUnderTestSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = ['name', 'details', ]
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         # 'start_page': fk_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class ApplicationPageViewSet(ShaniOrgGroupViewSet):
@@ -185,19 +149,13 @@ class ApplicationPageViewSet(ShaniOrgGroupViewSet):
     serializer_class = ApplicationPageSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = ['name', 'details', ]
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'application': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         # 'check_element': fk_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class ElementViewSet(ShaniOrgGroupViewSet):
@@ -205,19 +163,13 @@ class ElementViewSet(ShaniOrgGroupViewSet):
     serializer_class = ElementSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = ['name', 'details', 'locator_value', ]
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'page': fk_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'containing_element': fk_fields_filter_lookups,
         'element_type': enum_fields_filter_lookups,
         'locator_type': enum_fields_filter_lookups,
         'locator_value': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)

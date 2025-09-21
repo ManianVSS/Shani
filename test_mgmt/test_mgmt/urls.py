@@ -2,17 +2,14 @@ from django.conf.urls.static import static
 from django.urls import include, path
 from django.urls import re_path
 from django.views.generic import TemplateView
-# from rest_framework.schemas import get_schema_view
-# from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
-
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 from api import admin
 from . import settings
 
-# schema_view = get_schema_view(title='Test Management API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])
+# TODO: Handle routes in a combined way instead of constructing individually at each app
 
 schema_view = get_schema_view(
     openapi.Info(

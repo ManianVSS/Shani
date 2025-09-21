@@ -51,6 +51,7 @@ class BaseModelTestCase(TestCase):
         org1_leader.groups.set([manager_group])
         l1_org1.leaders.set([org1_leader])
 
+    # noinspection PyUnresolvedReferences
     def test_object_created(self):
         print("Running ", self)
         root_leader = User.objects.get(username="root_leader")

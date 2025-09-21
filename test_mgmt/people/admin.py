@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin
+from api.admin import CustomModelAdmin, org_model_list_filter_base, base_model_list_filter_base
 from api.views import default_search_fields
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
     TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Attachment, Credit, Scale, Reason, \
@@ -11,17 +11,12 @@ from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation,
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
 
 
 @admin.register(Engineer)
 class EngineerAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'role',
         ('site', RelatedOnlyFieldListFilter),
     )
@@ -30,9 +25,7 @@ class EngineerAdmin(CustomModelAdmin):
 
 @admin.register(EngineerOrgGroupParticipation)
 class EngineerOrgGroupParticipationAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'role',
         ('engineer', RelatedOnlyFieldListFilter),
     )
@@ -41,8 +34,7 @@ class EngineerOrgGroupParticipationAdmin(CustomModelAdmin):
 
 @admin.register(SiteHoliday)
 class SiteHolidayAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
+    list_filter = base_model_list_filter_base + (
         ('site', RelatedOnlyFieldListFilter),
         'date',
     )
@@ -51,8 +43,7 @@ class SiteHolidayAdmin(CustomModelAdmin):
 
 @admin.register(Leave)
 class LeaveAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
+    list_filter = base_model_list_filter_base + (
         'start_date',
         'end_date',
         'status',
@@ -63,9 +54,7 @@ class LeaveAdmin(CustomModelAdmin):
 
 @admin.register(EngineerOrgGroupParticipationHistory)
 class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'date',
         ('engineer', RelatedOnlyFieldListFilter),
     )
@@ -74,9 +63,7 @@ class EngineerOrgGroupParticipationHistoryAdmin(CustomModelAdmin):
 
 @admin.register(Topic)
 class TopicAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('parent_topic', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description']
@@ -84,9 +71,7 @@ class TopicAdmin(CustomModelAdmin):
 
 @admin.register(TopicEngineerAssignment)
 class TopicEngineerAssignmentAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'status',
         'start_date',
         'end_date',
@@ -99,27 +84,19 @@ class TopicEngineerAssignmentAdmin(CustomModelAdmin):
 
 @admin.register(Scale)
 class ScaleAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = default_search_fields
 
 
 @admin.register(Reason)
 class ReasonAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = default_search_fields
 
 
 @admin.register(Credit)
 class CreditAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'time',
         ('credited_user', RelatedOnlyFieldListFilter),
         ('scale', RelatedOnlyFieldListFilter),
@@ -131,9 +108,7 @@ class CreditAdmin(CustomModelAdmin):
 
 @admin.register(EngineerSkills)
 class EngineerSkillsAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'skill',
         ('engineer', RelatedOnlyFieldListFilter),
     )

@@ -93,7 +93,13 @@ class BaseModel(models.Model):
         return self.objects.all()
 
 
-base_model_base_fields = ['id', 'created_at', 'updated_at', 'published', 'is_public', ]
+base_model_base_fields = [
+    'id',
+    'created_at',
+    'updated_at',
+    'published',
+    'is_public',
+]
 
 
 class UserMode(BaseModel):

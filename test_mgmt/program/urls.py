@@ -1,14 +1,14 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import ApplicationTypeViewSet, ApplicationViewSet, ReleaseViewSet, ArtifactTypeViewSet, ArtifactViewSet, \
+from .views import ProgramApplicationTypeViewSet, ProgramApplicationViewSet, ProgramReleaseViewSet, ArtifactTypeViewSet, ArtifactViewSet, \
     DocumentTypeViewSet, DocumentViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'application_types', ApplicationTypeViewSet)
-router.register(r'applications', ApplicationViewSet)
-router.register(r'releases', ReleaseViewSet)
+router.register(r'application_types', ProgramApplicationTypeViewSet)
+router.register(r'applications', ProgramApplicationViewSet)
+router.register(r'releases', ProgramReleaseViewSet)
 router.register(r'artifact_types', ArtifactTypeViewSet)
 router.register(r'artifacts', ArtifactViewSet)
 router.register(r'document_types', DocumentTypeViewSet)

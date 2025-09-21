@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin
+from api.admin import CustomModelAdmin, org_model_list_filter_base
 from .models import Attachment, Tag, Release, Environment, ReliabilityIncident, ReliabilityRun, ExecutionRecord, Run, \
     Defect, Build, ReliabilityIteration
 
@@ -9,47 +9,34 @@ from .models import Attachment, Tag, Release, Environment, ReliabilityIncident, 
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + (    )
 
 
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + (    )
     search_fields = ['name', 'summary', 'description', ]
 
 
 @admin.register(Release)
 class ReleaseAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + (    )
     search_fields = ['name', 'summary', 'description', 'properties', ]
 
 
 @admin.register(Build)
 class BuildAdmin(CustomModelAdmin):
-    list_filter = (
+    list_filter = org_model_list_filter_base + (
         ('release', RelatedOnlyFieldListFilter),
         'type',
         'build_time',
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
     )
     search_fields = ['name', 'summary', 'description', 'properties', ]
 
 
 @admin.register(Defect)
 class DefectAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),
     )
@@ -58,9 +45,7 @@ class DefectAdmin(CustomModelAdmin):
 
 @admin.register(Run)
 class RunAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),
         'build',
@@ -72,9 +57,7 @@ class RunAdmin(CustomModelAdmin):
 
 @admin.register(ExecutionRecord)
 class ExecutionRecordAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'status',
         ('run', RelatedOnlyFieldListFilter),
         ('defects', RelatedOnlyFieldListFilter),
@@ -86,9 +69,7 @@ class ExecutionRecordAdmin(CustomModelAdmin):
 
 @admin.register(ReliabilityRun)
 class ReliabilityRunAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'status',
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),
@@ -104,9 +85,7 @@ class ReliabilityRunAdmin(CustomModelAdmin):
 
 @admin.register(ReliabilityIteration)
 class ReliabilityIterationAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('run', RelatedOnlyFieldListFilter),
         'name',
         'index',
@@ -119,9 +98,7 @@ class ReliabilityIterationAdmin(CustomModelAdmin):
 
 @admin.register(ReliabilityIncident)
 class ReliabilityIncidentAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('release', RelatedOnlyFieldListFilter),
         ('build', RelatedOnlyFieldListFilter),
         ('run', RelatedOnlyFieldListFilter),
@@ -134,10 +111,8 @@ class ReliabilityIncidentAdmin(CustomModelAdmin):
 
 @admin.register(Environment)
 class EnvironmentAdmin(CustomModelAdmin):
-    list_filter = (
+    list_filter = org_model_list_filter_base + (
         ('assigned_to', RelatedOnlyFieldListFilter),
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
         ('current_release', RelatedOnlyFieldListFilter),
         ('current_build', RelatedOnlyFieldListFilter),
         'type',

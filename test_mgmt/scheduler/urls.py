@@ -1,13 +1,13 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import AttachmentViewSet, TagViewSet, ResourceTypeViewSet, ResourceSetViewSet, ResourceSetComponentViewSet, \
+from .views import SchedulerAttachmentViewSet, SchedulerTagViewSet, ResourceTypeViewSet, ResourceSetViewSet, ResourceSetComponentViewSet, \
     RequestViewSet, ResourceViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'attachments', AttachmentViewSet)
-router.register(r'tags', TagViewSet)
+router.register(r'attachments', SchedulerAttachmentViewSet)
+router.register(r'tags', SchedulerTagViewSet)
 router.register(r'resource_types', ResourceTypeViewSet)
 router.register(r'resource_sets', ResourceSetViewSet)
 router.register(r'resource_set_components', ResourceSetComponentViewSet)

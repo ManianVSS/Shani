@@ -1,42 +1,31 @@
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin
+from api.admin import CustomModelAdmin, org_model_list_filter_base
 from .models import Attachment, Tag, ProgramIncrement, Epic, Feature, Sprint, Story, Feedback
 
 
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', ' file', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
 
 
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
 
 
 @admin.register(ProgramIncrement)
 class ProgramIncrementAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
 
 
 @admin.register(Epic)
 class EpicAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'weight',
         ('pi', RelatedOnlyFieldListFilter),
     )
@@ -45,9 +34,7 @@ class EpicAdmin(CustomModelAdmin):
 
 @admin.register(Feature)
 class FeatureAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'weight',
         ('epic', RelatedOnlyFieldListFilter),
     )
@@ -56,9 +43,7 @@ class FeatureAdmin(CustomModelAdmin):
 
 @admin.register(Sprint)
 class SprintAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'start_date',
         'end_date',
         ('pi', RelatedOnlyFieldListFilter),
@@ -68,9 +53,7 @@ class SprintAdmin(CustomModelAdmin):
 
 @admin.register(Story)
 class StoryAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'weight',
         'rank',
         ('sprint', RelatedOnlyFieldListFilter),
@@ -81,9 +64,7 @@ class StoryAdmin(CustomModelAdmin):
 
 @admin.register(Feedback)
 class FeedbackAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         'time',
         ('pi', RelatedOnlyFieldListFilter),
     )

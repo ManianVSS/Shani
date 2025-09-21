@@ -222,14 +222,20 @@ class CustomTokenAdmin(CustomModelAdmin, TokenAdmin):
     display_order = 3
 
 
+base_model_list_filter_base = (
+    'created_at',
+    'updated_at',
+    'published',
+    'is_public',
+)
+
+
 @admin.register(Configuration)
 class ConfigurationAdmin(CustomModelAdmin):
     search_fields = ['name', 'value', 'description', ]
     ordering = ('name',)
     list_display = ['name', 'value', 'description', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-    )
+    list_filter = base_model_list_filter_base + ()
     display_order = 3
 
 
@@ -241,8 +247,7 @@ def update_admin_site_name(sender, instance, **kwargs):
 
 @admin.register(OrgGroup)
 class OrgGroupAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
+    list_filter = base_model_list_filter_base + (
         ('org_group', RelatedOnlyFieldListFilter),
         ('leaders', RelatedOnlyFieldListFilter),
         ('members', RelatedOnlyFieldListFilter),
@@ -253,21 +258,20 @@ class OrgGroupAdmin(CustomModelAdmin):
     display_order = 4
 
 
+org_model_list_filter_base = base_model_list_filter_base + (
+    ('org_group', RelatedOnlyFieldListFilter),
+)
+
+
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
     search_fields = ['name', 'file', ]
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + (    )
     display_order = 6
 
 
 @admin.register(Site)
 class SiteAdmin(CustomModelAdmin):
-    list_filter = (
-        'created_at', 'updated_at', 'published', 'is_public',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + (    )
     search_fields = ['name', 'summary', ]
     display_order = 5

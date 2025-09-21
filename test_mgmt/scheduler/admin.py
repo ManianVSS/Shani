@@ -1,55 +1,41 @@
 from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin
+from api.admin import CustomModelAdmin, org_model_list_filter_base
 from .models import Attachment, Tag, ResourceType, ResourceSet, ResourceSetComponent, Request, Resource
 
 
 @admin.register(Attachment)
 class AttachmentAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'file', ]
     display_order = 1
 
 
 @admin.register(Tag)
 class TagAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
     display_order = 2
 
 
 @admin.register(ResourceType)
 class ResourceTypeAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
     display_order = 3
 
 
 @admin.register(ResourceSet)
 class ResourceSetAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
-    )
+    list_filter = org_model_list_filter_base + ( )
     search_fields = ['name', 'summary', 'description', ]
     display_order = 4
 
 
 @admin.register(ResourceSetComponent)
 class ResourceSetComponentAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('resource_set', RelatedOnlyFieldListFilter),
         ('type', RelatedOnlyFieldListFilter),
     )
@@ -58,9 +44,7 @@ class ResourceSetComponentAdmin(CustomModelAdmin):
 
 @admin.register(Request)
 class RequestAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('requester', RelatedOnlyFieldListFilter),
         ('resource_set', RelatedOnlyFieldListFilter),
         'priority',
@@ -74,9 +58,7 @@ class RequestAdmin(CustomModelAdmin):
 
 @admin.register(Resource)
 class ResourceAdmin(CustomModelAdmin):
-    list_filter = (
-        'published',
-        ('org_group', RelatedOnlyFieldListFilter),
+    list_filter = org_model_list_filter_base + (
         ('type', RelatedOnlyFieldListFilter),
         ('assigned_to', RelatedOnlyFieldListFilter),
     )

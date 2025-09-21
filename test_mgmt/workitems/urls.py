@@ -1,16 +1,16 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import AttachmentViewSet, TagViewSet, ProgramIncrementViewSet, EpicViewSet, FeatureViewSet, SprintViewSet, \
+from .views import WorkItemsAttachmentViewSet, WorkItemsTagViewSet, ProgramIncrementViewSet, EpicViewSet, WorkItemsFeatureViewSet, SprintViewSet, \
     StoryViewSet, FeedbackViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'attachments', AttachmentViewSet)
-router.register(r'tags', TagViewSet)
+router.register(r'attachments', WorkItemsAttachmentViewSet)
+router.register(r'tags', WorkItemsTagViewSet)
 router.register(r'program_increments', ProgramIncrementViewSet)
 router.register(r'epics', EpicViewSet)
-router.register(r'features', FeatureViewSet)
+router.register(r'features', WorkItemsFeatureViewSet)
 router.register(r'sprints', SprintViewSet)
 router.register(r'stories', StoryViewSet)
 router.register(r'feedbacks', FeedbackViewSet)

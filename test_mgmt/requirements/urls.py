@@ -2,18 +2,18 @@ from django.urls import include, path
 from rest_framework import routers
 
 from .apiviews import browse_requirements_category
-from .views import AttachmentViewSet, TagViewSet, FeatureCategoryViewSet, FeatureViewSet, UseCaseCategoryViewSet, \
-    UseCaseViewSet, RequirementCategoryViewSet, RequirementViewSet
+from .views import RequirementsAttachmentViewSet, RequirementsTagViewSet, RequirementsFeatureCategoryViewSet, RequirementsFeatureViewSet, RequirementsUseCaseCategoryViewSet, \
+    RequirementsUseCaseViewSet, RequirementCategoryViewSet, RequirementViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'attachments', AttachmentViewSet)
-router.register(r'tags', TagViewSet)
-router.register(r'feature_categories', FeatureCategoryViewSet)
-router.register(r'features', FeatureViewSet)
+router.register(r'attachments', RequirementsAttachmentViewSet)
+router.register(r'tags', RequirementsTagViewSet)
+router.register(r'feature_categories', RequirementsFeatureCategoryViewSet)
+router.register(r'features', RequirementsFeatureViewSet)
 
-router.register(r'use_case_categories', UseCaseCategoryViewSet)
-router.register(r'use_cases', UseCaseViewSet)
+router.register(r'use_case_categories', RequirementsUseCaseCategoryViewSet)
+router.register(r'use_cases', RequirementsUseCaseViewSet)
 router.register(r'requirement_categories', RequirementCategoryViewSet)
 router.register(r'requirements', RequirementViewSet)
 

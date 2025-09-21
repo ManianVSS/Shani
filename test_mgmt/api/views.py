@@ -140,10 +140,26 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [IsSuperUser]
-    search_fields = ['id', 'username', 'first_name', 'last_name', 'email']
-    ordering_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined', ]
+    search_fields = [
+        'id', 'id',
+        'username',
+        'first_name',
+        'last_name',
+        'email'
+    ]
+    ordering_fields = [
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'is_staff',
+        'is_active',
+        'date_joined',
+    ]
     ordering = default_ordering
     filterset_fields = {
+        # Fields available in django.contrib.auth.models.User
         'id': id_fields_filter_lookups,
         'username': string_fields_filter_lookups,
         'first_name': string_fields_filter_lookups,
@@ -163,14 +179,40 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsSuperUser]
-    search_fields = ['id', 'name', ]
-    ordering_fields = ['id', 'name', ]
+    search_fields = [
+        'id',
+        'name',
+        'permissions__name',
+    ]
+
+    ordering_fields = [
+        'id',
+        'name', ]
     ordering = default_ordering
     filterset_fields = {
+        # Fields available in django.contrib.auth.models.Group
         'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'permissions': fk_fields_filter_lookups,
     }
+
+
+base_model_view_set_filterset_fields = {
+    # Fields from BaseModel
+    'id': id_fields_filter_lookups,
+
+    'created_at': datetime_fields_filter_lookups,
+    'updated_at': datetime_fields_filter_lookups,
+    'published': exact_fields_filter_lookups,
+    'is_public': exact_fields_filter_lookups,
+}
+base_model_ordering_fields = [
+    'id',
+    'created_at',
+    'updated_at',
+    'published',
+    'is_public',
+]
 
 
 # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -180,17 +222,12 @@ class ConfigurationViewSet(ModelViewSet):
     serializer_class = ConfigurationSerializer
     permission_classes = [IsSuperUser]
     search_fields = ['name', 'value', 'description', ]
-    ordering_fields = ['id', 'name', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = base_model_ordering_fields + ['name', ]
     ordering = ['name', 'updated_at']
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'value': string_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-    }
+    }.update(base_model_view_set_filterset_fields)
 
 
 class OrgGroupViewSet(ShaniOrgGroupViewSet):
@@ -198,11 +235,9 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
     serializer_class = OrgGroupSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'auth_group', 'org_group', 'leaders', 'created_at', 'updated_at', 'published',
-                       'is_public', ]
+    ordering_fields = base_model_ordering_fields + ['name', 'auth_group', 'org_group', 'leaders', ]
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
         'auth_group': fk_fields_filter_lookups,
@@ -211,11 +246,29 @@ class OrgGroupViewSet(ShaniOrgGroupViewSet):
         'members': exact_fields_filter_lookups,
         'guests': exact_fields_filter_lookups,
         'consumers': exact_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(base_model_view_set_filterset_fields)
+
+
+org_model_view_set_filterset_fields = {
+    # Fields from OrgModel
+    'id': id_fields_filter_lookups,
+
+    'created_at': datetime_fields_filter_lookups,
+    'updated_at': datetime_fields_filter_lookups,
+    'published': exact_fields_filter_lookups,
+    'is_public': exact_fields_filter_lookups,
+
+    'org_group': fk_fields_filter_lookups,
+}
+
+org_model_ordering_fields = [
+    'id',
+    'created_at',
+    'updated_at',
+    'published',
+    'is_public',
+    'org_group',
+]
 
 
 class AttachmentViewSet(ShaniOrgGroupViewSet):
@@ -223,17 +276,11 @@ class AttachmentViewSet(ShaniOrgGroupViewSet):
     serializer_class = AttachmentSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-    }
+    }.update(org_model_view_set_filterset_fields)
 
 
 class SiteViewSet(ShaniOrgGroupViewSet):
@@ -241,16 +288,9 @@ class SiteViewSet(ShaniOrgGroupViewSet):
     serializer_class = SiteSerializer
     permission_classes = [ShaniOrgGroupObjectLevelPermission]
     search_fields = default_search_fields
-    ordering_fields = ['id', 'name', 'org_group', 'created_at', 'updated_at', 'published', 'is_public', ]
+    ordering_fields = ['name', ] + org_model_ordering_fields
     ordering = default_ordering
     filterset_fields = {
-        'id': id_fields_filter_lookups,
         'name': string_fields_filter_lookups,
         'summary': string_fields_filter_lookups,
-        'org_group': fk_fields_filter_lookups,
-        'published': exact_fields_filter_lookups,
-        'is_public': exact_fields_filter_lookups,
-        'created_at': datetime_fields_filter_lookups,
-        'updated_at': datetime_fields_filter_lookups,
-
-    }
+    }.update(org_model_view_set_filterset_fields)

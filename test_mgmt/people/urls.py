@@ -3,11 +3,11 @@ from rest_framework import routers
 
 from .apiviews import get_org_capacity_for_time_range, get_engineer_capacity_for_time_range
 from .views import EngineerViewSet, SiteHolidayViewSet, LeaveViewSet, EngineerOrgGroupParticipationViewSet, \
-    TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, AttachmentViewSet, \
+    TopicViewSet, TopicEngineerAssignmentViewSet, EngineerOrgGroupParticipationHistoryViewSet, PeopleAttachmentViewSet, \
     CreditViewSet, ScaleViewSet, ReasonViewSet, EngineerSkillsViewSet
 
 router = routers.DefaultRouter()
-router.register(r'attachments', AttachmentViewSet)
+router.register(r'attachments', PeopleAttachmentViewSet)
 
 router.register(r'engineers', EngineerViewSet)
 router.register(r'engineer_org_group_participation', EngineerOrgGroupParticipationViewSet)
