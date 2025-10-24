@@ -38,7 +38,7 @@ else:
         'LANGUAGE_CODE': 'en-us',
         'USE_I18N': True,
         'USE_TZ': True,
-        'TIME_ZONE': 'Asia/kolkata',  # UTC
+        'TIME_ZONE': 'Asia/Kolkata',  # UTC
 
         'DATABASE': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -254,13 +254,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = config['LANGUAGE_CODE'] if 'LANGUAGE_CODE' in config else 'en-us'
 
-TIME_ZONE = 'UTC'  # 'Asia/Kolkata'
+TIME_ZONE = config['TIME_ZONE'] if 'TIME_ZONE' in config else 'Asia/Kolkata'  # UTC
 
-USE_I18N = True
+USE_I18N = config['USE_I18N'] if 'USE_I18N' in config else True
 
-USE_TZ = True
+USE_TZ = config['USE_TZ'] if 'USE_TZ' in config else True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
