@@ -25,5 +25,5 @@ move program\migrations data\dbbackup\%fullstamp%
 move data\db.sqlite3 data\dbbackup\%fullstamp%
 
 call migrate.bat
-python manage.py shell -c "from create_super_user import create_super_user; create_super_user()"
-python manage.py shell -c "from api.models import create_default_configuration; create_default_configuration()"
+python manage.py create_super_user
+python manage.py create_default_configuration

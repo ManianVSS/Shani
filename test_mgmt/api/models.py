@@ -158,12 +158,6 @@ class Configuration(BaseModel):
         return str(self.name) + ": " + str(self.value)
 
 
-def create_default_configuration():
-    database_name_config = Configuration.objects.filter(name="site_name")
-    if database_name_config.count() == 0:
-        Configuration(name='site_name', value='Shani Test Management', description='The name of the site.').save()
-
-
 def get_database_name():
     database_name_config = Configuration.objects.filter(name="site_name")
     if database_name_config.count() > 0:
