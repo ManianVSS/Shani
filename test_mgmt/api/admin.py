@@ -11,6 +11,8 @@ from django.db.models import TextField
 from django.db.models.fields import NOT_PROVIDED
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
+from django.urls import reverse
+from django.utils.html import format_html
 from django_ace import AceWidget
 from django_extensions.db.fields.json import JSONField
 from django_yaml_field import YAMLField
@@ -21,6 +23,36 @@ from rest_framework.authtoken.models import TokenProxy
 
 from .models import Attachment, Configuration, OrgGroup, get_database_name, Site, PythonCodeField, XMLField, \
     GherkinField, HTMLField, LuaField
+
+
+def linkify(field_name, verbose_name=None):
+    """
+    Convert a foreign key value into links to the related admin pages.
+
+    If field name is 'parent' link text will be str(obj.parent).
+    Link will be admin url for obj.praent.id:change
+    :param field_name:
+    :param verbose_name: Optional verbose name to use for the field in list display. If not provided, field_name will be used.
+    :return:
+    """
+
+    def _linkify(obj):
+        linked_obj = getattr(obj, field_name)
+        if linked_obj is not None:
+            app_label = linked_obj._meta.app_label
+            model_name = linked_obj._meta.model_name
+            view_name = f'admin:{app_label}_{model_name}_change'
+            link_url = reverse(view_name, args=[linked_obj.pk])
+            link_text = linked_obj.name if hasattr(linked_obj, 'name') else str(linked_obj)
+            return format_html('<a href="{}">{}</a>', link_url, link_text)
+            # url = f"/admin/{app_label}/{model_name}/{linked_obj.id}/change/"
+            # return f'<a href="{url}">{str(linked_obj)}</a>'
+        else:
+            return '-'
+
+    # Use field Verbose name in list display
+    _linkify.short_description = verbose_name if verbose_name else field_name
+    return _linkify
 
 
 class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
@@ -41,17 +73,31 @@ class CustomModelAdmin(MassEditMixin, ImportExportModelAdmin):
 
     # search_fields = ['name', 'summary', 'description', ]
 
+    def linkify_list_display(self, list_display):
+        fields = self.model._meta.get_fields()
+
+        modified_field_list = []
+        for list_item in list_display:
+            field_found = False
+            for field in fields:
+                if field.name == list_item and field.related_model:
+                    modified_field_list.append(linkify(field.name, field.verbose_name))
+                    field_found = True
+                    break
+            if not field_found:
+                modified_field_list.append(list_item)
+        return modified_field_list
+
     # noinspection PyProtectedMember
     def get_list_display(self, request):
-        return [f.name for f in self.model._meta.get_fields() if f.concrete and
-                not (f.many_to_many or f.one_to_many or isinstance(f, TextField))]
-        # return [
-        #     f.name if f.model != self.model else None
-        #     for f in self.model._meta.get_fields()
-        #     if not f.is_relation
-        #        or f.one_to_one
-        #        or (f.many_to_one and f.related_model)
-        # ]
+        display_fields = []
+        for f in self.model._meta.get_fields():
+            if f.concrete and not (f.many_to_many or f.one_to_many or isinstance(f, TextField)):
+                if f.related_model:
+                    display_fields.append(linkify(f.name, f.verbose_name))
+                else:
+                    display_fields.append(f.name)
+        return display_fields
 
     def has_view_permission(self, request, obj=None):
         if (request is None) or (obj is None) or (request.user is None) or request.user.is_superuser:

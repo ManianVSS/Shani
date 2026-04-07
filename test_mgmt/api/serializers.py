@@ -8,13 +8,13 @@ from .models import Attachment, OrgGroup, Configuration, Site, base_model_base_f
 class ShaniModelSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
-        self.expand_relation_as_object = kwargs.pop('expand_relation_as_object', True)
+        self.expand_relation_as_objects = kwargs.pop('expand_relation_as_object', True)
         super().__init__(*args, **kwargs)
 
     def to_representation(self, instance):
         super_representation = super().to_representation(instance)
 
-        if self.expand_relation_as_object:
+        if self.expand_relation_as_objects:
             fields = self._readable_fields
 
             for field in fields:

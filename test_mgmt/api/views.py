@@ -13,7 +13,7 @@ exact_fields_filter_lookups = ['exact', ]
 id_fields_filter_lookups = ['exact', 'in', ]
 enum_fields_filter_lookups = id_fields_filter_lookups
 fk_fields_filter_lookups = ['exact', 'in', 'isnull']
-string_fields_filter_lookups = ['exact', 'iexact', 'icontains', 'regex', ]
+string_fields_filter_lookups = ['exact', 'iexact', 'icontains', 'regex', 'in', ]
 # 'startswith', 'endswith', 'istartswith','iendswith', 'contains',
 compare_fields_filter_lookups = ['exact', 'lte', 'lt', 'gt', 'gte', ]
 date_fields_filter_lookups = ['exact', 'lte', 'gte', 'range', ]
@@ -22,6 +22,7 @@ datetime_fields_filter_lookups = ['exact', 'lte', 'gte', 'range', ]
 # time, hour, minute, second
 default_search_fields = ['name', 'summary', 'description', ]
 default_ordering = ['id', ]
+default_ordering_fields = ['id', 'name', 'created_at', 'updated_at', ]
 
 
 class IsSuperUser(IsAdminUser):
@@ -151,7 +152,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsSuperUser]
     search_fields = [
-        'id', 'id',
+        'id',
         'username',
         'first_name',
         'last_name',

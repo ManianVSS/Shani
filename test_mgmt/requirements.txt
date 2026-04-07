@@ -15,6 +15,7 @@ diff-match-patch==20241021
 Django==5.2.7
 django-ace==1.43.3
 django-allauth==65.11.2
+django-cleanup==9.0.0
 django-cors-headers==4.9.0
 django-crontab==0.7.1
 django-dbbackup==5.0.0

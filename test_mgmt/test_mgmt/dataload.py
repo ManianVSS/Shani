@@ -64,7 +64,8 @@ def save_data_to_folder(data_folder: str):
         for model_to_save in model_name_map[app_to_save].keys():
             logger.info(f"Going to write f{model_to_save}")
             model_class = model_name_map[app_to_save][model_to_save]
-            model_records = model_class.objects.all()
+            # Sort by id to avoid dependency issue on self-referencing models
+            model_records = model_class.objects.all().order_by('id')
             os.makedirs(Path(data_folder, app_to_save), exist_ok=True)
             # for model_record in model_records:
             file_path = Path(data_folder, app_to_save, model_to_save + ".yaml")
@@ -110,7 +111,6 @@ def load_data_from_folder(data_folder: str):
                                     logger.info(f"Created {str(model_record)}")
                                 except IntegrityError as e:
                                     model_record = model_class.objects.get(id=model_record_data['id'])
-                                    model_serializer_cls = serializer_map[model_class]
                                     logger.info(
                                         f"Ignoring existing data {model_record_data['id']} {str(e)}")
 

@@ -20,6 +20,13 @@ STATIC_FILES: [ 'static', 'build/static', 'build/assets', ]
 STATIC_URLS: [ '/static/', '/assets/' ]
 MEDIA_URL: /data/
 
+# File upload settings
+# FILE_UPLOAD_MAX_MEMORY_SIZE: 104857600
+# FILE_UPLOAD_TEMP_DIR= data/_temp
+# SESSION_FILE_PATH= data/_session
+# FILE_UPLOAD_DIRECTORY_PERMISSIONS: 0o755
+# FILE_UPLOAD_PERMISSIONS: 0o644
+
 # Language and timezone settings
 LANGUAGE_CODE: en-us
 USE_I18N: False

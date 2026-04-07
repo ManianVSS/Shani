@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 import django_env_overrides
@@ -28,11 +29,11 @@ else:
         'ALLOWED_HOSTS': ['*'],
 
         'FORCE_SCRIPT_NAME': '',
-        'TEMPLATES_DIRS': ['build', 'templates'],
+        'TEMPLATES_DIRS': ['build', 'templates', ],
         'DATA_MOUNT_DIR': str(BASE_DIR),
 
         'STATIC_FILES': ['static', 'build', 'build/static', 'build/assets', ],
-        'STATIC_URLS': ['/static/', 'assets/'],
+        'STATIC_URLS': ['/static/', 'assets/', ],
         'MEDIA_URL': '/data/',
 
         'LANGUAGE_CODE': 'en-us',
@@ -109,6 +110,10 @@ LOGGING = {
 
 print("Config used is:", str(config))
 
+DATA_MOUNT_DIR = config['DATA_MOUNT_DIR'] if 'DATA_MOUNT_DIR' in config else str(BASE_DIR)
+DATA_DIR = str(Path(str(DATA_MOUNT_DIR), "data"))
+os.makedirs(DATA_DIR, exist_ok=True)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config['DEBUG'] if 'DEBUG' in config else True
 
@@ -116,11 +121,19 @@ FQDN = config['FQDN'] if 'FQDN' in config else '*'
 
 ALLOWED_HOSTS = config['ALLOWED_HOSTS'] if 'ALLOWED_HOSTS' in config else ['*']
 
-DATA_MOUNT_DIR = config['DATA_MOUNT_DIR'] if 'DATA_MOUNT_DIR' in config else str(BASE_DIR)
-os.makedirs(str(Path(DATA_MOUNT_DIR, "data")), exist_ok=True)
-
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 # APPEND_SLASH = False
+
+# Disapbe COOP on insecure origins
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+# Trust local development environment
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'https://localhost',
+    'http://127.0.0.1',
+    'https://127.0.0.1',
+]
 
 USE_X_FORWARDED_HOST = True
 FORCE_SCRIPT_NAME = config['FORCE_SCRIPT_NAME'] if 'FORCE_SCRIPT_NAME' in config else ''
@@ -175,6 +188,9 @@ INSTALLED_APPS = [
     'execution',
     'people',
     'program',
+
+    # Keeping django cleanup at the end
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 # 'api.middlewares.CustomCorsMiddleware',
@@ -182,6 +198,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'api.middlewares.StripInsecureCoopMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -224,7 +241,7 @@ WSGI_APPLICATION = 'test_mgmt.wsgi.application'
 DATABASES = {
     "default": config['DATABASE'] if 'DATABASE' in config else {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(Path(DATA_MOUNT_DIR, 'data', 'db.sqlite3')),
+        'NAME': str(Path(DATA_DIR, 'db.sqlite3')),
     },
 }
 # print("Database object is :", str(DATABASES))
@@ -265,10 +282,29 @@ USE_TZ = config['USE_TZ'] if 'USE_TZ' in config else True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_SUFFIXIES = config['STATIC_URLS'] if 'STATIC_URLS' in config else ['/static/', '/assets/']
-STATIC_URLS = [FORCE_SCRIPT_NAME + STATIC_URL for STATIC_URL in STATIC_SUFFIXIES]
+STATIC_SUFFIXES = config['STATIC_URLS'] if 'STATIC_URLS' in config else ['/static/', '/assets/']
+STATIC_URLS = [FORCE_SCRIPT_NAME + STATIC_URL for STATIC_URL in STATIC_SUFFIXES]
 MEDIA_SUFFIX = '/data/'
 MEDIA_URL = config['MEDIA_URL'] if 'MEDIA_URL' in config else FORCE_SCRIPT_NAME + MEDIA_SUFFIX
+
+# FILE_UPLOAD_HANDLERS=(
+#     'django.core.files.uploadhandler.MemoryFileUploadHandler',
+#     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+# )
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = config[
+    'FILE_UPLOAD_MAX_MEMORY_SIZE'] if 'FILE_UPLOAD_MAX_MEMORY_SIZE' in config else 1024 * 1024 * 10  # 10 MB
+FILE_UPLOAD_TEMP_DIR = config['FILE_UPLOAD_TEMP_DIR'] if 'FILE_UPLOAD_TEMP_DIR' in config else str(
+    Path(DATA_DIR, '_temp'))
+SESSION_FILE_PATH = config['SESSION_FILE_PATH'] if 'SESSION_FILE_PATH' in config else str(
+    Path(DATA_DIR, '_session'))
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = config[
+    'FILE_UPLOAD_DIRECTORY_PERMISSIONS'] if 'FILE_UPLOAD_DIRECTORY_PERMISSIONS' in config else 0o644
+FILE_UPLOAD_PERMISSIONS = config['FILE_UPLOAD_PERMISSIONS'] if 'FILE_UPLOAD_PERMISSIONS' in config else 0o644
+
+# Create temp directories
+os.makedirs(str(FILE_UPLOAD_TEMP_DIR), exist_ok=True)
+os.makedirs(str(SESSION_FILE_PATH), exist_ok=True)
 
 static_file_dir_config = config['STATIC_FILES'] if 'STATIC_FILES' in config else ['static', 'build', 'build/static',
                                                                                   'build/assets', ]
@@ -280,7 +316,7 @@ for STATIC_URL in STATIC_URLS:
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_BASE_NAME = 'data'
-MEDIA_ROOT = str(Path(DATA_MOUNT_DIR, MEDIA_BASE_NAME))
+MEDIA_ROOT = str(Path(str(DATA_MOUNT_DIR), MEDIA_BASE_NAME))
 # os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 # Default primary key field type
@@ -316,6 +352,23 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
     ]
 
+}
+
+# Simple JWT Settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'UPDATE_LAST_LOGIN': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
 CORS_ALLOW_ALL_ORIGINS = True

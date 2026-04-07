@@ -109,7 +109,7 @@ class UserModel(BaseModel):
     class Meta:
         abstract = True
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="%(class)ss")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)ss')
 
     def is_owner(self, user):
         return (self.user is None) or (self.user == user)
@@ -137,7 +137,7 @@ class UserModel(BaseModel):
             if user.is_superuser:
                 return self.objects.all()
             else:
-                return self.objects.filter(Q(user=user) | Q(user_isnull=True)).distinct()
+                return self.objects.filter(Q(user=user) | Q(user__isnull=True)).distinct()
         else:
             return self.objects.none()
 
@@ -237,6 +237,10 @@ class OrgGroup(BaseModel):
     members = models.ManyToManyField(User, blank=True, related_name="org_groups_where_member")
     guests = models.ManyToManyField(User, blank=True, related_name="org_groups_where_guest")
     consumers = models.ManyToManyField(User, blank=True, related_name="org_groups_where_consumer")
+
+    #String Representation
+    def __str__(self):
+        return self.name
 
     def is_owner(self, user):
         return ((self.leaders is not None) and (user in self.leaders.all())) or (
