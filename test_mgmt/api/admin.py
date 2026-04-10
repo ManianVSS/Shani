@@ -183,7 +183,7 @@ class CustomAdminSite(AdminSite):
     def __init__(self, name="admin"):
         super().__init__(name)
         self.model_ordering = {}
-        database_name = "Shani Test Management"
+        database_name = "Shani"
         self.site_header = database_name + " Administration"
         self.site_title = database_name + " Admin Portal"
         self.index_title = database_name + " Administration Portal"

@@ -157,6 +157,8 @@ INSTALLED_APPS = [
     'rest_framework',  # Added for Django Rest Framework
     'rest_framework.authtoken',
 
+    'drf_spectacular',
+
     'drf_yasg',
     # 'rest_framework_swagger',
 
@@ -339,7 +341,8 @@ REST_FRAMEWORK = {
     ],
 
     # Added for swagger
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
     # Pagination
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPaginationExtn',
@@ -417,7 +420,7 @@ CRONJOBS = [
 ]
 
 JAZZMIN_SETTINGS = {
-    "show_ui_builder": True,
+    "show_ui_builder": False,
     "site_logo": "raven.png",
     "login_logo": "raven.png",
 }

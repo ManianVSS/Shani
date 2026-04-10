@@ -10,7 +10,7 @@ class Command(BaseCommand):
         try:
             database_name_config = Configuration.objects.filter(name="site_name")
             if database_name_config.count() == 0:
-                Configuration(name='site_name', value='Shani Test Management',
+                Configuration(name='site_name', value='Shani',
                               description='The name of the site.').save()
         except Exception as e:
             self.stderr.write(self.style.ERROR(f'Error creating default configuration: {str(e)}'))
