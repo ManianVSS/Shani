@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from django.db import IntegrityError
 
-from test_mgmt.dataload import load_data_from_folder
+from server.dataload import load_data_from_folder
 
 
 class Command(BaseCommand):

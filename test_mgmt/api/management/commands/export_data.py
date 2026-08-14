@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from django.db import IntegrityError
 
-from test_mgmt.dataload import save_data_to_folder
+from server.dataload import save_data_to_folder
 
 
 class Command(BaseCommand):

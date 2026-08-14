@@ -1,5 +1,5 @@
 """
-WSGI config for test_mgmt project.
+WSGI config for server project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -13,7 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 from api import admin
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_mgmt.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 
 application = get_wsgi_application()
 

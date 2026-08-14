@@ -2,7 +2,7 @@ from django.db import models
 
 from api.models import OrgModel, OrgGroup
 from api.storage import CustomFileSystemStorage
-from test_mgmt import settings
+from server import settings
 
 
 class Attachment(OrgModel):

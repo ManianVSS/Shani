@@ -94,7 +94,7 @@ LOGGING = {
             "level": "INFO",
             "propagate": True,
         },
-        "test_mgmt": APP_LOGGER,
+        "server": APP_LOGGER,
         "api": APP_LOGGER,
         "automation": APP_LOGGER,
         "execution": APP_LOGGER,
@@ -209,7 +209,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'test_mgmt.urls'
+ROOT_URLCONF = 'server.urls'
 
 TEMPLATES = [
     {
@@ -235,7 +235,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'test_mgmt.wsgi.application'
+WSGI_APPLICATION = 'server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -247,7 +247,7 @@ DATABASES = {
     },
 }
 # print("Database object is :", str(DATABASES))
-# DATABASE_ROUTERS = ['test_mgmt.database_routers.ReplicaRouter']
+# DATABASE_ROUTERS = ['server.database_routers.ReplicaRouter']
 
 # AUTH_GROUP_MODEL = 'auth_custom.Group'
 # AUTH_USER_MODEL = 'auth_custom.User'
@@ -416,7 +416,7 @@ DBBACKUP_CLEANUP_KEEP_MEDIA = 30
 os.makedirs(os.getenv('HOME', ".") + '/backup/Shani/dbbackup', exist_ok=True, )
 
 CRONJOBS = [
-    ('0 */6 * * *', 'test_mgmt.db_backup_cronjob.backup')
+    ('0 */6 * * *', 'server.db_backup_cronjob.backup')
 ]
 
 JAZZMIN_SETTINGS = {

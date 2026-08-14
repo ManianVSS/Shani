@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from django.db import models
 from django.db.models import Q, TextField
 
-from test_mgmt import settings
+from server import settings
 from .storage import CustomFileSystemStorage
 
 # # noinspection PyMethodMayBeStatic

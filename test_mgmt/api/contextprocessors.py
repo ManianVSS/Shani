@@ -1,4 +1,4 @@
-from test_mgmt import settings
+from server import settings
 from .models import Configuration, get_database_name
 
 

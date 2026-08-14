@@ -10,12 +10,12 @@ RUN apt -y update \
 	&& apt -y install libpq-dev \
 	&& rm -rf /var/cache/apt/*
 
-COPY test_mgmt /test_mgmt
-# COPY webui/build /test_mgmt/build
-COPY scripts/* /test_mgmt
+COPY server /server
+# COPY webui/build /server/build
+COPY scripts/* /server
 
-WORKDIR /test_mgmt
-COPY test_mgmt/dev-config.yaml.example /test_mgmt/config.yaml
+WORKDIR /server
+COPY server/dev-config.yaml.example /server/config.yaml
 RUN pip install -r requirements.txt
 RUN bash cleandb.sh
 

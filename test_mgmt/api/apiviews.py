@@ -14,8 +14,8 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import test_mgmt.settings
-from test_mgmt.dataload import model_name_map, serializer_map, save_data_to_folder, load_data_from_folder
+import server.settings
+from server.dataload import model_name_map, serializer_map, save_data_to_folder, load_data_from_folder
 
 
 # noinspection PyTypeChecker
@@ -125,7 +125,7 @@ class ExportZIPDataView(APIView):
         if not request.user.is_superuser:
             return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
 
-        zip_path = os.path.join(test_mgmt.settings.MEDIA_BASE_NAME, f'exported_data_{int(time.time())}.zip')
+        zip_path = os.path.join(server.settings.MEDIA_BASE_NAME, f'exported_data_{int(time.time())}.zip')
 
         with tempfile.TemporaryDirectory() as temp_dir:
             save_data_to_folder(temp_dir)
