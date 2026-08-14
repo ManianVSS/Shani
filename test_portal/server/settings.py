@@ -402,8 +402,12 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     # match localhost with any port
-    r"^http:\/\/localhost:*([0-9]+)?$",
-    r"^https:\/\/localhost:*([0-9]+)?$",
+    #r"^http:\/\/localhost:*([0-9]+)?$",
+    #r"^https:\/\/localhost:*([0-9]+)?$",
+
+    # Match any hostname and any port
+    r"^http:\/\/.*:*([0-9]+)?$",
+    r"^https:\/\/.*:*([0-9]+)?$",
 ]
 
 # DBBACKUP_DATABASES = ['default']
