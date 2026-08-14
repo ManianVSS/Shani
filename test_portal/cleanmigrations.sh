@@ -3,7 +3,7 @@
 timestamp=$(date +%F-%H:%M)
 mkdir -p data/dbbackup/$timestamp/migrations
 
-mv api/migrations data/dbbackup/$timestamp/migrations/api
+mv core/migrations data/dbbackup/$timestamp/migrations/core
 mv siteconfig/migrations data/dbbackup/$timestamp/migrations/siteconfig
 mv requirements/migrations data/dbbackup/$timestamp/migrations/requirements
 mv workitems/migrations data/dbbackup/$timestamp/migrations/workitems

@@ -180,7 +180,7 @@ INSTALLED_APPS = [
 
     # Project modules
     # 'auth_custom',
-    'api',
+        'core',
     'siteconfig',
     'requirements',
     'workitems',

@@ -11,16 +11,16 @@ echo fullstamp: "%fullstamp%"
 
 mkdir data\dbbackup\%fullstamp%
 
-move api\migrations data\dbbackup\%fullstamp%
-move siteconfig\migrations data\dbbackup\%fullstamp%
-move requirements\migrations data\dbbackup\%fullstamp%
-move workitems\migrations data\dbbackup\%fullstamp%
-move scheduler\migrations data\dbbackup\%fullstamp%
-move testdesign\migrations data\dbbackup\%fullstamp%
-move automation\migrations data\dbbackup\%fullstamp%
-move execution\migrations data\dbbackup\%fullstamp%
-move people\migrations data\dbbackup\%fullstamp%
-move program\migrations data\dbbackup\%fullstamp%
+move core\migrations data\dbbackup\%fullstamp%\migrations\core
+move siteconfig\migrations data\dbbackup\%fullstamp%\migrations\siteconfig
+move requirements\migrations data\dbbackup\%fullstamp%\migrations\requirements
+move workitems\migrations data\dbbackup\%fullstamp%\migrations\workitems
+move scheduler\migrations data\dbbackup\%fullstamp%\migrations\scheduler
+move testdesign\migrations data\dbbackup\%fullstamp%\migrations\testdesign
+move automation\migrations data\dbbackup\%fullstamp%\migrations\automation
+move execution\migrations data\dbbackup\%fullstamp%\migrations\execution
+move people\migrations data\dbbackup\%fullstamp%\migrations\people
+move program\migrations data\dbbackup\%fullstamp%\migrations\program
 
 move data\db.sqlite3 data\dbbackup\%fullstamp%
 
