@@ -9,7 +9,7 @@ Test Management - Test management tool with database and dashboard.
 ##### **Pre-Requisites**</br>
 Python 3, pip and libpq-dev </br>
 > sudo apt install libpq-dev pandoc screen</br>
-> cd test_mgmt</br>
+> cd test_portal</br>
 > python -m venv .venv</br>
 > source .venv/bin/activate</br>
 > pip install -r requirements.txt</br>
@@ -17,13 +17,13 @@ Python 3, pip and libpq-dev </br>
 
 ##### **Creating and Migrating DB Schema**</br>
 
-> cd test_mgmt</br>
+> cd test_portal</br>
 > cp dev-config.yaml.example config.yaml
 > ./migrate.sh</br>
 
 ##### **Running server**
 
-> cd test_mgmt</br>
+> cd test_portal</br>
 > ./runserver.sh</br>
 
 Admin console should be up on http://localhost:8000/admin
@@ -35,23 +35,23 @@ Note: Create files referring to the .example files in root directory</br>
 ##### **Pre-Requisites**</br>
 Python 3, pip , postgres database and libpq-dev </br>
 > sudo apt install libpq-dev pandoc screen</br>
-> cd test_mgmt</br>
+> cd test_portal</br>
 > python -m venv .venv</br>
 > source .venv/bin/activate</br>
 > pip install -r requirements.txt</br>
 > pip install setuptools</br>
 
 ##### **Creating Postgres production DB and schema one time**</br>
-> cd test_mgmt</br>
+> cd test_portal</br>
 > ./createdb.sh
 
 ##### **Migrating DB Schema for changes**</br>
-> cd test_mgmt</br>
+> cd test_portal</br>
 > cp config.yaml.example config.yaml
 > ./migrate.sh
 
 ##### **Running server**</br>
-> cd test_mgmt</br>
+> cd test_portal</br>
 > ./runserver.sh
 
 Admin console should be up on http://localhost:8000/admin
@@ -70,6 +70,6 @@ Installing yarn</br>
 > cd webui</br>
 > yarn install</br>
 > yarn build </br>
-> cd ../test_mgmt/</br>
+> cd ../test_portal/</br>
 > ln -sf ../webui/build .</br>
 > cd ..</br>
