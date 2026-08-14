@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from api.serializers import OrgGroupSerializer
-from api.views import default_search_fields, id_fields_filter_lookups, fk_fields_filter_lookups, \
+from core.serializers import OrgGroupSerializer
+from core.views import default_search_fields, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, compare_fields_filter_lookups, exact_fields_filter_lookups, \
     ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, datetime_fields_filter_lookups, \
     org_model_view_set_filterset_fields, org_model_ordering_fields

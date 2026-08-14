@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin, org_model_list_filter_base, base_model_list_filter_base
-from api.views import default_search_fields
+from core.admin import CustomModelAdmin, org_model_list_filter_base, base_model_list_filter_base
+from core.views import default_search_fields
 from .models import Engineer, SiteHoliday, Leave, EngineerOrgGroupParticipation, Topic, \
     TopicEngineerAssignment, EngineerOrgGroupParticipationHistory, Attachment, Credit, Scale, Reason, \
     EngineerSkills

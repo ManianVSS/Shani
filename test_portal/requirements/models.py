@@ -1,8 +1,8 @@
 from django.db import models
 
-from api.enumerations import ReviewStatus
-from api.models import OrgModel, OrgGroup
-from api.storage import CustomFileSystemStorage
+from core.enumerations import ReviewStatus
+from core.models import OrgModel, OrgGroup
+from core.storage import CustomFileSystemStorage
 
 
 class Attachment(OrgModel):

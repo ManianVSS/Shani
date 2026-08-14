@@ -1,7 +1,7 @@
 from django.db import models
 
-from api.models import OrgGroup, NotMutablePublishOrgModel
-from api.storage import CustomFileSystemStorage
+from core.models import OrgGroup, NotMutablePublishOrgModel
+from core.storage import CustomFileSystemStorage
 
 
 class ApplicationType(NotMutablePublishOrgModel):

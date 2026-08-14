@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from api.models import OrgModel, OrgGroup, BaseModel, Site
-from api.storage import CustomFileSystemStorage
+from core.models import OrgModel, OrgGroup, BaseModel, Site
+from core.storage import CustomFileSystemStorage
 
 
 class Attachment(OrgModel):

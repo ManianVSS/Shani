@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from api.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
+from core.views import default_search_fields, default_ordering, id_fields_filter_lookups, fk_fields_filter_lookups, \
     string_fields_filter_lookups, exact_fields_filter_lookups, compare_fields_filter_lookups, \
     date_fields_filter_lookups, ShaniOrgGroupObjectLevelPermission, ShaniOrgGroupViewSet, \
     datetime_fields_filter_lookups, enum_fields_filter_lookups, org_model_view_set_filterset_fields, \

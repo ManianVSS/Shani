@@ -6,7 +6,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-from api import admin
+from core import admin
 from . import settings
 
 # TODO: Handle routes in a combined way instead of constructing individually at each app
@@ -32,7 +32,7 @@ urlpatterns = [
     # For Advanced filters path('advanced_filters/', include('advanced_filters.urls')),
 
     # Modules
-    path('api/', include('api.urls')),
+    path('api/', include('core.urls')),
     path('siteconfig/', include('siteconfig.urls')),
     path('requirements/', include('requirements.urls')),
     path('workitems/', include('workitems.urls')),

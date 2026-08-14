@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
-from api.admin import CustomModelAdmin, org_model_list_filter_base
+from core.admin import CustomModelAdmin, org_model_list_filter_base
 from .models import Attachment, Tag, ProgramIncrement, Epic, Feature, Sprint, Story, Feedback
 
 

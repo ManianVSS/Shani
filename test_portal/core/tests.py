@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User, Group, Permission
 from django.test import TestCase
 
-from api.models import OrgGroup
-from api.serializers import UserSerializer, OrgGroupSerializer
+from core.models import OrgGroup
+from core.serializers import UserSerializer, OrgGroupSerializer
 
 
 # Create your tests here.

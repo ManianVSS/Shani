@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from api.views import ToolIntegrationWritePermission, ToolIntegrationDeletePermission
+from core.views import ToolIntegrationWritePermission, ToolIntegrationDeletePermission
 from execution.models import Release, Build, Run, ReliabilityRun
 from execution.serializers import RunSerializer, ReliabilityRunSerializer
 

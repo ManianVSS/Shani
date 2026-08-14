@@ -11,7 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-from api import admin
+from core import admin
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 

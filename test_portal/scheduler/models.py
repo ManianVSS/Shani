@@ -3,8 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_yaml_field import YAMLField
 
-from api.models import OrgModel, OrgGroup
-from api.storage import CustomFileSystemStorage
+from core.models import OrgModel, OrgGroup
+from core.storage import CustomFileSystemStorage
 
 
 class Attachment(OrgModel):

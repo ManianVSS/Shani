@@ -95,7 +95,7 @@ LOGGING = {
             "propagate": True,
         },
         "server": APP_LOGGER,
-        "api": APP_LOGGER,
+        "core": APP_LOGGER,
         "automation": APP_LOGGER,
         "execution": APP_LOGGER,
         "people": APP_LOGGER,
@@ -195,12 +195,12 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
 ]
 
-# 'api.middlewares.CustomCorsMiddleware',
+# 'core.middlewares.CustomCorsMiddleware',
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'api.middlewares.StripInsecureCoopMiddleware',
+    'core.middlewares.StripInsecureCoopMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -225,7 +225,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'api.contextprocessors.site_configuration',
+                'core.contextprocessors.site_configuration',
             ],
             # For swagger
             'libraries': {
@@ -346,7 +346,7 @@ REST_FRAMEWORK = {
 
     # Pagination
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPaginationExtn',
-    'DEFAULT_PAGINATION_CLASS': 'api.pagination.PageNumberPaginationExtn',
+    'DEFAULT_PAGINATION_CLASS': 'core.pagination.PageNumberPaginationExtn',
 
     # Added for filtering
     'DEFAULT_FILTER_BACKENDS': [

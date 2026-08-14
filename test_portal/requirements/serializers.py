@@ -1,5 +1,5 @@
-from api.models import org_model_base_fields
-from api.serializers import ShaniModelSerializer
+from core.models import org_model_base_fields
+from core.serializers import ShaniModelSerializer
 from .models import Attachment, Tag, FeatureCategory, Feature, UseCaseCategory, UseCase, RequirementCategory, \
     Requirement
 

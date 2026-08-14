@@ -282,7 +282,7 @@ class OrgGroup(BaseModel):
             if user.is_superuser:
                 return self.objects.all()
             # If user has ci_integration_read permission, return all objects
-            if user.has_perm('api.tool_integration_read'):
+            if user.has_perm('core.tool_integration_read'):
                 return self.objects.all()
             elif user.is_anonymous:
                 return self.objects.filter(Q(published='True') & Q(is_public='True')).distinct()
@@ -373,7 +373,7 @@ class OrgModel(BaseModel):
             if user.is_superuser:
                 return self.objects.all()
             # If user has ci_integration_read permission, return all objects
-            if user.has_perm('api.tool_integration_read'):
+            if user.has_perm('core.tool_integration_read'):
                 return self.objects.all()
             elif user.is_anonymous:
                 return self.objects.filter(

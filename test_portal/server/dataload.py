@@ -7,8 +7,8 @@ import yaml
 from django.contrib.auth.models import Group, User
 from django.db import IntegrityError
 
-from api.models import model_name_map as api_model_name_map
-from api.serializers import serializer_map as api_serializer_map
+from core.models import model_name_map as api_model_name_map
+from core.serializers import serializer_map as api_serializer_map
 from automation.models import model_name_map as automation_model_name_map
 from automation.serializers import serializer_map as automation_serializer_map
 from execution.models import model_name_map as execution_model_name_map

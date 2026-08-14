@@ -4,8 +4,8 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_yaml_field import YAMLField
 
-from api.models import OrgModel, OrgGroup, GherkinField
-from api.storage import CustomFileSystemStorage
+from core.models import OrgModel, OrgGroup, GherkinField
+from core.storage import CustomFileSystemStorage
 from execution import ipte_util
 
 

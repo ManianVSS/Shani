@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 
-from api.models import Configuration
+from core.models import Configuration
 
 
 class Command(BaseCommand):

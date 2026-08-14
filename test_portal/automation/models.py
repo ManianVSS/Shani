@@ -3,8 +3,8 @@ from http import HTTPStatus
 from django.db import models
 from django.utils.translation import gettext_lazy
 
-from api.models import OrgModel, OrgGroup
-from api.storage import CustomFileSystemStorage
+from core.models import OrgModel, OrgGroup
+from core.storage import CustomFileSystemStorage
 from requirements.models import Feature
 
 

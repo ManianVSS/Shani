@@ -1,5 +1,5 @@
-from api.models import base_model_base_fields, org_model_base_fields
-from api.serializers import ShaniModelSerializer
+from core.models import base_model_base_fields, org_model_base_fields
+from core.serializers import ShaniModelSerializer
 from .models import Attachment, Tag, Step, Properties, MockAPI, ApplicationUnderTest, ApplicationPage, Element
 
 

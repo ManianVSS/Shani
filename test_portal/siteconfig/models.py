@@ -6,8 +6,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from api.models import OrgModel, OrgGroup
-from api.storage import CustomFileSystemStorage
+from core.models import OrgModel, OrgGroup
+from core.storage import CustomFileSystemStorage
 
 
 class DisplayItem(OrgModel):

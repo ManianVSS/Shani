@@ -4,7 +4,7 @@ from itertools import cycle
 
 from django.contrib.auth.models import User, Group, Permission
 
-from api.models import OrgGroup, Site
+from core.models import OrgGroup, Site
 from people.models import Engineer, EngineerOrgGroupParticipation, SiteHoliday, Leave
 
 

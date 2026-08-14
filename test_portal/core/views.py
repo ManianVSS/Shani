@@ -80,11 +80,11 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
 
         match request.method:
             case 'HEAD' | 'OPTIONS' | 'GET':
-                return request.user.has_perm('api.tool_integration_read') or base_permission
+                return request.user.has_perm('core.tool_integration_read') or base_permission
             case 'POST' | 'PUT' | "PATCH":
-                return request.user.has_perm('api.tool_integration_write') or base_permission
+                return request.user.has_perm('core.tool_integration_write') or base_permission
             case 'DELETE':
-                return request.user.has_perm('api.tool_integration_delete') or base_permission
+                return request.user.has_perm('core.tool_integration_delete') or base_permission
             case _:
                 return False
 
@@ -104,21 +104,21 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
         try:
             match request.method:
                 case 'HEAD' | 'OPTIONS':
-                    return request.user.has_perm('api.tool_integration_read') or base_permission
+                    return request.user.has_perm('core.tool_integration_read') or base_permission
                 case 'POST':
-                    return request.user.has_perm('api.tool_integration_write') or base_permission
+                    return request.user.has_perm('core.tool_integration_write') or base_permission
                 case 'GET':
                     # For anonymous requests, only allow if model's can_read allows it
                     if is_anonymous_request:
                         return hasattr(model_cls, 'can_read') and model_cls.can_read(obj, request.user)
 
-                    return request.user.has_perm('api.tool_integration_read') or (base_permission and (
+                    return request.user.has_perm('core.tool_integration_read') or (base_permission and (
                             not hasattr(model_cls, 'can_read') or model_cls.can_read(obj, request.user)))
                 case 'PUT' | "PATCH":
-                    return request.user.has_perm('api.tool_integration_write') or (base_permission and (
+                    return request.user.has_perm('core.tool_integration_write') or (base_permission and (
                             not hasattr(model_cls, 'can_modify') or model_cls.can_read(obj, request.user)))
                 case 'DELETE':
-                    return request.user.has_perm('api.tool_integration_delete') or (base_permission and (
+                    return request.user.has_perm('core.tool_integration_delete') or (base_permission and (
                             not hasattr(model_cls, 'can_delete') or model_cls.can_delete(obj, request.user)))
                 case _:
                     return False
@@ -130,21 +130,21 @@ class ToolIntegrationReadPermission(BasePermission):
     def has_permission(self, request, view):
         if not request.user or not request.user.is_authenticated:
             return False
-        return request.user.is_superuser or request.user.has_perm('api.tool_integration_read')
+        return request.user.is_superuser or request.user.has_perm('core.tool_integration_read')
 
 
 class ToolIntegrationWritePermission(BasePermission):
     def has_permission(self, request, view):
         if not request.user or not request.user.is_authenticated:
             return False
-        return request.user.is_superuser or request.user.has_perm('api.tool_integration_write')
+        return request.user.is_superuser or request.user.has_perm('core.tool_integration_write')
 
 
 class ToolIntegrationDeletePermission(BasePermission):
     def has_permission(self, request, view):
         if not request.user or not request.user.is_authenticated:
             return False
-        return request.user.is_superuser or request.user.has_perm('api.tool_integration_delete')
+        return request.user.is_superuser or request.user.has_perm('core.tool_integration_delete')
 
 
 class UserViewSet(viewsets.ModelViewSet):
