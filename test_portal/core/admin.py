@@ -246,6 +246,10 @@ admin.site.unregister(Group)
 admin.site.unregister(User)
 # admin.site.unregister(TokenProxy)
 
+admin.site.site_header = "Shani Administration"
+admin.site.site_title = "Shani Admin Portal"
+admin.site.index_title = "Shani Administration Portal"
+
 site = CustomAdminSite()
 admin.site = site
 orig_register = admin.register

@@ -8,7 +8,7 @@ from core.storage import CustomFileSystemStorage
 
 class Attachment(OrgModel):
     name = models.CharField(max_length=256)
-    file = models.FileField(storage=CustomFileSystemStorage, upload_to='execution', blank=False, null=False)
+    file = models.FileField(storage=CustomFileSystemStorage, upload_to='people', blank=False, null=False)
 
 
 class Engineer(OrgModel):

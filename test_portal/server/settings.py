@@ -29,7 +29,7 @@ else:
         'ALLOWED_HOSTS': ['*'],
 
         'FORCE_SCRIPT_NAME': '',
-        'TEMPLATES_DIRS': ['build', 'templates', ],
+        'TEMPLATE_DIRS': ['build', 'templates', ],
         'DATA_MOUNT_DIR': str(BASE_DIR),
 
         'STATIC_FILES': ['static', 'build', 'build/static', 'build/assets', ],
@@ -179,8 +179,7 @@ INSTALLED_APPS = [
     'dbbackup',  # django-dbbackup
 
     # Project modules
-    # 'auth_custom',
-        'core',
+    'core',
     'siteconfig',
     'requirements',
     'workitems',
@@ -215,7 +214,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, template_dir) for template_dir in
-                 config['TEMPLATES_DIRS']] if 'TEMPLATES_DIRS' in config else
+                 config['TEMPLATE_DIRS']] if 'TEMPLATE_DIRS' in config else
         [os.path.join(BASE_DIR, 'build'), os.path.join(BASE_DIR, 'templates'), ],
 
         'APP_DIRS': True,
@@ -301,7 +300,7 @@ FILE_UPLOAD_TEMP_DIR = config['FILE_UPLOAD_TEMP_DIR'] if 'FILE_UPLOAD_TEMP_DIR' 
 SESSION_FILE_PATH = config['SESSION_FILE_PATH'] if 'SESSION_FILE_PATH' in config else str(
     Path(DATA_DIR, '_session'))
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = config[
-    'FILE_UPLOAD_DIRECTORY_PERMISSIONS'] if 'FILE_UPLOAD_DIRECTORY_PERMISSIONS' in config else 0o644
+    'FILE_UPLOAD_DIRECTORY_PERMISSIONS'] if 'FILE_UPLOAD_DIRECTORY_PERMISSIONS' in config else 0o755
 FILE_UPLOAD_PERMISSIONS = config['FILE_UPLOAD_PERMISSIONS'] if 'FILE_UPLOAD_PERMISSIONS' in config else 0o644
 
 # Create temp directories
@@ -402,8 +401,8 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     # match localhost with any port
-    #r"^http:\/\/localhost:*([0-9]+)?$",
-    #r"^https:\/\/localhost:*([0-9]+)?$",
+    # r"^http:\/\/localhost:*([0-9]+)?$",
+    # r"^https:\/\/localhost:*([0-9]+)?$",
 
     # Match any hostname and any port
     r"^http:\/\/.*:*([0-9]+)?$",

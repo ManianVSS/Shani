@@ -7,8 +7,8 @@ import yaml
 from django.contrib.auth.models import Group, User
 from django.db import IntegrityError
 
-from core.models import model_name_map as api_model_name_map
-from core.serializers import serializer_map as api_serializer_map
+from core.models import model_name_map as core_model_name_map
+from core.serializers import serializer_map as core_serializer_map
 from automation.models import model_name_map as automation_model_name_map
 from automation.serializers import serializer_map as automation_serializer_map
 from execution.models import model_name_map as execution_model_name_map
@@ -28,7 +28,7 @@ from workitems.serializers import serializer_map as workitems_serializer_map
 
 model_name_map = {
     'auth': {'Group': Group, 'User': User},
-    'api': api_model_name_map,
+    'core': core_model_name_map,
 
     'siteconfig': siteconfig_model_name_map,
     'people': people_model_name_map,
@@ -44,7 +44,7 @@ model_name_map = {
 }
 
 serializer_map = {}
-serializer_map.update(api_serializer_map)
+serializer_map.update(core_serializer_map)
 serializer_map.update(siteconfig_serializer_map)
 serializer_map.update(people_serializer_map)
 serializer_map.update(program_serializer_map)
