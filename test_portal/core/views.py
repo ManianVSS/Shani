@@ -116,7 +116,7 @@ class ShaniOrgGroupObjectLevelPermission(DjangoModelPermissions):
                             not hasattr(model_cls, 'can_read') or model_cls.can_read(obj, request.user)))
                 case 'PUT' | "PATCH":
                     return request.user.has_perm('core.tool_integration_write') or (base_permission and (
-                            not hasattr(model_cls, 'can_modify') or model_cls.can_read(obj, request.user)))
+                            not hasattr(model_cls, 'can_modify') or model_cls.can_modify(obj, request.user)))
                 case 'DELETE':
                     return request.user.has_perm('core.tool_integration_delete') or (base_permission and (
                             not hasattr(model_cls, 'can_delete') or model_cls.can_delete(obj, request.user)))
